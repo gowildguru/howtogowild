@@ -20,7 +20,7 @@ const routeCounts = {
   SEA:4, SMF:4, MCI:4, DSM:3, GRR:3, JAX:3, MDW:3, SAP:3,
   SJO:3, BDL:2, ELP:2, ISP:2, MBJ:2, MEM:2, OAK:2, OKC:2,
   ORF:2, PNS:2, SJC:2, TTN:2, BOI:2, BOG:0, BQN:1, BUR:1,
-  CTG:1, DCA:1, FAR:1, FSD:1, JFK:1, MDE:1, MKE:1, MSN:1,
+  CTG:1, DCA:1, FAR:1, FSD:1, JFK:0, MDE:1, MKE:1, MSN:1,
   MYR:1, OMA:1, DJT:1, PIT:1, PSE:1, RIC:1, RNO:1, STI:1,
   SYR:1, XNA:1
 };
@@ -1903,18 +1903,15 @@ async function updateWeather(airport) {
   try {
 
     const weather =
-      await getWeather(
-        airport
-      );
-     
+  await getWeather(
+    airport
+  );
+
 airport.timezone =
   weather.timezone;
 
-setBookingAirport(
-  airport
-);
-    const current =
-      weather.current;
+const current =
+  weather.current;
 
     const isDay =
       Number(
@@ -2106,7 +2103,16 @@ setBookingAirport(
         `${low}°–${high}° · ${rain}% precip.`;
 
     }
-
+try {
+  setBookingAirport(
+    airport
+  );
+} catch (bookingError) {
+  console.warn(
+    "Booking dashboard could not update:",
+    bookingError
+  );
+}
   } catch (error) {
 
     condition.textContent =
