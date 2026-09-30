@@ -2667,6 +2667,9 @@ function setBookingAirport(
 
 }
 
+setTimeout(
+  updateBookingDashboard,
+  250
 
 setInterval(
   updateBookingDashboard,
