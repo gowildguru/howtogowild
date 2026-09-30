@@ -142,57 +142,136 @@
         Your personalized GoWild! travel tools will live here.
       </p>
 
-<div class="airport-dashboard">
+<div id="dashboardMain" class="dashboard-main">
 
-  <div class="airport-card">
+  <section class="dashboard-airport-hero">
 
-    <div class="airport-card-photo">
-      <div class="airport-card-overlay"></div>
+    <div
+      id="heroBackground"
+      class="dashboard-airport-photo">
+    </div>
 
-      <div class="airport-card-content">
+    <div class="dashboard-airport-shade"></div>
 
-        <div class="airport-main">
-          <div class="airport-label">YOUR HOME AIRPORT</div>
+    <a
+      id="heroPhotoCredit"
+      class="dashboard-photo-credit"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      hidden>
+    </a>
 
-          <div class="airport-code-row">
-            <span class="airport-code">DEN</span>
-            <span class="airport-name">• Denver</span>
-          </div>
+    <div class="dashboard-airport-content">
 
-          <div class="airport-subtitle">
-            Denver International Airport
-          </div>
+      <div class="dashboard-airport-copy">
+
+        <div class="dashboard-kicker">
+          YOUR FRONTIER AIRPORT
         </div>
 
-        <div class="airport-stats">
+        <div class="dashboard-airport-title">
+          <span id="airportCode">DEN</span>
+          <span class="dashboard-divider">·</span>
+          <span id="airportCity">Denver</span>
+        </div>
 
-          <div class="airport-stat">
-            <span class="airport-stat-label">
-              NONSTOP DESTINATIONS
-            </span>
-
-            <span class="airport-stat-number">
-              100
-            </span>
-          </div>
-
-          <div class="airport-stat-divider"></div>
-
-          <div class="airport-stat">
-            <span class="airport-stat-label">
-              CONNECTIONS
-            </span>
-
-            <span class="airport-stat-number">
-              100+
-            </span>
-          </div>
-
+        <div id="airportName" class="dashboard-airport-name">
+          Denver International Airport
         </div>
 
       </div>
+
+      <div class="dashboard-score">
+
+        <span class="dashboard-score-label">
+          CONNECTION SCORE
+        </span>
+
+        <div>
+          <span id="score" class="dashboard-score-number">99</span>
+          <span class="dashboard-score-max">/100</span>
+        </div>
+
+      </div>
+
     </div>
 
+  </section>
+
+
+  <div class="dashboard-change-row">
+
+    <button id="changeAirport" type="button">
+      Not your airport? Change it
+    </button>
+
+  </div>
+
+
+  <div id="airportChooser" class="dashboard-airport-chooser">
+
+    <select id="airportSelect">
+      <option value="">
+        Select Frontier airport...
+      </option>
+    </select>
+
+  </div>
+
+
+  <section class="dashboard-network">
+
+    <div class="dashboard-network-main">
+
+      <span id="routeCount" class="dashboard-route-count">
+        52
+      </span>
+
+      <div class="dashboard-network-copy">
+
+        <strong id="routeLabel">
+          nonstop destinations
+        </strong>
+
+        <span>
+          on Frontier
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="dashboard-network-rank">
+
+      <strong id="rank">
+        #2
+      </strong>
+
+      <span>
+        in Frontier's network
+      </span>
+
+    </div>
+
+
+    <div class="dashboard-score-bar">
+      <div
+        id="scoreBar"
+        class="dashboard-score-bar-fill">
+      </div>
+    </div>
+
+
+    <div
+      id="networkDescription"
+      class="dashboard-network-description">
+    </div>
+
+  </section>
+
+</div>
     <div class="airport-card-footer">
       <span>Explore routes from Denver</span>
       <span>→</span>
