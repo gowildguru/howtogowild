@@ -2671,8 +2671,7 @@ function departureBookingURL(airport, flight) {
   const url = new URL('https://booking.flyfrontier.com/external/flightselect');
   url.search = new URLSearchParams({
     o1: airport.code, d1: flight.destination, dd1: bookingKey(flight.date),
-    r: 'false', f1: `F9~${flight.flightNumber}`, bundletype: 'STD',
-    ispaxpage: 'true', ADT: '1', inl: '0', mon: 'true'
+    r: 'false', ADT: '1', inl: '0', mon: 'true'
   }).toString();
   return url.href;
 }
@@ -2707,7 +2706,7 @@ function renderDepartureBoard() {
     row.rel = 'noopener noreferrer';
     row.style.textDecoration = 'none';
     row.style.color = 'inherit';
-    row.setAttribute('aria-label', `Book Frontier flight ${flight.flightNumber} from ${airport.code} to ${flight.destination} on ${bookingKey(flight.date)} in a new tab`);
+    row.setAttribute('aria-label', `View Frontier flights from ${airport.code} to ${flight.destination} on ${bookingKey(flight.date)} in a new tab`);
     const hour = Math.floor(flight.minutes / 60);
     const time = `${hour % 12 || 12}:${bookingPad(flight.minutes % 60)}${hour < 12 ? 'am' : 'pm'}`;
     row.append(departureText('div', 'departure-time', `${flight.label} ${time}`));
