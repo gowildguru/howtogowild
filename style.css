@@ -935,3 +935,52 @@ h3 {
   }
 
 }
+/* Dashboard desktop sizing */
+
+.airport-card {
+  width: min(100%, 900px);
+}
+
+.airport-card-photo {
+  min-height: 260px;
+}
+
+.airport-card-content {
+  min-height: 260px;
+  padding: 34px 38px;
+}
+
+.airport-code {
+  font-size: 3rem;
+}
+
+.airport-name {
+  font-size: 1.4rem;
+}
+
+.airport-stat-number {
+  font-size: 1.8rem;
+}
+
+@media (max-width: 600px) {
+  .airport-card-photo {
+    min-height: 230px;
+  }
+
+  .airport-card-content {
+    min-height: 230px;
+    padding: 20px;
+  }
+
+  .airport-code {
+    font-size: 2rem;
+  }
+
+  .airport-name {
+    font-size: 1rem;
+  }
+
+  .airport-stat-number {
+    font-size: 1.45rem;
+  }
+}
