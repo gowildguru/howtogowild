@@ -464,3 +464,107 @@ h3 {
     width: 100%;
   }
 }
+/* =========================================
+   HOMEPAGE REDESIGN — HERO V2
+   ========================================= */
+
+.hero {
+  position: relative;
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  background-image:
+    linear-gradient(
+      rgba(20, 32, 24, 0.12),
+      rgba(20, 32, 24, 0.18)
+    ),
+    url("images/120425_Airfield_frontier-0055.jpg");
+
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+/* Give the hero text its own subtle glassy area
+   instead of darkening the entire photograph */
+
+.hero-copy {
+  max-width: 720px;
+  padding: 34px 38px;
+
+  background: rgba(35, 50, 40, 0.38);
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.hero-content {
+  width: min(calc(100% - 40px), var(--page-width));
+  margin: auto;
+  padding: 64px 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.hero h1 {
+  margin-bottom: 16px;
+}
+
+.hero p {
+  margin-bottom: 24px;
+  color: rgba(255,255,255,0.94);
+}
+
+/* Remove some of the "startup website" treatment */
+
+.hero-eyebrow {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin-bottom: 12px;
+
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+
+  color: rgba(255,255,255,0.82);
+}
+
+
+/* MOBILE HERO */
+
+@media (max-width: 700px) {
+
+  .hero {
+    min-height: 500px;
+    background-position: center center;
+  }
+
+  .hero-content {
+    width: calc(100% - 24px);
+    padding: 42px 0;
+  }
+
+  .hero-copy {
+    width: 100%;
+
+    padding: 26px 22px;
+
+    border-radius: 22px;
+
+    background: rgba(35, 50, 40, 0.46);
+
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+  }
+
+}
