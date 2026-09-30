@@ -1745,3 +1745,178 @@ h3 {
   }
 
 }
+/* =========================================
+   DASHBOARD STAGE 3 — GOWILD BOOKING
+   ========================================= */
+
+.dashboard-booking {
+  margin-top: 12px;
+  padding: 24px 26px;
+
+  border-radius: 22px;
+
+  background: #ffffff;
+  color: #66766c;
+
+  box-shadow:
+    0 8px 24px rgba(20,34,25,0.09);
+}
+
+.dashboard-booking-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.dashboard-booking-kicker,
+.dashboard-booking-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.dashboard-booking-heading h3 {
+  margin: 4px 0;
+
+  font-size: 20px;
+  color: #4e5851;
+}
+
+.dashboard-booking-heading p {
+  margin: 0;
+
+  font-size: 10px;
+  opacity: 0.78;
+}
+
+.dashboard-booking-button {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 17px;
+
+  border-radius: 999px;
+
+  background: #66766c;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.dashboard-booking-button:hover {
+  background: #526158;
+}
+
+.dashboard-booking-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+.dashboard-booking-item {
+  min-width: 0;
+
+  padding: 15px;
+
+  border:
+    1px solid rgba(102,118,108,0.17);
+
+  border-radius: 14px;
+
+  background: #f8faf8;
+}
+
+.dashboard-booking-item.is-blackout {
+  background: #fff8ed;
+  border-color: #e6cda4;
+}
+
+.dashboard-booking-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  opacity: 0.72;
+}
+
+.booking-date {
+  display: block;
+
+  color: #4e5851;
+
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.booking-status {
+  display: block;
+
+  margin-top: 7px;
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.dashboard-booking-item.is-blackout .booking-status {
+  color: #925a14;
+}
+
+.booking-timer {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #4e5851;
+
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-booking-note {
+  margin: 13px 0 0;
+
+  font-size: 9px;
+  line-height: 1.5;
+
+  opacity: 0.8;
+}
+
+
+@media (max-width: 600px) {
+
+  .dashboard-booking {
+    padding: 19px;
+  }
+
+  .dashboard-booking-heading {
+    align-items: flex-start;
+  }
+
+  .dashboard-booking-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 430px) {
+
+  .dashboard-booking-heading {
+    flex-wrap: wrap;
+  }
+
+}
