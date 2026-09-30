@@ -1962,3 +1962,318 @@ h3 {
 #dashboard .section-description {
   text-align: center;
 }
+/* =========================================
+   DASHBOARD STAGE 4 — DEPARTURE BOARD
+   ========================================= */
+
+.dashboard-departures {
+  margin-top: 12px;
+  padding: 24px 26px;
+
+  border-radius: 22px;
+
+  background: #ffffff;
+  color: #66766c;
+
+  box-shadow:
+    0 8px 24px rgba(20, 34, 25, 0.09);
+
+  box-sizing: border-box;
+}
+
+.dashboard-departures-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 16px;
+}
+
+.dashboard-departures-kicker {
+  margin-bottom: 4px;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+
+  opacity: 0.72;
+}
+
+.dashboard-departures-heading h3 {
+  margin: 0;
+
+  color: #4e5851;
+
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.dashboard-departures-heading p {
+  margin: 5px 0 0;
+
+  font-size: 10px;
+  line-height: 1.45;
+
+  opacity: 0.78;
+}
+
+
+/* BOARD */
+
+.departure-board {
+  overflow: hidden;
+
+  border:
+    1px solid rgba(102, 118, 108, 0.16);
+
+  border-radius: 15px;
+
+  background: #ffffff;
+}
+
+.departure-board-header,
+.departure-row {
+  display: grid;
+
+  grid-template-columns:
+    1.15fr
+    1.5fr
+    0.75fr
+    1.7fr;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.departure-board-header {
+  padding: 10px 14px;
+
+  background: #f3f6f3;
+
+  border-bottom:
+    1px solid rgba(102, 118, 108, 0.14);
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  color: #66766c;
+
+  opacity: 0.78;
+}
+
+.departure-board-rows {
+  display: block;
+}
+
+.departure-row {
+  min-height: 62px;
+
+  padding: 11px 14px;
+
+  border-bottom:
+    1px solid rgba(102, 118, 108, 0.11);
+}
+
+.departure-row:last-child {
+  border-bottom: 0;
+}
+
+
+/* ROW CONTENT */
+
+.departure-time {
+  color: #4e5851;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.departure-destination {
+  min-width: 0;
+}
+
+.departure-destination strong {
+  display: block;
+
+  color: #4e5851;
+
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.departure-destination span {
+  display: block;
+
+  margin-top: 2px;
+
+  font-size: 9px;
+
+  opacity: 0.72;
+}
+
+.departure-flight {
+  color: #4e5851;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* BOOKING STATUS */
+
+.departure-booking-status {
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  line-height: 1.25;
+}
+
+.departure-booking-status.standard {
+  background:
+    rgba(102, 118, 108, 0.12);
+
+  color: #526158;
+}
+
+.departure-booking-status.advance {
+  background: #fff5df;
+
+  color: #8b5a15;
+}
+
+.departure-booking-status.blackout {
+  background: #fdecec;
+
+  color: #9c3f3f;
+}
+
+.departure-booking-countdown {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  color: #7a6745;
+}
+
+
+/* LOADING / EMPTY STATES */
+
+.departure-board-loading,
+.departure-board-empty {
+  padding: 22px 16px;
+
+  text-align: center;
+
+  font-size: 10px;
+  line-height: 1.5;
+
+  color: #66766c;
+
+  opacity: 0.78;
+}
+
+
+/* SHOW MORE */
+
+.departure-show-more {
+  display: block;
+
+  margin: 14px auto 0;
+
+  padding: 9px 16px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #66766c;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.departure-show-more:hover {
+  background: #526158;
+}
+
+.dashboard-departures-note {
+  margin: 13px 0 0;
+
+  font-size: 9px;
+  line-height: 1.5;
+
+  opacity: 0.72;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+  .dashboard-departures {
+    padding: 19px;
+  }
+
+  .departure-board-header {
+    display: none;
+  }
+
+  .departure-row {
+    grid-template-columns:
+      1fr auto;
+
+    grid-template-areas:
+      "time flight"
+      "destination destination"
+      "booking booking";
+
+    gap: 5px 10px;
+
+    padding: 14px;
+  }
+
+  .departure-time {
+    grid-area: time;
+
+    font-size: 12px;
+  }
+
+  .departure-flight {
+    grid-area: flight;
+
+    text-align: right;
+  }
+
+  .departure-destination {
+    grid-area: destination;
+  }
+
+  .departure-booking {
+    grid-area: booking;
+
+    margin-top: 3px;
+  }
+
+}
