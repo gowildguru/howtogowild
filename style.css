@@ -1956,5 +1956,9 @@ h3 {
     margin-right: 0;
     box-sizing: border-box;
   }
+/* Center dashboard heading */
 
+#dashboard .section-heading,
+#dashboard .section-description {
+  text-align: center;
 }
