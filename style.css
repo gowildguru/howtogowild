@@ -1945,3 +1945,16 @@ h3 {
     margin-right: auto;
   }
 }
+/* Mobile booking card width fix */
+
+@media (max-width: 600px) {
+
+  .dashboard-booking {
+    width: auto;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+  }
+
+}
