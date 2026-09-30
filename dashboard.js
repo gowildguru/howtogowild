@@ -2685,6 +2685,99 @@ function updateDepartureCountdowns() {
   }
 }
 
+const boardStatusURL = 'https://frontier-flight-times.jacob-brown-6700.workers.dev/';
+const boardStatuses = new Map();
+let boardStatusPolling = false;
+
+function boardStatusKey(airport, flight) {
+  return `${airport.code}:${flight.destination}:${bookingKey(flight.date)}:${flight.flightNumber}`;
+}
+
+function boardStatusTime(time, flight, airport) {
+  const minutes = departureMinutes(time);
+  if (minutes === null) return null;
+  let instant = departureInstant(flight.date, minutes, airport.timezone);
+  if (instant < flight.instant - 12 * 3600000) instant = departureInstant(bookingDate(flight.date, 1), minutes, airport.timezone);
+  if (instant > flight.instant + 12 * 3600000) instant = departureInstant(bookingDate(flight.date, -1), minutes, airport.timezone);
+  return instant;
+}
+
+function boardStatusDelayed(entry, flight, airport) {
+  return entry?.data?.statusCode === 'delayed' || (entry?.data?.departure?.estimated &&
+    boardStatusTime(entry.data.departure.estimated, flight, airport) > flight.instant + 60000);
+}
+
+function boardStatusInfo(airport, flight, now = Date.now()) {
+  const entry = boardStatuses.get(boardStatusKey(airport, flight));
+  const data = entry?.data;
+  const fresh = data && (now - Date.parse(data.fetchedAt) < 180000 || ['departed','arrived','cancelled'].includes(data.statusCode) || data.departure.actual);
+  const near = flight.instant <= now + 3600000;
+  if (!fresh) return near ? {label: entry?.error ? 'Status unavailable' : 'Checking status…', kind: 'live', visible: flight.instant > now - 4 * 3600000 || boardStatusDelayed(entry, flight, airport)} : null;
+  const actual = boardStatusTime(data.departure.actual, flight, airport);
+  const estimate = boardStatusTime(data.departure.estimated, flight, airport);
+  const terminal = ['departed', 'arrived'].includes(data.statusCode) || actual !== null;
+  if (terminal) return {label: 'Departed' + (data.departure.actual ? ` · ${data.departure.actual}` : ''), kind: 'departed',
+    visible: now < (actual ?? flight.instant) + 3600000};
+  if (data.statusCode === 'cancelled') return {label: 'Cancelled', kind: 'cancelled', visible: flight.instant > now - 3600000};
+  if (!near) return null;
+  if (data.statusCode === 'delayed' || (estimate !== null && estimate > flight.instant + 60000)) {
+    return {label: data.departure.estimated ? `Delayed · ${data.departure.estimated}` : 'Delayed', kind: 'delayed', visible: true};
+  }
+  const departure = estimate ?? flight.instant;
+  if (now >= departure - 45 * 60000 && now <= departure) return {label: 'Boarding', kind: 'boarding', visible: true};
+  if (now > departure) return {label: 'Awaiting departure update', kind: 'live', visible: true};
+  return {label: data.status || 'On Time', kind: 'live', visible: true};
+}
+
+function boardFlightVisible(airport, flight, now) {
+  const info = boardStatusInfo(airport, flight, now);
+  return info ? info.visible : flight.instant > now;
+}
+
+async function pollBoardStatuses() {
+  if (boardStatusPolling || !departureState || document.hidden) return;
+  boardStatusPolling = true;
+  const state = departureState;
+  const now = Date.now();
+  const candidates = state.flights.filter(flight => {
+    if (flight.instant > now + 3600000) return false;
+    const entry = boardStatuses.get(boardStatusKey(state.airport, flight));
+    if (['departed','arrived','cancelled'].includes(entry?.data?.statusCode)) return false;
+    const delayed = boardStatusDelayed(entry, flight, state.airport);
+    return (flight.instant > now - 4 * 3600000 || delayed) && (!entry || now - entry.checkedAt >= 60000);
+  });
+  try {
+    let cursor = 0;
+    await Promise.all(Array.from({length: Math.min(3, candidates.length)}, async () => {
+      while (cursor < candidates.length) {
+        const flight = candidates[cursor++];
+        if (departureState !== state) break;
+        const key = boardStatusKey(state.airport, flight);
+        const previous = boardStatuses.get(key);
+        const entry = {...previous, checkedAt: Date.now(), error: false};
+        boardStatuses.set(key, entry);
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 35000);
+        try {
+          const response = await fetch(boardStatusURL, {method: 'POST', headers: {'Content-Type':'application/json'},
+            signal: controller.signal, body: JSON.stringify({action:'status', origin:state.airport.code,
+              destination:flight.destination, departDate:bookingKey(flight.date), flightNumber:String(flight.flightNumber)})});
+          const data = await response.json();
+          if (!response.ok || data.error) throw new Error(data.error || `HTTP ${response.status}`);
+          if (data.origin !== state.airport.code || data.destination !== flight.destination || data.departDate !== bookingKey(flight.date) || String(data.flightNumber) !== String(flight.flightNumber) || !data.departure || !Number.isFinite(Date.parse(data.fetchedAt))) {
+            throw new Error('Flight status did not match this row.');
+          }
+          entry.data = data;
+        } catch (error) { entry.error = true; }
+        finally { clearTimeout(timer); }
+        if (departureState === state) renderDepartureBoard();
+      }
+    }));
+  } finally { boardStatusPolling = false; }
+}
+
+setInterval(pollBoardStatuses, 10000);
+
 function renderDepartureBoard() {
   if (!departureState) return;
   const {airport, flights, missing} = departureState;
@@ -2692,14 +2785,14 @@ function renderDepartureBoard() {
   const rows = document.getElementById('departureRows');
   const more = document.getElementById('departureShowMore');
   if (!rows) return;
-  const visible = flights.filter(flight => flight.instant > now + 60 * 60 * 1000);
-  const signature = JSON.stringify([departureState.limit, missing, departureState.loading,
-    visible.map(f => [f.destination, f.flightNumber, f.instant,
+  const visible = flights.filter(flight => boardFlightVisible(airport, flight, now));
+  const signature = JSON.stringify([missing, departureState.loading,
+    visible.map(f => [f.destination, f.flightNumber, f.instant, boardStatusInfo(airport, f, now)?.label, boardStatuses.get(boardStatusKey(airport, f))?.data?.departure?.gate,
       Date.now() >= bookingMidnight(bookingDate(f.date, -1), airport.timezone)])]);
   if (departureState.renderSignature === signature) { updateDepartureCountdowns(); return; }
   departureState.renderSignature = signature;
   rows.replaceChildren();
-  for (const flight of visible.slice(0, departureState.limit)) {
+  for (const flight of visible) {
     const row = departureText('a', 'departure-row', '');
     row.href = departureBookingURL(airport, flight);
     row.target = '_blank';
@@ -2709,9 +2802,12 @@ function renderDepartureBoard() {
     row.setAttribute('aria-label', `View Frontier flights from ${airport.code} to ${flight.destination} on ${bookingKey(flight.date)} in a new tab`);
     const hour = Math.floor(flight.minutes / 60);
     const time = `${hour % 12 || 12}:${bookingPad(flight.minutes % 60)}${hour < 12 ? 'AM' : 'PM'}`;
-    const day = flight.label === 'Upcoming'
-      ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][flight.date.weekday]
-      : flight.label;
+    const localToday = bookingDate(bookingParts(new Date(), airport.timezone), 0);
+    const flightDate = bookingKey(flight.date);
+    const day = flightDate === bookingKey(localToday) ? 'Today'
+      : flightDate === bookingKey(bookingDate(localToday, 1)) ? 'Tomorrow'
+      : flightDate === bookingKey(bookingDate(localToday, -1)) ? 'Yesterday'
+      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][flight.date.weekday];
     const dayCell = departureText('div', 'departure-day', day);
     dayCell.title = day;
     row.append(dayCell, departureText('div', 'departure-time', time));
@@ -2724,17 +2820,27 @@ function renderDepartureBoard() {
     destination.title = `${flight.destination} - ${target?.name || airportName}`;
     destination.append(departureText('strong', '', flight.destination));
     destination.append(departureText('span', '', `- ${airportName}`));
-    row.append(destination, departureText('div', 'departure-flight', `F9${flight.flightNumber}`));
+    const departureGate = boardStatuses.get(boardStatusKey(airport, flight))?.data?.departure?.gate;
+    const flightCell = departureText('div', 'departure-flight', `F9${flight.flightNumber}${departureGate ? '·' + departureGate : ''}`);
+    flightCell.title = `Flight F9${flight.flightNumber}${departureGate ? ' · Departure gate ' + departureGate : ''}`;
+    row.append(destination, flightCell);
     const booking = departureText('div', 'departure-booking', '');
+    const live = boardStatusInfo(airport, flight, now);
     const international = departureInternational.has(airport.code) || departureInternational.has(flight.destination);
     const blackout = bookingBlackout(flight.date);
     const standard = international || now >= bookingMidnight(bookingDate(flight.date, -1), airport.timezone);
+    if (live) {
+      const prefix = live.booking ? (blackout ? 'Blackout' : standard ? 'Standard Window' : 'Advanced Booking') + ' · ' : '';
+      booking.append(departureText('span', 'departure-booking-status ' + live.kind, prefix + live.label));
+      if (live.kind === 'boarding') booking.title = 'Boarding label uses the 45-minute timing rule.';
+    } else {
     booking.append(departureText('span', `departure-booking-status ${blackout ? 'blackout' : standard ? 'standard' : 'advance'}`,
       blackout ? 'Blackout · peak day charge may apply' : standard ? 'Standard Window' : 'Advanced Booking'));
     if (!standard && !blackout) {
       const countdown = departureText('span', 'departure-booking-countdown', '');
       countdown.dataset.opensAt = String(bookingMidnight(bookingDate(flight.date, -1), airport.timezone));
       booking.append(countdown);
+    }
     }
     row.append(booking);
     rows.append(row);
@@ -2745,8 +2851,8 @@ function renderDepartureBoard() {
       : 'No upcoming nonstop departures are listed for this airport in these three days.'));
   }
   if (more) {
-    more.hidden = visible.length <= departureState.limit;
-    more.onclick = () => { departureState.limit += 8; renderDepartureBoard(); };
+    more.hidden = true;
+    more.onclick = null;
   }
   const subtitle = document.getElementById('departuresSubtitle');
   if (subtitle) subtitle.textContent = `Times are local to ${airport.city} (${airport.code}).` +
@@ -2758,6 +2864,7 @@ async function loadDepartureBoard(airport) {
   const rows = document.getElementById('departureRows');
   if (!rows) return;
   const request = ++departureRequest;
+  const previousBoardState = departureState;
   departureState = null;
   rows.replaceChildren(departureText('div', 'departure-board-loading', 'Loading upcoming Frontier departures...'));
   const more = document.getElementById('departureShowMore');
@@ -2767,7 +2874,9 @@ async function loadDepartureBoard(airport) {
   try {
     const today = bookingDate(bookingParts(new Date(), airport.timezone), 0);
     const days = [0, 1, 2].map(offset => ({date: bookingDate(today, offset), label: ['Today','Tomorrow','Upcoming'][offset]}));
-    const flights = [];
+    const flights = previousBoardState?.airport.code === airport.code
+      ? previousBoardState.flights.filter(flight => bookingKey(flight.date) < bookingKey(today) && boardFlightVisible(airport, flight, Date.now()))
+      : [];
     const missing = [];
     const state = {airport, flights, missing, loading: true, limit: 8, dayKey: bookingKey(today)};
     departureState = state;
@@ -2797,6 +2906,7 @@ async function loadDepartureBoard(airport) {
     if (request !== departureRequest) return;
     state.loading = false;
     renderDepartureBoard();
+    pollBoardStatuses();
   } catch (error) {
     if (request !== departureRequest) return;
     rows.replaceChildren(departureText('div', 'departure-board-empty', 'The schedule could not load. Please refresh to try again.'));
