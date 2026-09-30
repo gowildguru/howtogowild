@@ -1987,7 +1987,7 @@ h3 {
 .departure-board { overflow: hidden; border: 1px solid #dce3dc; border-radius: 10px; }
 .departure-board-header, .departure-row {
   display: grid;
-  grid-template-columns: 78px 68px minmax(0,1fr) 62px 255px;
+  grid-template-columns: 78px 68px minmax(0,1fr) 100px 255px;
   align-items: center;
   gap: 10px;
   padding: 0 12px;
@@ -2047,7 +2047,7 @@ h3 {
 .departure-show-more:hover { background: #526158; }
 .dashboard-departures-note { margin: 10px 0 0; font-size: 9px; line-height: 1.5; opacity: .72; }
 @media (max-width: 850px) {
-  .departure-board-header, .departure-row { grid-template-columns: 62px 54px minmax(0,1fr) 48px 220px; gap: 6px; }
+  .departure-board-header, .departure-row { grid-template-columns: 62px 54px minmax(0,1fr) 80px 220px; gap: 6px; }
   .departure-row { font-size: 10px; }
   .departure-booking { font-size: 8px; gap: 2px; }
 }
@@ -2055,7 +2055,7 @@ h3 {
   .dashboard-departures { padding: 10px 8px; border-radius: 16px; }
   .dashboard-departures-heading h3 { font-size: 16px; }
   .departure-board-header, .departure-row {
-    grid-template-columns: 44px 39px minmax(0,1fr) 34px 146px;
+    grid-template-columns: 44px 39px minmax(0,1fr) 51px 146px;
     gap: 3px;
     padding: 0 5px;
   }
@@ -2067,10 +2067,23 @@ h3 {
 }
 @media (max-width: 390px) {
   .departure-board-header, .departure-row {
-    grid-template-columns: 38px 34px minmax(0,1fr) 29px 130px;
+    grid-template-columns: 36px 33px minmax(0,1fr) 46px 124px;
     gap: 2px;
     padding: 0 4px;
   }
   .departure-row { font-size: 7px; }
   .departure-booking { font-size: 6px; gap: 1px; }
 }
+
+/* Live departure labels and scrolling. */
+.departure-booking-status.boarding { color: #526158; font-weight: 800; }
+.departure-booking-status.delayed { color: #8b5a15; font-weight: 700; }
+.departure-booking-status.departed { color: #66766c; }
+.departure-booking-status.cancelled { color: #9c3f3f; font-weight: 700; }
+.departure-booking-status.live { color: #66766c; }
+.departure-board { max-height: 299px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #66766c #f3f6f3; }
+.departure-board-header { position: sticky; top: 0; z-index: 2; }
+@media (max-width: 650px) { .departure-board { max-height: 280px; } }
+
+.departure-flight { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 390px) { .departure-flight { font-size: 6px; } }
