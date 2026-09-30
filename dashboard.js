@@ -1425,6 +1425,10 @@ function showAirport(
     airport
   );
 
+   updateWeather(
+  airport
+);
+   
 }
 
 
@@ -1502,7 +1506,629 @@ document
     }
   );
 
+/* =====================================================
+   STAGE 2 — WEATHER
+   ===================================================== */
 
+const weatherImages = {
+
+  clearDay:
+    "https://images.unsplash.com/photo-1517495306984-f84210f9daa8?q=80&w=1400&auto=format&fit=crop",
+
+  partlyCloudyDay:
+    "https://images.unsplash.com/photo-1595865749889-b37a43c4eba4?q=80&w=1400&auto=format&fit=crop",
+
+  cloudyDay:
+    "https://images.unsplash.com/photo-1591552265137-99c59d9f4927?q=80&w=1400&auto=format&fit=crop",
+
+  rainDay:
+    "https://images.unsplash.com/photo-1603321544554-f416a9a11fcf?q=80&w=1400&auto=format&fit=crop",
+
+  storm:
+    "https://images.unsplash.com/photo-1560928863-e140ee0fc733?q=80&w=1400&auto=format&fit=crop",
+
+  snowDay:
+    "https://images.unsplash.com/photo-1491002052546-bf38f186af56?q=80&w=1400&auto=format&fit=crop",
+
+  snowNight:
+    "https://images.unsplash.com/photo-1637765435788-11281303943a?q=80&w=1400&auto=format&fit=crop",
+
+  fogDay:
+    "https://plus.unsplash.com/premium_photo-1669612905191-48c67547f9a0?q=80&w=1400&auto=format&fit=crop",
+
+  fogNight:
+    "https://images.unsplash.com/photo-1619204715997-1367fe5812f1?q=80&w=1400&auto=format&fit=crop",
+
+  clearNight:
+    "https://images.unsplash.com/photo-1472552944129-b035e9ea3744?q=80&w=1400&auto=format&fit=crop",
+
+  partlyCloudyNight:
+    "https://images.unsplash.com/photo-1647941953367-6ff24a0e5857?q=80&w=1400&auto=format&fit=crop",
+
+  cloudyNight:
+    "https://images.unsplash.com/photo-1724147127863-cbe02527966b?q=80&w=1400&auto=format&fit=crop",
+
+  rainNight:
+    "https://images.unsplash.com/photo-1619256291575-d98d823a2c4a?w=1400&auto=format&fit=crop&q=75"
+
+};
+
+
+function weatherLabel(code) {
+
+  code = Number(code);
+
+  if (code === 0) return "Clear";
+  if (code === 1) return "Mostly clear";
+  if (code === 2) return "Partly cloudy";
+  if (code === 3) return "Cloudy";
+
+  if (code === 45 || code === 48)
+    return "Fog";
+
+  if (code >= 51 && code <= 57)
+    return "Drizzle";
+
+  if (code >= 61 && code <= 67)
+    return "Rain";
+
+  if (code >= 71 && code <= 77)
+    return "Snow";
+
+  if (code >= 80 && code <= 82)
+    return "Showers";
+
+  if (code >= 85 && code <= 86)
+    return "Snow showers";
+
+  if (code >= 95)
+    return "Thunderstorms";
+
+  return "Mixed conditions";
+
+}
+
+
+function weatherImage(code, isDay) {
+
+  code = Number(code);
+
+  if (code >= 95)
+    return weatherImages.storm;
+
+  if (
+    (code >= 71 && code <= 77) ||
+    (code >= 85 && code <= 86)
+  ) {
+    return isDay
+      ? weatherImages.snowDay
+      : weatherImages.snowNight;
+  }
+
+  if (code === 45 || code === 48) {
+    return isDay
+      ? weatherImages.fogDay
+      : weatherImages.fogNight;
+  }
+
+  if (
+    (code >= 51 && code <= 67) ||
+    (code >= 80 && code <= 82)
+  ) {
+    return isDay
+      ? weatherImages.rainDay
+      : weatherImages.rainNight;
+  }
+
+  if (code === 3) {
+    return isDay
+      ? weatherImages.cloudyDay
+      : weatherImages.cloudyNight;
+  }
+
+  if (code === 2) {
+    return isDay
+      ? weatherImages.partlyCloudyDay
+      : weatherImages.partlyCloudyNight;
+  }
+
+  return isDay
+    ? weatherImages.clearDay
+    : weatherImages.clearNight;
+
+}
+
+
+async function getWeather(airport) {
+
+  const currentVars = [
+    "temperature_2m",
+    "weather_code",
+    "is_day",
+    "wind_speed_10m",
+    "wind_gusts_10m"
+  ].join(",");
+
+  const hourlyVars = [
+    "visibility",
+    "weather_code",
+    "precipitation_probability",
+    "precipitation",
+    "snowfall",
+    "wind_gusts_10m"
+  ].join(",");
+
+  const dailyVars = [
+    "weather_code",
+    "temperature_2m_max",
+    "temperature_2m_min",
+    "precipitation_probability_max"
+  ].join(",");
+
+  const url =
+    "https://api.open-meteo.com/v1/forecast" +
+    "?latitude=" + encodeURIComponent(airport.lat) +
+    "&longitude=" + encodeURIComponent(airport.lon) +
+    "&current=" + currentVars +
+    "&hourly=" + hourlyVars +
+    "&daily=" + dailyVars +
+    "&temperature_unit=fahrenheit" +
+    "&wind_speed_unit=mph" +
+    "&precipitation_unit=inch" +
+    "&timezone=auto" +
+    "&forecast_days=3";
+
+  const response =
+    await fetch(url);
+
+  if (!response.ok)
+    throw new Error("Weather unavailable");
+
+  return response.json();
+
+}
+
+
+function analyzeWeather(weather, airport) {
+
+  const hourly = weather.hourly;
+  const current = weather.current;
+
+  if (!hourly?.time?.length)
+    return null;
+
+  let startIndex =
+    hourly.time.findIndex(
+      time =>
+        time >= current.time
+    );
+
+  if (startIndex < 0)
+    startIndex = 0;
+
+  const endIndex =
+    Math.min(
+      hourly.time.length,
+      startIndex + 37
+    );
+
+  const upcoming = [];
+
+  for (
+    let i = startIndex;
+    i < endIndex;
+    i++
+  ) {
+
+    upcoming.push({
+
+      code:
+        Number(
+          hourly.weather_code[i]
+        ),
+
+      visibility:
+        Number(
+          hourly.visibility[i]
+        ) / 1609.344,
+
+      precip:
+        Number(
+          hourly.precipitation[i]
+        ) || 0,
+
+      precipChance:
+        Number(
+          hourly.precipitation_probability[i]
+        ) || 0,
+
+      snow:
+        Number(
+          hourly.snowfall[i]
+        ) || 0,
+
+      gust:
+        Number(
+          hourly.wind_gusts_10m[i]
+        ) || 0
+
+    });
+
+  }
+
+  const maxGust =
+    Math.max(
+      Number(
+        current.wind_gusts_10m
+      ) || 0,
+
+      ...upcoming.map(
+        hour => hour.gust
+      )
+    );
+
+  const minVisibility =
+    upcoming.length
+      ? Math.min(
+          ...upcoming.map(
+            hour => hour.visibility
+          )
+        )
+      : 999;
+
+  const thunderHours =
+    upcoming.filter(
+      hour =>
+        hour.code >= 95
+    );
+
+  const snowHours =
+    upcoming.filter(
+      hour =>
+        hour.snow >= 0.1 ||
+        (hour.code >= 71 && hour.code <= 77) ||
+        (hour.code >= 85 && hour.code <= 86)
+    );
+
+  const heavyRainHours =
+    upcoming.filter(
+      hour =>
+        hour.precipChance >= 70 &&
+        hour.precip >= 0.10
+    );
+
+  const showGusts =
+    maxGust >= 30;
+
+  const showVisibility =
+    minVisibility <= 5;
+
+  let message;
+
+  if (thunderHours.length) {
+
+    message = {
+      concern: true,
+      title: "Thunderstorms may affect operations",
+      text:
+        `Storms are forecast around ${airport.code} during the next 36 hours. ` +
+        `Airport slowdowns, ground stops, or reroutes are possible.`
+    };
+
+  } else if (maxGust >= 45) {
+
+    message = {
+      concern: true,
+      title: "Strong winds are forecast",
+      text:
+        `Gusts may reach about ${Math.round(maxGust)} mph. ` +
+        `Strong winds can contribute to slower airport operations.`
+    };
+
+  } else if (snowHours.length) {
+
+    message = {
+      concern: true,
+      title: "Snow may affect operations",
+      text:
+        "Snow is forecast during the next 36 hours. " +
+        "Deicing or runway conditions may contribute to slower operations."
+    };
+
+  } else if (minVisibility <= 2) {
+
+    message = {
+      concern: true,
+      title: "Low visibility is possible",
+      text:
+        `Visibility may fall to around ${Math.max(
+          0.1,
+          Math.round(minVisibility * 10) / 10
+        )} miles. Reduced visibility can lower airport capacity.`
+    };
+
+  } else if (heavyRainHours.length >= 2) {
+
+    message = {
+      concern: true,
+      title: "Heavy rain is possible",
+      text:
+        "Periods of heavier rain may contribute to slower airport operations."
+    };
+
+  } else if (maxGust >= 35) {
+
+    message = {
+      concern: true,
+      title: "Breezy conditions worth watching",
+      text:
+        `Gusts may reach about ${Math.round(maxGust)} mph during the next 36 hours.`
+    };
+
+  } else {
+
+    message = {
+      concern: false,
+      title: "No major weather concerns",
+      text:
+        `No significant weather concerns are apparent at ${airport.code} during the next 36 hours.`
+    };
+
+  }
+
+  return {
+    maxGust,
+    minVisibility,
+    showGusts,
+    showVisibility,
+    message
+  };
+
+}
+
+
+async function updateWeather(airport) {
+
+  const condition =
+    document.getElementById(
+      "condition"
+    );
+
+  if (!condition)
+    return;
+
+  condition.textContent =
+    "Loading...";
+
+  try {
+
+    const weather =
+      await getWeather(
+        airport
+      );
+
+    const current =
+      weather.current;
+
+    const isDay =
+      Number(
+        current.is_day
+      ) === 1;
+
+
+    document.getElementById(
+      "temperature"
+    ).textContent =
+      `${Math.round(
+        current.temperature_2m
+      )}°`;
+
+
+    condition.textContent =
+      weatherLabel(
+        current.weather_code
+      );
+
+
+    document.getElementById(
+      "wind"
+    ).textContent =
+      Math.round(
+        current.wind_speed_10m
+      );
+
+
+    document.getElementById(
+      "weatherBackground"
+    ).style.backgroundImage =
+      `url("${weatherImage(
+        current.weather_code,
+        isDay
+      )}")`;
+
+
+    const analysis =
+      analyzeWeather(
+        weather,
+        airport
+      );
+
+
+    const concerns =
+      document.getElementById(
+        "weatherConcerns"
+      );
+
+    const gustChip =
+      document.getElementById(
+        "gustConcern"
+      );
+
+    const visibilityChip =
+      document.getElementById(
+        "visibilityConcern"
+      );
+
+
+    gustChip.classList.remove(
+      "show"
+    );
+
+    visibilityChip.classList.remove(
+      "show"
+    );
+
+
+    if (
+      analysis?.showGusts
+    ) {
+
+      gustChip.classList.add(
+        "show"
+      );
+
+      document.getElementById(
+        "gusts"
+      ).textContent =
+        `${Math.round(
+          analysis.maxGust
+        )} mph`;
+
+    }
+
+
+    if (
+      analysis?.showVisibility
+    ) {
+
+      visibilityChip.classList.add(
+        "show"
+      );
+
+      document.getElementById(
+        "visibility"
+      ).textContent =
+        `${Math.max(
+          0.1,
+          Math.round(
+            analysis.minVisibility *
+            10
+          ) / 10
+        )} mi`;
+
+    }
+
+
+    concerns.style.display =
+      analysis &&
+      (
+        analysis.showGusts ||
+        analysis.showVisibility
+      )
+
+        ? "flex"
+
+        : "none";
+
+
+    const message =
+      analysis?.message || {
+        concern:false,
+        title:
+          "Weather forecast available",
+        text:
+          "No operational weather assessment is currently available."
+      };
+
+
+    document.getElementById(
+      "weatherIcon"
+    ).textContent =
+      message.concern
+        ? "!"
+        : "✓";
+
+
+    document.getElementById(
+      "weatherTitle"
+    ).textContent =
+      message.title;
+
+
+    document.getElementById(
+      "weatherText"
+    ).textContent =
+      message.text;
+
+
+    if (
+      weather.daily?.time?.length > 1
+    ) {
+
+      const i = 1;
+
+      document.getElementById(
+        "tomorrowCondition"
+      ).textContent =
+        weatherLabel(
+          weather.daily
+            .weather_code[i]
+        );
+
+      const low =
+        Math.round(
+          weather.daily
+            .temperature_2m_min[i]
+        );
+
+      const high =
+        Math.round(
+          weather.daily
+            .temperature_2m_max[i]
+        );
+
+      const rain =
+        Math.round(
+          weather.daily
+            .precipitation_probability_max[i] ||
+          0
+        );
+
+      document.getElementById(
+        "tomorrowSummary"
+      ).textContent =
+        `${low}°–${high}° · ${rain}% precip.`;
+
+    }
+
+  } catch (error) {
+
+    condition.textContent =
+      "Weather unavailable";
+
+    document.getElementById(
+      "weatherTitle"
+    ).textContent =
+      "Weather temporarily unavailable";
+
+    document.getElementById(
+      "weatherText"
+    ).textContent =
+      "Frontier network information is still available.";
+
+    document.getElementById(
+      "weatherIcon"
+    ).textContent =
+      "–";
+
+    document.getElementById(
+      "weatherConcerns"
+    ).style.display =
+      "none";
+
+  }
+
+}
 /* =====================================================
    INITIALIZE
    ===================================================== */
