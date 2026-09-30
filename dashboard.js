@@ -2643,7 +2643,7 @@ async function departureSnapshot(key) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 12000);
       try {
-        const response = await fetch(new URL(`data/${key}.json`, document.baseURI), {signal: controller.signal});
+        const response = await fetch(new URL(`data/${key}.json`, document.baseURI), {signal: controller.signal, cache: "no-cache"});
         if (!response.ok) throw new Error(`Schedule ${key}: HTTP ${response.status}`);
         const data = await response.json();
         if (data.date !== key || !data.airports || typeof data.airports !== 'object') {
@@ -2667,6 +2667,25 @@ function departureText(tag, className, value) {
   return element;
 }
 
+function departureBookingURL(airport, flight) {
+  const url = new URL('https://booking.flyfrontier.com/external/flightselect');
+  url.search = new URLSearchParams({
+    o1: airport.code, d1: flight.destination, dd1: bookingKey(flight.date),
+    r: 'false', f1: `F9~${flight.flightNumber}`, bundletype: 'STD',
+    ispaxpage: 'true', ADT: '1', inl: '0', mon: 'true'
+  }).toString();
+  return url.href;
+}
+
+function updateDepartureCountdowns() {
+  const rows = document.getElementById('departureRows');
+  if (!rows) return;
+  for (const element of rows.querySelectorAll('[data-opens-at]')) {
+    const seconds = Math.max(0, Math.ceil((Number(element.dataset.opensAt) - Date.now()) / 1000));
+    element.textContent = `Standard opens in ${Math.floor(seconds / 3600)}h ${bookingPad(Math.floor(seconds % 3600 / 60))}m ${bookingPad(seconds % 60)}s`;
+  }
+}
+
 function renderDepartureBoard() {
   if (!departureState) return;
   const {airport, flights, missing} = departureState;
@@ -2675,9 +2694,20 @@ function renderDepartureBoard() {
   const more = document.getElementById('departureShowMore');
   if (!rows) return;
   const visible = flights.filter(flight => flight.instant > now + 60 * 60 * 1000);
+  const signature = JSON.stringify([departureState.limit, missing, departureState.loading,
+    visible.map(f => [f.destination, f.flightNumber, f.instant,
+      Date.now() >= bookingMidnight(bookingDate(f.date, -1), airport.timezone)])]);
+  if (departureState.renderSignature === signature) { updateDepartureCountdowns(); return; }
+  departureState.renderSignature = signature;
   rows.replaceChildren();
   for (const flight of visible.slice(0, departureState.limit)) {
-    const row = departureText('div', 'departure-row', '');
+    const row = departureText('a', 'departure-row', '');
+    row.href = departureBookingURL(airport, flight);
+    row.target = '_blank';
+    row.rel = 'noopener noreferrer';
+    row.style.textDecoration = 'none';
+    row.style.color = 'inherit';
+    row.setAttribute('aria-label', `Book Frontier flight ${flight.flightNumber} from ${airport.code} to ${flight.destination} on ${bookingKey(flight.date)} in a new tab`);
     const hour = Math.floor(flight.minutes / 60);
     const time = `${hour % 12 || 12}:${bookingPad(flight.minutes % 60)}${hour < 12 ? 'am' : 'pm'}`;
     row.append(departureText('div', 'departure-time', `${flight.label} ${time}`));
@@ -2693,15 +2723,15 @@ function renderDepartureBoard() {
     booking.append(departureText('span', `departure-booking-status ${blackout ? 'blackout' : standard ? 'standard' : 'advance'}`,
       blackout ? 'Blackout · peak day charge may apply' : standard ? 'Standard booking window' : 'Advanced booking'));
     if (!standard && !blackout) {
-      const seconds = Math.max(0, Math.ceil((bookingMidnight(bookingDate(flight.date, -1), airport.timezone) - now) / 1000));
-      booking.append(departureText('span', 'departure-booking-countdown',
-        `Standard opens in ${Math.floor(seconds / 3600)}h ${bookingPad(Math.floor(seconds % 3600 / 60))}m ${bookingPad(seconds % 60)}s`));
+      const countdown = departureText('span', 'departure-booking-countdown', '');
+      countdown.dataset.opensAt = String(bookingMidnight(bookingDate(flight.date, -1), airport.timezone));
+      booking.append(countdown);
     }
     row.append(booking);
     rows.append(row);
   }
   if (!visible.length) {
-    rows.append(departureText('div', 'departure-board-empty', missing.length
+    rows.append(departureText('div', 'departure-board-empty', departureState.loading ? 'Loading the remaining schedule snapshots...' : missing.length
       ? 'No departures to display from the available snapshots. Missing schedules may still be building.'
       : 'No upcoming nonstop departures are listed for this airport in these three days.'));
   }
@@ -2711,7 +2741,8 @@ function renderDepartureBoard() {
   }
   const subtitle = document.getElementById('departuresSubtitle');
   if (subtitle) subtitle.textContent = `Times are local to ${airport.city} (${airport.code}).` +
-    (missing.length ? ` ${missing.join(' and ')} schedule unavailable; showing the available days.` : ' Today, tomorrow, and upcoming.');
+    (missing.length ? ` ${missing.join(' and ')} schedule unavailable; showing the available days.` : departureState.loading ? ' Loading the remaining days...' : ' Today, tomorrow, and upcoming.');
+  updateDepartureCountdowns();
 }
 
 async function loadDepartureBoard(airport) {
@@ -2727,26 +2758,35 @@ async function loadDepartureBoard(airport) {
   try {
     const today = bookingDate(bookingParts(new Date(), airport.timezone), 0);
     const days = [0, 1, 2].map(offset => ({date: bookingDate(today, offset), label: ['Today','Tomorrow','Upcoming'][offset]}));
-    const results = await Promise.allSettled(days.map(day => departureSnapshot(bookingKey(day.date))));
-    if (request !== departureRequest) return;
     const flights = [];
     const missing = [];
-    results.forEach((result, index) => {
-      const day = days[index];
-      if (result.status !== 'fulfilled') { missing.push(day.label); return; }
-      const source = result.value.airports[airport.code] || [];
-      const seen = new Set();
-      for (const item of source) {
-        const minutes = departureMinutes(item.departureTime);
-        if (minutes === null || !/^[A-Z]{3}$/.test(item.destination) || !/^\d+$/.test(String(item.flightNumber))) continue;
-        const key = `${item.destination}:${item.flightNumber}:${minutes}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-        flights.push({...item, ...day, minutes, instant: departureInstant(day.date, minutes, airport.timezone)});
+    const state = {airport, flights, missing, loading: true, limit: 8, dayKey: bookingKey(today)};
+    departureState = state;
+    await Promise.allSettled(days.map(async day => {
+      try {
+        const data = await departureSnapshot(bookingKey(day.date));
+        if (request !== departureRequest) return;
+        const source = data.airports[airport.code] || [];
+        const seen = new Set();
+        for (const item of source) {
+          const minutes = departureMinutes(item.departureTime);
+          if (minutes === null || !/^[A-Z]{3}$/.test(item.destination) || !/^\d+$/.test(String(item.flightNumber))) continue;
+          const key = `${item.destination}:${item.flightNumber}:${minutes}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          flights.push({...item, ...day, minutes, instant: departureInstant(day.date, minutes, airport.timezone)});
+        }
+      } catch (error) {
+        if (request !== departureRequest) return;
+        missing.push(day.label);
+        console.info(`Departure snapshot unavailable: ${bookingKey(day.date)}`, error);
       }
-    });
-    flights.sort((a, b) => a.instant - b.instant || a.destination.localeCompare(b.destination));
-    departureState = {airport, flights, missing, limit: 8, dayKey: bookingKey(today)};
+      if (request !== departureRequest) return;
+      flights.sort((a, b) => a.instant - b.instant || a.destination.localeCompare(b.destination));
+      renderDepartureBoard();
+    }));
+    if (request !== departureRequest) return;
+    state.loading = false;
     renderDepartureBoard();
   } catch (error) {
     if (request !== departureRequest) return;
