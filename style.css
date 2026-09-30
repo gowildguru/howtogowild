@@ -586,4 +586,130 @@ h3 {
   padding: 0;
 }
 
+/* =========================================
+   HELPFUL TOOLS V2
+   ========================================= */
 
+.tools-section {
+  padding: 46px 0 54px;
+  background: #ffffff;
+}
+
+.tools-heading {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.55rem;
+  color: #26332b;
+}
+
+.tools-simple-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.simple-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  color: #26332b;
+  text-decoration: none;
+
+  padding: 4px 8px;
+
+  transition: transform 0.18s ease;
+}
+
+.simple-tool:hover {
+  transform: translateY(-2px);
+}
+
+.simple-tool-icon {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 10px;
+
+  border-radius: 50%;
+
+  background: #66766c;
+  color: #ffffff;
+
+  font-size: 17px;
+  line-height: 1;
+}
+
+.simple-tool-title {
+  display: inline-block;
+
+  padding: 7px 13px;
+  margin-bottom: 8px;
+
+  border-radius: 999px;
+
+  background: #66766c;
+  color: #ffffff;
+
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.simple-tool-description {
+  max-width: 215px;
+
+  color: #6b756e;
+
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+
+/* Tablet */
+
+@media (max-width: 850px) {
+
+  .tools-simple-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 34px 22px;
+  }
+
+}
+
+
+/* Phone */
+
+@media (max-width: 500px) {
+
+  .tools-section {
+    padding: 36px 0 42px;
+  }
+
+  .tools-heading {
+    margin-bottom: 24px;
+  }
+
+  .tools-simple-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 12px;
+  }
+
+  .simple-tool {
+    padding: 0;
+  }
+
+  .simple-tool-title {
+    font-size: 0.7rem;
+  }
+
+  .simple-tool-description {
+    font-size: 0.66rem;
+  }
+
+}
