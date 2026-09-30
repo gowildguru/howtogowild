@@ -1928,3 +1928,20 @@ h3 {
   margin: 12px auto 0;
   box-sizing: border-box;
 }
+/* Force booking card to match dashboard stack */
+
+.dashboard-booking {
+  width: min(100%, 900px);
+  max-width: 900px;
+  margin: 12px auto 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .dashboard-booking {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
