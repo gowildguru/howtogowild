@@ -2681,7 +2681,7 @@ function updateDepartureCountdowns() {
   if (!rows) return;
   for (const element of rows.querySelectorAll('[data-opens-at]')) {
     const seconds = Math.max(0, Math.ceil((Number(element.dataset.opensAt) - Date.now()) / 1000));
-    element.textContent = `Standard opens in ${Math.floor(seconds / 3600)}h ${bookingPad(Math.floor(seconds % 3600 / 60))}m ${bookingPad(seconds % 60)}s`;
+    element.textContent = `(Standard in ${bookingPad(Math.floor(seconds / 3600))}:${bookingPad(Math.floor(seconds % 3600 / 60))}:${bookingPad(seconds % 60)})`;
   }
 }
 
@@ -2708,19 +2708,29 @@ function renderDepartureBoard() {
     row.style.color = 'inherit';
     row.setAttribute('aria-label', `View Frontier flights from ${airport.code} to ${flight.destination} on ${bookingKey(flight.date)} in a new tab`);
     const hour = Math.floor(flight.minutes / 60);
-    const time = `${hour % 12 || 12}:${bookingPad(flight.minutes % 60)}${hour < 12 ? 'am' : 'pm'}`;
-    row.append(departureText('div', 'departure-time', `${flight.label} ${time}`));
+    const time = `${hour % 12 || 12}:${bookingPad(flight.minutes % 60)}${hour < 12 ? 'AM' : 'PM'}`;
+    const day = flight.label === 'Upcoming'
+      ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][flight.date.weekday]
+      : flight.label;
+    const dayCell = departureText('div', 'departure-day', day);
+    dayCell.title = day;
+    row.append(dayCell, departureText('div', 'departure-time', time));
     const destination = departureText('div', 'departure-destination', '');
     const target = airportByCode(flight.destination);
-    destination.append(departureText('strong', '', target?.city || flight.destination));
-    destination.append(departureText('span', '', flight.destination));
-    row.append(destination, departureText('div', 'departure-flight', `F9 ${flight.flightNumber}`));
+    const airportName = (target?.name || target?.city || flight.destination)
+      .replace(/International Airport/gi, 'Intl')
+      .replace(/International/gi, 'Intl')
+      .replace(/ Airport/gi, '');
+    destination.title = `${flight.destination} - ${target?.name || airportName}`;
+    destination.append(departureText('strong', '', flight.destination));
+    destination.append(departureText('span', '', `- ${airportName}`));
+    row.append(destination, departureText('div', 'departure-flight', `F9${flight.flightNumber}`));
     const booking = departureText('div', 'departure-booking', '');
     const international = departureInternational.has(airport.code) || departureInternational.has(flight.destination);
     const blackout = bookingBlackout(flight.date);
     const standard = international || now >= bookingMidnight(bookingDate(flight.date, -1), airport.timezone);
     booking.append(departureText('span', `departure-booking-status ${blackout ? 'blackout' : standard ? 'standard' : 'advance'}`,
-      blackout ? 'Blackout · peak day charge may apply' : standard ? 'Standard booking window' : 'Advanced booking'));
+      blackout ? 'Blackout · peak day charge may apply' : standard ? 'Standard Window' : 'Advanced Booking'));
     if (!standard && !blackout) {
       const countdown = departureText('span', 'departure-booking-countdown', '');
       countdown.dataset.opensAt = String(bookingMidnight(bookingDate(flight.date, -1), airport.timezone));
