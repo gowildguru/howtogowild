@@ -1920,3 +1920,11 @@ h3 {
   }
 
 }
+/* Keep Stage 3 aligned with the rest of the dashboard */
+
+.dashboard-booking {
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto 0;
+  box-sizing: border-box;
+}
