@@ -1968,9 +1968,14 @@ z-index: 2;
   }
 /* Center dashboard heading */
 
-#dashboard .section-heading,
+#dashboard .section-heading {
+  text-align: center;
+}
+
 #dashboard .section-description {
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 /* Compact departure board: one line per flight at every screen size. */
 .dashboard-departures {
