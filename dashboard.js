@@ -1,7 +1,7 @@
 /* =====================================================
    HOW TO GOWILD — DASHBOARD
-   STAGE 1
-   Airport + Network + City Photo
+   STAGES 1–3
+   Airport + Network + City Photo + Weather + GoWild Booking
    ===================================================== */
 
 
@@ -28,7 +28,7 @@ const routeCounts = {
 
 const frontierRoutes = {
 
-  ATL:["AUS","BOS","BUF","BWI","CLE","CMH","CUN","CVG","DEN","DFW","DTW","EWR","FLL","GUA","IAD","IAH","IND","JAX","JFK","LAS","LAX","LGA","MBJ","MCI","MCO","MDW","MIA","MSP","MSY","ORD","ORF","PHL","PHX","PUJ","RDU","SAL","SFO","SJO","SJU","STL","TPA"],
+  ATL:["AUS","BOS","BUF","BWI","CLE","CMH","CUN","CVG","DEN","DFW","DTW","EWR","FLL","GUA","IAD","IAH","IND","JAX","LAS","LAX","LGA","MBJ","MCI","MCO","MDW","MIA","MSP","MSY","ORD","ORF","PHL","PHX","PUJ","RDU","SAL","SFO","SJO","SJU","STL","TPA"],
 
   AUS:["ATL","CLE","DEN","LAS","MCO","PHX"],
 
@@ -96,7 +96,7 @@ const frontierRoutes = {
 
   JAX:["ATL","PHL","SJU"],
 
-  JFK:["ATL"],
+  JFK:[],
 
   LAS:["ATL","AUS","BNA","BOI","BUR","CLE","CVG","DEN","DFW","DTW","ELP","IAD","IAH","LAX","MCI","MCO","MIA","MSP","MSY","OAK","OKC","ONT","ORD","PDX","PHL","PHX","RNO","SAN","SAT","SEA","SFO","SJC","SLC","SMF","SNA","STL"],
 
@@ -423,97 +423,7 @@ const scores =
    AIRPORT DATABASE
    ===================================================== */
 
-const airportSnapshot = [
-
-["ATL","Hartsfield Jackson Atlanta International Airport","Atlanta",33.6367,-84.4281],
-["AUS","Austin Bergstrom International Airport","Austin",30.1945,-97.6699],
-["BDL","Bradley International Airport","Hartford",41.9389,-72.6832],
-["BNA","Nashville International Airport","Nashville",36.1245,-86.6782],
-["BOG","El Dorado International Airport","Bogota",4.70159,-74.1469],
-["BOI","Boise Air Terminal/Gowen field","Boise",43.5644,-116.223],
-["BOS","General Edward Lawrence Logan International Airport","Boston",42.3643,-71.0052],
-["BQN","Rafael Hernandez Airport","Aguadilla",18.4949,-67.1294],
-["BUF","Buffalo Niagara International Airport","Buffalo",42.9405,-78.7322],
-["BUR","Bob Hope Airport","Burbank",34.2007,-118.359],
-["BWI","Baltimore/Washington International Thurgood Marshall Airport","Baltimore",39.1754,-76.6683],
-["CLE","Cleveland Hopkins International Airport","Cleveland",41.4117,-81.8498],
-["CLT","Charlotte Douglas International Airport","Charlotte",35.214,-80.9431],
-["CMH","John Glenn Columbus International Airport","Columbus",39.998,-82.8919],
-["CTG","Rafael Nunez International Airport","Cartagena",10.4424,-75.513],
-["CUN","Cancun International Airport","Cancun",21.0365,-86.8771],
-["CVG","Cincinnati Northern Kentucky International Airport","Hebron",39.0488,-84.6678],
-["DCA","Ronald Reagan Washington National Airport","Washington",38.8521,-77.0377],
-["DEN","Denver International Airport","Denver",39.8617,-104.673],
-["DFW","Dallas Fort Worth International Airport","Dallas-Fort Worth",32.8968,-97.038],
-["DSM","Des Moines International Airport","Des Moines",41.534,-93.6631],
-["DTW","Detroit Metropolitan Wayne County Airport","Detroit",42.2124,-83.3534],
-["ELP","El Paso International Airport","El Paso",31.8072,-106.378],
-["EWR","Newark Liberty International Airport","Newark",40.6925,-74.1687],
-["FAR","Hector International Airport","Fargo",46.9207,-96.8158],
-["FLL","Fort Lauderdale Hollywood International Airport","Fort Lauderdale",26.0726,-80.1527],
-["FSD","Joe Foss Field Airport","Sioux Falls",43.582,-96.7419],
-["GRR","Gerald R. Ford International Airport","Grand Rapids",42.8808,-85.5228],
-["GUA","La Aurora Airport","Guatemala City",14.5833,-90.5275],
-["IAD","Washington Dulles International Airport","Dulles",38.9445,-77.4558],
-["IAH","George Bush Intercontinental Houston Airport","Houston",29.9844,-95.3414],
-["IND","Indianapolis International Airport","Indianapolis",39.7173,-86.2944],
-["ISP","Long Island Mac Arthur Airport","Islip",40.7952,-73.1002],
-["JAX","Jacksonville International Airport","Jacksonville",30.4941,-81.6879],
-["JFK","John F Kennedy International Airport","New York",40.6398,-73.7789],
-["LAS","Harry Reid International Airport","Las Vegas",36.0801,-115.152],
-["LAX","Los Angeles International Airport","Los Angeles",33.9425,-118.408],
-["LGA","La Guardia Airport","New York",40.7772,-73.8726],
-["MBJ","Sangster International Airport","Montego Bay",18.5037,-77.9134],
-["MCI","Kansas City International Airport","Kansas City",39.2976,-94.7139],
-["MCO","Orlando International Airport","Orlando",28.4294,-81.309],
-["MDE","Jose Maria Cordova International Airport","Rionegro",6.16454,-75.4231],
-["MDW","Chicago Midway International Airport","Chicago",41.786,-87.7524],
-["MEM","Memphis International Airport","Memphis",35.0424,-89.9767],
-["MIA","Miami International Airport","Miami",25.7932,-80.2906],
-["MKE","General Mitchell International Airport","Milwaukee",42.9472,-87.8966],
-["MSN","Dane County Regional Truax Field","Madison",43.1399,-89.3375],
-["MSP","Minneapolis-St Paul International Airport","Minneapolis",44.882,-93.2218],
-["MSY","Louis Armstrong New Orleans International Airport","New Orleans",29.9934,-90.258],
-["MYR","Myrtle Beach International Airport","Myrtle Beach",33.6797,-78.9283],
-["OAK","Metropolitan Oakland International Airport","Oakland",37.7213,-122.221],
-["OKC","Will Rogers World Airport","Oklahoma City",35.3931,-97.6007],
-["OMA","Eppley Airfield","Omaha",41.3032,-95.8941],
-["ONT","Ontario International Airport","Ontario",34.056,-117.601],
-["ORD","Chicago O'Hare International Airport","Chicago",41.9786,-87.9048],
-["ORF","Norfolk International Airport","Norfolk",36.8946,-76.2012],
-["DJT","Palm Beach International Airport","West Palm Beach",26.6832,-80.0956],
-["PDX","Portland International Airport","Portland",45.5887,-122.598],
-["PHL","Philadelphia International Airport","Philadelphia",39.8719,-75.2411],
-["PHX","Phoenix Sky Harbor International Airport","Phoenix",33.4343,-112.012],
-["PIT","Pittsburgh International Airport","Pittsburgh",40.4915,-80.2329],
-["PNS","Pensacola International Airport","Pensacola",30.4734,-87.1866],
-["PSE","Mercedita Airport","Ponce",18.0083,-66.563],
-["PUJ","Punta Cana International Airport","Punta Cana",18.5674,-68.3634],
-["RDU","Raleigh Durham International Airport","Raleigh/Durham",35.8776,-78.7875],
-["RIC","Richmond International Airport","Richmond",37.5052,-77.3197],
-["RNO","Reno Tahoe International Airport","Reno",39.4991,-119.768],
-["RSW","Southwest Florida International Airport","Fort Myers",26.5362,-81.7552],
-["SAL","El Salvador International Airport","Santa Clara",13.4409,-89.0557],
-["SAN","San Diego International Airport","San Diego",32.7336,-117.19],
-["SAP","Ramon Villeda Morales International Airport","La Mesa",15.4526,-87.9236],
-["SAT","San Antonio International Airport","San Antonio",29.5337,-98.4698],
-["SDQ","Las Americas International Airport","Santo Domingo",18.4297,-69.6689],
-["SEA","Seattle Tacoma International Airport","Seattle",47.449,-122.309],
-["SFO","San Francisco International Airport","San Francisco",37.619,-122.375],
-["SJC","Norman Y. Mineta San Jose International Airport","San Jose",37.3626,-121.929],
-["SJO","Juan Santamaria International Airport","San Jose",9.99386,-84.2088],
-["SJU","Luis Munoz Marin International Airport","San Juan",18.4394,-66.0018],
-["SLC","Salt Lake City International Airport","Salt Lake City",40.7884,-111.978],
-["SMF","Sacramento International Airport","Sacramento",38.6954,-121.591],
-["SNA","John Wayne Airport-Orange County Airport","Santa Ana",33.6757,-117.868],
-["STI","Cibao International Airport","Santiago",19.4061,-70.6047],
-["STL","Lambert St Louis International Airport","St Louis",38.7487,-90.37],
-["SYR","Syracuse Hancock International Airport","Syracuse",43.1112,-76.1063],
-["TPA","Tampa International Airport","Tampa",27.9755,-82.5332],
-["TTN","Trenton Mercer Airport","Trenton",40.2767,-74.8135],
-["XNA","Northwest Arkansas Regional Airport","Fayetteville",36.2819,-94.3068]
-
-];
+const airportSnapshot = [["ATL","Hartsfield Jackson Atlanta International Airport","Atlanta",33.6367,-84.4281,"America/New_York"],["AUS","Austin Bergstrom International Airport","Austin",30.1945,-97.6699,"America/Chicago"],["BDL","Bradley International Airport","Hartford",41.9389,-72.6832,"America/New_York"],["BNA","Nashville International Airport","Nashville",36.1245,-86.6782,"America/Chicago"],["BOG","El Dorado International Airport","Bogota",4.70159,-74.1469,"America/Bogota"],["BOI","Boise Air Terminal/Gowen field","Boise",43.5644,-116.223,"America/Boise"],["BOS","General Edward Lawrence Logan International Airport","Boston",42.3643,-71.0052,"America/New_York"],["BQN","Rafael Hernandez Airport","Aguadilla",18.4949,-67.1294,"America/Puerto_Rico"],["BUF","Buffalo Niagara International Airport","Buffalo",42.9405,-78.7322,"America/New_York"],["BUR","Bob Hope Airport","Burbank",34.2007,-118.359,"America/Los_Angeles"],["BWI","Baltimore/Washington International Thurgood Marshal Airport","Baltimore",39.1754,-76.6683,"America/New_York"],["CLE","Cleveland Hopkins International Airport","Cleveland",41.4117,-81.8498,"America/New_York"],["CLT","Charlotte Douglas International Airport","Charlotte",35.214,-80.9431,"America/New_York"],["CMH","John Glenn Columbus International Airport","Columbus",39.998,-82.8919,"America/New_York"],["CTG","Rafael Nunez International Airport","Cartagena",10.4424,-75.513,"America/Bogota"],["CUN","Cancun International Airport","Cancun",21.0365,-86.8771,"America/Cancun"],["CVG","Cincinnati Northern Kentucky International Airport","Hebron",39.0488,-84.6678,"America/New_York"],["DCA","Ronald Reagan Washington National Airport","Washington",38.8521,-77.0377,"America/New_York"],["DEN","Denver International Airport","Denver",39.8617,-104.673,"America/Denver"],["DFW","Dallas Fort Worth International Airport","Dallas-Fort Worth",32.8968,-97.038,"America/Chicago"],["DSM","Des Moines International Airport","Des Moines",41.534,-93.6631,"America/Chicago"],["DTW","Detroit Metropolitan Wayne County Airport","Detroit",42.2124,-83.3534,"America/Detroit"],["ELP","El Paso International Airport","El Paso",31.8072,-106.378,"America/Denver"],["EWR","Newark Liberty International Airport","Newark",40.6925,-74.1687,"America/New_York"],["FAR","Hector International Airport","Fargo",46.9207,-96.8158,"America/Chicago"],["FLL","Fort Lauderdale Hollywood International Airport","Fort Lauderdale",26.0726,-80.1527,"America/New_York"],["FSD","Joe Foss Field Airport","Sioux Falls",43.582,-96.7419,"America/Chicago"],["GRR","Gerald R. Ford International Airport","Grand Rapids",42.8808,-85.5228,"America/Detroit"],["GUA","La Aurora Airport","Guatemala City",14.5833,-90.5275,"America/Guatemala"],["IAD","Washington Dulles International Airport","Dulles",38.9445,-77.4558,"America/New_York"],["IAH","George Bush Intercontinental Houston Airport","Houston",29.9844,-95.3414,"America/Chicago"],["IND","Indianapolis International Airport","Indianapolis",39.7173,-86.2944,"America/Indiana/Indianapolis"],["ISP","Long Island Mac Arthur Airport","Islip",40.7952,-73.1002,"America/New_York"],["JAX","Jacksonville International Airport","Jacksonville",30.4941,-81.6879,"America/New_York"],["JFK","John F Kennedy International Airport","New York",40.6398,-73.7789,"America/New_York"],["LAS","Harry Reid International Airport","Las Vegas",36.0801,-115.152,"America/Los_Angeles"],["LAX","Los Angeles International Airport","Los Angeles",33.9425,-118.408,"America/Los_Angeles"],["LGA","La Guardia Airport","New York",40.7772,-73.8726,"America/New_York"],["MBJ","Sangster International Airport","Montego Bay",18.5037,-77.9134,"America/Jamaica"],["MCI","Kansas City International Airport","Kansas City",39.2976,-94.7139,"America/Chicago"],["MCO","Orlando International Airport","Orlando",28.4294,-81.309,"America/New_York"],["MDE","Jose Maria Cordova International Airport","Rionegro",6.16454,-75.4231,"America/Bogota"],["MDW","Chicago Midway International Airport","Chicago",41.786,-87.7524,"America/Chicago"],["MEM","Memphis International Airport","Memphis",35.0424,-89.9767,"America/Chicago"],["MIA","Miami International Airport","Miami",25.7932,-80.2906,"America/New_York"],["MKE","General Mitchell International Airport","Milwaukee",42.9472,-87.8966,"America/Chicago"],["MSN","Dane County Regional Truax Field","Madison",43.1399,-89.3375,"America/Chicago"],["MSP","Minneapolis-St Paul International/Wold-Chamberlain Airport","Minneapolis",44.882,-93.2218,"America/Chicago"],["MSY","Louis Armstrong New Orleans International Airport","New Orleans",29.9934,-90.258,"America/Chicago"],["MYR","Myrtle Beach International Airport","Myrtle Beach",33.6797,-78.9283,"America/New_York"],["OAK","Metropolitan Oakland International Airport","Oakland",37.7213,-122.221,"America/Los_Angeles"],["OKC","Will Rogers World Airport","Oklahoma City",35.3931,-97.6007,"America/Chicago"],["OMA","Eppley Airfield","Omaha",41.3032,-95.8941,"America/Chicago"],["ONT","Ontario International Airport","Ontario",34.056,-117.601,"America/Los_Angeles"],["ORD","Chicago O'Hare International Airport","Chicago",41.9786,-87.9048,"America/Chicago"],["ORF","Norfolk International Airport","Norfolk",36.8946,-76.2012,"America/New_York"],["DJT","President Donald J. Trump International Airport (formerly: Palm Beach International Airport)","West Palm Beach",26.6832,-80.0956,"America/New_York"],["PDX","Portland International Airport","Portland",45.5887,-122.598,"America/Los_Angeles"],["PHL","Philadelphia International Airport","Philadelphia",39.8719,-75.2411,"America/New_York"],["PHX","Phoenix Sky Harbor International Airport","Phoenix",33.4343,-112.012,"America/Phoenix"],["PIT","Pittsburgh International Airport","Pittsburgh",40.4915,-80.2329,"America/New_York"],["PNS","Pensacola Regional Airport","Pensacola",30.4734,-87.1866,"America/Chicago"],["PSE","Mercedita Airport","Ponce",18.0083,-66.563,"America/Puerto_Rico"],["PUJ","Punta Cana International Airport","Punta Cana",18.5674,-68.3634,"America/Santo_Domingo"],["RDU","Raleigh Durham International Airport","Raleigh/Durham",35.8776,-78.7875,"America/New_York"],["RIC","Richmond International Airport","Richmond",37.5052,-77.3197,"America/New_York"],["RNO","Reno Tahoe International Airport","Reno",39.4991,-119.768,"America/Los_Angeles"],["RSW","Southwest Florida International Airport","Fort Myers",26.5362,-81.7552,"America/New_York"],["SAL","El Salvador International Airport","Santa Clara",13.4409,-89.0557,"America/El_Salvador"],["SAN","San Diego International Airport","San Diego",32.7336,-117.19,"America/Los_Angeles"],["SAP","Ramon Villeda Morales International Airport","La Mesa",15.4526,-87.9236,"America/Tegucigalpa"],["SAT","San Antonio International Airport","San Antonio",29.5337,-98.4698,"America/Chicago"],["SDQ","Las Americas International Airport","Santo Domingo",18.4297,-69.6689,"America/Santo_Domingo"],["SEA","Seattle Tacoma International Airport","Seattle",47.449,-122.309,"America/Los_Angeles"],["SFO","San Francisco International Airport","San Francisco",37.619,-122.375,"America/Los_Angeles"],["SJC","Norman Y. Mineta San Jose International Airport","San Jose",37.3626,-121.929,"America/Los_Angeles"],["SJO","Juan Santamaria International Airport","San Jose",9.99386,-84.2088,"America/Costa_Rica"],["SJU","Luis Munoz Marin International Airport","San Juan",18.4394,-66.0018,"America/Puerto_Rico"],["SLC","Salt Lake City International Airport","Salt Lake City",40.7884,-111.978,"America/Denver"],["SMF","Sacramento International Airport","Sacramento",38.6954,-121.591,"America/Los_Angeles"],["SNA","John Wayne Airport-Orange County Airport","Santa Ana",33.6757,-117.868,"America/Los_Angeles"],["STI","Cibao International Airport","Santiago",19.4061,-70.6047,"America/Santo_Domingo"],["STL","Lambert St Louis International Airport","St Louis",38.7487,-90.37,"America/Chicago"],["SYR","Syracuse Hancock International Airport","Syracuse",43.1112,-76.1063,"America/New_York"],["TPA","Tampa International Airport","Tampa",27.9755,-82.5332,"America/New_York"],["TTN","Trenton Mercer Airport","Trenton",40.2767,-74.8135,"America/New_York"],["XNA","Northwest Arkansas Regional Airport","Fayetteville/Springdale/",36.2819,-94.3068,"America/Chicago"]];
 
 
 let airports = [];
@@ -529,7 +439,7 @@ function loadAirports() {
     airportSnapshot
 
       .map(
-        ([code, name, city, lat, lon]) => {
+        ([code, name, city, lat, lon, timezone]) => {
 
           const network =
             scores.get(code);
@@ -549,6 +459,9 @@ function loadAirports() {
             lat,
 
             lon,
+
+            timezone:
+              timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
 
             routes:
               network?.count || 0,
@@ -1425,10 +1338,23 @@ function showAirport(
     airport
   );
 
-   updateWeather(
-  airport
-);
-   
+  /* Booking uses the airport's embedded timezone and
+     remains independent from the weather request. */
+  try {
+    setBookingAirport(
+      airport
+    );
+  } catch (bookingError) {
+    console.warn(
+      "Booking dashboard could not update:",
+      bookingError
+    );
+  }
+
+  updateWeather(
+    airport
+  );
+
 }
 
 
@@ -1903,15 +1829,12 @@ async function updateWeather(airport) {
   try {
 
     const weather =
-  await getWeather(
-    airport
-  );
+      await getWeather(
+        airport
+      );
 
-airport.timezone =
-  weather.timezone;
-
-const current =
-  weather.current;
+    const current =
+      weather.current;
 
     const isDay =
       Number(
@@ -2103,16 +2026,6 @@ const current =
         `${low}°–${high}° · ${rain}% precip.`;
 
     }
-try {
-  setBookingAirport(
-    airport
-  );
-} catch (bookingError) {
-  console.warn(
-    "Booking dashboard could not update:",
-    bookingError
-  );
-}
   } catch (error) {
 
     condition.textContent =
@@ -2422,25 +2335,28 @@ function bookingCard(
     return;
 
 
-  card
-    .querySelector(
+  const dateElement =
+    card.querySelector(
       ".booking-date"
-    )
-    .textContent =
-      bookingLabel(date);
+    );
 
+  const statusElement =
+    card.querySelector(
+      ".booking-status"
+    );
+
+  if (dateElement) {
+    dateElement.textContent =
+      bookingLabel(date);
+  }
 
   card.classList.toggle(
     "is-blackout",
     bookingBlackout(date)
   );
 
-
-  card
-    .querySelector(
-      ".booking-status"
-    )
-    .textContent =
+  if (statusElement) {
+    statusElement.textContent =
 
       !bookingKnown(date)
 
@@ -2451,6 +2367,7 @@ function bookingCard(
           ? `${which} is a blackout date. Standard GoWild booking is unavailable; a Peak Day Charge may apply.`
 
           : `Flights departing ${which.toLowerCase()} are within the standard booking window.`;
+  }
 
 }
 
@@ -2554,42 +2471,49 @@ function updateBookingDashboard() {
         "bookingNext"
       );
 
+    if (next) {
 
-    next.classList.toggle(
-      "is-blackout",
-      !bookingKnown(departure)
-    );
+      next.classList.toggle(
+        "is-blackout",
+        !bookingKnown(departure)
+      );
 
-
-    next
-      .querySelector(
-        ".booking-date"
-      )
-      .textContent =
-        bookingLabel(
-          departure
+      const nextDate =
+        next.querySelector(
+          ".booking-date"
         );
 
+      const nextStatus =
+        next.querySelector(
+          ".booking-status"
+        );
 
-    next
-      .querySelector(
-        ".booking-status"
-      )
-      .textContent =
+      if (nextDate) {
+        nextDate.textContent =
+          bookingLabel(
+            departure
+          );
+      }
 
-        bookingKnown(departure)
+      if (nextStatus) {
+        nextStatus.textContent =
 
-          ? `Flights departing ${[
-              "Sunday",
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday"
-            ][departure.weekday]} open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)} (${bookingAirport.code} local time).`
+          bookingKnown(departure)
 
-          : `Expected to open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)}. Check Frontier for newly posted blackout dates.`;
+            ? `Flights departing ${[
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday"
+              ][departure.weekday]} open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)} (${bookingAirport.code} local time).`
+
+            : `Expected to open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)}. Check Frontier for newly posted blackout dates.`;
+      }
+
+    }
 
   }
 
@@ -2642,40 +2566,48 @@ function setBookingAirport(
   airport
 ) {
 
-  if (!airport.timezone)
+  if (
+    !airport ||
+    !airport.timezone
+  ) {
     return;
-
+  }
 
   bookingAirport =
     airport;
 
-
   bookingDayKey =
     "";
 
+  const zone =
+    document.getElementById(
+      "bookingZone"
+    );
 
-  document.getElementById(
-    "bookingZone"
-  ).textContent =
+  const link =
+    document.getElementById(
+      "bookingLink"
+    );
 
-    `Dates and countdown use ${airport.city} (${airport.code}) local time.`;
+  if (zone) {
+    zone.textContent =
+      `Dates and countdown use ${airport.city} (${airport.code}) local time.`;
+  }
 
+  if (link) {
+    link.href =
+      "https://flights.flyfrontier.com/en/flights-from-" +
+      bookingSlug(airport);
 
-  document.getElementById(
-    "bookingLink"
-  ).href =
-
-    "https://flights.flyfrontier.com/en/flights-from-" +
-    bookingSlug(airport);
-
+    link.setAttribute(
+      "aria-label",
+      `Explore Frontier flights from ${airport.city}`
+    );
+  }
 
   updateBookingDashboard();
 
 }
-
-setTimeout(
-  updateBookingDashboard,
-  250
 
 setInterval(
   updateBookingDashboard,
