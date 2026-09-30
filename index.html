@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HowToGoWild</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sage: #66766c;
+      --sage-dark: #4f5d55;
+      --cream: #f7f5ef;
+      --white: #ffffff;
+      --text: #202622;
+      --muted: #6f7772;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Montserrat", sans-serif;
+      background: var(--cream);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 245, 239, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.15rem;
+      text-decoration: none;
+      color: var(--sage-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      background: rgba(102, 118, 108, 0.12);
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 72px 24px 48px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: rgba(102, 118, 108, 0.12);
+      color: var(--sage-dark);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 auto 18px;
+      max-width: 800px;
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      max-width: 680px;
+      margin: 0 auto 28px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 13px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--sage);
+      color: var(--white);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--sage-dark);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 72px;
+    }
+
+    .section h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--sage-dark);
+    }
+
+    .card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .card a {
+      color: var(--sage-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 36px 24px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 800px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding-top: 48px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav class="nav">
+      <a class="logo" href="#">HowToGoWild</a>
+
+      <div class="nav-links">
+        <a href="#start">Start Here</a>
+        <a href="#tools">Tools</a>
+        <a href="#routes">Routes</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <span class="eyebrow">Frontier GoWild! Pass Guide</span>
+
+      <h1>GoWild without the guesswork.</h1>
+
+      <p>
+        Tools, route information, pricing guides, booking tips, and practical
+        resources for getting more out of Frontier's GoWild! Pass.
+      </p>
+
+      <div class="button-row">
+        <a class="btn btn-primary" href="#tools">Explore the tools</a>
+        <a class="btn btn-secondary" href="#routes">Browse routes</a>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <h2>Popular tools</h2>
+
+      <div class="grid">
+        <article class="card">
+          <h3>GoWild Availability</h3>
+          <p>
+            Check when a domestic or international itinerary becomes bookable
+            based on your departure dates.
+          </p>
+          <a href="#">Open tool →</a>
+        </article>
+
+        <article class="card" id="routes">
+          <h3>Routes & Network</h3>
+          <p>
+            Explore Frontier destinations, nonstop routes, and useful
+            connection possibilities.
+          </p>
+          <a href="#">Explore routes →</a>
+        </article>
+
+        <article class="card" id="pricing">
+          <h3>International Pricing</h3>
+          <p>
+            See common taxes and fees for GoWild international trips by
+            country and direction.
+          </p>
+          <a href="#">View pricing →</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    HowToGoWild • Independent travel guide
+  </footer>
+
+</body>
+</html>
