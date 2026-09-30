@@ -1,1 +1,446 @@
+import fs from "node:fs/promises";
+import path from "node:path";
 
+const WORKER_URL =
+  "https://frontier-flight-times.jacob-brown-6700.workers.dev/";
+
+const CONCURRENCY = 5;
+
+/*
+  Keep this route map in sync with dashboard.js.
+  JFK is intentionally excluded as an active destination.
+*/
+const frontierRoutes = {
+  ATL:["AUS","BOS","BUF","BWI","CLE","CMH","CUN","CVG","DEN","DFW","DTW","EWR","FLL","GUA","IAD","IAH","IND","JAX","LAS","LAX","LGA","MBJ","MCI","MCO","MDW","MIA","MSP","MSY","ORD","ORF","PHL","PHX","PUJ","RDU","SAL","SFO","SJO","SJU","STL","TPA"],
+  AUS:["ATL","CLE","DEN","LAS","MCO","PHX"],
+  BDL:["MCO","SJU"],
+  BNA:["DEN","DFW","LAS","MCO","PHL","TPA"],
+  BOI:["DEN","LAS"],
+  BOS:["ATL","MCO","RDU","SJU"],
+  BQN:["MCO"],
+  BUF:["ATL","MCO","RDU","TPA"],
+  BUR:["LAS"],
+  BWI:["ATL","CLT","DFW","DTW","FLL","IAH","MCO","MIA","ORD","SJU","TPA"],
+  CLE:["ATL","AUS","CUN","DEN","DFW","FLL","LAS","MCO","MIA","PHX","PUJ","RDU","RSW","SJU","TPA"],
+  CLT:["BWI","DEN","DFW","FLL","IAH","LGA","MCO","MIA","PHL","SJU"],
+  CMH:["ATL","DEN","FLL","MCO"],
+  CTG:["MCO"],
+  CUN:["ATL","CLE","CVG","DEN","DFW","DTW","IAH","MCO","ORD","PHL","STL"],
+  CVG:["ATL","CUN","DEN","DFW","FLL","LAS","MCO","MIA","PUJ","RSW","TPA"],
+  DCA:["DEN"],
+  DEN:["ATL","AUS","BNA","BOI","CID","CLE","CLT","CMH","CUN","CVG","DCA","DFW","DSM","DTW","ELP","FAR","FLL","FSD","GRR","IAH","IND","LAS","LAX","LIT","MCI","MCO","MEM","MIA","MSN","MSP","MSY","OKC","OMA","ONT","ORD","PDX","PHL","PHX","PNS","RDU","RIC","RSW","SAN","SAT","SEA","SFO","SLC","SMF","SNA","STL","TPA","XNA"],
+  DFW:["ATL","BNA","BWI","CLE","CLT","CUN","CVG","DEN","DTW","EWR","FLL","GUA","IAD","IND","LAS","LAX","LGA","MCO","MDW","MIA","MSP","MSY","ONT","ORD","PHL","PHX","RDU","SAL","SAN","SFO","SJO","SJU","SLC","SNA","STL","TPA"],
+  DJT:["PHL"],
+  DSM:["DEN","MCO","PHX"],
+  DTW:["ATL","BWI","CUN","DEN","DFW","FLL","IAH","LAS","LAX","MCO","PHL","PHX","RDU","RSW","TPA"],
+  ELP:["DEN","LAS"],
+  EWR:["ATL","DFW","MCO","SJU"],
+  FAR:["DEN"],
+  FLL:["ATL","BWI","CLE","CLT","CMH","CVG","DEN","DFW","DTW","IAD","IAH","IND","ORD","PHL","RDU","SJU"],
+  FSD:["DEN"],
+  GRR:["DEN","MCO","TPA"],
+  GUA:["ATL","DFW","IAH","LAX","MCO","MIA"],
+  IAD:["ATL","DFW","FLL","LAS","MCO","MIA","SAL","SJU","TPA"],
+  IAH:["ATL","BWI","CLT","CUN","DEN","DTW","FLL","GUA","LAS","LAX","MCO","MIA","ONT","ORD","PHX","RDU","SAL","SAP","SJU","TPA"],
+  IND:["ATL","DEN","DFW","FLL","MCO"],
+  ISP:["MCO","TPA"],
+  JAX:["ATL","PHL","SJU"],
+  LAS:["ATL","AUS","BNA","BOI","BUR","CLE","CVG","DEN","DFW","DTW","ELP","IAD","IAH","LAX","MCI","MCO","MIA","MSP","MSY","OAK","OKC","ONT","ORD","PDX","PHL","PHX","RNO","SAN","SAT","SEA","SFO","SJC","SLC","SMF","SNA","STL"],
+  LAX:["ATL","DEN","DFW","DTW","GUA","IAH","LAS","MCO","ORD","PDX","PHX","SEA","SFO","SJC","SLC","SMF"],
+  LGA:["ATL","CLT","DFW","MCO","MIA","SJU"],
+  LIT:["DEN"],
+  MBJ:["ATL","PHL"],
+  MCI:["ATL","DEN","LAS","MCO"],
+  MCO:["ATL","AUS","BDL","BNA","BOS","BQN","BUF","BWI","CLE","CLT","CMH","CUN","CVG","DEN","DFW","DSM","DTW","EWR","GRR","GUA","IAD","IAH","IND","ISP","LAS","LAX","LGA","MCI","MDW","MEM","MKE","MSP","MSY","ORD","ORF","PHL","PHX","PIT","PNS","PSE","RDU","RIC","SAL","SAP","SAT","SDQ","SJO","SJU","STL","SYR","TTN"],
+  MDE:["MCO"],
+  MDW:["ATL","DFW","MCO"],
+  MEM:["DEN","MCO"],
+  MIA:["ATL","BWI","CLE","CLT","CVG","DEN","DFW","GUA","IAD","IAH","LAS","LGA","PHL","RDU","SAP","SJU"],
+  MKE:["MCO"],
+  MSN:["DEN"],
+  MSP:["ATL","DEN","DFW","LAS","MCO","PHX"],
+  MSY:["ATL","DEN","DFW","LAS","MCO","TPA"],
+  MYR:["PHL"],
+  OAK:["LAS","ONT"],
+  OKC:["DEN","LAS"],
+  OMA:["DEN"],
+  ONT:["DEN","DFW","IAH","LAS","OAK","PDX","SEA","SFO","SMF"],
+  ORD:["ATL","BWI","CUN","DEN","DFW","FLL","IAH","LAS","LAX","MCO","PHL","PHX","RSW","SJU","TPA"],
+  ORF:["ATL","MCO"],
+  PDX:["DEN","LAS","LAX","ONT","SFO"],
+  PHL:["ATL","BNA","CLT","CUN","DEN","DFW","DJT","DTW","FLL","JAX","LAS","MBJ","MCO","MIA","MYR","ORD","PUJ","RDU","RSW","SDQ","SJU","STI","TPA"],
+  PHX:["ATL","AUS","CLE","DEN","DFW","DSM","DTW","IAH","LAS","LAX","MCO","MSP","ORD","SAN","SAT","SFO","SLC","SNA"],
+  PIT:["MCO"],
+  PNS:["DEN","MCO"],
+  PSE:["MCO"],
+  PUJ:["ATL","CLE","CVG","PHL","SJU","STL"],
+  RDU:["ATL","BOS","BUF","CLE","DEN","DFW","DTW","FLL","IAH","MCO","MIA","PHL","SJU","TPA"],
+  RIC:["MCO"],
+  RNO:["LAS"],
+  RSW:["CLE","CVG","DEN","DTW","ORD","PHL"],
+  SAL:["ATL","DFW","IAD","IAH","MCO"],
+  SAN:["DEN","DFW","LAS","PHX","SFO"],
+  SAP:["IAH","MCO","MIA"],
+  SAT:["DEN","LAS","MCO","PHX"],
+  SDQ:["MCO","PHL","SJU","TPA"],
+  SEA:["DEN","LAS","LAX","ONT"],
+  SFO:["ATL","DEN","DFW","LAS","LAX","ONT","PDX","PHX","SAN","SLC","SNA"],
+  SJC:["LAS","LAX"],
+  SJO:["ATL","DFW","MCO"],
+  SJU:["ATL","BDL","BOS","BWI","CLE","CLT","DFW","EWR","FLL","IAD","IAH","JAX","LGA","MCO","MIA","ORD","PHL","PUJ","RDU","SDQ","TPA"],
+  SLC:["DEN","DFW","LAS","LAX","PHX","SFO"],
+  SMF:["DEN","LAS","LAX","ONT"],
+  SNA:["DEN","DFW","LAS","PHX","SFO"],
+  STI:["PHL"],
+  STL:["ATL","CUN","DEN","DFW","LAS","MCO","PUJ"],
+  SYR:["MCO"],
+  TPA:["ATL","BNA","BUF","BWI","CLE","CVG","DEN","DFW","DTW","GRR","IAD","IAH","ISP","MSY","ORD","PHL","RDU","SDQ","SJU","TTN"],
+  TTN:["MCO","TPA"],
+  XNA:["DEN"]
+};
+
+
+function tomorrowISO() {
+  const now = new Date();
+
+  const tomorrow =
+    new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1
+      )
+    );
+
+  return tomorrow
+    .toISOString()
+    .slice(0, 10);
+}
+
+
+const departDate =
+  tomorrowISO();
+
+
+async function lookupRoute(
+  origin,
+  destination
+) {
+
+  try {
+
+    const response =
+      await fetch(
+        WORKER_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              origin,
+              destination,
+              departDate
+            })
+        }
+      );
+
+
+    if (!response.ok) {
+
+      console.warn(
+        `${origin}-${destination}: HTTP ${response.status}`
+      );
+
+      return [];
+    }
+
+
+    const data =
+      await response.json();
+
+
+    return (
+      data.flights || []
+    )
+
+      .filter(
+        flight =>
+          Array.isArray(
+            flight.flights
+          ) &&
+          flight.flights.length === 1
+      )
+
+      .map(
+        flight => ({
+          destination,
+
+          departureTime:
+            flight.departureTime,
+
+          flightNumber:
+            String(
+              flight.flights[0]
+            )
+        })
+      );
+
+
+  } catch (error) {
+
+    console.warn(
+      `${origin}-${destination} failed:`,
+      error.message
+    );
+
+    return [];
+  }
+
+}
+
+
+async function processInBatches(
+  jobs,
+  concurrency
+) {
+
+  const results = [];
+
+  for (
+    let i = 0;
+    i < jobs.length;
+    i += concurrency
+  ) {
+
+    const batch =
+      jobs.slice(
+        i,
+        i + concurrency
+      );
+
+
+    const batchResults =
+      await Promise.all(
+        batch.map(
+          job =>
+            lookupRoute(
+              job.origin,
+              job.destination
+            )
+        )
+      );
+
+
+    for (
+      let j = 0;
+      j < batch.length;
+      j++
+    ) {
+
+      results.push({
+        ...batch[j],
+        flights:
+          batchResults[j]
+      });
+
+    }
+
+
+    console.log(
+      `Processed ${Math.min(
+        i + concurrency,
+        jobs.length
+      )}/${jobs.length} route lookups`
+    );
+
+  }
+
+
+  return results;
+}
+
+
+async function main() {
+
+  const jobs = [];
+
+
+  for (
+    const [
+      origin,
+      destinations
+    ] of Object.entries(
+      frontierRoutes
+    )
+  ) {
+
+    for (
+      const destination of
+      destinations
+    ) {
+
+      jobs.push({
+        origin,
+        destination
+      });
+
+    }
+
+  }
+
+
+  console.log(
+    `Building Frontier snapshot for ${departDate}`
+  );
+
+  console.log(
+    `${jobs.length} nonstop route lookups`
+  );
+
+
+  const routeResults =
+    await processInBatches(
+      jobs,
+      CONCURRENCY
+    );
+
+
+  const airports = {};
+
+
+  for (
+    const origin of
+    Object.keys(
+      frontierRoutes
+    )
+  ) {
+
+    airports[origin] = [];
+
+  }
+
+
+  let flightCount = 0;
+
+
+  for (
+    const result of
+    routeResults
+  ) {
+
+    if (
+      !result.flights.length
+    ) {
+      continue;
+    }
+
+
+    airports[
+      result.origin
+    ].push(
+      ...result.flights
+    );
+
+
+    flightCount +=
+      result.flights.length;
+
+  }
+
+
+  for (
+    const flights of
+    Object.values(
+      airports
+    )
+  ) {
+
+    flights.sort(
+      (a, b) =>
+        String(
+          a.departureTime
+        ).localeCompare(
+          String(
+            b.departureTime
+          )
+        )
+    );
+
+  }
+
+
+  const snapshot = {
+
+    date:
+      departDate,
+
+    generatedAt:
+      new Date()
+        .toISOString(),
+
+    routeLookups:
+      jobs.length,
+
+    flightCount,
+
+    airports
+
+  };
+
+
+  const dataDirectory =
+    path.resolve(
+      "data"
+    );
+
+
+  await fs.mkdir(
+    dataDirectory,
+    {
+      recursive: true
+    }
+  );
+
+
+  const filePath =
+    path.join(
+      dataDirectory,
+      `${departDate}.json`
+    );
+
+
+  await fs.writeFile(
+    filePath,
+    JSON.stringify(
+      snapshot,
+      null,
+      2
+    ) + "\n",
+    "utf8"
+  );
+
+
+  console.log(
+    `Saved ${flightCount} nonstop departures to ${filePath}`
+  );
+
+}
+
+
+main()
+  .catch(
+    error => {
+
+      console.error(
+        error
+      );
+
+      process.exitCode = 1;
+
+    }
+  );
