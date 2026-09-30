@@ -1703,3 +1703,45 @@ h3 {
   }
 
 }
+/* Desktop weather cleanup */
+
+@media (min-width: 701px) {
+
+  .dashboard-weather {
+    min-height: 260px;
+  }
+
+  .dashboard-weather-content {
+    min-height: 260px;
+    padding: 28px 32px;
+  }
+
+  .dashboard-weather-top {
+    align-items: center;
+  }
+
+  .dashboard-current-weather {
+    gap: 12px;
+  }
+
+  .dashboard-temperature {
+    font-size: 52px;
+  }
+
+  .dashboard-condition {
+    font-size: 15px;
+  }
+
+  .dashboard-wind strong {
+    font-size: 22px;
+  }
+
+  .dashboard-weather-message {
+    max-width: 620px;
+  }
+
+  .dashboard-tomorrow {
+    margin-top: 18px;
+  }
+
+}
