@@ -175,7 +175,7 @@ h3 {
 }
 
 .hero-content {
-  width: min(calc(100% - 40px), var(--page-width));
+  width: min(calc(100% - 40px), 900px);
   margin: auto;
   padding: 90px 0;
 }
