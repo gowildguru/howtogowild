@@ -713,3 +713,22 @@ h3 {
   }
 
 }
+/* Helpful Tools — pill-only treatment */
+
+.simple-tool-title {
+  padding: 9px 18px;
+  margin-bottom: 9px;
+
+  border-radius: 999px;
+
+  background: #66766c;
+  color: #ffffff;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.simple-tool:hover .simple-tool-title {
+  background: #526158;
+}
