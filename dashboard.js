@@ -1906,7 +1906,13 @@ async function updateWeather(airport) {
       await getWeather(
         airport
       );
+     
+airport.timezone =
+  weather.timezone;
 
+setBookingAirport(
+  airport
+);
     const current =
       weather.current;
 
