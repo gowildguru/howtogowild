@@ -2132,7 +2132,540 @@ async function updateWeather(airport) {
 /* =====================================================
    INITIALIZE
    ===================================================== */
+/* =====================================================
+   STAGE 3 — GOWILD BOOKING WINDOW
+   ===================================================== */
 
+const goWildBlackouts = {
+
+  2026: {
+    1:[1,3,4,15,16,19],
+    2:[12,13,16],
+    3:[13,14,15,20,21,22,27,28,29],
+    4:[3,4,5,6,10,11,12],
+    5:[21,22,25],
+    6:[25,26,27,28],
+    7:[2,3,4,5,6],
+    9:[3,4,7],
+    10:[8,9,11,12],
+    11:[24,25,28,29],
+    12:[19,20,21,22,23,24,26,27,28,29,30,31]
+  },
+
+  2027: {
+    1:[1,2,3,14,15,18],
+    2:[11,12,15],
+    3:[12,13,14,19,20,21,26,27,28,29],
+    4:[2,3,4]
+  }
+
+};
+
+
+const goWildSlugs = {
+  DCA:"washington",
+  IAD:"washington",
+  DFW:"dallas",
+  JFK:"new-york",
+  LGA:"new-york",
+  MDW:"chicago",
+  ORD:"chicago",
+  ONT:"ontario-ca",
+  SNA:"orange-county",
+  MSP:"minneapolis",
+  ISP:"long-island",
+  RDU:"raleigh",
+  XNA:"fayetteville"
+};
+
+
+let bookingAirport = null;
+let bookingTarget = null;
+let bookingDayKey = "";
+
+
+const bookingPad =
+  number =>
+    String(number).padStart(2, "0");
+
+
+function bookingSlug(airport) {
+
+  return (
+
+    goWildSlugs[airport.code] ||
+
+    airport.city
+      .split("/")[0]
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+
+  );
+
+}
+
+
+function bookingParts(
+  date,
+  timezone
+) {
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone: timezone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23"
+      }
+    )
+    .formatToParts(date);
+
+
+  const values =
+    Object.fromEntries(
+      parts.map(
+        part => [
+          part.type,
+          Number(part.value)
+        ]
+      )
+    );
+
+
+  return {
+    year: values.year,
+    month: values.month,
+    day: values.day,
+    hour: values.hour,
+    minute: values.minute,
+    second: values.second
+  };
+
+}
+
+
+function bookingDate(
+  parts,
+  addDays
+) {
+
+  const date =
+    new Date(
+      Date.UTC(
+        parts.year,
+        parts.month - 1,
+        parts.day + addDays
+      )
+    );
+
+
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
+    weekday: date.getUTCDay()
+  };
+
+}
+
+
+function bookingKey(date) {
+
+  return (
+    `${date.year}-` +
+    `${bookingPad(date.month)}-` +
+    `${bookingPad(date.day)}`
+  );
+
+}
+
+
+function bookingKnown(date) {
+
+  return (
+    date.year === 2026 ||
+    (
+      date.year === 2027 &&
+      date.month <= 4
+    )
+  );
+
+}
+
+
+function bookingBlackout(date) {
+
+  return (
+    goWildBlackouts[
+      date.year
+    ]?.[
+      date.month
+    ] || []
+  ).includes(
+    date.day
+  );
+
+}
+
+
+function bookingLabel(date) {
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+
+
+  return (
+    `${days[date.weekday]} ` +
+    `${bookingPad(date.month)}/` +
+    `${bookingPad(date.day)}/` +
+    `${date.year}`
+  );
+
+}
+
+
+/* Convert midnight in the selected airport's
+   timezone into a real instant. */
+
+function bookingMidnight(
+  date,
+  timezone
+) {
+
+  const desired =
+    Date.UTC(
+      date.year,
+      date.month - 1,
+      date.day
+    );
+
+
+  let instant =
+    desired;
+
+
+  for (
+    let i = 0;
+    i < 4;
+    i++
+  ) {
+
+    const parts =
+      bookingParts(
+        new Date(instant),
+        timezone
+      );
+
+
+    const shown =
+      Date.UTC(
+        parts.year,
+        parts.month - 1,
+        parts.day,
+        parts.hour,
+        parts.minute,
+        parts.second
+      );
+
+
+    instant +=
+      desired - shown;
+
+  }
+
+
+  return instant;
+
+}
+
+
+function bookingCard(
+  id,
+  date,
+  which
+) {
+
+  const card =
+    document.getElementById(id);
+
+
+  if (!card)
+    return;
+
+
+  card
+    .querySelector(
+      ".booking-date"
+    )
+    .textContent =
+      bookingLabel(date);
+
+
+  card.classList.toggle(
+    "is-blackout",
+    bookingBlackout(date)
+  );
+
+
+  card
+    .querySelector(
+      ".booking-status"
+    )
+    .textContent =
+
+      !bookingKnown(date)
+
+        ? "Check Frontier for newly posted blackout dates."
+
+        : bookingBlackout(date)
+
+          ? `${which} is a blackout date. Standard GoWild booking is unavailable; a Peak Day Charge may apply.`
+
+          : `Flights departing ${which.toLowerCase()} are within the standard booking window.`;
+
+}
+
+
+function updateBookingDashboard() {
+
+  if (
+    !bookingAirport ||
+    !bookingAirport.timezone
+  ) {
+
+    return;
+
+  }
+
+
+  const timezone =
+    bookingAirport.timezone;
+
+
+  const now =
+    Date.now();
+
+
+  const today =
+    bookingDate(
+      bookingParts(
+        new Date(now),
+        timezone
+      ),
+      0
+    );
+
+
+  const key =
+    `${bookingAirport.code}:${bookingKey(today)}`;
+
+
+  if (
+    key !== bookingDayKey
+  ) {
+
+    bookingDayKey =
+      key;
+
+
+    bookingCard(
+      "bookingToday",
+      today,
+      "Today"
+    );
+
+
+    bookingCard(
+      "bookingTomorrow",
+      bookingDate(today, 1),
+      "Tomorrow"
+    );
+
+
+    let offset = 2;
+
+    let departure =
+      bookingDate(
+        today,
+        offset
+      );
+
+
+    while (
+      bookingKnown(departure) &&
+      bookingBlackout(departure) &&
+      offset < 370
+    ) {
+
+      departure =
+        bookingDate(
+          today,
+          ++offset
+        );
+
+    }
+
+
+    const opensOn =
+      bookingDate(
+        today,
+        offset - 1
+      );
+
+
+    bookingTarget =
+      bookingMidnight(
+        opensOn,
+        timezone
+      );
+
+
+    const next =
+      document.getElementById(
+        "bookingNext"
+      );
+
+
+    next.classList.toggle(
+      "is-blackout",
+      !bookingKnown(departure)
+    );
+
+
+    next
+      .querySelector(
+        ".booking-date"
+      )
+      .textContent =
+        bookingLabel(
+          departure
+        );
+
+
+    next
+      .querySelector(
+        ".booking-status"
+      )
+      .textContent =
+
+        bookingKnown(departure)
+
+          ? `Flights departing ${[
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ][departure.weekday]} open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)} (${bookingAirport.code} local time).`
+
+          : `Expected to open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)}. Check Frontier for newly posted blackout dates.`;
+
+  }
+
+
+  const remaining =
+    Math.max(
+      0,
+      Math.ceil(
+        (bookingTarget - now) /
+        1000
+      )
+    );
+
+
+  const hours =
+    Math.floor(
+      remaining / 3600
+    );
+
+
+  const minutes =
+    Math.floor(
+      remaining / 60
+    ) % 60;
+
+
+  const seconds =
+    remaining % 60;
+
+
+  const timer =
+    document.querySelector(
+      "#bookingNext .booking-timer"
+    );
+
+
+  if (timer) {
+
+    timer.textContent =
+      `${bookingPad(hours)}:` +
+      `${bookingPad(minutes)}:` +
+      `${bookingPad(seconds)}`;
+
+  }
+
+}
+
+
+function setBookingAirport(
+  airport
+) {
+
+  if (!airport.timezone)
+    return;
+
+
+  bookingAirport =
+    airport;
+
+
+  bookingDayKey =
+    "";
+
+
+  document.getElementById(
+    "bookingZone"
+  ).textContent =
+
+    `Dates and countdown use ${airport.city} (${airport.code}) local time.`;
+
+
+  document.getElementById(
+    "bookingLink"
+  ).href =
+
+    "https://flights.flyfrontier.com/en/flights-from-" +
+    bookingSlug(airport);
+
+
+  updateBookingDashboard();
+
+}
+
+
+setInterval(
+  updateBookingDashboard,
+  1000
+);
 async function initializeDashboard() {
 
   loadAirports();
