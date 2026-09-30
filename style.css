@@ -1408,3 +1408,20 @@ h3 {
   font-size: 0.72rem;
   font-weight: 600;
 }
+/* Force dashboard airport photo to display on desktop */
+
+.dashboard-airport-photo {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -3 !important;
+
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.dashboard-airport-hero {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
