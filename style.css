@@ -1425,3 +1425,281 @@ h3 {
   overflow: hidden !important;
   isolation: isolate !important;
 }
+/* =========================================
+   DASHBOARD STAGE 2 — WEATHER
+   ========================================= */
+
+.dashboard-weather {
+  position: relative;
+  min-height: 235px;
+
+  margin-top: 12px;
+
+  overflow: hidden;
+  border-radius: 22px;
+
+  background: #66766c;
+  color: #ffffff;
+
+  isolation: isolate;
+
+  box-shadow:
+    0 10px 26px rgba(20, 34, 25, 0.12);
+}
+
+.dashboard-weather-photo {
+  position: absolute;
+  inset: 0;
+
+  z-index: -3;
+
+  background-size: cover;
+  background-position: center;
+
+  transition: background-image 0.3s ease;
+}
+
+.dashboard-weather-shade {
+  position: absolute;
+  inset: 0;
+
+  z-index: -2;
+
+  background:
+    linear-gradient(
+      115deg,
+      rgba(15, 22, 18, 0.72),
+      rgba(15, 22, 18, 0.32)
+    );
+}
+
+.dashboard-weather-content {
+  min-height: 235px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 25px 28px;
+}
+
+.dashboard-weather-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 18px;
+}
+
+.dashboard-weather-label {
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.9px;
+
+  opacity: 0.82;
+}
+
+.dashboard-current-weather {
+  display: flex;
+  align-items: baseline;
+
+  gap: 10px;
+
+  margin-top: 3px;
+}
+
+.dashboard-temperature {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dashboard-condition {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dashboard-wind {
+  display: flex;
+  flex-direction: column;
+
+  text-align: right;
+}
+
+.dashboard-wind strong {
+  font-size: 20px;
+}
+
+.dashboard-wind span {
+  font-size: 9px;
+  opacity: 0.82;
+}
+
+
+/* Only appears when noteworthy */
+
+.dashboard-weather-concerns {
+  display: none;
+
+  flex-wrap: wrap;
+  gap: 7px;
+
+  margin-top: 10px;
+}
+
+.dashboard-weather-chip {
+  display: none;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.17);
+
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+
+  font-size: 10px;
+}
+
+.dashboard-weather-chip.show {
+  display: flex;
+}
+
+
+/* Operational assessment */
+
+.dashboard-weather-message {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  margin-top: 13px;
+  padding: 11px 13px;
+
+  border-radius: 14px;
+
+  background: rgba(0, 0, 0, 0.23);
+
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.dashboard-weather-icon {
+  width: 23px;
+  height: 23px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.22);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.dashboard-weather-message strong {
+  display: block;
+
+  font-size: 11px;
+}
+
+.dashboard-weather-message span {
+  display: block;
+
+  margin-top: 2px;
+
+  font-size: 10px;
+  line-height: 1.45;
+
+  opacity: 0.9;
+}
+
+
+/* Tomorrow */
+
+.dashboard-tomorrow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  margin-top: 14px;
+  padding-top: 10px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.22);
+}
+
+.dashboard-tomorrow-label {
+  display: block;
+
+  margin-bottom: 2px;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  opacity: 0.72;
+}
+
+.dashboard-tomorrow strong {
+  font-size: 11px;
+}
+
+.dashboard-tomorrow-summary {
+  text-align: right;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+
+@media (max-width: 600px) {
+
+  .dashboard-weather {
+    min-height: 220px;
+  }
+
+  .dashboard-weather-content {
+    min-height: 220px;
+
+    padding: 19px;
+  }
+
+  .dashboard-temperature {
+    font-size: 36px;
+  }
+
+}
+
+
+@media (max-width: 430px) {
+
+  .dashboard-weather-top {
+    gap: 8px;
+  }
+
+  .dashboard-tomorrow {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .dashboard-tomorrow-summary {
+    text-align: left;
+  }
+
+}
