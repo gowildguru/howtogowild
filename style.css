@@ -4558,7 +4558,7 @@ body.tool-modal-open {
   width: 100%;
   min-height: 500px;
   margin: 0 auto;
-  padding: 230px 48px 72px;
+  padding: 190px 48px 72px;
 
   display: flex;
   flex-direction: column;
@@ -4600,10 +4600,10 @@ body.tool-modal-open {
 
 .credit-card-image {
   position: absolute;
-  top: -145px;
+  top: -95px;
   left: 50%;
 
-  width: min(78%, 430px);
+  width: min(62%, 350px);
   height: auto;
   object-fit: contain;
 
