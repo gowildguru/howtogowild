@@ -2313,3 +2313,332 @@ z-index: 2;
     opacity: 0.30;
   }
 }
+/* FAQ redesign — scoped to #faq to preserve the homepage and dashboard. */
+#faq.gw-faq {
+  padding: 80px 24px;
+  background: linear-gradient(rgba(30,45,36,.12),rgba(30,45,36,.12)), url('images/felirbe-uvlvl0XqQl0-unsplash.jpg') center 60% / cover no-repeat;
+  background-color: #1c2721;
+  font-family: 'Montserrat', sans-serif;
+  scroll-margin-top: 24px;
+}
+#faq .gw-faq-inner { max-width: 900px; margin: 0 auto; }
+#faq .gw-faq-heading { text-align: center; color: #fff; margin-bottom: 32px; text-shadow: 0 2px 12px #17231bcc; }
+#faq .gw-faq-heading h2 { color: inherit; font-size: clamp(1.65rem, 3vw, 2.25rem); line-height: 1.2; margin: 0 0 12px; }
+#faq .gw-faq-heading p { margin: 0; font-size: .95rem; }
+#faq .gw-faq-list { display: grid; gap: 14px; }
+#faq .gw-faq-card {
+  border: 1px solid rgba(255,255,255,.28); border-radius: 22px; overflow: hidden;
+  background: rgba(250,252,250,.96); color: var(--text, #26332b);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.14);
+  transition: background-color .3s ease, color .3s ease;
+}
+#faq.gw-faq-ready .gw-faq-card:not(.is-open) { background: rgba(28,39,33,.70); color: #fff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+#faq .gw-faq-card h3 { margin: 0; font-size: 1rem; }
+#faq .gw-faq-trigger { display: flex; align-items: center; gap: 16px; width: 100%; padding: 20px 22px; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; line-height: 1.4; }
+#faq .gw-faq-icon { width: 42px; height: 42px; flex: 0 0 42px; display: grid; place-items: center; border-radius: 14px; background: rgba(102,118,108,.14); }
+#faq.gw-faq-ready .gw-faq-card:not(.is-open) .gw-faq-icon { background: rgba(255,255,255,.12); }
+#faq .gw-faq-icon svg { width: 24px; height: 24px; }
+#faq .gw-faq-chevron { display: grid; place-items: center; margin-left: auto; flex: 0 0 30px; transition: transform .3s; }
+#faq .gw-faq-chevron svg { width: 20px; height: 20px; }
+#faq .is-open .gw-faq-chevron { transform: rotate(180deg); }
+#faq .gw-faq-panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .3s ease, visibility .3s; }
+#faq.gw-faq-ready .gw-faq-card:not(.is-open) .gw-faq-panel { grid-template-rows: 0fr; visibility: hidden; }
+#faq .gw-faq-panel-inner { min-height: 0; overflow: hidden; }
+#faq .gw-faq-body { padding: 0 28px 28px 80px; font-size: .94rem; line-height: 1.75; }
+#faq .gw-faq-copy + .gw-faq-copy { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border, #d9dfdb); }
+#faq .gw-faq-copy h4 { margin: 0 0 12px; color: var(--green-dark,#354d3d); font-size: 1rem; line-height: 1.5; }
+#faq .gw-faq-copy p { margin: 0 0 12px; }
+#faq .gw-faq-copy p:last-child { margin-bottom: 0; }
+#faq .gw-faq-copy a { text-decoration: underline; font-weight: 600; }
+#faq button:focus-visible, #faq input:focus-visible, #faq select:focus-visible { outline: 3px solid #92ad9c; outline-offset: 3px; }
+#faq .gw-faq-trigger:focus-visible { outline-offset: -5px; }
+@media (max-width: 600px) {
+  #faq.gw-faq { padding: 48px 16px; }
+  #faq .gw-faq-trigger { padding: 18px 16px; gap: 12px; }
+  #faq .gw-faq-body { padding: 0 18px 22px; }
+  #faq .gw-faq-card h3 { font-size: .92rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #faq .gw-faq-panel, #faq .gw-faq-card, #faq .gw-faq-chevron { transition: none; }
+}
+
+#faq .gw-booking-widget * {
+  box-sizing:border-box;
+}
+#faq .gw-booking-widget {
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  font-family:Montserrat, Arial, sans-serif;
+  color:#66766c;
+}
+#faq .gw-booking-widget .gw-title {
+  background:#66766c;
+  color:white;
+  border-radius:999px;
+  padding:11px 14px;
+  text-align:center;
+  font-size:11pt;
+  font-weight:700;
+  margin-bottom:10px;
+}
+#faq .gw-booking-widget #gw-formView,
+#faq .gw-booking-widget #gw-resultView {
+  width:100%;
+}
+#faq .gw-booking-widget #gw-resultView {
+  display:none;
+}
+#faq .gw-booking-widget .field {
+  margin-bottom:8px;
+}
+#faq .gw-booking-widget .field label:not(.check-toggle) {
+  display:block;
+  margin:0 0 3px 4px;
+  font-size:8.5pt;
+  font-weight:700;
+}
+#faq .gw-booking-widget select,
+#faq .gw-booking-widget input[type="date"] {
+  width:100%;
+  height:39px;
+  border:1px solid rgba(102,118,108,.35);
+  border-radius:999px;
+  padding:0 12px;
+  background:white;
+  color:#3f4541;
+  font-family:Montserrat, Arial, sans-serif;
+  font-size:15px;
+  outline:none;
+}
+#faq .gw-booking-widget select:focus,
+#faq .gw-booking-widget input[type="date"]:focus {
+  border:2px solid #66766c;
+}
+#faq .gw-booking-widget .date-field {
+  width:190px;
+  max-width:100%;
+}
+#faq .gw-booking-widget .date-field input[type="date"] {
+  width:190px;
+  max-width:100%;
+}
+#faq .gw-booking-widget .check-toggle {
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  cursor:pointer;
+  font-size:8.5pt;
+  font-weight:600;
+  color:#66766c;
+}
+#faq .gw-booking-widget .nonstop-toggle {
+  margin:0 0 8px 3px;
+}
+#faq .gw-booking-widget .nextday-toggle {
+  margin:5px 0 0 3px;
+}
+#faq .gw-booking-widget .check-toggle input {
+  display:none;
+}
+#faq .gw-booking-widget .toggle-box {
+  width:18px;
+  height:18px;
+  border:2px solid #66766c;
+  border-radius:5px;
+  position:relative;
+  flex-shrink:0;
+}
+#faq .gw-booking-widget .check-toggle input:checked + .toggle-box {
+  background:#66766c;
+}
+#faq .gw-booking-widget .check-toggle input:checked + .toggle-box::after {
+  content:"✓";
+  position:absolute;
+  left:2px;
+  top:-3px;
+  color:white;
+  font-size:13px;
+  font-weight:700;
+}
+#faq .gw-booking-widget #gw-calculateButton,
+#faq .gw-booking-widget .secondary-button,
+#faq .gw-booking-widget .details-button {
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  border:0;
+  border-radius:999px;
+  font-family:Montserrat, Arial, sans-serif;
+  font-weight:700;
+  cursor:pointer;
+}
+#faq .gw-booking-widget #gw-calculateButton {
+  margin-top:10px;
+  padding:10px 18px;
+  background:#66766c;
+  color:white;
+  font-size:9.5pt;
+}
+#faq .gw-booking-widget .secondary-button {
+  margin-top:10px;
+  padding:9px 15px;
+  background:rgba(102,118,108,.12);
+  color:#66766c;
+  font-size:8.5pt;
+}
+#faq .gw-booking-widget .details-button {
+  margin-top:9px;
+  padding:8px 14px;
+  background:transparent;
+  color:#66766c;
+  border:1px solid rgba(102,118,108,.28);
+  font-size:8.5pt;
+}
+#faq .gw-booking-widget .error-message {
+  display:none;
+  margin-top:7px;
+  color:#8b4c4c;
+  font-size:8.5pt;
+  font-weight:600;
+  text-align:center;
+}
+#faq .gw-booking-widget .result-view {
+  text-align:center;
+  padding:1px 4px 0;
+}
+#faq .gw-booking-widget .route-summary {
+  margin-bottom:6px;
+  font-size:9pt;
+  font-weight:700;
+}
+#faq .gw-booking-widget .result-label {
+  font-size:8.5pt;
+  font-weight:600;
+  margin-bottom:3px;
+}
+#faq .gw-booking-widget .main-result {
+  font-size:14pt;
+  font-weight:700;
+  line-height:1.2;
+}
+#faq .gw-booking-widget .local-note {
+  margin-top:3px;
+  font-size:7.5pt;
+  opacity:.78;
+}
+#faq .gw-booking-widget .window-type {
+  display:inline-block;
+  margin-top:6px;
+  padding:5px 9px;
+  background:rgba(102,118,108,.12);
+  border-radius:999px;
+  font-size:7.5pt;
+  font-weight:700;
+}
+#faq .gw-booking-widget .countdown-wrap {
+  display:none;
+  max-width:320px;
+  margin:8px auto 0;
+  padding:8px 10px;
+  background:rgba(102,118,108,.09);
+  border:1px solid rgba(102,118,108,.22);
+  border-radius:13px;
+}
+#faq .gw-booking-widget .countdown-label {
+  font-size:7.5pt;
+  font-weight:600;
+  margin-bottom:2px;
+}
+#faq .gw-booking-widget .countdown-display {
+  font-size:12pt;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.2px;
+}
+#faq .gw-booking-widget .status-message,
+#faq .gw-booking-widget .notice {
+  max-width:520px;
+  margin:8px auto 0;
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:8pt;
+  line-height:1.35;
+  text-align:left;
+}
+#faq .gw-booking-widget .status-early {
+  background:#f7f3e8;
+  border:1px solid #ddd0a9;
+  color:#655d48;
+}
+#faq .gw-booking-widget .status-open {
+  background:rgba(102,118,108,.10);
+  border:1px solid rgba(102,118,108,.25);
+  color:#66766c;
+}
+#faq .gw-booking-widget .notice {
+  display:none;
+}
+#faq .gw-booking-widget .blackout-notice {
+  background:#f7eee8;
+  border:1px solid #ddc4b3;
+  color:#765847;
+}
+#faq .gw-booking-widget .unpublished-notice {
+  background:#f7f3e8;
+  border:1px solid #ddd0a9;
+  color:#655d48;
+}
+#faq .gw-booking-widget .segment-results {
+  display:none;
+  max-width:520px;
+  margin:8px auto 0;
+  padding-top:8px;
+  border-top:1px solid rgba(102,118,108,.18);
+  text-align:left;
+  font-size:8pt;
+  line-height:1.45;
+}
+@media(min-width:700px) {
+#faq .gw-booking-widget #gw-formView {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 12px;
+  }
+#faq .gw-booking-widget .nonstop-toggle,
+#faq .gw-booking-widget #gw-calculateButton,
+#faq .gw-booking-widget .error-message {
+    grid-column:1 / -1;
+  }
+#faq .gw-booking-widget .date-field {
+    width:190px;
+  }
+#faq .gw-booking-widget .gw-title {
+    font-size:12pt;
+  }
+#faq .gw-booking-widget .main-result {
+    font-size:16pt;
+  }
+}
+@media(max-width:400px) {
+#faq .gw-booking-widget .date-field,
+#faq .gw-booking-widget .date-field input[type="date"] {
+    width:175px;
+  }
+
+}
+
+/* Native widget refinements and accessible controls. */
+#faq .gw-booking-widget { max-width: none; margin: 24px 0 0; padding: 22px; border-radius: 18px; border: 1px solid var(--border); background: rgba(255,255,255,.84); color: var(--green-dark); }
+#faq .gw-booking-widget .field { min-width: 0; }
+#faq .gw-booking-widget select, #faq .gw-booking-widget input[type="date"] { min-width: 0; height: 44px; font-size: 16px; }
+#faq .gw-booking-widget .check-toggle input { display: block; position: absolute; opacity: 0; width: 18px; height: 18px; }
+#faq .gw-booking-widget .check-toggle input:focus-visible + .toggle-box { outline: 3px solid #354d3d; outline-offset: 3px; }
+#faq .gw-booking-widget .field label:not(.check-toggle), #faq .gw-booking-widget .check-toggle { font-size: .82rem; }
+#faq .gw-booking-widget button { min-height: 44px; font-size: .85rem; }
+#faq .gw-booking-widget .local-note, #faq .gw-booking-widget .window-type, #faq .gw-booking-widget .result-label, #faq .gw-booking-widget .status-message, #faq .gw-booking-widget .notice, #faq .gw-booking-widget .segment-results { font-size: .82rem; }
+@media (max-width: 600px) { #faq .gw-booking-widget { padding: 16px; } }
+
+#faq .gw-booking-widget .check-toggle input { position: static; opacity: 1; margin: 0; flex: 0 0 18px; accent-color: #66766c; }
+#faq .gw-booking-widget .toggle-box { display: none; }
