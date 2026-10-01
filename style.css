@@ -4461,3 +4461,305 @@ body.tool-modal-open {
   }
 
 }
+/* =========================================
+   CREDIT CARDS
+========================================= */
+
+.credit-cards-section {
+  position: relative;
+  padding: 110px 24px 130px;
+  background:
+    linear-gradient(
+      rgba(25, 34, 28, 0.18),
+      rgba(25, 34, 28, 0.18)
+    ),
+    url("assets/images/credit-card-sky.jpg") center center / cover fixed;
+}
+
+.credit-cards-overlay {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.credit-cards-heading {
+  max-width: 700px;
+  margin: 0 auto 90px;
+  text-align: center;
+  color: white;
+}
+
+.credit-cards-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+.credit-cards-heading h2 {
+  margin: 0;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1;
+  font-weight: 800;
+}
+
+.credit-cards-heading > p:not(.credit-cards-kicker):not(.credit-cards-disclosure) {
+  margin: 20px auto 0;
+  max-width: 590px;
+  font-size: 18px;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+.credit-cards-disclosure {
+  margin: 18px auto 0;
+  max-width: 590px;
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.65;
+}
+
+
+/* GRID */
+
+.credit-cards-overlay {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 100px 44px;
+}
+
+.credit-cards-heading {
+  grid-column: 1 / -1;
+}
+
+
+/* PANEL */
+
+.credit-card-panel {
+  position: relative;
+  min-height: 610px;
+  padding: 220px 42px 70px;
+
+  border-radius: 42px;
+
+  background: rgba(20, 28, 23, 0.48);
+
+  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.20);
+
+  color: white;
+  text-align: center;
+}
+
+
+/* CARD IMAGE */
+
+.credit-card-image {
+  position: absolute;
+
+  top: -75px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: min(82%, 420px);
+  height: auto;
+
+  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.28));
+
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.credit-card-panel:hover .credit-card-image {
+  transform: translateX(-50%) translateY(-8px);
+
+  filter:
+    drop-shadow(0 30px 32px rgba(0, 0, 0, 0.34));
+}
+
+
+/* CONTENT */
+
+.credit-card-content h3 {
+  margin: 0;
+
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.1;
+
+  font-weight: 800;
+}
+
+.credit-card-description {
+  margin: 34px auto 0;
+
+  max-width: 480px;
+
+  font-size: 17px;
+  line-height: 1.65;
+
+  opacity: 0.92;
+}
+
+
+/* FACTS */
+
+.credit-card-facts {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-top: 42px;
+}
+
+.credit-card-facts > div {
+  padding: 18px 12px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.credit-card-fact-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  opacity: 0.58;
+}
+
+.credit-card-facts strong {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+
+/* APPLY BUTTON */
+
+.credit-card-button {
+  position: absolute;
+
+  left: 50%;
+  bottom: -28px;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: min(360px, 78%);
+  height: 64px;
+
+  border-radius: 999px;
+
+  background: #66766c;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 19px;
+  font-weight: 800;
+
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.22);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.credit-card-button:hover {
+  transform: translateX(-50%) translateY(-3px);
+  background: #73857a;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 760px) {
+
+  .credit-cards-section {
+    padding:
+      80px
+      18px
+      110px;
+
+    background-attachment: scroll;
+  }
+
+  .credit-cards-overlay {
+    grid-template-columns: 1fr;
+
+    gap: 110px;
+  }
+
+  .credit-cards-heading {
+    margin-bottom: 65px;
+  }
+
+  .credit-cards-heading h2 {
+    font-size: 42px;
+  }
+
+  .credit-card-panel {
+    min-height: auto;
+
+    padding:
+      170px
+      22px
+      68px;
+
+    border-radius: 32px;
+  }
+
+  .credit-card-image {
+    top: -62px;
+
+    width: min(88%, 360px);
+  }
+
+  .credit-card-description {
+    margin-top: 26px;
+
+    font-size: 16px;
+  }
+
+  .credit-card-facts {
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+
+    margin-top: 30px;
+  }
+
+  .credit-card-facts > div {
+    padding: 14px;
+  }
+
+  .credit-card-button {
+    height: 58px;
+
+    font-size: 17px;
+  }
+
+}
