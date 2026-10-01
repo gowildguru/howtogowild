@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoWild! Fare Pricing | How To GoWild!</title>
+  <meta name="description" content="See example GoWild! fare totals for domestic flights, Puerto Rico, and international destinations, with taxes and fees explained.">
+  <link rel="stylesheet" href="style.css?v=19">
+  <style>
+    .pricing-page { min-height:100vh; color:#fff; background:linear-gradient(rgba(35,50,40,.8),rgba(35,50,40,.94)),url("images/120425_Airfield_frontier-0055.jpg") center/cover fixed; }
+    .pricing-wrap { width:min(100% - 32px,960px); margin:auto; padding:28px 0 64px; }
+    .pricing-home { display:inline-block; padding:10px 18px; border:1px solid #ffffff55; border-radius:999px; background:#ffffff15; text-decoration:none; font-size:.9rem; font-weight:600; }
+    .pricing-heading { margin:36px 0 28px; text-align:center; }
+    .pricing-heading h1 { margin:0 0 16px; font-size:clamp(2rem,6vw,3.2rem); line-height:1.15; }
+    .pricing-heading p { max-width:800px; margin:0 auto 14px; line-height:1.8; }
+    .pricing-jumps { display:flex; gap:10px; overflow-x:auto; margin:24px 0 32px; padding:5px 3px 12px; scrollbar-width:thin; }
+    .pricing-jumps a { flex:0 0 auto; padding:10px 16px; border:1px solid #ffffff55; border-radius:999px; text-decoration:none; font-weight:600; font-size:.9rem; background:#ffffff15; }
+    .pricing-section { margin-top:36px; scroll-margin-top:24px; }
+    .pricing-section > h2 { margin:0 0 14px; font-size:clamp(1.4rem,4vw,1.9rem); line-height:1.4; }
+    .pricing-section > p { margin:0 0 22px; line-height:1.8; }
+    .price-card { margin:0 0 22px; padding:20px; border:1px solid #ffffff44; border-radius:24px; background:rgba(35,50,40,.8); box-shadow:0 12px 32px #0002; }
+    @supports (backdrop-filter:blur(12px)) or (-webkit-backdrop-filter:blur(12px)) { .price-card { background:rgba(35,50,40,.58); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); } }
+    .price-card h3 { margin:0 0 16px; font-size:1.1rem; line-height:1.5; }
+    .price-table-scroll { overflow-x:auto; border-radius:16px; border:1px solid #66766c66; background:#fff; }
+    .pricing-page table { width:100%; border-collapse:collapse; color:#354d3d; font-size:.95rem; }
+    .pricing-page thead th { padding:13px 16px; background:#66766c; color:#fff; text-align:left; font-weight:700; }
+    .pricing-page tbody th,.pricing-page tbody td { padding:13px 16px; border-bottom:1px solid #66766c33; background:#fff; text-align:left; vertical-align:top; font-weight:500; line-height:1.5; }
+    .pricing-page tbody td:nth-child(2) { font-weight:700; white-space:nowrap; }
+    .pricing-page tfoot th,.pricing-page tfoot td { padding:14px 16px; background:#e9eeeb; font-weight:700; text-align:left; }
+    .pricing-page tfoot td:nth-child(2) { white-space:nowrap; }
+    .pricing-page .international-table td { font-weight:700; white-space:nowrap; }
+    .price-note { margin:14px 0 0; font-size:.85rem; line-height:1.65; }
+    .pricing-footer { margin:32px auto 0; max-width:800px; text-align:center; font-size:.8rem; color:#ffffffcc; line-height:1.7; }
+    .pricing-footer a { text-decoration:underline; }
+    .price-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .pricing-page a:focus-visible,.price-table-scroll:focus-visible { outline:3px solid #b6d3c0; outline-offset:4px; }
+    @media(max-width:600px) { .pricing-page { background-attachment:scroll; } .price-card { padding:14px; border-radius:20px; } .pricing-page table { font-size:.8rem; } .pricing-page thead th,.pricing-page tbody th,.pricing-page tbody td,.pricing-page tfoot th,.pricing-page tfoot td { padding:10px 8px; } .pricing-page tbody td:nth-child(3) { font-size:.76rem; } .pricing-heading { margin-top:28px; } }
+  </style>
+</head>
+<body class="pricing-page">
+  <main class="pricing-wrap">
+    <a class="pricing-home" href="index.html">← Back to How To GoWild!</a>
+    <header class="pricing-heading">
+      <h1>GoWild! Fare Pricing</h1>
+      <p>GoWild! bookings made during the standard booking window—one calendar day in advance for domestic flights and up to ten calendar days in advance for international destinations—have <strong>$0.01 in base airfare plus applicable government and airport taxes and fees per direction</strong>.</p>
+      <p>Every departing segment must be within its applicable booking window to qualify <strong>without an Early Booking Fee</strong>. Return travel must also qualify when you book it; a return outside the window may need to be booked later.</p>
+      <p>Wondering <strong>“Why isn’t my flight $0.01?”</strong> The airfare is only part of the total. The tables below show example totals for one traveler, one direction, during the standard booking window.</p>
+    </header>
+    <nav class="pricing-jumps" aria-label="Pricing sections">
+      <a href="#domestic-pricing">Domestic Flights</a>
+      <a href="#puerto-rico-pricing">Puerto Rico</a>
+      <a href="#international-pricing">International Flights</a>
+    </nav>
+    <section class="pricing-section" id="domestic-pricing" aria-labelledby="domestic-title" data-search-topic>
+      <h2 id="domestic-title">Domestic Flights (not including Puerto Rico)</h2>
+      <article class="price-card" id="domestic-nonstop">
+        <h3>Nonstop Flights</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="Nonstop Flights pricing table">
+          <table>
+            <caption class="price-sr-only">Nonstop Flights — one traveler, one direction</caption>
+            <thead><tr><th scope="col">Charge</th><th scope="col">Amount</th><th scope="col">What is this?</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">Base Airfare</th><td>$0.01</td><td>This is the airfare portion that the airline collects.</td></tr>
+            <tr><th scope="row">U.S. Domestic Flight Segment Tax</th><td>$5.30</td><td>Federal tax assessed for this domestic flight segment.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>The September 11 Security Fee helps fund aviation security.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Airport-imposed charge at the departure airport; this example uses $4.50.</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td>$15.41</td><td>One traveler · one direction</td></tr></tfoot>
+          </table>
+        </div>
+        
+      </article>
+
+      <article class="price-card" id="domestic-short">
+        <h3>Connecting Flights — Connections Under 4 Hours</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="Connecting Flights — Connections Under 4 Hours pricing table">
+          <table>
+            <caption class="price-sr-only">Connecting Flights — Connections Under 4 Hours — one traveler, one direction</caption>
+            <thead><tr><th scope="col">Charge</th><th scope="col">Amount</th><th scope="col">What is this?</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">Base Airfare</th><td>$0.01</td><td>This is the airfare portion that the airline collects.</td></tr>
+            <tr><th scope="row">U.S. Domestic Flight Segment Tax</th><td>$5.30</td><td>Federal tax assessed for this domestic flight segment.</td></tr>
+            <tr><th scope="row">U.S. Domestic Flight Segment Tax</th><td>$5.30</td><td>A second segment tax applies for the connecting flight.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>The September 11 Security Fee helps fund aviation security.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Airport-imposed charge at the departure airport; this example uses $4.50.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Charge at the connecting airport; this example uses $4.50.</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td>$25.21</td><td>One traveler · one direction</td></tr></tfoot>
+          </table>
+        </div>
+        
+      </article>
+
+      <article class="price-card" id="domestic-long">
+        <h3>Connecting Flights — Connections Over 4 Hours</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="Connecting Flights — Connections Over 4 Hours pricing table">
+          <table>
+            <caption class="price-sr-only">Connecting Flights — Connections Over 4 Hours — one traveler, one direction</caption>
+            <thead><tr><th scope="col">Charge</th><th scope="col">Amount</th><th scope="col">What is this?</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">Base Airfare</th><td>$0.01</td><td>This is the airfare portion that the airline collects.</td></tr>
+            <tr><th scope="row">U.S. Domestic Flight Segment Tax</th><td>$5.30</td><td>Federal tax assessed for this domestic flight segment.</td></tr>
+            <tr><th scope="row">U.S. Domestic Flight Segment Tax</th><td>$5.30</td><td>A second segment tax applies for the connecting flight.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>The September 11 Security Fee helps fund aviation security.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>An additional security fee when the itinerary is treated as another one-way trip.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Airport-imposed charge at the departure airport; this example uses $4.50.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Charge at the connecting airport; this example uses $4.50.</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td>$30.81</td><td>One traveler · one direction</td></tr></tfoot>
+          </table>
+        </div>
+        
+      </article>
+      <p class="price-note">Connecting examples assume two flight segments. Airport charges can vary. Under the federal security-fee definition, a continental connection of exactly four hours is not a stopover; a break of more than four hours is.</p>
+    </section>
+    <section class="pricing-section" id="puerto-rico-pricing" aria-labelledby="pr-title" data-search-topic>
+      <h2 id="pr-title">Domestic Flights (to and from Puerto Rico)</h2>
+      <p>Puerto Rico travel is domestic travel, but its federal transportation-tax treatment differs from mainland domestic flights. These examples include a <strong>$23.40 U.S. Transportation Tax</strong> alongside the security fee and airport charges. This transportation tax is <strong>not an additional security-screening fee</strong>.</p>
+      <article class="price-card" id="pr-nonstop">
+        <h3>Nonstop Flights to/from Puerto Rico</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="Nonstop Flights to/from Puerto Rico pricing table">
+          <table>
+            <caption class="price-sr-only">Nonstop Flights to/from Puerto Rico — one traveler, one direction</caption>
+            <thead><tr><th scope="col">Charge</th><th scope="col">Amount</th><th scope="col">What is this?</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">Base Airfare</th><td>$0.01</td><td>This is the airfare portion that the airline collects.</td></tr>
+            <tr><th scope="row">U.S. Transportation Tax</th><td>$23.40</td><td>Federal transportation tax shown for this mainland–Puerto Rico itinerary; separate from the TSA fee.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>The September 11 Security Fee helps fund aviation security.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Airport-imposed charge at the departure airport; this example uses $4.50.</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td>$33.51</td><td>One traveler · one direction</td></tr></tfoot>
+          </table>
+        </div>
+        
+      </article>
+
+      <article class="price-card" id="pr-short">
+        <h3>Connecting Flights to/from Puerto Rico — Under 4 Hours</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="Connecting Flights to/from Puerto Rico — Under 4 Hours pricing table">
+          <table>
+            <caption class="price-sr-only">Connecting Flights to/from Puerto Rico — Under 4 Hours — one traveler, one direction</caption>
+            <thead><tr><th scope="col">Charge</th><th scope="col">Amount</th><th scope="col">What is this?</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">Base Airfare</th><td>$0.01</td><td>This is the airfare portion that the airline collects.</td></tr>
+            <tr><th scope="row">U.S. Transportation Tax</th><td>$23.40</td><td>Federal transportation tax shown for this mainland–Puerto Rico itinerary; separate from the TSA fee.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>The September 11 Security Fee helps fund aviation security.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Airport-imposed charge at the departure airport; this example uses $4.50.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Charge at the connecting airport; this example uses $4.50.</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td>$38.01</td><td>One traveler · one direction</td></tr></tfoot>
+          </table>
+        </div>
+        
+      </article>
+
+      <article class="price-card" id="pr-additional">
+        <h3>Connecting Flights to/from Puerto Rico — Additional Security Fee Applied</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="Connecting Flights to/from Puerto Rico — Additional Security Fee Applied pricing table">
+          <table>
+            <caption class="price-sr-only">Connecting Flights to/from Puerto Rico — Additional Security Fee Applied — one traveler, one direction</caption>
+            <thead><tr><th scope="col">Charge</th><th scope="col">Amount</th><th scope="col">What is this?</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">Base Airfare</th><td>$0.01</td><td>This is the airfare portion that the airline collects.</td></tr>
+            <tr><th scope="row">U.S. Transportation Tax</th><td>$23.40</td><td>Federal transportation tax shown for this mainland–Puerto Rico itinerary; separate from the TSA fee.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>The September 11 Security Fee helps fund aviation security.</td></tr>
+            <tr><th scope="row">U.S. Passenger Security Fee</th><td>$5.60</td><td>An additional security fee when the itinerary is treated as another one-way trip.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Airport-imposed charge at the departure airport; this example uses $4.50.</td></tr>
+            <tr><th scope="row">Passenger Facility Charge</th><td>$4.50</td><td>Charge at the connecting airport; this example uses $4.50.</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td>$43.61</td><td>One traveler · one direction</td></tr></tfoot>
+          </table>
+        </div>
+        <p class="price-note">This example includes a second $5.60 security fee. A Puerto Rico connection over four hours does not automatically trigger this fee; stopover treatment depends on the itinerary. The federal definition generally uses more than 12 hours for non-continental interstate travel.</p>
+      </article>
+    </section>
+    <section class="pricing-section" id="international-pricing" aria-labelledby="international-title" data-search-topic>
+      <h2 id="international-title">International Flights</h2>
+      <p>International destinations incur different charges and fees assessed by various localities. The table below shows totals in each direction. Departing a foreign country may cost significantly more than arriving there.</p>
+      <article class="price-card">
+        <h3>One-way, nonstop international GoWild! fares</h3>
+        <div class="price-table-scroll" tabindex="0" role="region" aria-label="International directional pricing table">
+          <table class="international-table">
+            <caption class="price-sr-only">Example international fares by country and direction</caption>
+            <thead><tr><th scope="col">Country</th><th scope="col">USA → Destination</th><th scope="col">Destination → USA</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">🇦🇼 Aruba</th><td>$45.31</td><td>$98.19</td></tr>
+              <tr><th scope="row">🇧🇸 Bahamas</th><td>$34.51</td><td>$136.32</td></tr>
+              <tr><th scope="row">🇨🇴 Colombia</th><td>$48.51</td><td>$137.88</td></tr>
+              <tr><th scope="row">🇨🇷 Costa Rica</th><td>$52.59</td><td>$79.50</td></tr>
+              <tr><th scope="row">🇩🇴 Dominican Republic</th><td>$82.78</td><td>$100.91</td></tr>
+              <tr><th scope="row">🇸🇻 El Salvador</th><td>$35.01</td><td>$80.77</td></tr>
+              <tr><th scope="row">🇬🇹 Guatemala</th><td>$33.51</td><td>$74.25</td></tr>
+              <tr><th scope="row">🇯🇲 Jamaica</th><td>$77.51</td><td>$121.52</td></tr>
+              <tr><th scope="row">🇲🇽 Mexico</th><td>$86.84</td><td>$102.46</td></tr>
+              <tr><th scope="row">🇸🇽 St. Maarten</th><td>$33.51</td><td>$115.43</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="price-note">Prices shown are for one-way, nonstop GoWild! fares and include the $0.01 airfare plus applicable taxes and government-imposed fees. Connecting itineraries may differ.</p>
+      </article>
+    </section>
+    <footer class="pricing-footer">
+      <p>These are pricing examples, not live fare quotes or a list of currently available routes. Bags, paid seats, pass purchase costs, Early Booking Fees, and Peak Day charges are not included. Confirm your itinerary’s final price with Frontier.</p>
+      <p>Tax and security-fee references: <a href="https://www.irs.gov/instructions/i720" target="_blank" rel="noopener">IRS air transportation taxes</a> · <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-XII/subchapter-A/part-1510" target="_blank" rel="noopener">Federal passenger security-fee rules</a>.</p>
+      <p>This website is independently operated and is not affiliated with Frontier Airlines.</p>
+    </footer>
+  </main>
+</body>
+</html>
