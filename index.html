@@ -614,7 +614,250 @@
   </div>
 
 </div>
-  
+<!-- =========================================
+     FRONTIER CARD ANALYZER TEMPLATE
+     ========================================= -->
+
+<template id="cardAnalyzerTemplate">
+
+  <div class="f9-card-miles-tool">
+
+    <div class="intro-card">
+
+      <div class="intro-copy">
+        Estimate your annual Travel Miles and Elite Status Points based on how
+        you use your Frontier Airlines World Mastercard.
+      </div>
+
+    </div>
+
+
+    <!-- FRONTIER PURCHASES -->
+
+    <div class="spend-card">
+
+      <div class="spend-heading">
+
+        <div>
+          <div class="spend-title">Frontier Purchases</div>
+          <div class="rate-pill">5X Travel Miles</div>
+        </div>
+
+        <div
+          class="miles-preview"
+          data-miles-display="frontier"
+        >
+          0 miles
+        </div>
+
+      </div>
+
+      <input
+        class="spend-slider"
+        data-slider="frontier"
+        type="range"
+        min="0"
+        max="20000"
+        step="100"
+        value="0"
+      >
+
+      <div class="slider-bottom">
+        <span>$0</span>
+        <span>$20,000</span>
+      </div>
+
+      <div class="manual-row">
+
+        <span>Annual spend</span>
+
+        <label class="amount-entry">
+          $
+          <input
+            data-input="frontier"
+            type="number"
+            min="0"
+            max="20000"
+            step="100"
+            value="0"
+            inputmode="decimal"
+          >
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- RESTAURANTS -->
+
+    <div class="spend-card">
+
+      <div class="spend-heading">
+
+        <div>
+          <div class="spend-title">Restaurants</div>
+          <div class="rate-pill">3X Travel Miles</div>
+        </div>
+
+        <div
+          class="miles-preview"
+          data-miles-display="restaurant"
+        >
+          0 miles
+        </div>
+
+      </div>
+
+      <input
+        class="spend-slider"
+        data-slider="restaurant"
+        type="range"
+        min="0"
+        max="20000"
+        step="100"
+        value="0"
+      >
+
+      <div class="slider-bottom">
+        <span>$0</span>
+        <span>$20,000</span>
+      </div>
+
+      <div class="manual-row">
+
+        <span>Annual spend</span>
+
+        <label class="amount-entry">
+          $
+          <input
+            data-input="restaurant"
+            type="number"
+            min="0"
+            max="20000"
+            step="100"
+            value="0"
+            inputmode="decimal"
+          >
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- OTHER PURCHASES -->
+
+    <div class="spend-card">
+
+      <div class="spend-heading">
+
+        <div>
+          <div class="spend-title">All Other Purchases</div>
+          <div class="rate-pill">1X Travel Mile</div>
+        </div>
+
+        <div
+          class="miles-preview"
+          data-miles-display="other"
+        >
+          0 miles
+        </div>
+
+      </div>
+
+      <input
+        class="spend-slider"
+        data-slider="other"
+        type="range"
+        min="0"
+        max="50000"
+        step="100"
+        value="0"
+      >
+
+      <div class="slider-bottom">
+        <span>$0</span>
+        <span>$50,000</span>
+      </div>
+
+      <div class="manual-row">
+
+        <span>Annual spend</span>
+
+        <label class="amount-entry">
+          $
+          <input
+            data-input="other"
+            type="number"
+            min="0"
+            max="50000"
+            step="100"
+            value="0"
+            inputmode="decimal"
+          >
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div class="results-card">
+
+      <div class="results-label">
+        Estimated annual earnings
+      </div>
+
+      <div class="total-miles" data-result="totalMiles">
+        0 Travel Miles
+      </div>
+
+      <div class="award-flights" data-result="awardFlights">
+        ✈️ That's 0 saver award flights every year!
+      </div>
+
+      <div class="award-remainder" data-result="awardRemainder">
+        0 miles toward your next award.
+      </div>
+
+      <div class="results-divider"></div>
+
+      <div class="secondary-result">
+        <span>Total annual card spend</span>
+        <strong data-result="totalSpend">$0.00</strong>
+      </div>
+
+      <div class="secondary-result">
+        <span>Elite Status Points earned</span>
+        <strong data-result="elitePoints">0</strong>
+      </div>
+
+    </div>
+
+
+    <!-- NOTES -->
+
+    <div class="footnote">
+
+      <strong>How this estimate works:</strong>
+      Frontier purchases earn 5X Travel Miles, restaurant purchases earn 3X,
+      and other purchases earn 1X. Eligible card spend also earns 1 Elite
+      Status Point per $1.
+
+      <br><br>
+
+      Award-flight estimate is based on saver awards starting at
+      <strong>5,000 Travel Miles</strong> per one-way flight. Taxes, fees,
+      availability, and higher award pricing may apply.
+
+    </div>
+
+  </div>
+
+</template>
   <!-- FAQ -->
 <section id="faq" class="gw-faq" aria-labelledby="gw-faq-title">
 <div class="gw-faq-inner">
