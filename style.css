@@ -3320,3 +3320,993 @@ body.tool-modal-open {
   }
 
 }
+
+/* =========================================
+   MODAL HELPFUL TOOLS — CONSOLIDATED WIDGET STYLES
+   Added for tools.js v3
+   ========================================= */
+
+.tool-modal-content .tool-booking-timeline * {box-sizing:border-box;}
+.tool-modal-content .tool-booking-timeline {width:100%;
+  max-width:760px;
+  margin:0 auto;
+  font-family:Montserrat, Arial, sans-serif;
+  color:#66766c;}
+.tool-modal-content .tool-booking-timeline .gw-title {background:#66766c;
+  color:white;
+  border-radius:999px;
+  padding:11px 14px;
+  text-align:center;
+  font-size:11pt;
+  font-weight:700;
+  margin-bottom:10px;}
+.tool-modal-content .tool-booking-timeline #formView,
+.tool-modal-content .tool-booking-timeline #resultView {width:100%;}
+.tool-modal-content .tool-booking-timeline #resultView {display:none;}
+.tool-modal-content .tool-booking-timeline .field {margin-bottom:8px;}
+.tool-modal-content .tool-booking-timeline .field label:not(.check-toggle) {display:block;
+  margin:0 0 3px 4px;
+  font-size:8.5pt;
+  font-weight:700;}
+.tool-modal-content .tool-booking-timeline select,
+.tool-modal-content .tool-booking-timeline input[type="date"] {width:100%;
+  height:39px;
+  border:1px solid rgba(102,118,108,.35);
+  border-radius:999px;
+  padding:0 12px;
+  background:white;
+  color:#3f4541;
+  font-family:Montserrat, Arial, sans-serif;
+  font-size:15px;
+  outline:none;}
+.tool-modal-content .tool-booking-timeline select:focus,
+.tool-modal-content .tool-booking-timeline input[type="date"]:focus {border:2px solid #66766c;}
+/* ===== COMPACT DATE FIELD ===== */
+.tool-modal-content .tool-booking-timeline .date-field {width:190px;
+  max-width:100%;}
+.tool-modal-content .tool-booking-timeline .date-field input[type="date"] {width:190px;
+  max-width:100%;}
+/* ===== CHECKBOXES ===== */
+.tool-modal-content .tool-booking-timeline .check-toggle {display:inline-flex;
+  align-items:center;
+  gap:7px;
+  cursor:pointer;
+  font-size:8.5pt;
+  font-weight:600;
+  color:#66766c;}
+.tool-modal-content .tool-booking-timeline .nonstop-toggle {margin:0 0 8px 3px;}
+.tool-modal-content .tool-booking-timeline .nextday-toggle {margin:5px 0 0 3px;}
+.tool-modal-content .tool-booking-timeline .check-toggle input {display:none;}
+.tool-modal-content .tool-booking-timeline .toggle-box {width:18px;
+  height:18px;
+  border:2px solid #66766c;
+  border-radius:5px;
+  position:relative;
+  flex-shrink:0;}
+.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box {background:#66766c;}
+.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"✓";
+  position:absolute;
+  left:2px;
+  top:-3px;
+  color:white;
+  font-size:13px;
+  font-weight:700;}
+/* ===== BUTTONS ===== */
+.tool-modal-content .tool-booking-timeline #calculateButton,
+.tool-modal-content .tool-booking-timeline .secondary-button,
+.tool-modal-content .tool-booking-timeline .details-button {display:block;
+  margin-left:auto;
+  margin-right:auto;
+  border:0;
+  border-radius:999px;
+  font-family:Montserrat, Arial, sans-serif;
+  font-weight:700;
+  cursor:pointer;}
+.tool-modal-content .tool-booking-timeline #calculateButton {margin-top:10px;
+  padding:10px 18px;
+  background:#66766c;
+  color:white;
+  font-size:9.5pt;}
+.tool-modal-content .tool-booking-timeline .secondary-button {margin-top:10px;
+  padding:9px 15px;
+  background:rgba(102,118,108,.12);
+  color:#66766c;
+  font-size:8.5pt;}
+.tool-modal-content .tool-booking-timeline .details-button {margin-top:9px;
+  padding:8px 14px;
+  background:transparent;
+  color:#66766c;
+  border:1px solid rgba(102,118,108,.28);
+  font-size:8.5pt;}
+/* ===== ERRORS ===== */
+.tool-modal-content .tool-booking-timeline .error-message {display:none;
+  margin-top:7px;
+  color:#8b4c4c;
+  font-size:8.5pt;
+  font-weight:600;
+  text-align:center;}
+/* ===== RESULTS ===== */
+.tool-modal-content .tool-booking-timeline .result-view {text-align:center;
+  padding:1px 4px 0;}
+.tool-modal-content .tool-booking-timeline .route-summary {margin-bottom:6px;
+  font-size:9pt;
+  font-weight:700;}
+.tool-modal-content .tool-booking-timeline .result-label {font-size:8.5pt;
+  font-weight:600;
+  margin-bottom:3px;}
+.tool-modal-content .tool-booking-timeline .main-result {font-size:14pt;
+  font-weight:700;
+  line-height:1.2;}
+.tool-modal-content .tool-booking-timeline .local-note {margin-top:3px;
+  font-size:7.5pt;
+  opacity:.78;}
+.tool-modal-content .tool-booking-timeline .window-type {display:inline-block;
+  margin-top:6px;
+  padding:5px 9px;
+  background:rgba(102,118,108,.12);
+  border-radius:999px;
+  font-size:7.5pt;
+  font-weight:700;}
+/* ===== COUNTDOWN ===== */
+.tool-modal-content .tool-booking-timeline .countdown-wrap {display:none;
+  max-width:320px;
+  margin:8px auto 0;
+  padding:8px 10px;
+  background:rgba(102,118,108,.09);
+  border:1px solid rgba(102,118,108,.22);
+  border-radius:13px;}
+.tool-modal-content .tool-booking-timeline .countdown-label {font-size:7.5pt;
+  font-weight:600;
+  margin-bottom:2px;}
+.tool-modal-content .tool-booking-timeline .countdown-display {font-size:12pt;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.2px;}
+/* ===== STATUS ===== */
+.tool-modal-content .tool-booking-timeline .status-message,
+.tool-modal-content .tool-booking-timeline .notice {max-width:520px;
+  margin:8px auto 0;
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:8pt;
+  line-height:1.35;
+  text-align:left;}
+.tool-modal-content .tool-booking-timeline .status-early {background:#f7f3e8;
+  border:1px solid #ddd0a9;
+  color:#655d48;}
+.tool-modal-content .tool-booking-timeline .status-open {background:rgba(102,118,108,.10);
+  border:1px solid rgba(102,118,108,.25);
+  color:#66766c;}
+.tool-modal-content .tool-booking-timeline .notice {display:none;}
+.tool-modal-content .tool-booking-timeline .blackout-notice {background:#f7eee8;
+  border:1px solid #ddc4b3;
+  color:#765847;}
+.tool-modal-content .tool-booking-timeline .unpublished-notice {background:#f7f3e8;
+  border:1px solid #ddd0a9;
+  color:#655d48;}
+/* ===== DETAILS ===== */
+.tool-modal-content .tool-booking-timeline .segment-results {display:none;
+  max-width:520px;
+  margin:8px auto 0;
+  padding-top:8px;
+  border-top:1px solid rgba(102,118,108,.18);
+  text-align:left;
+  font-size:8pt;
+  line-height:1.45;}
+/* ===== DESKTOP ===== */
+@media (min-width:700px) {
+.tool-modal-content .tool-booking-timeline #formView {display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 12px;}
+.tool-modal-content .tool-booking-timeline .nonstop-toggle,
+.tool-modal-content .tool-booking-timeline #calculateButton,
+.tool-modal-content .tool-booking-timeline .error-message {grid-column:1 / -1;}
+.tool-modal-content .tool-booking-timeline .date-field {width:190px;}
+.tool-modal-content .tool-booking-timeline .gw-title {font-size:12pt;}
+.tool-modal-content .tool-booking-timeline .main-result {font-size:16pt;}
+}
+/* ===== VERY SMALL PHONES ===== */
+@media (max-width:400px) {
+.tool-modal-content .tool-booking-timeline .date-field,
+.tool-modal-content .tool-booking-timeline .date-field input[type="date"] {width:175px;}
+}
+
+.tool-modal-content .f9-status-tool * {box-sizing:border-box;}
+.tool-modal-content .f9-status-tool {width:100%;
+  max-width:820px;
+  margin:0 auto;
+  font-family:Montserrat,Arial,sans-serif;
+  color:#66766c;}
+.tool-modal-content .f9-status-tool .tool-title {background:#66766c;
+  color:#fff;
+  border-radius:999px;
+  padding:13px 18px;
+  text-align:center;
+  font-size:12pt;
+  font-weight:700;
+  margin-bottom:14px;}
+/* =========================
+   SETUP
+   ========================= */
+.tool-modal-content .f9-status-tool #mixerView {display:none;}
+.tool-modal-content .f9-status-tool .setup-grid {display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:11px;}
+.tool-modal-content .f9-status-tool .field label {display:block;
+  margin:0 0 4px 5px;
+  font-size:8.5pt;
+  font-weight:700;}
+.tool-modal-content .f9-status-tool select,
+.tool-modal-content .f9-status-tool .field input[type="number"] {width:100%;
+  height:42px;
+  border:1px solid rgba(102,118,108,.35);
+  border-radius:999px;
+  background:#fff;
+  color:#3e4541;
+  padding:0 13px;
+  font-family:Montserrat,Arial,sans-serif;
+  font-size:10pt;
+  outline:none;}
+.tool-modal-content .f9-status-tool select:focus,
+.tool-modal-content .f9-status-tool .field input:focus {border:2px solid #66766c;}
+/* =========================
+   MASTERCARD SELECTOR
+   ========================= */
+.tool-modal-content .f9-status-tool .mastercard-selector {display:flex;
+  align-items:center;
+  gap:14px;
+
+  width:fit-content;
+  max-width:100%;
+
+  margin-top:14px;
+  padding:10px 14px;
+
+  background:#fff;
+
+  border:1px solid rgba(102,118,108,.20);
+  border-radius:16px;}
+.tool-modal-content .f9-status-tool .mastercard-image {display:block;
+  width:110px;
+  height:auto;
+  flex-shrink:0;
+  border-radius:8px;}
+.tool-modal-content .f9-status-tool .card-toggle {display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  font-size:9pt;
+  font-weight:600;
+  line-height:1.35;
+  color:#66766c;}
+.tool-modal-content .f9-status-tool .card-toggle input {position:absolute;
+  opacity:0;
+  pointer-events:none;}
+.tool-modal-content .f9-status-tool .card-toggle-text {display:flex;
+  flex-direction:column;}
+.tool-modal-content .f9-status-tool .check-box {width:20px;
+  height:20px;
+  border:2px solid #66766c;
+  border-radius:50%;
+  background:#fff;
+  flex-shrink:0;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;}
+.tool-modal-content .f9-status-tool .card-toggle input:checked + .check-box {background:#66766c;
+  border-color:#66766c;}
+.tool-modal-content .f9-status-tool .card-toggle input:focus-visible + .check-box {box-shadow:0 0 0 3px rgba(102,118,108,.20);}
+/* =========================
+   YEAR
+   ========================= */
+.tool-modal-content .f9-status-tool .year-card {margin-top:13px;
+  padding:10px 13px;
+  background:rgba(102,118,108,.08);
+  border:1px solid rgba(102,118,108,.18);
+  border-radius:13px;
+  font-size:8.5pt;
+  line-height:1.45;}
+.tool-modal-content .f9-status-tool .year-name {font-weight:700;}
+.tool-modal-content .f9-status-tool .dot {margin:0 4px;}
+.tool-modal-content .f9-status-tool .threshold-summary {margin-top:3px;
+  font-size:7.8pt;
+  opacity:.85;}
+.tool-modal-content .f9-status-tool .error-message {display:none;
+  margin-top:9px;
+  color:#b84f4f;
+  font-size:8.5pt;
+  font-weight:600;
+  text-align:center;}
+/* =========================
+   BUTTONS
+   ========================= */
+.tool-modal-content .f9-status-tool .primary-button,
+.tool-modal-content .f9-status-tool .small-button {border:0;
+  border-radius:999px;
+  font-family:Montserrat,Arial,sans-serif;
+  font-weight:700;
+  cursor:pointer;}
+.tool-modal-content .f9-status-tool .primary-button {display:block;
+  margin:14px auto 0;
+  padding:11px 20px;
+  background:#66766c;
+  color:#fff;
+  font-size:9.5pt;}
+.tool-modal-content .f9-status-tool .small-button {padding:9px 14px;
+  background:rgba(102,118,108,.11);
+  color:#66766c;
+  font-size:8pt;}
+.tool-modal-content .f9-status-tool .primary-button:hover,
+.tool-modal-content .f9-status-tool .small-button:hover {opacity:.88;}
+/* =========================
+   GOAL
+   ========================= */
+.tool-modal-content .f9-status-tool .goal-summary {text-align:center;
+  margin-bottom:13px;}
+.tool-modal-content .f9-status-tool .goal-label {font-size:8pt;
+  font-weight:600;}
+.tool-modal-content .f9-status-tool .goal-name {margin-top:2px;
+  font-size:17pt;
+  font-weight:700;}
+.tool-modal-content .f9-status-tool .points-needed {margin-top:3px;
+  font-size:8.5pt;
+  font-weight:600;}
+/* =========================
+   PROGRESS
+   ========================= */
+.tool-modal-content .f9-status-tool .progress-area {margin-bottom:12px;}
+.tool-modal-content .f9-status-tool .progress-header {display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:5px;
+  font-size:8pt;}
+.tool-modal-content .f9-status-tool .progress-track {width:100%;
+  height:11px;
+  background:rgba(102,118,108,.12);
+  border-radius:999px;
+  overflow:hidden;}
+.tool-modal-content .f9-status-tool .progress-fill {width:0%;
+  height:100%;
+  background:#b84f4f;
+  border-radius:999px;
+
+  transition:
+    width .18s ease,
+    background .18s ease;}
+.tool-modal-content .f9-status-tool .progress-message {margin-top:5px;
+  text-align:right;
+  font-size:8pt;
+  font-weight:700;}
+.tool-modal-content .f9-status-tool .progress-message.short {color:#b84f4f;}
+.tool-modal-content .f9-status-tool .progress-message.complete {color:#66766c;}
+/* =========================
+   SPEND CARDS
+   ========================= */
+.tool-modal-content .f9-status-tool .spend-card {padding:11px 13px;
+  margin-bottom:9px;
+  border:1px solid rgba(102,118,108,.20);
+  border-radius:14px;
+  background:#fff;}
+.tool-modal-content .f9-status-tool .spend-heading {display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:7px;}
+.tool-modal-content .f9-status-tool .spend-title {font-size:9.5pt;
+  font-weight:700;}
+.tool-modal-content .f9-status-tool .rate-text {margin-top:2px;
+  font-size:7.5pt;
+  opacity:.78;}
+.tool-modal-content .f9-status-tool .spend-value-group {display:flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+  font-size:9pt;}
+.tool-modal-content .f9-status-tool .mode-pill {display:inline-block;
+  padding:3px 6px;
+  border-radius:999px;
+  background:rgba(102,118,108,.10);
+  font-size:6.5pt;
+  font-weight:700;
+  letter-spacing:.4px;}
+.tool-modal-content .f9-status-tool .mode-pill.locked {background:#66766c;
+  color:#fff;}
+/* =========================
+   SLIDERS
+   ========================= */
+.tool-modal-content .f9-status-tool .spend-slider {width:100%;
+  cursor:pointer;
+  accent-color:#66766c;}
+.tool-modal-content .f9-status-tool .slider-bottom {display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-top:3px;
+  font-size:7pt;
+  opacity:.82;}
+.tool-modal-content .f9-status-tool .manual-row {display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+  font-size:7pt;}
+.tool-modal-content .f9-status-tool .amount-entry {display:inline-flex;
+  align-items:center;
+  gap:2px;
+  font-weight:600;}
+.tool-modal-content .f9-status-tool .amount-entry input {width:86px;
+  height:29px;
+  padding:0 6px;
+  border:1px solid rgba(102,118,108,.25);
+  border-radius:8px;
+  font-family:Montserrat,Arial,sans-serif;
+  font-size:8pt;
+  color:#4b514d;
+  outline:none;}
+.tool-modal-content .f9-status-tool .amount-entry input:focus {border-color:#66766c;}
+/* =========================
+   TOTAL
+   ========================= */
+.tool-modal-content .f9-status-tool .total-card {display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-top:11px;
+  padding:11px 13px;
+  background:rgba(102,118,108,.09);
+  border-radius:13px;}
+.tool-modal-content .f9-status-tool .total-label {font-size:8.5pt;
+  font-weight:700;}
+.tool-modal-content .f9-status-tool .total-sub {margin-top:2px;
+  font-size:7pt;}
+.tool-modal-content .f9-status-tool .total-number {white-space:nowrap;
+  font-size:15pt;
+  font-weight:700;}
+/* =========================
+   COMPARISON WARNING
+   ========================= */
+.tool-modal-content .f9-status-tool .comparison-warning {display:none;
+  margin-top:10px;
+  padding:11px 13px;
+  border-radius:13px;
+  background:#f7eee8;
+  border:1px solid #ddc4b3;
+  color:#765847;}
+.tool-modal-content .f9-status-tool .comparison-title {font-size:8pt;
+  font-weight:700;
+  margin-bottom:3px;}
+.tool-modal-content .f9-status-tool .comparison-main {font-size:11pt;
+  font-weight:700;
+  line-height:1.3;}
+.tool-modal-content .f9-status-tool .comparison-sub {margin-top:3px;
+  font-size:7.5pt;
+  line-height:1.4;}
+/* =========================
+   YEAR FOOTER
+   ========================= */
+.tool-modal-content .f9-status-tool .mixer-year-card {margin-top:10px;
+  padding:9px 11px;
+  text-align:center;
+  border:1px solid rgba(102,118,108,.18);
+  border-radius:12px;
+  font-size:7.5pt;}
+.tool-modal-content .f9-status-tool .mixer-year-card > span {margin:0 4px;}
+.tool-modal-content .f9-status-tool .mixer-thresholds {margin-top:3px;
+  opacity:.82;}
+/* =========================
+   ACTIONS
+   ========================= */
+.tool-modal-content .f9-status-tool .actions {display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:11px;}
+/* =========================
+   MOBILE
+   ========================= */
+@media (max-width:650px) {
+.tool-modal-content .f9-status-tool .tool-title {padding:11px 13px;
+    margin-bottom:11px;
+    font-size:10.5pt;}
+.tool-modal-content .f9-status-tool .setup-grid {grid-template-columns:1fr;
+    gap:7px;}
+.tool-modal-content .f9-status-tool .field label {font-size:8pt;}
+.tool-modal-content .f9-status-tool select,
+.tool-modal-content .f9-status-tool .field input[type="number"] {height:39px;
+    font-size:16px;}
+.tool-modal-content .f9-status-tool .mastercard-selector {width:100%;
+    gap:10px;
+    margin-top:10px;
+    padding:9px 10px;}
+.tool-modal-content .f9-status-tool .mastercard-image {width:90px;}
+.tool-modal-content .f9-status-tool .card-toggle {font-size:8pt;}
+.tool-modal-content .f9-status-tool .year-card {margin-top:9px;
+    padding:8px 10px;}
+.tool-modal-content .f9-status-tool .goal-summary {margin-bottom:9px;}
+.tool-modal-content .f9-status-tool .goal-name {font-size:14pt;}
+.tool-modal-content .f9-status-tool .spend-card {padding:9px 10px;
+    margin-bottom:7px;}
+.tool-modal-content .f9-status-tool .spend-heading {margin-bottom:4px;}
+.tool-modal-content .f9-status-tool .spend-title {font-size:8.5pt;}
+.tool-modal-content .f9-status-tool .rate-text {font-size:7pt;}
+.tool-modal-content .f9-status-tool .spend-value-group {font-size:8pt;}
+.tool-modal-content .f9-status-tool .amount-entry input {width:76px;}
+.tool-modal-content .f9-status-tool .total-card {padding:9px 10px;}
+.tool-modal-content .f9-status-tool .total-number {font-size:12pt;}
+}
+@media (max-width:400px) {
+.tool-modal-content .f9-status-tool .mastercard-image {width:76px;}
+.tool-modal-content .f9-status-tool .mastercard-selector {gap:8px;}
+.tool-modal-content .f9-status-tool .card-toggle {font-size:7.5pt;}
+}
+/* CUSTOM SLIDER TRACK FOR SUPPORTED BROWSERS */
+.tool-modal-content .f9-status-tool .spend-slider {--fill:#b84f4f;
+  --pct:0%;
+  appearance:none;
+  -webkit-appearance:none;
+  height:22px;
+  background:transparent;}
+.tool-modal-content .f9-status-tool .spend-slider::-webkit-slider-runnable-track {height:7px;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      to right,
+      var(--fill) 0%,
+      var(--fill) var(--pct),
+      rgba(102,118,108,.15) var(--pct),
+      rgba(102,118,108,.15) 100%
+    );}
+.tool-modal-content .f9-status-tool .spend-slider::-webkit-slider-thumb {-webkit-appearance:none;
+  width:20px;
+  height:20px;
+  margin-top:-6.5px;
+  border-radius:50%;
+  border:3px solid #fff;
+  background:var(--fill);
+  box-shadow:0 0 0 1px rgba(102,118,108,.25);}
+.tool-modal-content .f9-status-tool .spend-slider::-moz-range-track {height:7px;
+  border-radius:999px;
+  background:rgba(102,118,108,.15);}
+.tool-modal-content .f9-status-tool .spend-slider::-moz-range-progress {height:7px;
+  border-radius:999px;
+  background:var(--fill);}
+.tool-modal-content .f9-status-tool .spend-slider::-moz-range-thumb {width:16px;
+  height:16px;
+  border-radius:50%;
+  border:3px solid #fff;
+  background:var(--fill);}
+
+.tool-modal-content .award-booking-tool {--sage:#66766c;--dark:#28382e;--pale:#edf3ee;--line:#dce5de;--ink:#26352b;--muted:#627268;--gold:#d99b43}
+.tool-modal-content .award-booking-tool * {box-sizing:border-box}
+.tool-modal-content .award-booking-tool {max-width:1060px;margin:auto;padding:12px}
+.tool-modal-content .award-booking-tool .award-tool-intro {position:relative;overflow:hidden;min-height:200px;border-radius:25px;background:#64786b url("https://images.unsplash.com/photo-1552564835-07e1379e9708?w=1400&auto=format&fit=crop&q=80") center/cover;color:white;display:flex;align-items:flex-end;padding:26px}
+.tool-modal-content .award-booking-tool .award-tool-intro:after {content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(17,32,23,.77),rgba(17,32,23,.08) 85%)}
+.tool-modal-content .award-booking-tool .award-tool-intro {position:relative;z-index:1;max-width:670px}
+.tool-modal-content .award-booking-tool .award-tool-eyebrow {font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+.tool-modal-content .award-booking-tool .award-tool-intro h1 {font-size:clamp(26px,5vw,45px);line-height:1.08;margin:9px 0}
+.tool-modal-content .award-booking-tool .award-tool-intro p {margin:0;font-size:13px;line-height:1.5;max-width:610px}
+.tool-modal-content .award-booking-tool .award-panel {background:#fff;border:1px solid var(--line);border-radius:23px;box-shadow:0 10px 30px rgba(39,61,45,.07);padding:23px;margin-top:15px}
+.tool-modal-content .award-booking-tool .award-panel h2 {font-size:20px;margin:0 0 7px}
+.tool-modal-content .award-booking-tool .sub {font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 18px}
+.tool-modal-content .award-booking-tool .grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.tool-modal-content .award-booking-tool .field {display:flex;flex-direction:column;gap:7px}
+.tool-modal-content .award-booking-tool .field label {font-size:12px;font-weight:700}
+.tool-modal-content .award-booking-tool .field input,
+.tool-modal-content .award-booking-tool .field select {height:47px;width:100%;border:1px solid #cbd7ce;border-radius:13px;background:#fff;color:var(--ink);font:600 14px Montserrat,Arial,sans-serif;padding:0 13px;outline-color:var(--sage)}
+.tool-modal-content .award-booking-tool .field small,
+.tool-modal-content .award-booking-tool .note {font-size:11px;color:var(--muted);line-height:1.45}
+.tool-modal-content .award-booking-tool .wide {grid-column:1/-1}
+.tool-modal-content .award-booking-tool .checks {display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:13px;background:var(--pale);font-size:12px;font-weight:600}
+.tool-modal-content .award-booking-tool .checks input {accent-color:var(--sage);width:18px;height:18px}
+.tool-modal-content .award-booking-tool .fee-note {margin:5px 0 0}
+.tool-modal-content .award-booking-tool .actions {display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}
+.tool-modal-content .award-booking-tool .btn {border:0;border-radius:999px;background:var(--sage);color:#fff;font:700 13px Montserrat,Arial,sans-serif;padding:14px 22px;cursor:pointer}
+.tool-modal-content .award-booking-tool .btn:hover {background:#526459}
+.tool-modal-content .award-booking-tool .btn.secondary {background:var(--pale);color:var(--sage)}
+.tool-modal-content .award-booking-tool .btn:disabled {opacity:.55;cursor:default}
+.tool-modal-content .award-booking-tool .result {display:none;margin-top:18px}
+.tool-modal-content .award-booking-tool .result.show {display:block}
+.tool-modal-content .award-booking-tool .score-cards {display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool-modal-content .award-booking-tool .score-card {border-radius:18px;padding:20px;background:var(--pale)}
+.tool-modal-content .award-booking-tool .score-card.cash {background:#f5f0e8}
+.tool-modal-content .award-booking-tool .score-card .tag {font-size:10px;letter-spacing:.1em;font-weight:800;text-transform:uppercase}
+.tool-modal-content .award-booking-tool .score-card strong {display:block;font-size:clamp(25px,4vw,38px);margin:7px 0 2px}
+.tool-modal-content .award-booking-tool .score-card .grade {font-weight:800;font-size:15px}
+.tool-modal-content .award-booking-tool .score-card p {font-size:11px;line-height:1.5;margin:9px 0 0}
+.tool-modal-content .award-booking-tool .rating {display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:13px}
+.tool-modal-content .award-booking-tool .rating span {height:7px;border-radius:9px;background:#d9e0da}
+.tool-modal-content .award-booking-tool .rating span.on {background:var(--sage)}
+.tool-modal-content .award-booking-tool .cash .rating span.on {background:#bf8851}
+.tool-modal-content .award-booking-tool .result-meta {font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}
+.tool-modal-content .award-booking-tool .feedback {min-height:16px;margin:10px 0 0;font-size:11px;color:var(--muted)}
+.tool-modal-content .award-booking-tool .recent-head {display:flex;align-items:end;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.tool-modal-content .award-booking-tool .recent-head h2 {margin-bottom:4px}
+.tool-modal-content .award-booking-tool .home-select {max-width:310px}
+.tool-modal-content .award-booking-tool .home-select label {display:block;font-size:11px;font-weight:700;margin-bottom:5px}
+.tool-modal-content .award-booking-tool .home-select select {height:39px;width:100%;border:1px solid var(--line);border-radius:999px;padding:0 10px;color:var(--ink);font:600 12px Montserrat,Arial,sans-serif;background:white}
+.tool-modal-content .award-booking-tool .recent-list {display:flex;gap:12px;overflow-x:auto;padding:3px 2px 12px;scroll-snap-type:x proximity}
+.tool-modal-content .award-booking-tool .find {flex:0 0 310px;border:1px solid var(--line);border-radius:19px;overflow:hidden;background:#fff;scroll-snap-align:start}
+.tool-modal-content .award-booking-tool .find-photo {height:101px;background:#66766c center/cover;position:relative;display:flex;align-items:flex-end;padding:10px}
+.tool-modal-content .award-booking-tool .find-photo:after {content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(9,21,15,.54),transparent 90%)}
+.tool-modal-content .award-booking-tool .find-city {position:relative;z-index:1;color:#fff;font-size:15px;font-weight:800;padding:7px 10px;border:1px solid rgba(255,255,255,.42);border-radius:13px;background:rgba(22,36,27,.24);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.tool-modal-content .award-booking-tool .photo-credit {position:absolute;right:5px;top:4px;z-index:1;background:rgba(15,25,18,.5);color:#fff;border-radius:7px;padding:3px 5px;font-size:8px;text-decoration:none}
+.tool-modal-content .award-booking-tool .find-body {padding:14px}
+.tool-modal-content .award-booking-tool .find-route {font-size:13px;font-weight:800;line-height:1.35;min-height:35px}
+.tool-modal-content .award-booking-tool .find-value {font-size:22px;color:var(--sage);font-weight:800;margin:8px 0 3px}
+.tool-modal-content .award-booking-tool .find-value small {font-size:10px;font-weight:600}
+.tool-modal-content .award-booking-tool .find-time {font-size:11px;color:var(--muted)}
+.tool-modal-content .award-booking-tool .find-fare {margin-top:8px;font-size:10px;color:var(--muted)}
+.tool-modal-content .award-booking-tool .fineprint {font-size:10px;color:var(--muted);line-height:1.5;margin:11px 4px 18px}
+.tool-modal-content .award-booking-tool .fineprint a {color:var(--sage)}
+@media (max-width:650px) {
+.tool-modal-content .award-booking-tool {padding:8px}
+.tool-modal-content .award-booking-tool .award-tool-intro {min-height:175px;padding:20px}
+.tool-modal-content .award-booking-tool .award-panel {padding:17px}
+.tool-modal-content .award-booking-tool .grid,
+.tool-modal-content .award-booking-tool .score-cards {grid-template-columns:1fr}
+.tool-modal-content .award-booking-tool .wide {grid-column:auto}
+.tool-modal-content .award-booking-tool .find {flex-basis:280px}
+}
+.tool-modal-content .award-booking-tool .find-link {display:block;color:inherit;text-decoration:none}
+.tool-modal-content .award-booking-tool .find-link:focus-visible {outline:3px solid var(--sage);outline-offset:-3px}
+.tool-modal-content .award-booking-tool .route-photos {position:relative;display:grid;grid-template-columns:1fr 1fr;height:134px}
+.tool-modal-content .award-booking-tool .route-photos:after {content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;transform:translateX(-50%);background:#fff;z-index:2}
+.tool-modal-content .award-booking-tool .route-photos .find-photo {height:134px;padding:9px 8px;min-width:0}
+.tool-modal-content .award-booking-tool .route-photos .find-city {font-size:11px;line-height:1.3;padding:6px 8px;max-width:100%}
+.tool-modal-content .award-booking-tool .find-city span {display:block;font-size:9px;opacity:.9;margin-top:2px}
+.tool-modal-content .award-booking-tool .route-plane {position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:39px;height:39px;display:grid;place-items:center;background:#fff;border-radius:50%;box-shadow:0 2px 9px #172c2633;color:#66766c}
+.tool-modal-content .award-booking-tool .route-plane svg {width:22px;height:22px}
+.tool-modal-content .award-booking-tool .find-departure {font-size:11px;font-weight:700;margin-top:8px;color:var(--sage)}
+.tool-modal-content .award-booking-tool .find-departure.departed {color:#7b7467}
+.tool-modal-content .award-booking-tool .find-credits {display:flex;justify-content:space-between;gap:8px;padding:0 12px 9px}
+.tool-modal-content .award-booking-tool .find-credits a {font-size:8px;color:var(--muted);text-decoration:none;max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tool-modal-content .award-booking-tool .find-credits a:hover {text-decoration:underline}
+.tool-modal-content .award-booking-tool .carousel-controls {display:flex;justify-content:flex-end;gap:7px;margin:0 0 8px}
+.tool-modal-content .award-booking-tool .carousel-controls button {border:1px solid var(--line);background:var(--pale);border-radius:999px;color:var(--sage);font:600 10px Montserrat,Arial,sans-serif;cursor:pointer;padding:7px 12px}
+.tool-modal-content .award-booking-tool .carousel-controls button:first-child,
+.tool-modal-content .award-booking-tool .carousel-controls button:last-child {font-size:20px;line-height:15px}
+.tool-modal-content .award-booking-tool .recent-list {scroll-behavior:smooth}
+.tool-modal-content .award-booking-tool .photo-credit {max-width:90%}
+@media (prefers-reduced-motion:reduce) {
+.tool-modal-content .award-booking-tool .recent-list {scroll-behavior:auto}
+}
+.tool-modal-content .award-booking-tool .recent-photo-credits {font-size:9px;line-height:1.5;margin:10px 0 0;color:var(--muted)}
+.tool-modal-content .award-booking-tool .recent-photo-credits a {color:var(--muted);text-decoration:underline}
+.tool-modal-content .award-booking-tool .find-ratings {display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 5px}
+.tool-modal-content .award-booking-tool .find-rating {padding:5px 8px;border-radius:999px;font-size:10px;font-weight:700;background:#edf3ee;color:#526459}
+.tool-modal-content .award-booking-tool .find-rating[data-level="1"] {background:#f7e9e5;color:#a25342}
+.tool-modal-content .award-booking-tool .find-rating[data-level="2"] {background:#f3eee5;color:#826b4e}
+.tool-modal-content .award-booking-tool .find-rating[data-level="3"] {background:#eef0e7;color:#69734d}
+.tool-modal-content .award-booking-tool .find-rating[data-level="5"],
+.tool-modal-content .award-booking-tool .find-rating[data-level="6"] {background:#dfeee1;color:#3d6b46}
+.tool-modal-content .award-booking-tool .find-value {display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tool-modal-content .award-booking-tool .find-value .find-rating {font-size:9px;white-space:nowrap}
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="1"] {background:#f6e8e8;color:#B84F4F}
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="2"],
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="3"] {background:#f7f0dc;color:#8a713a}
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="4"],
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="5"],
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="6"] {background:#e8eee9;color:#66766c}
+@keyframes phenomenal-pulse {
+.tool-modal-content .award-booking-tool 0%,
+.tool-modal-content .award-booking-tool 100% {opacity:1;box-shadow:0 0 0 0 rgba(102,118,108,0)}
+.tool-modal-content .award-booking-tool 50% {opacity:.68;box-shadow:0 0 0 4px rgba(102,118,108,.12)}
+}
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="6"] {animation:phenomenal-pulse 3.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce) {
+.tool-modal-content .award-booking-tool .find-value .find-rating[data-level="6"] {animation:none}
+}
+.tool-modal-content .award-booking-tool .recommended-pill {display:inline-block;font-size:10px;font-weight:700;padding:6px 10px;margin-bottom:12px;background:#66766c;color:#fff;border-radius:999px}
+.tool-modal-content .award-booking-tool .recommended-pill[hidden] {display:none}
+.tool-modal-content .award-booking-tool .score-card.recommended {outline:2px solid #66766c;outline-offset:-2px}
+.tool-modal-content .award-booking-tool .recommendation {margin-top:13px;padding:13px 16px;border-radius:14px;background:#edf3ee;color:#526459;font-size:13px}
+.tool-modal-content .award-booking-tool .recommendation.wait {background:#f7f0dc;color:#8a713a}
+.tool-modal-content .award-booking-tool .recommendation p {font-size:11px;line-height:1.45;margin:5px 0 0}
+.tool-modal-content .award-booking-tool [hidden] {display:none!important}
+.tool-modal-content .award-booking-tool .price-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.tool-modal-content .award-booking-tool .tax-display {padding:14px;background:var(--pale);border-radius:13px;font-size:12px}
+.tool-modal-content .award-booking-tool .score-cards {grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.tool-modal-content .award-booking-tool .field select:disabled {background:#f3f5f3}
+.tool-modal-content .award-booking-tool .flight-tools {display:flex;align-items:center;gap:10px}
+.tool-modal-content .award-booking-tool .flight-tools .btn {padding:8px 13px;font-size:11px}
+@media (max-width:650px) {
+.tool-modal-content .award-booking-tool .price-grid {grid-template-columns:1fr}
+}
+
+
+/* =========================================
+   HELPFUL TOOLS — FOUR-TOOL FINAL LAYOUT
+   ========================================= */
+
+.tools-simple-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.simple-tool {
+  width: 100%;
+  min-width: 0;
+  min-height: 112px;
+  justify-content: flex-start;
+}
+
+.simple-tool-title {
+  width: min(100%, 205px);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+@media (max-width: 850px) {
+  .tools-simple-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .tools-simple-grid {
+    gap: 24px 12px;
+  }
+
+  .simple-tool {
+    min-height: 126px;
+  }
+
+  .simple-tool-title {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 10px;
+  }
+
+  .simple-tool-description {
+    max-width: 180px;
+  }
+}
+
+/* =========================================
+   TOOL MODAL — SHARED POLISH
+   ========================================= */
+
+.tool-modal-content {
+  width: 100%;
+  min-width: 0;
+}
+
+.tool-modal-content button,
+.tool-modal-content input,
+.tool-modal-content select {
+  font-family: "Montserrat", sans-serif;
+}
+
+.tool-modal-content button:focus-visible,
+.tool-modal-content input:focus-visible,
+.tool-modal-content select:focus-visible {
+  outline: 3px solid rgba(102, 118, 108, 0.28);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .tool-modal-window {
+    max-height: calc(100dvh - 20px);
+  }
+
+  .tool-modal-inner {
+    max-height: calc(100dvh - 20px);
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* =========================================
+   BOOKING TIMELINE — MODAL OVERRIDES
+   ========================================= */
+
+.tool-modal-content .tool-booking-timeline {
+  max-width: 760px;
+}
+
+.tool-modal-content .tool-booking-timeline .check-toggle input {
+  position: static;
+  opacity: 1;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: 0 0 18px;
+  accent-color: #66766c;
+}
+
+.tool-modal-content .tool-booking-timeline .toggle-box {
+  display: none;
+}
+
+.tool-modal-content .tool-booking-timeline select,
+.tool-modal-content .tool-booking-timeline input[type="date"] {
+  min-width: 0;
+  min-height: 44px;
+  font-size: 16px;
+}
+
+.tool-modal-content .tool-booking-timeline #calculateButton,
+.tool-modal-content .tool-booking-timeline .secondary-button,
+.tool-modal-content .tool-booking-timeline .details-button {
+  min-height: 44px;
+}
+
+@media (max-width: 600px) {
+  .tool-modal-content .tool-booking-timeline .date-field,
+  .tool-modal-content .tool-booking-timeline .date-field input[type="date"] {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   ELITE STATUS CALCULATOR — MODAL OVERRIDES
+   ========================================= */
+
+.tool-modal-content .f9-status-tool {
+  max-width: 820px;
+}
+
+.tool-modal-content .f9-status-tool .card-toggle input {
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #66766c;
+}
+
+.tool-modal-content .f9-status-tool .check-box {
+  display: none;
+}
+
+.tool-modal-content .f9-status-tool select,
+.tool-modal-content .f9-status-tool .field input[type="number"] {
+  min-width: 0;
+  font-size: 16px;
+}
+
+.tool-modal-content .f9-status-tool button {
+  min-height: 42px;
+}
+
+@media (max-width: 700px) {
+  .tool-modal-content .f9-status-tool .setup-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-modal-content .f9-status-tool .mastercard-selector {
+    width: 100%;
+  }
+
+  .tool-modal-content .f9-status-tool .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tool-modal-content .f9-status-tool .actions button {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   AWARD BOOKING CALCULATOR — MODAL OVERRIDES
+   ========================================= */
+
+.tool-modal-content .award-booking-tool {
+  --sage: #66766c;
+  --dark: #28382e;
+  --pale: #edf3ee;
+  --line: #dce5de;
+  --ink: #26352b;
+  --muted: #627268;
+  --gold: #d99b43;
+
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  color: var(--ink);
+  font-family: "Montserrat", Arial, sans-serif;
+}
+
+.tool-modal-content .award-booking-tool .award-tool-intro {
+  position: relative;
+  min-height: 0;
+  margin: 0 0 14px;
+  padding: 18px 20px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #66766c, #526158);
+  color: #fff;
+}
+
+.tool-modal-content .award-booking-tool .award-tool-intro::after {
+  display: none;
+}
+
+.tool-modal-content .award-booking-tool .award-tool-intro h3 {
+  position: relative;
+  z-index: 1;
+  margin: 5px 0 7px;
+  color: #fff;
+  font-size: clamp(20px, 4vw, 28px);
+}
+
+.tool-modal-content .award-booking-tool .award-tool-intro p,
+.tool-modal-content .award-booking-tool .award-tool-eyebrow {
+  position: relative;
+  z-index: 1;
+}
+
+.tool-modal-content .award-booking-tool .award-tool-intro p {
+  margin: 0;
+  max-width: 680px;
+  color: rgba(255,255,255,.92);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.tool-modal-content .award-booking-tool .award-tool-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.tool-modal-content .award-booking-tool .award-panel {
+  margin-top: 12px;
+}
+
+.tool-modal-content .award-booking-tool .award-panel h3 {
+  margin: 0 0 7px;
+  font-size: 19px;
+}
+
+.tool-modal-content .award-booking-tool input,
+.tool-modal-content .award-booking-tool select {
+  min-width: 0;
+  font-size: 16px;
+}
+
+.tool-modal-content .award-booking-tool .recent-list {
+  scrollbar-width: thin;
+  scrollbar-color: #66766c #edf3ee;
+}
+
+@media (max-width: 650px) {
+  .tool-modal-content .award-booking-tool .grid,
+  .tool-modal-content .award-booking-tool .price-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-modal-content .award-booking-tool .wide {
+    grid-column: 1;
+  }
+
+  .tool-modal-content .award-booking-tool .award-panel {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .tool-modal-content .award-booking-tool .recent-head {
+    align-items: stretch;
+  }
+
+  .tool-modal-content .award-booking-tool .home-select {
+    width: 100%;
+  }
+
+  .tool-modal-content .award-booking-tool .home-select select {
+    width: 100%;
+  }
+
+  .tool-modal-content .award-booking-tool .actions .btn {
+    width: 100%;
+  }
+}
