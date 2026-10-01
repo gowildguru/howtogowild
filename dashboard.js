@@ -1567,6 +1567,221 @@ function weatherImage(code, isDay) {
 }
 
 
+/* Weather video backgrounds and FAA notices. */
+function weatherVideo(code, isDay) {
+  code = Number(code);
+  if ([95, 96, 99].includes(code)) return isDay ? "stormydaywv.mp4" : null;
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return isDay ? "snowydaywv.mp4" : "snowynightwv.mp4";
+  // Fog and freezing precipitation retain their existing still images.
+  if ([45, 48, 56, 57, 66, 67].includes(code)) return null;
+  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return isDay ? "rainydaywv.mp4" : "rainynightwv.mp4";
+  if (code === 3) return isDay ? "cloudydaywv.mp4" : null;
+  if (code === 2) return isDay ? "partlycloudydaywv.mp4" : null;
+  if ([0, 1].includes(code)) return isDay ? "cleardaywv.mp4" : "clearnightwv.mp4";
+  return null;
+}
+
+let weatherRequestSequence = 0;
+const weatherMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+let weatherVideoFile = null;
+let weatherVideoSequence = 0;
+let weatherVideoFailed = false;
+let weatherCardVisible = true;
+let faaAirport = null;
+let faaController = null;
+let faaSequence = 0;
+const faaResults = new Map();
+
+function weatherIsActive() {
+  return !document.hidden && weatherCardVisible;
+}
+
+function clearWeatherVideo() {
+  weatherVideoSequence++;
+  const video = document.getElementById("weatherVideo");
+  if (!video) return;
+  video.onplaying = null;
+  video.onerror = null;
+  video.pause();
+  video.classList.remove("is-playing");
+  if (video.hasAttribute("src")) {
+    video.removeAttribute("src");
+    video.load();
+  }
+}
+
+function syncWeatherVideo() {
+  const video = document.getElementById("weatherVideo");
+  if (!video) return;
+  if (!weatherVideoFile || weatherVideoFailed || weatherMotionPreference.matches || navigator.connection?.saveData) {
+    clearWeatherVideo();
+    return;
+  }
+  if (!weatherIsActive()) {
+    weatherVideoSequence++;
+    video.pause();
+    video.classList.remove("is-playing");
+    return;
+  }
+  const token = ++weatherVideoSequence;
+  const url = new URL(`videos/${weatherVideoFile}`, document.baseURI).href;
+  video.muted = true;
+  video.onplaying = () => {
+    if (token === weatherVideoSequence && weatherIsActive()) video.classList.add("is-playing");
+  };
+  video.onerror = () => {
+    if (token !== weatherVideoSequence) return;
+    weatherVideoFailed = true;
+    clearWeatherVideo();
+  };
+  if (video.src !== url) {
+    video.classList.remove("is-playing");
+    video.src = url;
+    video.load();
+  }
+  video.play().catch(() => {
+    if (token !== weatherVideoSequence) return;
+    weatherVideoFailed = true;
+    clearWeatherVideo();
+  });
+}
+
+function setWeatherBackground(code, isDay) {
+  const photo = document.getElementById("weatherBackground");
+  if (photo) photo.style.backgroundImage = `url("${weatherImage(code, isDay)}")`;
+  const next = weatherVideo(code, isDay);
+  if (next !== weatherVideoFile) clearWeatherVideo();
+  weatherVideoFile = next;
+  weatherVideoFailed = false;
+  syncWeatherVideo();
+}
+
+function hideFAA() {
+  const panel = document.getElementById("faaNotice");
+  if (panel) { panel.hidden = true; panel.replaceChildren(); }
+}
+
+function renderFAA(data, airport) {
+  const panel = document.getElementById("faaNotice");
+  if (!panel) return;
+  hideFAA();
+  if (!Array.isArray(data.events) || !data.events.length) return;
+  for (const event of data.events) {
+    const item = document.createElement("div");
+    item.className = "dashboard-faa-event";
+    const heading = document.createElement("strong");
+    heading.textContent = `FAA ${event.title} · ${airport.code}`;
+    item.append(heading);
+    const reason = document.createElement("span");
+    reason.textContent = event.reason || "Reason not provided by FAA.";
+    item.append(reason);
+    const details = [];
+    if (event.averageDelay) details.push(`Average delay: ${event.averageDelay}`);
+    if (event.minimumDelay) details.push(`Minimum delay: ${event.minimumDelay}`);
+    if (event.maximumDelay) details.push(`Maximum delay: ${event.maximumDelay}`);
+    if (event.endTime) details.push(`Until ${event.endTime} (FAA estimate)`);
+    if (event.startTime) details.push(`Starts: ${event.startTime}`);
+    if (event.reopenTime) details.push(`Reopens: ${event.reopenTime}`);
+    if (event.trend) details.push(`Trend: ${event.trend}`);
+    if (details.length) {
+      const detail = document.createElement("span");
+      detail.textContent = details.join(" · ");
+      item.append(detail);
+    }
+    if (event.type === "ground_stop" || event.type === "ground_delay") {
+      const scope = document.createElement("span");
+      scope.textContent = "Affects covered flights headed to this airport; check your airline for your flight’s status.";
+      item.append(scope);
+    }
+    panel.append(item);
+  }
+  const foot = document.createElement("div");
+  foot.className = "dashboard-faa-source";
+  const link = document.createElement("a");
+  link.href = "https://nasstatus.faa.gov/";
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "FAA airport status";
+  const updated = new Intl.DateTimeFormat("en-US", {timeZone: airport.timezone,
+    hour: "numeric", minute: "2-digit", timeZoneName: "short"}).format(new Date(data.updatedAt));
+  foot.append(link, document.createTextNode(` · Updated ${updated}`));
+  panel.append(foot);
+  panel.hidden = false;
+}
+
+function selectFAAAirport(airport) {
+  faaSequence++;
+  faaController?.abort();
+  faaController = null;
+  faaAirport = airport;
+  hideFAA();
+  refreshFAA();
+}
+
+async function refreshFAA() {
+  if (!faaAirport || !weatherIsActive() || !document.getElementById("faaNotice")) return;
+  const airport = faaAirport;
+  const cached = faaResults.get(airport.code);
+  const now = Date.now();
+  if (cached && now - cached.receivedAt < 300000 && now - Date.parse(cached.data.updatedAt) < 900000) {
+    renderFAA(cached.data, airport);
+    return;
+  }
+  if (faaController) return;
+  hideFAA();
+  const sequence = ++faaSequence;
+  const controller = new AbortController();
+  faaController = controller;
+  const timer = setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch(boardStatusURL, {method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({action: "airport-status", airport: airport.code}), signal: controller.signal});
+    if (!response.ok) throw new Error(`FAA lookup returned HTTP ${response.status}`);
+    const data = await response.json();
+    if (sequence !== faaSequence || faaAirport?.code !== airport.code || !weatherIsActive()) return;
+    if (!Array.isArray(data.events) || data.airport !== airport.code || !Number.isFinite(Date.parse(data.updatedAt)) ||
+        Date.now() - Date.parse(data.updatedAt) > 900000) throw new Error("FAA feed unavailable or stale");
+    faaResults.set(airport.code, {data, receivedAt: Date.now()});
+    renderFAA(data, airport);
+  } catch (error) {
+    if (sequence === faaSequence) {
+      hideFAA();
+      if (error.name !== "AbortError") console.info("FAA notice unavailable:", error.message);
+    }
+  } finally {
+    clearTimeout(timer);
+    if (faaController === controller) faaController = null;
+  }
+}
+
+function syncWeatherActivity() {
+  syncWeatherVideo();
+  if (weatherIsActive()) refreshFAA();
+  else {
+    faaSequence++;
+    faaController?.abort();
+    faaController = null;
+  }
+}
+
+function initializeWeatherEnhancements() {
+  const card = document.querySelector(".dashboard-weather");
+  if (card && "IntersectionObserver" in window) {
+    weatherCardVisible = false;
+    const observer = new IntersectionObserver(entries => {
+      weatherCardVisible = entries[0].isIntersecting;
+      syncWeatherActivity();
+    }, {threshold: 0});
+    observer.observe(card);
+  }
+  document.addEventListener("visibilitychange", syncWeatherActivity);
+  if (weatherMotionPreference.addEventListener) weatherMotionPreference.addEventListener("change", syncWeatherVideo);
+  else weatherMotionPreference.addListener(syncWeatherVideo);
+  // No background cron: these checks do nothing when the card/tab is not visible.
+  setInterval(() => { if (weatherIsActive()) refreshFAA(); }, 60000);
+}
+
+
 async function getWeather(airport) {
 
   const currentVars = [
@@ -1816,6 +2031,13 @@ function analyzeWeather(weather, airport) {
 
 
 async function updateWeather(airport) {
+  const requestSequence = ++weatherRequestSequence;
+  clearWeatherVideo();
+  weatherVideoFile = null;
+  const weatherPhoto = document.getElementById("weatherBackground");
+  if (weatherPhoto) weatherPhoto.style.backgroundImage = "";
+  selectFAAAirport(airport);
+
 
   const condition =
     document.getElementById(
@@ -1835,6 +2057,7 @@ async function updateWeather(airport) {
         airport
       );
 
+    if (requestSequence !== weatherRequestSequence) return;
     const current =
       weather.current;
 
@@ -1866,13 +2089,7 @@ async function updateWeather(airport) {
       );
 
 
-    document.getElementById(
-      "weatherBackground"
-    ).style.backgroundImage =
-      `url("${weatherImage(
-        current.weather_code,
-        isDay
-      )}")`;
+    setWeatherBackground(current.weather_code, isDay);
 
 
     const analysis =
@@ -2029,6 +2246,8 @@ async function updateWeather(airport) {
 
     }
   } catch (error) {
+    if (requestSequence !== weatherRequestSequence) return;
+    clearWeatherVideo();
 
     condition.textContent =
       "Weather unavailable";
@@ -2986,4 +3205,5 @@ async function initializeDashboard() {
 }
 
 
+initializeWeatherEnhancements();
 initializeDashboard();
