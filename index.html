@@ -69,7 +69,42 @@
 
   </section>
 
+  <!-- GUIDE SEARCH -->
+  <section class="guide-search" aria-label="Search this guide">
+    <div class="guide-search-inner">
+      <form id="guideSearchForm" role="search">
+        <label for="guideSearchInput" class="guide-search-label">
+          What can we help you find?
+        </label>
 
+        <div class="guide-search-field">
+          <input
+            id="guideSearchInput"
+            type="search"
+            placeholder="Search this guide"
+            autocomplete="off"
+            maxlength="150"
+            aria-controls="guideSearchResults"
+          >
+          <button type="submit">Search</button>
+        </div>
+      </form>
+
+      <p
+        id="guideSearchStatus"
+        class="guide-search-status"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+      <ul
+        id="guideSearchResults"
+        class="guide-search-results"
+        hidden
+      ></ul>
+    </div>
+  </section>
+  
   <!-- DASHBOARD -->
   <section
     class="section section-green"
