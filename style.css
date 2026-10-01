@@ -2272,3 +2272,44 @@ z-index: 2;
   }
 
 }
+/* =========================================
+   DASHBOARD AIRPORT ANCHOR ART
+   ========================================= */
+
+.dashboard-airport-art {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1.5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dashboard-airport-art img {
+  display: block;
+  width: 100%;
+  min-width: 1500px;
+  height: auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.42;
+}
+
+/* Keep the illustration from becoming enormous
+   on ultra-wide monitors */
+@media (min-width: 2000px) {
+  .dashboard-airport-art img {
+    width: 2000px;
+  }
+}
+
+/* Mobile: keep the artwork wide and crop the edges */
+@media (max-width: 700px) {
+  .dashboard-airport-art img {
+    width: 1400px;
+    min-width: 1400px;
+    opacity: 0.30;
+  }
+}
