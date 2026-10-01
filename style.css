@@ -629,6 +629,12 @@ z-index: 2;
 
   padding: 4px 8px;
 
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+
   transition: transform 0.18s ease;
 }
 
