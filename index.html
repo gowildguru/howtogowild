@@ -10,7 +10,7 @@
     content="An independent guide to Frontier Airlines' GoWild! Pass, including booking tools, route information, pricing help, and practical travel resources."
   >
 
-  <link rel="stylesheet" href="style.css?v=15">
+  <link rel="stylesheet" href="style.css?v=16">
 
   <!-- Needed by the Award Booking Calculator for community recent finds -->
   <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -251,9 +251,19 @@
             class="dashboard-weather-photo">
           </div>
 
+          <video
+            id="weatherVideo"
+            class="dashboard-weather-video"
+            autoplay muted loop playsinline preload="none"
+            aria-hidden="true" tabindex="-1">
+          </video>
+
           <div class="dashboard-weather-shade"></div>
 
           <div class="dashboard-weather-content">
+
+            <div id="faaNotice" class="dashboard-faa-notice" hidden
+                 role="status" aria-live="polite" aria-atomic="true"></div>
 
             <div class="dashboard-weather-top">
 
@@ -2248,7 +2258,7 @@
 
 
   <script src="faq-booking.js?v=1" defer></script>
-  <script src="dashboard.js?v=12"></script>
+  <script src="dashboard.js?v=13"></script>
   <script src="tools.js?v=3"></script>
   <script src="credit-cards.js?v=1"></script>
 
