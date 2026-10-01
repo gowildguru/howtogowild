@@ -1436,6 +1436,7 @@ z-index: 2;
 }
 /* =========================================
    DASHBOARD STAGE 2 — WEATHER
+   GLASS VERSION
    ========================================= */
 
 .dashboard-weather {
@@ -1447,14 +1448,30 @@ z-index: 2;
   overflow: hidden;
   border-radius: 22px;
 
-  background: #66766c;
+  /*
+    Transparent glass instead of an opaque card.
+    This allows the dashboard artwork/planes behind
+    the card to remain visible.
+  */
+  background: rgba(53, 77, 61, 0.12);
   color: #ffffff;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
 
   isolation: isolate;
 
   box-shadow:
-    0 10px 26px rgba(20, 34, 25, 0.12);
+    0 10px 30px rgba(20, 34, 25, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
+
+
+/* =========================================
+   WEATHER BACKGROUND PHOTO
+   ========================================= */
 
 .dashboard-weather-photo {
   position: absolute;
@@ -1462,11 +1479,24 @@ z-index: 2;
 
   z-index: -3;
 
+  /*
+    Keep the weather image visible, but allow some
+    of the glass character to come through.
+  */
+  opacity: 0.58;
+
   background-size: cover;
   background-position: center;
 
-  transition: background-image 0.3s ease;
+  transition:
+    background-image 0.3s ease,
+    opacity 0.3s ease;
 }
+
+
+/* =========================================
+   WEATHER PHOTO SHADE
+   ========================================= */
 
 .dashboard-weather-shade {
   position: absolute;
@@ -1474,15 +1504,29 @@ z-index: 2;
 
   z-index: -2;
 
+  /*
+    Much lighter than the old dark overlay.
+    Left side remains slightly darker so the
+    temperature stays readable.
+  */
   background:
     linear-gradient(
       115deg,
-      rgba(15, 22, 18, 0.72),
-      rgba(15, 22, 18, 0.32)
+      rgba(15, 22, 18, 0.32) 0%,
+      rgba(15, 22, 18, 0.15) 48%,
+      rgba(15, 22, 18, 0.07) 100%
     );
 }
 
+
+/* =========================================
+   WEATHER CONTENT
+   ========================================= */
+
 .dashboard-weather-content {
+  position: relative;
+  z-index: 2;
+
   min-height: 235px;
 
   display: flex;
@@ -1492,6 +1536,7 @@ z-index: 2;
   padding: 25px 28px;
 }
 
+
 .dashboard-weather-top {
   display: flex;
   align-items: flex-start;
@@ -1500,14 +1545,16 @@ z-index: 2;
   gap: 18px;
 }
 
+
 .dashboard-weather-label {
   font-size: 8px;
   font-weight: 700;
 
   letter-spacing: 0.9px;
 
-  opacity: 0.82;
+  opacity: 0.86;
 }
+
 
 .dashboard-current-weather {
   display: flex;
@@ -1518,16 +1565,25 @@ z-index: 2;
   margin-top: 3px;
 }
 
+
 .dashboard-temperature {
   font-size: 44px;
   font-weight: 700;
   line-height: 1;
+
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.16);
 }
+
 
 .dashboard-condition {
   font-size: 14px;
   font-weight: 600;
+
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.14);
 }
+
 
 .dashboard-wind {
   display: flex;
@@ -1536,17 +1592,25 @@ z-index: 2;
   text-align: right;
 }
 
+
 .dashboard-wind strong {
   font-size: 20px;
+
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.14);
 }
+
 
 .dashboard-wind span {
   font-size: 9px;
-  opacity: 0.82;
+  opacity: 0.84;
 }
 
 
-/* Only appears when noteworthy */
+/* =========================================
+   WEATHER CONCERNS
+   Only appears when noteworthy
+   ========================================= */
 
 .dashboard-weather-concerns {
   display: none;
@@ -1556,6 +1620,7 @@ z-index: 2;
 
   margin-top: 10px;
 }
+
 
 .dashboard-weather-chip {
   display: none;
@@ -1567,20 +1632,28 @@ z-index: 2;
 
   border-radius: 999px;
 
-  background: rgba(255, 255, 255, 0.17);
+  background: rgba(255, 255, 255, 0.13);
 
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
 
   font-size: 10px;
 }
+
 
 .dashboard-weather-chip.show {
   display: flex;
 }
 
 
-/* Operational assessment */
+/* =========================================
+   OPERATIONAL ASSESSMENT
+   ========================================= */
 
 .dashboard-weather-message {
   display: flex;
@@ -1593,11 +1666,21 @@ z-index: 2;
 
   border-radius: 14px;
 
-  background: rgba(0, 0, 0, 0.23);
+  /*
+    Glass panel instead of the old dark box.
+  */
+  background: rgba(255, 255, 255, 0.10);
 
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
+
 
 .dashboard-weather-icon {
   width: 23px;
@@ -1610,17 +1693,24 @@ z-index: 2;
 
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.18);
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
 
   font-size: 10px;
   font-weight: 700;
 }
 
+
 .dashboard-weather-message strong {
   display: block;
 
   font-size: 11px;
+
+  text-shadow:
+    0 1px 8px rgba(0, 0, 0, 0.12);
 }
+
 
 .dashboard-weather-message span {
   display: block;
@@ -1630,11 +1720,13 @@ z-index: 2;
   font-size: 10px;
   line-height: 1.45;
 
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
 
-/* Tomorrow */
+/* =========================================
+   TOMORROW
+   ========================================= */
 
 .dashboard-tomorrow {
   display: flex;
@@ -1647,8 +1739,9 @@ z-index: 2;
   padding-top: 10px;
 
   border-top:
-    1px solid rgba(255, 255, 255, 0.22);
+    1px solid rgba(255, 255, 255, 0.24);
 }
+
 
 .dashboard-tomorrow-label {
   display: block;
@@ -1660,12 +1753,14 @@ z-index: 2;
 
   letter-spacing: 0.7px;
 
-  opacity: 0.72;
+  opacity: 0.76;
 }
+
 
 .dashboard-tomorrow strong {
   font-size: 11px;
 }
+
 
 .dashboard-tomorrow-summary {
   text-align: right;
@@ -1675,17 +1770,38 @@ z-index: 2;
 }
 
 
+/* =========================================
+   MOBILE WEATHER
+   ========================================= */
+
 @media (max-width: 600px) {
 
   .dashboard-weather {
     min-height: 220px;
+
+    /*
+      Slightly stronger glass on mobile because
+      the card is smaller and text overlaps more
+      of the background.
+    */
+    background: rgba(53, 77, 61, 0.15);
+
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   }
+
+
+  .dashboard-weather-photo {
+    opacity: 0.54;
+  }
+
 
   .dashboard-weather-content {
     min-height: 220px;
 
     padding: 19px;
   }
+
 
   .dashboard-temperature {
     font-size: 36px;
@@ -1700,6 +1816,7 @@ z-index: 2;
     gap: 8px;
   }
 
+
   .dashboard-tomorrow {
     align-items: flex-start;
     flex-direction: column;
@@ -1707,12 +1824,17 @@ z-index: 2;
     gap: 5px;
   }
 
+
   .dashboard-tomorrow-summary {
     text-align: left;
   }
 
 }
-/* Desktop weather cleanup */
+
+
+/* =========================================
+   DESKTOP WEATHER
+   ========================================= */
 
 @media (min-width: 701px) {
 
@@ -1720,39 +1842,49 @@ z-index: 2;
     min-height: 260px;
   }
 
+
   .dashboard-weather-content {
     min-height: 260px;
+
     padding: 28px 32px;
   }
+
 
   .dashboard-weather-top {
     align-items: center;
   }
 
+
   .dashboard-current-weather {
     gap: 12px;
   }
+
 
   .dashboard-temperature {
     font-size: 52px;
   }
 
+
   .dashboard-condition {
     font-size: 15px;
   }
+
 
   .dashboard-wind strong {
     font-size: 22px;
   }
 
+
   .dashboard-weather-message {
     max-width: 620px;
   }
+
 
   .dashboard-tomorrow {
     margin-top: 18px;
   }
 
+}
 }
 /* =========================================
    DASHBOARD STAGE 3 — GOWILD BOOKING
