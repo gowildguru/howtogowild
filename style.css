@@ -2101,3 +2101,174 @@ z-index: 2;
 
 .departure-flight { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media (max-width: 390px) { .departure-flight { font-size: 6px; } }
+/* =========================================
+   DASHBOARD BACKGROUND PLANES
+   ========================================= */
+
+#dashboard {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+#dashboard > .container {
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-planes {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dashboard-plane {
+  position: absolute;
+  display: block;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+/* Plane 1 — large upper pass */
+.plane-1 {
+  width: 230px;
+  top: 10%;
+  left: -280px;
+  opacity: 0.18;
+
+  animation:
+    dashboard-plane-right-1 30s linear infinite;
+}
+
+/* Plane 2 — medium, opposite direction */
+.plane-2 {
+  width: 165px;
+  top: 38%;
+  right: -220px;
+  opacity: 0.15;
+
+  animation:
+    dashboard-plane-left-2 37s linear 7s infinite;
+}
+
+/* Plane 3 — smaller distant climb */
+.plane-3 {
+  width: 105px;
+  top: 64%;
+  left: -160px;
+  opacity: 0.11;
+
+  animation:
+    dashboard-plane-climb 43s linear 14s infinite;
+}
+
+/* Plane 4 — large lower pass */
+.plane-4 {
+  width: 205px;
+  top: 82%;
+  right: -260px;
+  opacity: 0.14;
+
+  animation:
+    dashboard-plane-left-4 48s linear 21s infinite;
+}
+
+
+/* LEFT TO RIGHT */
+
+@keyframes dashboard-plane-right-1 {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(100vw + 560px));
+  }
+}
+
+
+/* RIGHT TO LEFT */
+
+@keyframes dashboard-plane-left-2 {
+  from {
+    transform: translateX(0) scaleX(-1);
+  }
+
+  to {
+    transform: translateX(calc(-100vw - 440px)) scaleX(-1);
+  }
+}
+
+
+/* SMALL DIAGONAL CLIMB */
+
+@keyframes dashboard-plane-climb {
+  from {
+    transform:
+      translateX(0)
+      translateY(45px)
+      rotate(-4deg);
+  }
+
+  to {
+    transform:
+      translateX(calc(100vw + 340px))
+      translateY(-110px)
+      rotate(-4deg);
+  }
+}
+
+
+/* LARGE LOWER PASS */
+
+@keyframes dashboard-plane-left-4 {
+  from {
+    transform: translateX(0) scaleX(-1);
+  }
+
+  to {
+    transform: translateX(calc(-100vw - 520px)) scaleX(-1);
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .plane-1 {
+    width: 145px;
+    opacity: 0.12;
+  }
+
+  .plane-2 {
+    width: 110px;
+    opacity: 0.10;
+  }
+
+  .plane-3 {
+    width: 75px;
+    opacity: 0.08;
+  }
+
+  .plane-4 {
+    width: 135px;
+    opacity: 0.10;
+  }
+
+}
+
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .dashboard-plane {
+    animation: none !important;
+  }
+
+}
