@@ -98,7 +98,23 @@ document.addEventListener("keydown", event => {
 
 
 function initializeCardAnalyzer(root) {
-  const get = id => root.querySelector(`#${id}`);
+  const get = id => {
+    const category = id.replace(/(Slider|Input|MilesDisplay)$/, "");
+
+    if (id.endsWith("Slider")) {
+      return root.querySelector(`[data-slider="${category}"]`);
+    }
+
+    if (id.endsWith("Input")) {
+      return root.querySelector(`[data-input="${category}"]`);
+    }
+
+    if (id.endsWith("MilesDisplay")) {
+      return root.querySelector(`[data-miles-display="${category}"]`);
+    }
+
+    return root.querySelector(`[data-result="${id}"]`);
+  };
 /* =========================
    CONSTANTS
    ========================= */
