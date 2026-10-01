@@ -1659,6 +1659,8 @@ function setWeatherBackground(code, isDay) {
 function hideFAA() {
   const panel = document.getElementById("faaNotice");
   if (panel) { panel.hidden = true; panel.replaceChildren(); }
+  const assessment = document.getElementById("weatherMessage");
+  if (assessment) assessment.style.display = "";
 }
 
 function renderFAA(data, airport) {
@@ -1707,6 +1709,9 @@ function renderFAA(data, airport) {
   foot.append(link, document.createTextNode(` · Updated ${updated}`));
   panel.append(foot);
   panel.hidden = false;
+  // The active FAA notice takes precedence over the separate forecast assessment.
+  const assessment = document.getElementById("weatherMessage");
+  if (assessment) assessment.style.display = "none";
 }
 
 function selectFAAAirport(airport) {
