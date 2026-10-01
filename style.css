@@ -4467,13 +4467,13 @@ body.tool-modal-open {
 
 .credit-cards-section {
   position: relative;
-  padding: 90px 24px 105px;
+  padding: 90px 24px 110px;
   overflow: hidden;
 
   background:
     linear-gradient(
       rgba(8, 16, 13, 0.10),
-      rgba(8, 16, 13, 0.18)
+      rgba(8, 16, 13, 0.20)
     ),
     url("images/ccbackground.jpg") center center / cover no-repeat;
 
@@ -4493,7 +4493,7 @@ body.tool-modal-open {
 
 .credit-cards-heading {
   max-width: 650px;
-  margin: 0 auto 105px;
+  margin: 0 auto 34px;
   text-align: center;
 }
 
@@ -4536,17 +4536,16 @@ body.tool-modal-open {
   position: relative;
   width: min(100%, 760px);
   margin: 0 auto;
-  padding: 0 74px 55px;
+
+  /* Reserved space for the portion of the card art that floats above the panel. */
+  padding: 125px 74px 55px;
+
   touch-action: pan-y;
 }
-
-
-/* TRACK */
 
 .credit-card-track {
   position: relative;
   width: 100%;
-  min-height: 560px;
 }
 
 
@@ -4556,9 +4555,11 @@ body.tool-modal-open {
   position: absolute;
   inset: 0 0 auto 0;
   width: 100%;
-  min-height: 500px;
+  min-height: 390px;
   margin: 0 auto;
-  padding: 190px 48px 72px;
+
+  /* The image is in normal flow, so it can never cover the title. */
+  padding: 0 48px 72px;
 
   display: flex;
   flex-direction: column;
@@ -4599,15 +4600,18 @@ body.tool-modal-open {
 /* PHYSICAL CREDIT CARD IMAGE */
 
 .credit-card-image {
-  position: absolute;
-  top: -95px;
-  left: 50%;
+  position: relative;
+  top: auto;
+  left: auto;
 
-  width: min(62%, 350px);
+  width: min(70%, 380px);
+  max-height: 235px;
   height: auto;
-  object-fit: contain;
 
-  transform: translateX(-50%);
+  margin: -110px auto 28px;
+
+  object-fit: contain;
+  transform: none;
   z-index: 4;
 
   filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.34));
@@ -4618,7 +4622,7 @@ body.tool-modal-open {
 }
 
 .credit-card-panel:hover .credit-card-image {
-  transform: translateX(-50%) translateY(-6px);
+  transform: translateY(-6px);
   filter: drop-shadow(0 30px 34px rgba(0, 0, 0, 0.38));
 }
 
@@ -4640,7 +4644,7 @@ body.tool-modal-open {
 
 .credit-card-description {
   max-width: 500px;
-  margin: 28px auto 0;
+  margin: 24px auto 0;
   font-size: 15px;
   line-height: 1.65;
   opacity: 0.92;
@@ -4654,7 +4658,7 @@ body.tool-modal-open {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-top: auto;
-  padding-top: 34px;
+  padding-top: 32px;
 }
 
 .credit-card-facts > div {
@@ -4733,7 +4737,7 @@ body.tool-modal-open {
 
 .credit-card-arrow {
   position: absolute;
-  top: 46%;
+  top: 58%;
   transform: translateY(-50%);
   z-index: 8;
 
@@ -4834,11 +4838,11 @@ body.tool-modal-open {
 @media (max-width: 700px) {
 
   .credit-cards-section {
-    padding: 68px 14px 90px;
+    padding: 68px 14px 92px;
   }
 
   .credit-cards-heading {
-    margin-bottom: 92px;
+    margin-bottom: 24px;
   }
 
   .credit-cards-heading h2 {
@@ -4851,22 +4855,19 @@ body.tool-modal-open {
 
   .credit-card-carousel {
     width: 100%;
-    padding: 0 34px 52px;
-  }
-
-  .credit-card-track {
-    min-height: 520px;
+    padding: 100px 36px 52px;
   }
 
   .credit-card-panel {
-    min-height: 455px;
-    padding: 185px 22px 62px;
+    min-height: 395px;
+    padding: 0 22px 62px;
     border-radius: 30px;
   }
 
   .credit-card-image {
-    top: -115px;
-    width: min(84%, 330px);
+    width: min(78%, 285px);
+    max-height: 185px;
+    margin: -82px auto 22px;
   }
 
   .credit-card-content h3 {
@@ -4874,14 +4875,14 @@ body.tool-modal-open {
   }
 
   .credit-card-description {
-    margin-top: 20px;
+    margin-top: 18px;
     font-size: 13px;
     line-height: 1.55;
   }
 
   .credit-card-facts {
     gap: 6px;
-    padding-top: 25px;
+    padding-top: 24px;
   }
 
   .credit-card-facts > div {
@@ -4904,7 +4905,7 @@ body.tool-modal-open {
   }
 
   .credit-card-arrow {
-    top: 46%;
+    top: 58%;
     width: 38px;
     height: 38px;
     font-size: 27px;
@@ -4926,8 +4927,8 @@ body.tool-modal-open {
 @media (max-width: 390px) {
 
   .credit-card-carousel {
-    padding-left: 28px;
-    padding-right: 28px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
   .credit-card-panel {
@@ -4936,7 +4937,8 @@ body.tool-modal-open {
   }
 
   .credit-card-image {
-    width: 86%;
+    width: min(80%, 260px);
+    margin-top: -74px;
   }
 
   .credit-card-content h3 {
