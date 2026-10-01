@@ -5120,3 +5120,124 @@ body.tool-modal-open {
     transform: translateY(14%);
   }
 }
+/* Search between the hero and dashboard */
+.guide-search {
+  position: relative;
+  background: var(--green-dark);
+  color: white;
+  padding: 130px 20px 32px;
+}
+
+.guide-search-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.guide-search-label {
+  display: block;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.guide-search-field {
+  display: flex;
+  gap: 8px;
+  padding: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.guide-search-field input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: white;
+  font: inherit;
+  font-size: 16px;
+}
+
+.guide-search-field input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.guide-search-field button {
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: white;
+  color: var(--green-dark);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.guide-search-field input:focus-visible,
+.guide-search-field button:focus-visible,
+.guide-search-results a:focus-visible {
+  outline: 3px solid #b6d3c0;
+  outline-offset: 3px;
+}
+
+.guide-search-status {
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.guide-search-status:empty {
+  display: none;
+}
+
+.guide-search-results {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.guide-search-results li + li {
+  margin-top: 8px;
+}
+
+.guide-search-results a {
+  display: block;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  text-decoration: none;
+}
+
+.guide-search-results a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.guide-search-results strong,
+.guide-search-results span {
+  display: block;
+}
+
+.guide-search-results span {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+  .guide-search {
+    padding: 110px 16px 28px;
+  }
+
+  .guide-search-field input {
+    padding: 10px;
+  }
+
+  .guide-search-field button {
+    padding: 10px 16px;
+  }
+}
