@@ -5098,3 +5098,25 @@ body.tool-modal-open {
     animation: none;
   }
 }
+/* Shorter hero with overlapping text block */
+.hero {
+  min-height: 0;
+}
+
+.hero-content {
+  padding: 20px 0 24px;
+}
+
+.hero-copy {
+  transform: translateY(20%);
+}
+
+@media (max-width: 700px) {
+  .hero-content {
+    padding: 16px 0 20px;
+  }
+
+  .hero-copy {
+    transform: translateY(14%);
+  }
+}
