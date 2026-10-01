@@ -4473,7 +4473,7 @@ body.tool-modal-open {
       rgba(25, 34, 28, 0.18),
       rgba(25, 34, 28, 0.18)
     ),
-    url("assets/images/credit-card-sky.jpg") center center / cover fixed;
+    url("images/ccbackground.jpg") center center / cover fixed;
 }
 
 .credit-cards-overlay {
