@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GoWild! Availability | How To GoWild!</title>
+  <meta name="description"
+        content="Understand standard GoWild! booking, Early Booking promotions, Peak Day charges, and factors affecting flight availability.">
+
+  <link rel="stylesheet" href="style.css?v=18">
+
+  <style>
+    .availability-page {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(35, 50, 40, .76), rgba(35, 50, 40, .9)),
+        url("images/120425_Airfield_frontier-0055.jpg")
+        center / cover fixed;
+      color: #fff;
+    }
+
+    .availability-wrap {
+      width: min(100% - 32px, 960px);
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .availability-home {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 1px solid rgba(255, 255, 255, .3);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .1);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    .availability-heading {
+      margin: 36px 0 30px;
+      text-align: center;
+    }
+
+    .availability-heading h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1.15;
+    }
+
+    .availability-heading p {
+      max-width: 620px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .availability-card {
+      margin-bottom: 22px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 26px;
+      background: rgba(35, 50, 40, .8);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .14);
+    }
+
+    @supports (backdrop-filter: blur(12px)) or
+              (-webkit-backdrop-filter: blur(12px)) {
+      .availability-card {
+        background: rgba(35, 50, 40, .58);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+    }
+
+    .availability-card h2 {
+      margin: 0 0 20px;
+      font-size: 1.6rem;
+      line-height: 1.25;
+    }
+
+    .availability-card h3 {
+      margin: 26px 0 10px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    .availability-card p {
+      margin: 0 0 14px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, .94);
+    }
+
+    .availability-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .availability-note {
+      padding: 15px 18px;
+      border-left: 3px solid #b6d3c0;
+      border-radius: 0 14px 14px 0;
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .availability-section-heading {
+      margin: 42px 0 22px;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+
+    .availability-footer {
+      max-width: 740px;
+      margin: 32px auto 0;
+      text-align: center;
+      font-size: .8rem;
+      color: rgba(255, 255, 255, .75);
+    }
+
+    .availability-home:focus-visible {
+      outline: 3px solid #b6d3c0;
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .availability-page {
+        background-attachment: scroll;
+      }
+
+      .availability-card {
+        padding: 22px;
+        border-radius: 22px;
+      }
+
+      .availability-heading {
+        margin-top: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body class="availability-page">
+  <main class="availability-wrap">
+
+    <a class="availability-home" href="index.html">
+      ← Back to How To GoWild!
+    </a>
+
+    <header class="availability-heading">
+      <h1>GoWild! Availability</h1>
+      <p>
+        Understand when to book, how promotional fares work,
+        and why GoWild! may not appear on every flight.
+      </p>
+    </header>
+
+    <section class="availability-card"
+             id="standard-booking"
+             aria-labelledby="standard-booking-title"
+             data-search-topic>
+      <h2 id="standard-booking-title">Standard Booking</h2>
+
+      <p>
+        For domestic flights, GoWild! fares become eligible for confirmed
+        booking <strong>without an Early Booking Fee starting at midnight
+        the day before departure</strong>, in the departure airport’s
+        local time zone.
+      </p>
+
+      <p>
+        This rule applies to <strong>every flight segment</strong> on a
+        booking. An itinerary connecting through a different time zone
+        is fully within the standard booking window only when
+        <strong>all segments depart today or tomorrow in their respective
+        departure airport time zones</strong>.
+      </p>
+
+      <p>
+        For example, an Orlando–Denver–Las Vegas itinerary may need to
+        wait until midnight in Denver—2:00 a.m. in Orlando—before every
+        segment is within its standard booking window.
+      </p>
+
+      <p class="availability-note">
+        <strong>An open booking window does not guarantee availability.</strong>
+        Taxes and applicable charges still apply. International flights
+        have a separate standard booking window.
+      </p>
+    </section>
+
+    <section class="availability-card"
+             id="early-booking"
+             aria-labelledby="early-booking-title"
+             data-search-topic>
+      <h2 id="early-booking-title">Early Booking</h2>
+
+      <h3>What is Early Booking?</h3>
+      <p>
+        On a promotional basis, GoWild! fares may become available beyond
+        the standard one-day domestic booking window. These promotions
+        have often appeared for off-peak travel dates.
+      </p>
+
+      <p>
+        Promotional fares may allow you to book flights weeks, or
+        occasionally months, in advance with <strong>$0.01 in airfare</strong>.
+        Significant Early Booking Fees may apply, in addition to taxes
+        and other applicable charges.
+        <strong>Promotional availability is not guaranteed.</strong>
+      </p>
+
+      <h3>
+        Why is GoWild! Early Booking more expensive than the Discount Den fare?
+      </h3>
+      <p>
+        GoWild! and Discount Den are separate membership programs with
+        different offers and fare availability. If you have both
+        memberships, compare the total prices and book the lowest
+        eligible fare you see.
+      </p>
+
+      <h3>
+        Does a lack of Early Booking mean GoWild! won’t be available
+        during the standard booking window?
+      </h3>
+      <p>
+        No. Early Booking uses limited promotional inventory. A flight
+        without an Early Booking fare may still offer GoWild! during the
+        standard booking window, but availability is not guaranteed.
+      </p>
+    </section>
+
+    <section class="availability-card"
+             id="peak-day-booking"
+             aria-labelledby="peak-day-booking-title"
+             data-search-topic>
+      <h2 id="peak-day-booking-title">Peak Day Booking</h2>
+
+      <p>
+        Although GoWild! has published blackout dates, some Early Booking
+        promotions may offer GoWild! fares on those dates with a
+        <strong>Peak Day charge</strong>. Inventory is limited.
+      </p>
+
+      <p class="availability-note">
+        <strong>
+          The Peak Day charge does not disappear when the standard
+          booking window opens.
+        </strong>
+        Do not expect a promotional blackout-date fare to drop to the
+        usual standard-window price.
+      </p>
+
+      <p>
+        In the fare breakdown described by passholders, the charge appears
+        under <strong>GWEF</strong>. Select the fare and expand its taxes
+        and fees to review the charge and total price before booking.
+      </p>
+    </section>
+
+    <h2 class="availability-section-heading">Flight Availability</h2>
+
+    <section class="availability-card"
+             id="load-factor"
+             aria-labelledby="load-factor-title"
+             data-search-topic>
+      <h2 id="load-factor-title">Load Factor</h2>
+
+      <p>
+        Historically, passholders have observed that GoWild! fares are
+        less likely to appear when roughly <strong>15 or fewer seats
+        remain</strong>. This is a community observation, not a published
+        Frontier cutoff. Other inventory controls can affect availability.
+      </p>
+
+      <p>
+        <strong>A seat map does not reliably show how many seats are
+        unsold.</strong> Some ticketed passengers do not yet have assigned
+        seats, and some seats may be blocked from selection.
+      </p>
+
+      <p>
+        Missing GoWild! fares can reflect limited inventory or other
+        restrictions—even when seats are still available to purchase.
+      </p>
+    </section>
+
+    <section class="availability-card"
+             id="demand"
+             aria-labelledby="demand-title"
+             data-search-topic>
+      <h2 id="demand-title">Demand</h2>
+
+      <p>
+        <strong>High-demand flights may not offer GoWild! fares.</strong>
+        Seats available for purchase do not guarantee GoWild! availability.
+      </p>
+
+      <p>
+        Passholders have reported difficulty finding GoWild! fares in
+        markets such as <strong>New York City and Southern California</strong>.
+        These reports describe traveler experiences rather than a
+        published market restriction.
+      </p>
+
+      <p>
+        Availability can vary by route, date, and departure time.
+        Keeping your plans flexible gives you more options to check.
+      </p>
+    </section>
+
+    <footer class="availability-footer">
+      This independent guide is not affiliated with Frontier Airlines.
+      Promotions, policies, charges, and availability can change.
+      Confirm current terms and final prices directly with Frontier.
+    </footer>
+
+  </main>
+</body>
+</html>
