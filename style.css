@@ -5014,3 +5014,87 @@ body.tool-modal-open {
 @media (prefers-reduced-motion: reduce) {
   .dashboard-weather-video { display: none; transition: none; }
 }
+/* Hero takeoff animation */
+.hero-takeoff {
+  position: relative;
+  height: 100px;
+  margin: -12px 0 16px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-takeoff-message {
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  color: #fff;
+  font-size: clamp(1rem, 3.8vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  animation: hero-takeoff-reveal 1.65s linear 0.25s both;
+}
+
+.hero-takeoff-plane {
+  position: absolute;
+  left: -180px;
+  bottom: 0;
+  z-index: 1;
+  width: 170px;
+  height: auto;
+  max-width: none;
+  pointer-events: none;
+  transform-origin: 65% 50%;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25));
+  animation: hero-plane-takeoff 2.4s ease-in-out 0.15s both;
+}
+
+@keyframes hero-takeoff-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes hero-plane-takeoff {
+  0% {
+    left: -180px;
+    transform: translateY(0) rotate(0deg);
+  }
+  35% {
+    transform: translateY(0) rotate(0deg);
+  }
+  55% {
+    transform: translateY(-12px) rotate(-12deg);
+  }
+  100% {
+    left: 110%;
+    transform: translateY(-70px) rotate(-18deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-takeoff {
+    height: 88px;
+    margin-top: -8px;
+  }
+
+  .hero-takeoff-plane {
+    width: 125px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-takeoff {
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .hero-takeoff-message {
+    animation: none;
+    clip-path: none;
+  }
+
+  .hero-takeoff-plane {
+    display: none;
+    animation: none;
+  }
+}
