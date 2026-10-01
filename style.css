@@ -2774,3 +2774,20 @@ z-index: 2;
 
 #faq .gw-booking-widget .check-toggle input { position: static; opacity: 1; margin: 0; flex: 0 0 18px; accent-color: #66766c; }
 #faq .gw-booking-widget .toggle-box { display: none; }
+/* =========================================
+   MOBILE HELPFUL TOOLS — EQUAL CARD SIZES
+   ========================================= */
+
+@media (max-width: 600px) {
+
+  .helpful-tool-card {
+    height: 150px;
+    min-height: 150px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+}
