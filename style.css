@@ -4558,7 +4558,7 @@ body.tool-modal-open {
   width: 100%;
   min-height: 500px;
   margin: 0 auto;
-  padding: 190px 48px 72px;
+  padding: 230px 48px 72px;
 
   display: flex;
   flex-direction: column;
@@ -4600,7 +4600,7 @@ body.tool-modal-open {
 
 .credit-card-image {
   position: absolute;
-  top: -125px;
+  top: -145px;
   left: 50%;
 
   width: min(78%, 430px);
@@ -4860,12 +4860,12 @@ body.tool-modal-open {
 
   .credit-card-panel {
     min-height: 455px;
-    padding: 150px 22px 62px;
+    padding: 185px 22px 62px;
     border-radius: 30px;
   }
 
   .credit-card-image {
-    top: -98px;
+    top: -115px;
     width: min(84%, 330px);
   }
 
