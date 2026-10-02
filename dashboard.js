@@ -1342,6 +1342,10 @@ updateRadar(
   airport
 );
 
+updateLiveCam(
+  airport
+);
+
 }
 
 
@@ -1422,6 +1426,346 @@ document
 /* =====================================================
    STAGE 2 — WEATHER
    ===================================================== */
+/* =====================================================
+   AIRPORT COMMAND CENTER — LIVE CAMERAS
+   ===================================================== */
+
+const airportLiveCams = {
+
+  LAS: {
+    label: "LIVE AT LAS",
+    provider: "Flightradar24",
+    type: "youtube",
+    videoId: "V7_orOtu-oo",
+    source:
+      "https://www.youtube.com/watch?v=V7_orOtu-oo"
+  },
+
+  LGA: {
+    label: "LIVE AT LGA",
+    provider: "Flightradar24",
+    type: "youtube",
+    videoId: "OUBslrCqREs",
+    source:
+      "https://www.youtube.com/watch?v=OUBslrCqREs"
+  },
+
+  MSY: {
+    label: "LIVE AT MSY",
+    provider: "Flightradar24",
+    type: "embed",
+    embed:
+      "https://camstreamer.com/embed/RsO6gPW2odaFam0VSW33AaHj5spi00OL7z85crl0?rel=0",
+    source:
+      "https://www.youtube.com/watch?v=MH0_mPt-VXE"
+  },
+
+  RNO: {
+    label: "LIVE AT RNO",
+    provider: "Flightradar24",
+    type: "embed",
+    embed:
+      "https://camstreamer.com/embed/DXT3Lse8aEQDJol8f0KjKaS4iMBaAQeDVkzB3Dmk?rel=0",
+    source:
+      "https://camstreamer.com/live/stream/837936405-rno-reno-airport-live-24-7"
+  },
+
+  LAX: {
+    label: "LIVE AT LAX",
+    provider: "Airline Videos Live",
+    type: "youtube",
+    videoId: "69lhJSzgfK8",
+    source:
+      "https://www.youtube.com/watch?v=69lhJSzgfK8"
+  }
+
+};
+
+
+let liveCamAirport = null;
+let liveCamDefinition = null;
+let liveCamLoadedCode = "";
+
+
+function liveCamDesktopEnabled() {
+
+  return window.matchMedia(
+    "(min-width: 701px)"
+  ).matches;
+
+}
+
+
+function liveCamIsActive() {
+
+  return (
+    liveCamDesktopEnabled() &&
+    !document.hidden &&
+    weatherCardVisible
+  );
+
+}
+
+
+function unloadLiveCam() {
+
+  const frame =
+    document.getElementById(
+      "airportLiveCamFrame"
+    );
+
+  if (frame) {
+    frame.replaceChildren();
+  }
+
+  liveCamLoadedCode = "";
+
+}
+
+
+function loadLiveCam() {
+
+  if (
+    !liveCamAirport ||
+    !liveCamDefinition ||
+    !liveCamIsActive()
+  ) {
+    return;
+  }
+
+
+  if (
+    liveCamLoadedCode ===
+    liveCamAirport.code
+  ) {
+    return;
+  }
+
+
+  const frame =
+    document.getElementById(
+      "airportLiveCamFrame"
+    );
+
+
+  if (!frame) {
+    return;
+  }
+
+
+  unloadLiveCam();
+
+
+  const iframe =
+    document.createElement(
+      "iframe"
+    );
+
+
+  iframe.title =
+    `Live camera at ${liveCamAirport.code}`;
+
+
+  iframe.loading =
+    "lazy";
+
+
+  iframe.referrerPolicy =
+    "strict-origin-when-cross-origin";
+
+
+  iframe.allow =
+    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+
+
+  iframe.allowFullscreen =
+    true;
+
+
+  if (
+    liveCamDefinition.type ===
+    "youtube"
+  ) {
+
+    iframe.src =
+      "https://www.youtube.com/embed/" +
+      encodeURIComponent(
+        liveCamDefinition.videoId
+      ) +
+      "?autoplay=1&mute=1&playsinline=1&rel=0";
+
+  } else {
+
+    iframe.src =
+      liveCamDefinition.embed;
+
+  }
+
+
+  frame.appendChild(
+    iframe
+  );
+
+
+  liveCamLoadedCode =
+    liveCamAirport.code;
+
+}
+
+
+function updateLiveCam(
+  airport
+) {
+
+  liveCamAirport =
+    airport;
+
+
+  liveCamDefinition =
+    airportLiveCams[
+      airport.code
+    ] ||
+    null;
+
+
+  const container =
+    document.getElementById(
+      "airportLiveCam"
+    );
+
+
+  const label =
+    document.getElementById(
+      "airportLiveCamLabel"
+    );
+
+
+  const source =
+    document.getElementById(
+      "airportLiveCamSource"
+    );
+
+
+  unloadLiveCam();
+
+
+  if (
+    !container ||
+    !liveCamDefinition ||
+    !liveCamDesktopEnabled()
+  ) {
+
+    if (container) {
+      container.hidden =
+        true;
+    }
+
+    return;
+
+  }
+
+
+  if (label) {
+
+    label.textContent =
+      liveCamDefinition.label;
+
+  }
+
+
+  if (source) {
+
+    source.href =
+      liveCamDefinition.source;
+
+
+    source.textContent =
+      `${liveCamDefinition.provider} ↗`;
+
+
+    source.hidden =
+      false;
+
+  }
+
+
+  container.hidden =
+    false;
+
+
+  loadLiveCam();
+
+}
+
+
+function syncLiveCamActivity() {
+
+  const container =
+    document.getElementById(
+      "airportLiveCam"
+    );
+
+
+  if (
+    !liveCamDefinition ||
+    !liveCamDesktopEnabled()
+  ) {
+
+    unloadLiveCam();
+
+    if (container) {
+      container.hidden =
+        true;
+    }
+
+    return;
+
+  }
+
+
+  if (container) {
+    container.hidden =
+      false;
+  }
+
+
+  if (
+    liveCamIsActive()
+  ) {
+
+    loadLiveCam();
+
+  } else {
+
+    unloadLiveCam();
+
+  }
+
+}
+
+
+window
+  .matchMedia(
+    "(min-width: 701px)"
+  )
+  .addEventListener?.(
+    "change",
+    () => {
+
+      if (
+        liveCamAirport
+      ) {
+
+        updateLiveCam(
+          liveCamAirport
+        );
+
+      }
+
+    }
+  );
+
+
 /* =====================================================
    AIRPORT WEATHER RADAR — RAINVIEWER
    ===================================================== */
@@ -2298,6 +2642,7 @@ async function refreshFAA() {
 function syncWeatherActivity() {
   syncWeatherVideo();
   syncRadarActivity();
+  syncLiveCamActivity();
   if (weatherIsActive()) refreshFAA();
   else {
     faaSequence++;
