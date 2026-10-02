@@ -1946,48 +1946,14 @@ function refreshRadarMapLayout() {
   }
 
 
-  const refresh = () => {
-
-    radarMap.invalidateSize(
-      {
-        animate: false,
-        pan: false,
-        debounceMoveend: false
-      }
-    );
-
-
-    radarBaseLayer?.redraw();
-
-
-    radarTileLayers.forEach(
-      layer => layer.redraw()
-    );
-
-  };
-
-
   requestAnimationFrame(
     () => {
 
-      refresh();
-
-
-      setTimeout(
-        refresh,
-        60
-      );
-
-
-      setTimeout(
-        refresh,
-        180
-      );
-
-
-      setTimeout(
-        refresh,
-        420
+      radarMap.invalidateSize(
+        {
+          animate: false,
+          pan: false
+        }
       );
 
     }
@@ -2049,16 +2015,20 @@ function ensureRadarMap(
 
     radarBaseLayer =
       L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         {
+          subdomains:
+            "abcd",
+
           minZoom: 6,
           maxZoom: 6,
-          maxNativeZoom: 19,
-          updateWhenIdle: false,
-          keepBuffer: 2,
-          crossOrigin: true,
+          maxNativeZoom: 20,
+
+          updateWhenIdle: true,
+          keepBuffer: 1,
+
           attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
         }
       );
 
@@ -2067,7 +2037,7 @@ function ensureRadarMap(
       "tileerror",
       event => {
         console.info(
-          "OpenStreetMap tile failed:",
+          "CARTO basemap tile failed:",
           event?.tile?.src || ""
         );
       }
@@ -2208,12 +2178,11 @@ function ensureRadarMap(
           );
 
 
-          radarBaseLayer?.redraw();
-
-
-          radarTileLayers.forEach(
-            layer => layer.redraw()
-          );
+          /*
+           * Do not force tile-layer redraws here.
+           * Leaflet will request only the tiles needed for
+           * the final viewport after invalidateSize().
+           */
 
         },
         220
@@ -2280,64 +2249,63 @@ function buildRadarTileLayers() {
   clearRadarTileLayers();
 
 
-  radarTileLayers =
-    radarFrames.map(
-      (frame, index) => {
-
-        const tileURL =
-          `${radarHost}${frame.path}` +
-          "/256/{z}/{x}/{y}/2/1_1.png";
+  const frame =
+    radarFrames[
+      radarFrames.length - 1
+    ];
 
 
-        const layer =
-          L.tileLayer(
-            tileURL,
-            {
-              minZoom: 6,
-              maxZoom: 7,
-              maxNativeZoom: 7,
-              tileSize: 256,
-              opacity:
-                index === 0
-                  ? 0.80
-                  : 0,
-              zIndex: 240,
-              updateWhenIdle: false,
-              updateWhenZooming: false,
-              keepBuffer: 2,
-              crossOrigin: true,
-              attribution:
-                '<a href="https://www.rainviewer.com/" target="_blank" rel="noopener">Radar: RainViewer</a>'
-            }
-          );
+  const tileURL =
+    `${radarHost}${frame.path}` +
+    "/256/{z}/{x}/{y}/2/1_1.png";
 
 
-        layer.on(
-          "tileerror",
-          event => {
-            console.info(
-              "RainViewer radar tile failed:",
-              event?.tile?.src || tileURL
-            );
-          }
-        );
+  const layer =
+    L.tileLayer(
+      tileURL,
+      {
+        minZoom: 6,
+        maxZoom: 7,
+        maxNativeZoom: 7,
 
+        tileSize: 256,
 
-        layer.addTo(
-          radarMap
-        );
+        opacity: 0.82,
+        zIndex: 240,
 
+        updateWhenIdle: true,
+        keepBuffer: 1,
 
-        return layer;
-
+        attribution:
+          '<a href="https://www.rainviewer.com/" target="_blank" rel="noopener">Radar: RainViewer</a>'
       }
     );
 
 
-  radarFrameIndex = 0;
+  layer.on(
+    "tileerror",
+    event => {
+      console.info(
+        "RainViewer radar tile failed:",
+        event?.tile?.src || tileURL
+      );
+    }
+  );
 
 
-  /* Keep the airport marker above radar tiles. */
+  layer.addTo(
+    radarMap
+  );
+
+
+  radarTileLayers = [
+    layer
+  ];
+
+
+  radarFrameIndex =
+    radarFrames.length - 1;
+
 
   radarMarker?.setZIndexOffset(
     1000
@@ -2381,22 +2349,9 @@ function showRadarFrame() {
   }
 
 
-  radarTileLayers.forEach(
-    (layer, index) => {
-
-      layer.setOpacity(
-        index === radarFrameIndex
-          ? 0.80
-          : 0
-      );
-
-    }
-  );
-
-
   const frame =
     radarFrames[
-      radarFrameIndex
+      radarFrames.length - 1
     ];
 
 
@@ -2435,41 +2390,13 @@ function startRadarAnimation() {
     null;
 
 
-  if (
-    !radarIsActive() ||
-    !radarFrames.length ||
-    !radarTileLayers.length
-  ) {
-    return;
-  }
-
+  /*
+   * Intentionally static for stability.
+   * A single latest RainViewer frame dramatically lowers
+   * tile-request volume and avoids rate-limit failures.
+   */
 
   showRadarFrame();
-
-
-  radarAnimationTimer =
-    setInterval(
-      () => {
-
-        if (
-          !radarIsActive()
-        ) {
-          return;
-        }
-
-
-        radarFrameIndex =
-          (
-            radarFrameIndex + 1
-          ) %
-          radarFrames.length;
-
-
-        showRadarFrame();
-
-      },
-      1100
-    );
 
 }
 
@@ -2595,14 +2522,14 @@ async function updateRadar(
 
 
     /*
-     * Use the latest six historical frames. RainViewer's
-     * free API provides past radar only and supports zoom
-     * levels through 7.
+     * Use only the newest historical frame for now.
+     * This keeps request volume low and makes the radar
+     * reliable before animation is reintroduced.
      */
 
     const frames =
       manifest.radar.past
-        .slice(-6);
+        .slice(-1);
 
 
     if (!frames.length) {
