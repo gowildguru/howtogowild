@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FrontierMiles | How To GoWild!</title>
+  <meta name="description" content="Understand FrontierMiles earning rates, Elite Status, 2027 benefits, the cost of status, and the difference between Status Points and Travel Miles.">
+  <link rel="stylesheet" href="style.css?v=19">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap');
+
+    :root {
+      --sage:#66766c;
+      --sage-dark:#354d3d;
+      --sage-soft:rgba(102,118,108,.16);
+      --glass:rgba(35,50,40,.58);
+      --glass-strong:rgba(35,50,40,.76);
+      --white-soft:rgba(255,255,255,.88);
+      --border:rgba(255,255,255,.28);
+      --red:#b42318;
+      --red-soft:#fff2f0;
+      --gold:#c28b00;
+      --silver:#c7c9cb;
+      --platinum:#b8b8b8;
+      --diamond:#9bc8ed;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:Montserrat,Arial,sans-serif; }
+
+    .fm-page {
+      min-height:100vh;
+      color:#fff;
+      background:
+        linear-gradient(rgba(35,50,40,.80),rgba(35,50,40,.95)),
+        url("images/120425_Airfield_frontier-0055.jpg") center/cover fixed;
+    }
+
+    .fm-wrap {
+      width:min(100% - 32px, 1020px);
+      margin:auto;
+      padding:28px 0 64px;
+    }
+
+    .fm-home {
+      display:inline-block;
+      padding:10px 18px;
+      border:1px solid #ffffff55;
+      border-radius:999px;
+      background:#ffffff15;
+      color:#fff;
+      text-decoration:none;
+      font-size:.9rem;
+      font-weight:600;
+    }
+
+    .fm-heading {
+      margin:34px auto 26px;
+      max-width:820px;
+      text-align:center;
+    }
+
+    .fm-heading h1 {
+      margin:0 0 14px;
+      font-size:clamp(2.2rem,6vw,3.4rem);
+      line-height:1.08;
+    }
+
+    .fm-heading p {
+      margin:0;
+      color:#ffffffdc;
+      line-height:1.75;
+    }
+
+    /* Program alert */
+    .fm-update-alert {
+      margin:22px 0 28px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:20px;
+      background:var(--red);
+      box-shadow:0 12px 32px #0002;
+      overflow:hidden;
+    }
+
+    .fm-update-alert[hidden] { display:none; }
+
+    .fm-update-alert-content {
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:14px 16px;
+    }
+
+    .fm-update-alert-icon {
+      flex:0 0 auto;
+      width:26px;
+      height:26px;
+      display:grid;
+      place-items:center;
+      border:2px solid rgba(255,255,255,.86);
+      border-radius:50%;
+      font-weight:800;
+    }
+
+    .fm-update-alert-copy {
+      flex:1;
+      min-width:0;
+      font-size:.87rem;
+      line-height:1.55;
+    }
+
+    .fm-update-alert-copy a {
+      color:#fff;
+      font-weight:800;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    .fm-update-alert-close {
+      flex:0 0 auto;
+      border:0;
+      background:transparent;
+      color:#fff;
+      font:inherit;
+      font-size:1.6rem;
+      line-height:1;
+      cursor:pointer;
+      opacity:.88;
+    }
+
+    .fm-update-alert-close:hover { opacity:1; }
+
+    /* Main accordion */
+    .fm-accordion {
+      margin:18px 0;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:var(--glass);
+      box-shadow:0 14px 34px #0002;
+      overflow:hidden;
+    }
+
+    @supports (backdrop-filter:blur(14px)) or (-webkit-backdrop-filter:blur(14px)) {
+      .fm-accordion {
+        backdrop-filter:blur(14px);
+        -webkit-backdrop-filter:blur(14px);
+      }
+    }
+
+    .fm-accordion-trigger {
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:22px 24px;
+      border:0;
+      background:transparent;
+      color:#fff;
+      font:inherit;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .fm-accordion-heading { min-width:0; }
+    .fm-accordion-eyebrow {
+      display:block;
+      margin-bottom:6px;
+      color:#ffffffa8;
+      font-size:.66rem;
+      font-weight:800;
+      letter-spacing:.11em;
+    }
+
+    .fm-accordion-heading h2 {
+      margin:0;
+      font-size:clamp(1.15rem,3vw,1.45rem);
+      line-height:1.35;
+    }
+
+    .fm-accordion-heading p {
+      margin:6px 0 0;
+      color:#ffffffc9;
+      font-size:.82rem;
+      line-height:1.55;
+    }
+
+    .fm-accordion-arrow {
+      flex:0 0 auto;
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:#ffffff14;
+      font-size:1.35rem;
+      transition:transform .22s ease, background .2s ease;
+    }
+
+    .fm-accordion-trigger:hover .fm-accordion-arrow { background:#ffffff22; }
+    .fm-accordion-trigger[aria-expanded="true"] .fm-accordion-arrow { transform:rotate(180deg); }
+
+    .fm-accordion-content {
+      padding:0 24px 24px;
+    }
+
+    .fm-accordion-content[hidden] { display:none; }
+
+    .fm-panel {
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:20px;
+      background:rgba(255,255,255,.94);
+      color:var(--sage-dark);
+      overflow:hidden;
+    }
+
+    .fm-panel + .fm-panel { margin-top:16px; }
+
+    .fm-panel-pad { padding:20px; }
+    .fm-section-title { margin:0 0 8px; font-size:1.05rem; }
+    .fm-section-copy { margin:0; line-height:1.7; font-size:.9rem; }
+
+    /* Earning tool */
+    .fm-earn-tool { width:100%; color:var(--sage); }
+    .fm-table {
+      display:grid;
+      grid-template-columns:minmax(205px,1.25fr) repeat(3,1fr);
+      overflow:hidden;
+      border-radius:18px;
+      background:#fff;
+    }
+    .fm-cell {
+      min-width:0;
+      padding:14px;
+      border-right:1px solid rgba(102,118,108,.18);
+      border-top:1px solid rgba(102,118,108,.18);
+    }
+    .fm-cell:nth-child(4n) { border-right:0; }
+    .fm-controls { background:rgba(102,118,108,.08); padding:13px; }
+    .fm-controls label { display:block; margin:0 0 6px 4px; font-size:.72rem; font-weight:700; }
+    .fm-controls select {
+      width:100%; height:41px; padding:0 11px;
+      border:1px solid rgba(102,118,108,.30); border-radius:999px;
+      outline:none; background:#fff; color:#4d5850;
+      font:600 .78rem Montserrat,Arial,sans-serif;
+    }
+    .fm-controls select:focus { border-color:var(--sage); box-shadow:0 0 0 3px rgba(102,118,108,.10); }
+    .fm-card-selector {
+      display:flex; align-items:center; gap:8px; margin-top:9px; padding:7px 8px;
+      border:1px solid rgba(102,118,108,.22); border-radius:12px; background:#fff;
+      cursor:pointer; user-select:none;
+    }
+    .fm-card-selector.active { background:rgba(102,118,108,.055); border-color:rgba(102,118,108,.55); }
+    .fm-card-image-wrap { width:58px; flex-shrink:0; padding:3px; border-radius:7px; background:#fff; }
+    .fm-card-image { display:block; width:100%; height:auto; border-radius:5px; }
+    .fm-card-copy { flex:1; min-width:0; }
+    .fm-card-copy strong { display:block; font-size:.67rem; line-height:1.25; }
+    .fm-card-copy span { display:block; margin-top:2px; font-size:.58rem; opacity:.7; }
+    .fm-card-bubble {
+      width:21px; height:21px; flex-shrink:0; border:2px solid rgba(102,118,108,.38);
+      border-radius:50%; background:#fff;
+    }
+    .fm-card-selector.active .fm-card-bubble { background:var(--sage); border-color:var(--sage); }
+    .fm-column-header {
+      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:3px;
+      background:rgba(102,118,108,.12); text-align:center;
+    }
+    .fm-column-header strong { font-size:.82rem; }
+    .fm-column-header span { max-width:135px; font-size:.6rem; line-height:1.3; opacity:.72; }
+    .fm-row-header { display:flex; justify-content:center; flex-direction:column; background:rgba(102,118,108,.06); }
+    .fm-row-header strong { font-size:.8rem; }
+    .fm-row-header span { margin-top:2px; font-size:.62rem; opacity:.7; }
+    .fm-rate-cell {
+      display:flex; align-items:center; justify-content:center; min-height:85px;
+      background:#fff; font-size:2rem; font-weight:700; transition:background .15s ease;
+    }
+    .fm-rate-cell small { margin-left:2px; font-size:.9rem; }
+    .fm-rate-cell.updated { background:rgba(102,118,108,.09); }
+    .fm-disclaimer {
+      margin-top:10px; padding:10px 12px; border-radius:11px; background:rgba(102,118,108,.07);
+      color:var(--sage); font-size:.68rem; line-height:1.5;
+    }
+
+    /* FAQ */
+    .fm-subhead {
+      margin:26px 0 12px;
+      font-size:1.05rem;
+      color:#fff;
+    }
+
+    .fm-faq {
+      border:1px solid rgba(102,118,108,.18);
+      border-radius:16px;
+      background:#fff;
+      overflow:hidden;
+    }
+    .fm-faq + .fm-faq { margin-top:10px; }
+    .fm-faq-trigger {
+      width:100%; display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:15px 16px; border:0; background:#fff; color:var(--sage-dark); font:700 .9rem Montserrat,Arial,sans-serif;
+      text-align:left; cursor:pointer;
+    }
+    .fm-faq-trigger span:last-child { transition:transform .2s ease; }
+    .fm-faq-trigger[aria-expanded="true"] span:last-child { transform:rotate(180deg); }
+    .fm-faq-answer { padding:0 16px 16px; color:#48554d; font-size:.85rem; line-height:1.7; }
+    .fm-faq-answer[hidden] { display:none; }
+
+    .fm-threshold-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+    .fm-threshold-card {
+      padding:14px 12px;
+      border:1px solid rgba(102,118,108,.18);
+      border-radius:16px;
+      background:#fff;
+      text-align:center;
+    }
+    .fm-threshold-card strong { display:block; font-size:.9rem; }
+    .fm-threshold-card span { display:block; margin-top:6px; font-size:1.2rem; font-weight:800; }
+    .fm-threshold-card small { display:block; margin-top:3px; font-size:.62rem; opacity:.68; }
+
+    .fm-jump-button {
+      display:inline-block;
+      margin-top:14px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:var(--sage);
+      color:#fff;
+      text-decoration:none;
+      font-size:.76rem;
+      font-weight:700;
+    }
+
+    /* Benefit cards */
+    .fm-benefit-intro {
+      margin:0 0 16px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      font-size:.83rem;
+      line-height:1.65;
+    }
+
+    .fm-tier-grid {
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .fm-tier-card {
+      padding:16px;
+      border:1px solid rgba(102,118,108,.18);
+      border-radius:18px;
+      background:#fff;
+      color:var(--sage-dark);
+    }
+
+    .fm-tier-top {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:13px;
+    }
+    .fm-tier-name { font-size:1rem; font-weight:800; }
+    .fm-tier-name.silver { color:#aeb1b4; }
+    .fm-tier-name.gold { color:var(--gold); }
+    .fm-tier-name.platinum { color:#a3a3a3; }
+    .fm-tier-name.diamond { color:#72afe0; }
+
+    .fm-benefit-pill {
+      display:inline-block;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:.54rem;
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .fm-benefit-pill.included { background:#e9f0ec; color:var(--sage-dark); }
+    .fm-benefit-pill.bundle { border:1px solid #d9aaa5; background:var(--red-soft); color:#9d3027; }
+
+    .fm-benefit-list { margin:0; padding:0; list-style:none; }
+    .fm-benefit-list li {
+      position:relative;
+      padding-left:18px;
+      margin:0 0 9px;
+      font-size:.74rem;
+      line-height:1.45;
+    }
+    .fm-benefit-list li::before { content:"✓"; position:absolute; left:0; top:0; font-weight:800; color:var(--sage); }
+    .fm-benefit-list.bundle li::before { content:"•"; color:var(--red); }
+    .fm-benefit-list strong { font-weight:800; }
+
+    .fm-bundle-window {
+      margin:12px 0 10px;
+      padding:12px;
+      border-radius:14px;
+      background:#f5f7f5;
+      text-align:center;
+    }
+    .fm-bundle-window strong { display:block; font-size:1.35rem; }
+    .fm-bundle-window span { display:block; margin-top:3px; font-size:.64rem; line-height:1.35; }
+
+    .fm-footnote { margin:12px 0 0; font-size:.68rem; line-height:1.55; color:#5b665f; }
+
+    /* True-cost calculator */
+    .fm-calc-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .fm-field label { display:block; margin:0 0 6px; font-size:.72rem; font-weight:800; }
+    .fm-field select,
+    .fm-field input {
+      width:100%; min-height:44px; padding:0 12px;
+      border:1px solid rgba(102,118,108,.28); border-radius:999px;
+      background:#fff; color:var(--sage-dark); font:600 .82rem Montserrat,Arial,sans-serif;
+      outline:none;
+    }
+    .fm-field input { border-radius:14px; }
+    .fm-field select:focus,
+    .fm-field input:focus { border-color:var(--sage); box-shadow:0 0 0 3px rgba(102,118,108,.10); }
+
+    .fm-calc-result {
+      margin-top:16px;
+      padding:18px;
+      border-radius:18px;
+      background:#eef2ef;
+      text-align:center;
+    }
+    .fm-calc-result .fm-big { font-size:clamp(1.8rem,5vw,2.7rem); font-weight:800; color:var(--sage-dark); }
+    .fm-calc-result p { margin:7px 0 0; font-size:.78rem; line-height:1.55; }
+
+    /* Comparison */
+    .fm-compare-table {
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr;
+      border:1px solid rgba(102,118,108,.18);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      color:var(--sage-dark);
+    }
+    .fm-compare-table > div { padding:11px 12px; border-right:1px solid rgba(102,118,108,.15); border-bottom:1px solid rgba(102,118,108,.15); font-size:.75rem; line-height:1.45; }
+    .fm-compare-table > div:nth-child(3n) { border-right:0; }
+    .fm-compare-table .head { background:#e9eeeb; font-weight:800; }
+    .fm-compare-table .label { font-weight:700; }
+
+    .fm-balance-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+    .fm-balance-card { padding:18px; border-radius:18px; background:#fff; color:var(--sage-dark); }
+    .fm-balance-card h3 { margin:0 0 6px; font-size:1.1rem; }
+    .fm-balance-card .lead { margin:0 0 14px; font-size:.79rem; line-height:1.6; }
+    .fm-yesno-title { margin:14px 0 8px; font-size:.72rem; font-weight:800; }
+    .fm-yesno-title .yes { color:var(--sage); }
+    .fm-yesno-title .no { color:#b34c44; }
+    .fm-yesno-list { margin:0; padding:0; list-style:none; }
+    .fm-yesno-list li { position:relative; padding-left:22px; margin:0 0 9px; font-size:.74rem; line-height:1.5; }
+    .fm-yesno-list.yes li::before { content:"✓"; position:absolute; left:0; color:var(--sage); font-weight:800; }
+    .fm-yesno-list.no li::before { content:"✕"; position:absolute; left:0; color:#c43f36; font-weight:800; }
+
+    .fm-footer {
+      margin:34px auto 0;
+      max-width:820px;
+      text-align:center;
+      color:#ffffffc8;
+      font-size:.78rem;
+      line-height:1.7;
+    }
+    .fm-footer a { color:#fff; text-decoration:underline; }
+
+    .fm-page button:focus-visible,
+    .fm-page a:focus-visible,
+    .fm-page select:focus-visible,
+    .fm-page input:focus-visible {
+      outline:3px solid #b6d3c0;
+      outline-offset:3px;
+    }
+
+    @media(max-width:820px) {
+      .fm-tier-grid { grid-template-columns:repeat(2,1fr); }
+      .fm-threshold-grid { grid-template-columns:repeat(2,1fr); }
+      .fm-table { grid-template-columns:minmax(150px,1.2fr) repeat(3,1fr); }
+    }
+
+    @media(max-width:650px) {
+      .fm-page { background-attachment:scroll; }
+      .fm-wrap { width:min(100% - 22px, 1020px); padding-top:18px; }
+      .fm-accordion { border-radius:20px; }
+      .fm-accordion-trigger { padding:18px 16px; align-items:flex-start; }
+      .fm-accordion-content { padding:0 12px 14px; }
+      .fm-update-alert-content { padding:12px 13px; }
+      .fm-update-alert-copy { font-size:.76rem; }
+      .fm-update-alert-copy a { display:block; margin-top:2px; }
+
+      .fm-table { grid-template-columns:minmax(125px,1.2fr) repeat(3,1fr); }
+      .fm-cell { padding:9px 6px; }
+      .fm-controls { padding:8px 6px; }
+      .fm-controls select { height:38px; padding:0 7px; font-size:16px; }
+      .fm-card-selector { gap:5px; margin-top:7px; padding:6px; }
+      .fm-card-image-wrap { width:43px; }
+      .fm-column-header strong { font-size:.64rem; }
+      .fm-column-header span { font-size:.49rem; }
+      .fm-row-header strong { font-size:.64rem; }
+      .fm-row-header span { font-size:.5rem; }
+      .fm-rate-cell { min-height:70px; font-size:1.45rem; }
+      .fm-rate-cell small { font-size:.7rem; }
+
+      .fm-tier-grid {
+        display:flex;
+        overflow-x:auto;
+        scroll-snap-type:x mandatory;
+        padding-bottom:8px;
+      }
+      .fm-tier-card { flex:0 0 86%; scroll-snap-align:start; }
+      .fm-calc-grid,
+      .fm-balance-grid { grid-template-columns:1fr; }
+      .fm-compare-table { grid-template-columns:1fr 1fr 1fr; overflow-x:auto; }
+      .fm-compare-table > div { min-width:110px; }
+    }
+
+    @media(max-width:430px) {
+      .fm-card-image-wrap { display:none; }
+      .fm-threshold-grid { grid-template-columns:1fr 1fr; }
+      .fm-table { grid-template-columns:minmax(115px,1.3fr) repeat(3,1fr); }
+      .fm-rate-cell { font-size:1.2rem; }
+      .fm-heading { margin-top:28px; }
+    }
+  </style>
+</head>
+<body class="fm-page">
+  <main class="fm-wrap">
+    <a class="fm-home" href="index.html">← Back to How To GoWild!</a>
+
+    <header class="fm-heading">
+      <h1>FrontierMiles</h1>
+      <p>Understand how FrontierMiles are earned, how Elite Status works, what changes in 2027, and the difference between Status Points and Travel Miles.</p>
+    </header>
+
+    <aside class="fm-update-alert" id="frontierMilesUpdateAlert" aria-label="FrontierMiles program update">
+      <div class="fm-update-alert-content">
+        <span class="fm-update-alert-icon" aria-hidden="true">!</span>
+        <div class="fm-update-alert-copy">
+          <strong>FrontierMiles Program Updates:</strong> new earning rates began 9/1/2026 + new (reduced) benefits begin 1/1/2027.
+          <a href="https://www.f9compared.com" target="_blank" rel="noopener">Learn about these impacts and how Frontier compares →</a>
+        </div>
+        <button class="fm-update-alert-close" type="button" aria-label="Dismiss FrontierMiles program update">×</button>
+      </div>
+    </aside>
+
+    <!-- EARNING RATES -->
+    <section class="fm-accordion" id="earning-rates" data-search-topic>
+      <button class="fm-accordion-trigger" type="button" aria-expanded="false" aria-controls="earningRatesContent">
+        <span class="fm-accordion-heading">
+          <span class="fm-accordion-eyebrow">EARNING FRONTIERMILES</span>
+          <h2>FrontierMiles Earning Rates</h2>
+          <p>See how many Travel Miles + Status Points you earn based on your status, fare type, and Frontier Mastercard.</p>
+        </span>
+        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
+      </button>
+
+      <div class="fm-accordion-content" id="earningRatesContent" hidden>
+        <div class="fm-panel fm-panel-pad">
+          <div class="fm-earn-tool">
+            <div class="fm-table">
+              <div class="fm-cell fm-controls">
+                <label for="fmStatus">Current Elite Status</label>
+                <select id="fmStatus">
+                  <option value="member">Frontier Miles Member</option>
+                  <option value="silver">Elite Silver</option>
+                  <option value="gold">Elite Gold</option>
+                  <option value="platinum">Elite Platinum</option>
+                  <option value="diamond">Elite Diamond</option>
+                </select>
+
+                <div id="fmCardSelector" class="fm-card-selector" role="button" tabindex="0" aria-pressed="false">
+                  <div class="fm-card-image-wrap">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8z_sdOsNSL3kLZn-fDkoeVoR3J6zXFTSVF63LdZUYCw&s" alt="Frontier Airlines World Mastercard" class="fm-card-image">
+                  </div>
+                  <div class="fm-card-copy">
+                    <strong>Frontier World Mastercard</strong>
+                    <span>Cardmember</span>
+                  </div>
+                  <div class="fm-card-bubble" aria-hidden="true"></div>
+                </div>
+              </div>
+
+              <div class="fm-cell fm-column-header"><strong>Basic Fare</strong><span>Basic booking</span></div>
+              <div class="fm-cell fm-column-header"><strong>Bundled Fare</strong><span>Economy, Premium or Business</span></div>
+              <div class="fm-cell fm-column-header"><strong>Subscriptions</strong><span>GoWild! + Discount Den</span></div>
+
+              <div class="fm-cell fm-row-header"><strong>Miles + Points</strong><span>earned per $1</span></div>
+              <div class="fm-cell fm-rate-cell"><span id="fmBasicRate">1</span><small>X</small></div>
+              <div class="fm-cell fm-rate-cell"><span id="fmBundleRate">6</span><small>X</small></div>
+              <div class="fm-cell fm-rate-cell"><span id="fmSubscriptionRate">6</span><small>X</small></div>
+            </div>
+
+            <div class="fm-disclaimer">Ancillary purchases, such as additional bags or seat selection, earn at the applicable rate for the fare type purchased.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ELITE STATUS -->
+    <section class="fm-accordion" id="elite-status" data-search-topic>
+      <button class="fm-accordion-trigger" type="button" aria-expanded="false" aria-controls="eliteStatusContent">
+        <span class="fm-accordion-heading">
+          <span class="fm-accordion-eyebrow">FRONTIER ELITE STATUS</span>
+          <h2>Elite Status</h2>
+          <p>Qualification requirements, FAQs, and 2027 benefits for Silver, Gold, Platinum, and Diamond.</p>
+        </span>
+        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
+      </button>
+
+      <div class="fm-accordion-content" id="eliteStatusContent" hidden>
+        <div class="fm-panel fm-panel-pad">
+          <h3 class="fm-section-title">Elite Status FAQs</h3>
+
+          <div class="fm-faq">
+            <button class="fm-faq-trigger" type="button" aria-expanded="false"><span>What is Elite Status?</span><span aria-hidden="true">⌄</span></button>
+            <div class="fm-faq-answer" hidden>
+              Elite Status is an elevated tier of membership within an airline’s loyalty program. Frequent flyers and customers who spend significant amounts on cobranded credit cards can be rewarded with additional perks when they travel. These perks may include things like seat upgrades, added flexibility, and exclusive offers.
+            </div>
+          </div>
+
+          <div class="fm-faq">
+            <button class="fm-faq-trigger" type="button" aria-expanded="false"><span>How can I earn Elite Status?</span><span aria-hidden="true">⌄</span></button>
+            <div class="fm-faq-answer" hidden>
+              <p>You can earn Elite Status by earning a certain number of <strong>Status Points</strong> during a calendar year. Status Points are different from <strong>Travel Miles</strong>, which can be redeemed for award flights.</p>
+              <div class="fm-threshold-grid">
+                <div class="fm-threshold-card"><strong>Elite Silver</strong><span>15,000</span><small>points annually beginning 1/1/2027</small></div>
+                <div class="fm-threshold-card"><strong>Elite Gold</strong><span>25,000</span><small>points annually beginning 1/1/2027</small></div>
+                <div class="fm-threshold-card"><strong>Elite Platinum</strong><span>50,000</span><small>points annually</small></div>
+                <div class="fm-threshold-card"><strong>Elite Diamond</strong><span>75,000</span><small>points annually</small></div>
+              </div>
+              <a class="fm-jump-button" href="#true-cost" data-open-target="true-cost">Calculate the true cost of Elite Status →</a>
+            </div>
+          </div>
+
+          <div class="fm-faq">
+            <button class="fm-faq-trigger" type="button" aria-expanded="false"><span>What about Elite Status promotions?</span><span aria-hidden="true">⌄</span></button>
+            <div class="fm-faq-answer" hidden>
+              Frontier occasionally offers promotions that allow members to receive temporary Elite Status through challenges, credit card sign-up offers, or other promotions. Terms can vary significantly between offers, so it’s important to understand how earning requirements and expiration dates may differ from traditionally earned Elite Status.
+            </div>
+          </div>
+
+          <div class="fm-faq">
+            <button class="fm-faq-trigger" type="button" aria-expanded="false"><span>How long does Elite Status last?</span><span aria-hidden="true">⌄</span></button>
+            <div class="fm-faq-answer" hidden>
+              Status Points used to qualify for Elite Status are counted beginning January 1 each year and reset the following January 1. Qualifying flights completed by December 31 count toward the previous year’s qualification. When you earn Elite Status, it lasts through the end of the following calendar year. For example, if you earn status in March 2028, it will remain valid through December 2029. If you earn the required number of Status Points again during 2029, your status will then continue through December 2030. Promotional status received through a credit card offer, challenge, or other promotion may have different expiration rules and is not considered traditionally earned status for these purposes.
+            </div>
+          </div>
+        </div>
+
+        <h3 class="fm-subhead">Benefits included with Elite Status</h3>
+        <p class="fm-benefit-intro">For 2027, these benefits are included with Elite Status on all bookings. Swipe the cards on mobile to compare tiers.</p>
+
+        <div class="fm-tier-grid" aria-label="Elite Status benefits included on all bookings">
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name silver">Elite Silver</div><span class="fm-benefit-pill included">Included</span></div>
+            <ul class="fm-benefit-list">
+              <li>Group 4 Boarding</li>
+              <li>Priority Customer Care</li>
+              <li>Family Pooling</li>
+            </ul>
+          </article>
+
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name gold">Elite Gold</div><span class="fm-benefit-pill included">Included</span></div>
+            <ul class="fm-benefit-list">
+              <li>Group 1 Boarding</li>
+              <li>Carry On Bag</li>
+              <li>Priority Customer Care</li>
+              <li>Family Pooling</li>
+            </ul>
+          </article>
+
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name platinum">Elite Platinum</div><span class="fm-benefit-pill included">Included</span></div>
+            <ul class="fm-benefit-list">
+              <li>Group 1 Boarding</li>
+              <li>Carry On Bag for all passengers on booking</li>
+              <li>50 lb Checked Bag for all passengers on booking</li>
+              <li>2 One-Time-Use Companion Certificates</li>
+              <li>Pet In Cabin Fee Waiver</li>
+              <li>Priority Customer Care</li>
+              <li>Family Pooling</li>
+            </ul>
+          </article>
+
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name diamond">Elite Diamond</div><span class="fm-benefit-pill included">Included</span></div>
+            <ul class="fm-benefit-list">
+              <li>Preboarding</li>
+              <li>Carry On Bag for all passengers on booking</li>
+              <li>2× 50 lb Checked Bags for all passengers on booking</li>
+              <li>Unlimited Companion Travel</li>
+              <li>Pet In Cabin Fee Waiver</li>
+              <li>Priority Customer Care</li>
+              <li>Family Pooling</li>
+            </ul>
+          </article>
+        </div>
+
+        <h3 class="fm-subhead">Benefits that require a bundle</h3>
+        <p class="fm-benefit-intro"><strong>Beginning January 1, 2027,</strong> these Elite Status benefits do not apply to Basic Fare bookings. Purchase an Economy, Premium, or eligible higher bundle to unlock the status benefits below.</p>
+
+        <div class="fm-tier-grid" aria-label="Elite Status benefits requiring a bundle purchase">
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name silver">Elite Silver</div><span class="fm-benefit-pill bundle">Bundle Required</span></div>
+            <div class="fm-bundle-window"><strong>4 HOURS</strong><span>Complimentary UpFront or First seating upgrade window</span></div>
+            <ul class="fm-benefit-list bundle">
+              <li>No Change or Cancel Fee*</li>
+              <li>Preferred Seat at booking <strong>(member only)</strong></li>
+              <li>Complimentary UpFront or First seating upgrades 4 hours before departure <strong>(member only)</strong></li>
+            </ul>
+          </article>
+
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name gold">Elite Gold</div><span class="fm-benefit-pill bundle">Bundle Required</span></div>
+            <div class="fm-bundle-window"><strong>8 HOURS</strong><span>Complimentary UpFront or First seating upgrade window</span></div>
+            <ul class="fm-benefit-list bundle">
+              <li>No Change or Cancel Fee*</li>
+              <li>Premium Seat at booking <strong>(member only)</strong></li>
+              <li>Complimentary UpFront or First seating upgrades 8 hours before departure <strong>(member only)</strong></li>
+            </ul>
+          </article>
+
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name platinum">Elite Platinum</div><span class="fm-benefit-pill bundle">Bundle Required</span></div>
+            <div class="fm-bundle-window"><strong>18 HOURS</strong><span>Complimentary UpFront or First seating upgrade window</span></div>
+            <ul class="fm-benefit-list bundle">
+              <li>No Change or Cancel Fee*</li>
+              <li>Premium Seat at booking <strong>(up to 8 passengers on booking)</strong></li>
+              <li>Complimentary UpFront or First seating upgrades 18 hours before departure <strong>(member only)</strong></li>
+            </ul>
+          </article>
+
+          <article class="fm-tier-card">
+            <div class="fm-tier-top"><div class="fm-tier-name diamond">Elite Diamond</div><span class="fm-benefit-pill bundle">Bundle Required</span></div>
+            <div class="fm-bundle-window"><strong>24 HOURS</strong><span>Complimentary UpFront or First seating upgrade window</span></div>
+            <ul class="fm-benefit-list bundle">
+              <li>No Change or Cancel Fee*</li>
+              <li>Premium Seat at booking <strong>(up to 8 passengers on booking)</strong></li>
+              <li>Complimentary UpFront or First seating upgrades 24 hours before departure <strong>(member only)</strong></li>
+            </ul>
+          </article>
+        </div>
+        <p class="fm-footnote">*No Change or Cancel Fee is included with all bundle purchases regardless of Elite Status.</p>
+      </div>
+    </section>
+
+    <!-- TRUE COST -->
+    <section class="fm-accordion" id="true-cost" data-search-topic>
+      <button class="fm-accordion-trigger" type="button" aria-expanded="false" aria-controls="trueCostContent">
+        <span class="fm-accordion-heading">
+          <span class="fm-accordion-eyebrow">ELITE STATUS CALCULATOR</span>
+          <h2>The True Cost of Elite Status</h2>
+          <p>Estimate how much qualifying Frontier spending it could take to reach Silver, Gold, Platinum, or Diamond.</p>
+        </span>
+        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
+      </button>
+
+      <div class="fm-accordion-content" id="trueCostContent" hidden>
+        <div class="fm-panel fm-panel-pad">
+          <div class="fm-calc-grid">
+            <div class="fm-field">
+              <label for="calcTarget">Target Elite Tier</label>
+              <select id="calcTarget">
+                <option value="15000">Elite Silver — 15,000</option>
+                <option value="25000">Elite Gold — 25,000</option>
+                <option value="50000">Elite Platinum — 50,000</option>
+                <option value="75000">Elite Diamond — 75,000</option>
+              </select>
+            </div>
+
+            <div class="fm-field">
+              <label for="calcCurrentPoints">Current Status Points</label>
+              <input id="calcCurrentPoints" type="number" min="0" step="1" value="0" inputmode="numeric">
+            </div>
+
+            <div class="fm-field">
+              <label for="calcStatus">Current Elite Status</label>
+              <select id="calcStatus">
+                <option value="member">Frontier Miles Member</option>
+                <option value="silver">Elite Silver</option>
+                <option value="gold">Elite Gold</option>
+                <option value="platinum">Elite Platinum</option>
+                <option value="diamond">Elite Diamond</option>
+              </select>
+            </div>
+
+            <div class="fm-field">
+              <label for="calcFare">What will most spending be on?</label>
+              <select id="calcFare">
+                <option value="basic">Basic Fare</option>
+                <option value="bundle">Bundled Fare / Subscriptions</option>
+              </select>
+            </div>
+
+            <div class="fm-field">
+              <label for="calcCard">Frontier World Mastercard?</label>
+              <select id="calcCard">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fm-calc-result" id="calcResult" aria-live="polite">
+            <div class="fm-big">$15,000</div>
+            <p>Estimated qualifying spend needed at 1 Status Point per $1.</p>
+          </div>
+
+          <p class="fm-footnote">This is a simple estimate using the earning rates shown above and your current Status Point balance. Promotions, non-spend Status Points, posting timing, and future program changes can affect the actual amount needed.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATUS POINTS VS TRAVEL MILES -->
+    <section class="fm-accordion" id="points-vs-miles" data-search-topic>
+      <button class="fm-accordion-trigger" type="button" aria-expanded="false" aria-controls="pointsMilesContent">
+        <span class="fm-accordion-heading">
+          <span class="fm-accordion-eyebrow">KNOW YOUR BALANCES</span>
+          <h2>Status Points vs. Travel Miles</h2>
+          <p>Two balances that are often earned together—but serve very different purposes.</p>
+        </span>
+        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
+      </button>
+
+      <div class="fm-accordion-content" id="pointsMilesContent" hidden>
+        <p class="fm-benefit-intro">While often earned in the same way, Status Points and Travel Miles serve different purposes and have different expiration rules.</p>
+
+        <div class="fm-compare-table" role="table" aria-label="Status Points and Travel Miles quick comparison">
+          <div class="head"></div><div class="head">Status Points</div><div class="head">Travel Miles</div>
+          <div class="label">Think of them as…</div><div>Elite Status progress</div><div>Rewards currency</div>
+          <div class="label">Used for</div><div>Reaching Elite tiers</div><div>Booking award flights</div>
+          <div class="label">Can you spend them?</div><div>No</div><div>Yes</div>
+          <div class="label">Reset annually?</div><div>Yes</div><div>No*</div>
+        </div>
+
+        <div class="fm-balance-grid">
+          <article class="fm-balance-card">
+            <h3>Status Points</h3>
+            <p class="lead">Status Points are an annual count toward your Elite Status achievement. They are earned at different rates depending on what you purchase and may post to your account at different times.</p>
+
+            <div class="fm-yesno-title">Status Points <span class="yes">ARE</span></div>
+            <ul class="fm-yesno-list yes">
+              <li>earned on flight purchases for the member</li>
+              <li>earned on add-on purchases for the member</li>
+              <li>earned on subscription purchases for the member (Discount Den + GoWild! Pass)</li>
+              <li>earned by daily spend on your Frontier Airlines World Mastercard ($1 = 1 Status Point)</li>
+              <li>an annual indicator of your achieved Elite Status; Status Points reset to 0 on January 1 annually</li>
+            </ul>
+
+            <div class="fm-yesno-title">Status Points <span class="no">ARE NOT</span></div>
+            <ul class="fm-yesno-list no">
+              <li>spent on award flights</li>
+              <li>earned as part of promotions, including credit-card sign-up bonus miles</li>
+              <li>earned on purchases of flights, add-ons, or subscriptions for <strong>others</strong></li>
+            </ul>
+          </article>
+
+          <article class="fm-balance-card">
+            <h3>Travel Miles</h3>
+            <p class="lead">Unlike Status Points, Travel Miles are redeemed for award flights. While you may earn Travel Miles with the same types of activity, they are used differently.</p>
+
+            <div class="fm-yesno-title">Travel Miles <span class="yes">ARE</span></div>
+            <ul class="fm-yesno-list yes">
+              <li>earned on flight purchases for the member</li>
+              <li>earned on add-on purchases for the member</li>
+              <li>earned on subscription purchases for the member (Discount Den + GoWild! Pass)</li>
+              <li>earned by signing up for the Frontier Airlines World Mastercard</li>
+              <li>earned by daily spend on your Frontier Airlines World Mastercard (1–5x per $1)</li>
+              <li>spent on award flights for the member or friends and family</li>
+            </ul>
+
+            <div class="fm-yesno-title">Travel Miles <span class="no">ARE NOT</span></div>
+            <ul class="fm-yesno-list no">
+              <li>an indicator of Elite Status</li>
+              <li>reset annually; unlike Status Points, your Travel Miles balance only decreases when miles are spent or expire</li>
+              <li>permanent regardless of activity; Travel Miles expire after one year of no qualifying account activity</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="fm-footnote">*Travel Miles do not reset each January 1. The expiration rule shown here reflects the information carried over from the previous How To GoWild guide.</p>
+      </div>
+    </section>
+
+    <footer class="fm-footer">
+      <p>FrontierMiles program terms, benefits, qualification requirements, and earning rates can change. Confirm current rules with Frontier before making a purchase or relying on a specific benefit.</p>
+      <p>This website is independently operated and is not affiliated with Frontier Airlines.</p>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const rates = {
+        member:   { basic:1,  bundle:6,  cardBasic:4,  cardBundle:12 },
+        silver:   { basic:3,  bundle:8,  cardBasic:6,  cardBundle:14 },
+        gold:     { basic:5,  bundle:10, cardBasic:8,  cardBundle:16 },
+        platinum: { basic:7,  bundle:12, cardBasic:10, cardBundle:18 },
+        diamond:  { basic:11, bundle:16, cardBasic:14, cardBundle:22 }
+      };
+
+      // Main accordions
+      document.querySelectorAll('.fm-accordion-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const content = document.getElementById(trigger.getAttribute('aria-controls'));
+          const open = trigger.getAttribute('aria-expanded') === 'true';
+          trigger.setAttribute('aria-expanded', String(!open));
+          content.hidden = open;
+        });
+      });
+
+      // Nested FAQs
+      document.querySelectorAll('.fm-faq-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const answer = trigger.nextElementSibling;
+          const open = trigger.getAttribute('aria-expanded') === 'true';
+          trigger.setAttribute('aria-expanded', String(!open));
+          answer.hidden = open;
+        });
+      });
+
+      // Alert dismissal for the current browsing session
+      const alert = document.getElementById('frontierMilesUpdateAlert');
+      const closeAlert = alert?.querySelector('.fm-update-alert-close');
+      try {
+        if (sessionStorage.getItem('fmProgramAlertDismissed') === '1') alert.hidden = true;
+      } catch (_) {}
+      closeAlert?.addEventListener('click', () => {
+        alert.hidden = true;
+        try { sessionStorage.setItem('fmProgramAlertDismissed', '1'); } catch (_) {}
+      });
+
+      // Earning-rate tool
+      let hasCard = false;
+      const status = document.getElementById('fmStatus');
+      const cardSelector = document.getElementById('fmCardSelector');
+      const basic = document.getElementById('fmBasicRate');
+      const bundle = document.getElementById('fmBundleRate');
+      const subscription = document.getElementById('fmSubscriptionRate');
+
+      function renderRates() {
+        const tier = rates[status.value];
+        const basicRate = hasCard ? tier.cardBasic : tier.basic;
+        const bundleRate = hasCard ? tier.cardBundle : tier.bundle;
+        basic.textContent = basicRate;
+        bundle.textContent = bundleRate;
+        subscription.textContent = bundleRate;
+        cardSelector.classList.toggle('active', hasCard);
+        cardSelector.setAttribute('aria-pressed', String(hasCard));
+        document.querySelectorAll('.fm-rate-cell').forEach(cell => {
+          cell.classList.add('updated');
+          setTimeout(() => cell.classList.remove('updated'), 180);
+        });
+      }
+
+      function toggleCard() { hasCard = !hasCard; renderRates(); }
+      cardSelector.addEventListener('click', toggleCard);
+      cardSelector.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleCard();
+        }
+      });
+      status.addEventListener('change', renderRates);
+      renderRates();
+
+      // True-cost calculator
+      const calcTarget = document.getElementById('calcTarget');
+      const calcCurrentPoints = document.getElementById('calcCurrentPoints');
+      const calcStatus = document.getElementById('calcStatus');
+      const calcFare = document.getElementById('calcFare');
+      const calcCard = document.getElementById('calcCard');
+      const calcResult = document.getElementById('calcResult');
+
+      function renderCalculator() {
+        const target = Number(calcTarget.value || 0);
+        const current = Math.max(0, Number(calcCurrentPoints.value || 0));
+        const remaining = Math.max(0, target - current);
+        const tier = rates[calcStatus.value];
+        const card = calcCard.value === 'yes';
+        const fare = calcFare.value;
+        const rate = fare === 'basic'
+          ? (card ? tier.cardBasic : tier.basic)
+          : (card ? tier.cardBundle : tier.bundle);
+        const spend = rate > 0 ? remaining / rate : 0;
+
+        const formatted = spend.toLocaleString('en-US', {
+          style:'currency', currency:'USD', maximumFractionDigits:0
+        });
+
+        if (remaining === 0) {
+          calcResult.innerHTML = '<div class="fm-big">Target reached</div><p>Your current Status Point balance already meets this tier threshold.</p>';
+        } else {
+          calcResult.innerHTML = `<div class="fm-big">${formatted}</div><p>Estimated qualifying spend needed for ${remaining.toLocaleString()} remaining Status Points at ${rate} point${rate === 1 ? '' : 's'} per $1.</p>`;
+        }
+      }
+
+      [calcTarget, calcCurrentPoints, calcStatus, calcFare, calcCard].forEach(el => {
+        el.addEventListener('input', renderCalculator);
+        el.addEventListener('change', renderCalculator);
+      });
+      renderCalculator();
+
+      // Open and scroll to calculator from FAQ link
+      document.querySelectorAll('[data-open-target]').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          const section = document.getElementById(link.dataset.openTarget);
+          const trigger = section?.querySelector('.fm-accordion-trigger');
+          const content = section?.querySelector('.fm-accordion-content');
+          if (trigger && content) {
+            trigger.setAttribute('aria-expanded', 'true');
+            content.hidden = false;
+          }
+          section?.scrollIntoView({ behavior:'smooth', block:'start' });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
