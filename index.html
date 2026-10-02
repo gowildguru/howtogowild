@@ -312,9 +312,9 @@
 
             <div>
 
-              <div class="dashboard-weather-label">
-                AIRPORT WEATHER
-              </div>
+             <div class="dashboard-weather-label">
+  AIRPORT COMMAND CENTER
+</div>
 
               <div class="dashboard-current-weather">
 
@@ -413,56 +413,60 @@
           </div>
 
 
+          </div>
+          <!-- /.dashboard-radar -->
+
+
           <!-- =========================================
-               AIRPORT RADAR
+               LIVE AIRPORT CAMERA
           ========================================== -->
 
           <div
-            id="weatherRadar"
-            class="dashboard-radar"
+            id="airportLiveCam"
+            class="dashboard-live-cam"
             hidden>
 
-            <div class="dashboard-radar-heading">
+            <div class="dashboard-live-cam-heading">
 
               <span
-                id="weatherRadarLabel"
-                class="dashboard-radar-label">
-                LIVE RADAR
+                id="airportLiveCamLabel"
+                class="dashboard-live-cam-label">
+                LIVE AT AIRPORT
               </span>
 
-              <span
-                id="weatherRadarTime"
-                class="dashboard-radar-time">
-              </span>
+              <a
+                id="airportLiveCamSource"
+                class="dashboard-live-cam-source"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                hidden>
+                View source ↗
+              </a>
 
             </div>
 
+            <div
+              id="airportLiveCamFrame"
+              class="dashboard-live-cam-frame">
 
-            <div class="dashboard-radar-map">
-
-              <img
-                id="weatherRadarImage"
-                class="dashboard-radar-image"
-                alt=""
-                decoding="async">
-
-              <div
-                id="weatherRadarAirport"
-                class="dashboard-radar-airport"
-                aria-hidden="true">
-                <span></span>
-              </div>
+              <!--
+                The video iframe is created by dashboard.js
+                only when a supported airport is selected
+                and this section is actually needed.
+              -->
 
             </div>
 
           </div>
+          <!-- /.dashboard-live-cam -->
+
 
         </div>
         <!-- /.dashboard-weather-content -->
 
       </section>
       <!-- /.dashboard-weather -->
-
 
 
       <!-- =========================================
