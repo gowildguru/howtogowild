@@ -134,430 +134,589 @@
     </div>
   </section>
   
-  <!-- DASHBOARD -->
-  <section
-    class="section section-green"
-    id="dashboard"
-  >
+ <!-- DASHBOARD -->
+<section
+  class="section section-green"
+  id="dashboard"
+>
 
-    <div class="dashboard-planes" aria-hidden="true">
-      <img src="images/plane1.png" class="dashboard-plane plane-1" alt="">
-      <img src="images/plane2.png" class="dashboard-plane plane-2" alt="">
-      <img src="images/plane3.png" class="dashboard-plane plane-3" alt="">
-      <img src="images/plane4.png" class="dashboard-plane plane-4" alt="">
-    </div>
+  <div class="dashboard-planes" aria-hidden="true">
+    <img src="images/plane1.png" class="dashboard-plane plane-1" alt="">
+    <img src="images/plane2.png" class="dashboard-plane plane-2" alt="">
+    <img src="images/plane3.png" class="dashboard-plane plane-3" alt="">
+    <img src="images/plane4.png" class="dashboard-plane plane-4" alt="">
+  </div>
 
-    <div class="dashboard-airport-art" aria-hidden="true">
-      <img src="images/dashboardahchor.png" alt="">
-    </div>
+  <div class="dashboard-airport-art" aria-hidden="true">
+    <img src="images/dashboardahchor.png" alt="">
+  </div>
 
-    <div class="container">
+  <div class="container">
 
-      <h2 class="section-heading">
-        Your Dashboard
-      </h2>
+    <h2 class="section-heading">
+      Your Dashboard
+    </h2>
 
-      <p class="section-description">
-        Personalized data for your closest departure airport.
-      </p>
+    <p class="section-description">
+      Personalized data for your closest departure airport.
+    </p>
 
-      <div id="dashboardMain" class="dashboard-main">
+    <div id="dashboardMain" class="dashboard-main">
 
-        <section class="dashboard-airport-hero">
 
-          <div
-            id="heroBackground"
-            class="dashboard-airport-photo">
-          </div>
+      <!-- =========================================
+           AIRPORT SUMMARY
+      ========================================== -->
 
-          <div class="dashboard-airport-shade"></div>
+      <section class="dashboard-airport-hero">
 
-          <a
-            id="heroPhotoCredit"
-            class="dashboard-photo-credit"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            hidden>
-          </a>
+        <div
+          id="heroBackground"
+          class="dashboard-airport-photo">
+        </div>
 
-          <div class="dashboard-airport-content">
+        <div class="dashboard-airport-shade"></div>
 
-            <div class="dashboard-airport-copy">
+        <a
+          id="heroPhotoCredit"
+          class="dashboard-photo-credit"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          hidden>
+        </a>
 
-              <div class="dashboard-kicker">
-                YOUR FRONTIER AIRPORT
-              </div>
+        <div class="dashboard-airport-content">
 
-              <div class="dashboard-airport-title">
-                <span id="airportCode">DEN</span>
-                <span class="dashboard-divider">·</span>
-                <span id="airportCity">Denver</span>
-              </div>
+          <div class="dashboard-airport-copy">
 
-              <div id="airportName" class="dashboard-airport-name">
-                Denver International Airport
-              </div>
-
+            <div class="dashboard-kicker">
+              YOUR FRONTIER AIRPORT
             </div>
 
-            <div class="dashboard-score">
+            <div class="dashboard-airport-title">
+              <span id="airportCode">DEN</span>
+              <span class="dashboard-divider">·</span>
+              <span id="airportCity">Denver</span>
+            </div>
 
-              <span class="dashboard-score-label">
-                CONNECTION SCORE
+            <div
+              id="airportName"
+              class="dashboard-airport-name">
+              Denver International Airport
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-score">
+
+            <span class="dashboard-score-label">
+              CONNECTION SCORE
+            </span>
+
+            <div class="dashboard-score-value">
+              <span
+                id="score"
+                class="dashboard-score-number">
+                99
               </span>
 
-              <div>
-                <span id="score" class="dashboard-score-number">99</span>
-                <span class="dashboard-score-max">/100</span>
-              </div>
+              <span class="dashboard-score-max">
+                /100
+              </span>
+            </div>
 
+            <div
+              id="routeLabel"
+              class="dashboard-score-routes">
+              52 nonstop destinations · 40 possible one-stop
             </div>
 
           </div>
-
-        </section>
-
-
-        <div class="dashboard-change-row">
-
-          <button id="changeAirport" type="button">
-            Not your airport? Change it
-          </button>
 
         </div>
 
+      </section>
 
-        <div id="airportChooser" class="dashboard-airport-chooser">
 
-          <select id="airportSelect">
-            <option value="">
-              Select Frontier airport...
-            </option>
-          </select>
+      <!-- AIRPORT SELECTOR -->
 
+      <div class="dashboard-change-row">
+
+        <button
+          id="changeAirport"
+          type="button">
+          Not your airport? Change it
+        </button>
+
+      </div>
+
+
+      <div
+        id="airportChooser"
+        class="dashboard-airport-chooser">
+
+        <select id="airportSelect">
+          <option value="">
+            Select Frontier airport...
+          </option>
+        </select>
+
+      </div>
+
+
+
+      <!-- =========================================
+           WEATHER
+      ========================================== -->
+
+      <section class="dashboard-weather">
+
+        <div
+          id="weatherBackground"
+          class="dashboard-weather-photo">
         </div>
 
+        <video
+          id="weatherVideo"
+          class="dashboard-weather-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="none"
+          aria-hidden="true"
+          tabindex="-1">
+        </video>
 
-        <section class="dashboard-network">
+        <div class="dashboard-weather-shade"></div>
 
-          <div class="dashboard-network-main">
-
-            <span id="routeCount" class="dashboard-route-count">
-              52
-            </span>
-
-            <div class="dashboard-network-copy">
-
-              <strong id="routeLabel">
-                nonstop destinations
-              </strong>
-
-              <span>
-                on Frontier
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <div class="dashboard-network-rank">
-
-            <strong id="rank">
-              #2
-            </strong>
-
-            <span>
-              in Frontier's network
-            </span>
-
-          </div>
-
-
-          <div class="dashboard-score-bar">
-            <div
-              id="scoreBar"
-              class="dashboard-score-bar-fill">
-            </div>
-          </div>
-
+        <div class="dashboard-weather-content">
 
           <div
-            id="networkDescription"
-            class="dashboard-network-description">
+            id="faaNotice"
+            class="dashboard-faa-notice"
+            hidden
+            role="status"
+            aria-live="polite"
+            aria-atomic="true">
           </div>
 
-        </section>
 
+          <div class="dashboard-weather-top">
 
-        <!-- DASHBOARD WEATHER -->
-        <section class="dashboard-weather">
+            <div>
 
-          <div
-            id="weatherBackground"
-            class="dashboard-weather-photo">
-          </div>
-
-          <video
-            id="weatherVideo"
-            class="dashboard-weather-video"
-            autoplay muted loop playsinline preload="none"
-            aria-hidden="true" tabindex="-1">
-          </video>
-
-          <div class="dashboard-weather-shade"></div>
-
-          <div class="dashboard-weather-content">
-
-            <div id="faaNotice" class="dashboard-faa-notice" hidden
-                 role="status" aria-live="polite" aria-atomic="true"></div>
-
-            <div class="dashboard-weather-top">
-
-              <div>
-                <div class="dashboard-weather-label">
-                  AIRPORT WEATHER
-                </div>
-
-                <div class="dashboard-current-weather">
-                  <span id="temperature" class="dashboard-temperature">
-                    --°
-                  </span>
-
-                  <span id="condition" class="dashboard-condition">
-                    Loading...
-                  </span>
-                </div>
+              <div class="dashboard-weather-label">
+                AIRPORT WEATHER
               </div>
 
-              <div class="dashboard-wind">
-                <strong id="wind">--</strong>
-                <span>mph wind</span>
-              </div>
+              <div class="dashboard-current-weather">
 
-            </div>
-
-
-            <div
-              id="weatherConcerns"
-              class="dashboard-weather-concerns">
-
-              <div
-                id="gustConcern"
-                class="dashboard-weather-chip">
-
-                <strong id="gusts"></strong>
-                <span>gusts</span>
-
-              </div>
-
-              <div
-                id="visibilityConcern"
-                class="dashboard-weather-chip">
-
-                <strong id="visibility"></strong>
-                <span>visibility</span>
-
-              </div>
-
-            </div>
-
-
-            <div
-              id="weatherMessage"
-              class="dashboard-weather-message">
-
-              <div
-                id="weatherIcon"
-                class="dashboard-weather-icon">
-                ✓
-              </div>
-
-              <div>
-                <strong id="weatherTitle">
-                  Checking airport weather...
-                </strong>
-
-                <span id="weatherText"></span>
-              </div>
-
-            </div>
-
-
-            <div class="dashboard-tomorrow">
-
-              <div>
-                <span class="dashboard-tomorrow-label">
-                  TOMORROW
+                <span
+                  id="temperature"
+                  class="dashboard-temperature">
+                  --°
                 </span>
 
-                <strong id="tomorrowCondition">
-                  --
-                </strong>
+                <span
+                  id="condition"
+                  class="dashboard-condition">
+                  Loading...
+                </span>
+
               </div>
 
-              <div
-                id="tomorrowSummary"
-                class="dashboard-tomorrow-summary">
-              </div>
+            </div>
+
+
+            <div class="dashboard-wind">
+              <strong id="wind">--</strong>
+              <span>mph wind</span>
+            </div>
+
+          </div>
+
+
+          <div
+            id="weatherConcerns"
+            class="dashboard-weather-concerns">
+
+            <div
+              id="gustConcern"
+              class="dashboard-weather-chip">
+
+              <strong id="gusts"></strong>
+              <span>gusts</span>
+
+            </div>
+
+            <div
+              id="visibilityConcern"
+              class="dashboard-weather-chip">
+
+              <strong id="visibility"></strong>
+              <span>visibility</span>
 
             </div>
 
           </div>
 
-        </section>
 
+          <div
+            id="weatherMessage"
+            class="dashboard-weather-message">
 
-        <!-- GOWILD BOOKING WINDOW -->
-        <section class="dashboard-booking">
-
-          <div class="dashboard-booking-heading">
+            <div
+              id="weatherIcon"
+              class="dashboard-weather-icon">
+              ✓
+            </div>
 
             <div>
-              <div class="dashboard-booking-kicker">
-                GOWILD! · DOMESTIC
-              </div>
 
-              <h3>Standard booking window</h3>
+              <strong id="weatherTitle">
+                Checking airport weather...
+              </strong>
 
-              <p id="bookingZone">
-                Checking airport local time...
-              </p>
-            </div>
-
-            <a
-              id="bookingLink"
-              class="dashboard-booking-button"
-              href="https://flights.flyfrontier.com/en/"
-              target="_blank"
-              rel="noopener noreferrer">
-              Book now ↗
-            </a>
-
-          </div>
-
-
-          <div class="dashboard-booking-grid">
-
-            <div id="bookingToday" class="dashboard-booking-item">
-
-              <span class="dashboard-booking-label">
-                DEPARTING TODAY
-              </span>
-
-              <strong class="booking-date">--</strong>
-
-              <span class="booking-status">
-                Checking booking window...
-              </span>
-
-            </div>
-
-
-            <div id="bookingTomorrow" class="dashboard-booking-item">
-
-              <span class="dashboard-booking-label">
-                DEPARTING TOMORROW
-              </span>
-
-              <strong class="booking-date">--</strong>
-
-              <span class="booking-status">
-                Checking booking window...
-              </span>
-
-            </div>
-
-
-            <div id="bookingNext" class="dashboard-booking-item">
-
-              <span class="dashboard-booking-label">
-                OPENING NEXT
-              </span>
-
-              <strong class="booking-date">--</strong>
-
-              <span class="booking-status">
-                Checking next opening...
-              </span>
-
-              <span class="booking-timer">
-                --:--:--
-              </span>
+              <span id="weatherText"></span>
 
             </div>
 
           </div>
 
 
-          <p class="dashboard-booking-note">
-            Standard domestic GoWild! booking begins the day before departure.
-            Blackout dates may have a Peak Day Charge. Seats and fares remain
-            subject to availability and pass validity.
-          </p>
+          <div class="dashboard-tomorrow">
 
-        </section>
-
-
-        <!-- UPCOMING FRONTIER DEPARTURES -->
-        <section class="dashboard-departures">
-
-          <div class="dashboard-departures-heading">
             <div>
-              <div class="dashboard-departures-kicker">
-                FRONTIER DEPARTURES
-              </div>
 
-              <h3 id="departuresTitle">
-                Upcoming nonstop departures
-              </h3>
+              <span class="dashboard-tomorrow-label">
+                TOMORROW
+              </span>
 
-              <p id="departuresSubtitle">
-                Loading your airport schedule...
-              </p>
-            </div>
-          </div>
+              <strong id="tomorrowCondition">
+                --
+              </strong>
 
-          <div class="departure-board">
-
-            <div class="departure-board-header">
-              <span>DAY</span>
-              <span>TIME</span>
-              <span>DESTINATION</span>
-              <span>FLIGHT / GATE</span>
-              <span>GOWILD! BOOKING</span>
             </div>
 
-            <div id="departureRows" class="departure-board-rows">
-              <div class="departure-board-loading">
-                Loading upcoming Frontier departures...
-              </div>
+            <div
+              id="tomorrowSummary"
+              class="dashboard-tomorrow-summary">
             </div>
 
           </div>
 
-          <button
-            id="departureShowMore"
-            class="departure-show-more"
-            type="button"
-            hidden>
-            Show more departures
-          </button>
+        </div>
 
-          <p class="dashboard-departures-note">
-            Shows scheduled Frontier nonstop departures from your selected airport.
-            Status and departure-gate checks begin within 60 minutes of departure. Delayed flights continue to be checked until departure. Boarding uses a 45-minute timing rule; departed flights remain visible for one hour.
-          </p>
+      </section>
 
-        </section>
 
-      </div> <!-- /dashboardMain -->
 
-    </div> <!-- /.container -->
+      <!-- =========================================
+           GOWILD! BOOKING CALENDAR
+      ========================================== -->
 
-  </section> <!-- /#dashboard -->
+      <section
+        class="dashboard-booking dashboard-booking-calendar">
 
+        <div class="dashboard-booking-heading">
+
+          <div>
+
+            <div class="dashboard-booking-kicker">
+              GOWILD! BOOKING
+            </div>
+
+            <h3>
+              Booking calendar
+            </h3>
+
+            <p id="bookingZone">
+              Checking airport local time...
+            </p>
+
+          </div>
+
+
+          <a
+            id="bookingLink"
+            class="dashboard-booking-button"
+            href="https://flights.flyfrontier.com/en/"
+            target="_blank"
+            rel="noopener noreferrer">
+            Book now ↗
+          </a>
+
+        </div>
+
+
+
+        <!-- BOOKING STATUS / COUNTDOWNS -->
+
+        <div class="dashboard-booking-summary">
+
+
+          <div class="booking-summary-item">
+
+            <span class="booking-summary-label">
+              STANDARD
+            </span>
+
+            <strong id="bookingStandardStatus">
+              Checking...
+            </strong>
+
+            <span id="bookingStandardDate">
+              --
+            </span>
+
+          </div>
+
+
+
+          <div class="booking-summary-item">
+
+            <span class="booking-summary-label">
+              INTERNATIONAL
+            </span>
+
+            <strong id="bookingInternationalStatus">
+              Checking...
+            </strong>
+
+            <span id="bookingInternationalDate">
+              --
+            </span>
+
+          </div>
+
+
+
+          <div
+            class="booking-summary-item booking-summary-countdown">
+
+            <span class="booking-summary-label">
+              NEXT STANDARD OPENING
+            </span>
+
+            <strong id="bookingNextDate">
+              --
+            </strong>
+
+            <span
+              id="bookingCountdown"
+              class="booking-timer">
+              --:--:--
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- CALENDAR -->
+
+        <div class="booking-calendar">
+
+          <div class="booking-calendar-header">
+
+            <button
+              id="bookingCalendarPrevious"
+              class="booking-calendar-nav"
+              type="button"
+              aria-label="Previous month">
+              ‹
+            </button>
+
+
+            <strong id="bookingCalendarMonth">
+              October 2026
+            </strong>
+
+
+            <button
+              id="bookingCalendarNext"
+              class="booking-calendar-nav"
+              type="button"
+              aria-label="Next month">
+              ›
+            </button>
+
+          </div>
+
+
+
+          <div
+            class="booking-calendar-weekdays"
+            aria-hidden="true">
+
+            <span>Su</span>
+            <span>Mo</span>
+            <span>Tu</span>
+            <span>We</span>
+            <span>Th</span>
+            <span>Fr</span>
+            <span>Sa</span>
+
+          </div>
+
+
+
+          <div
+            id="bookingCalendarDays"
+            class="booking-calendar-days"
+            aria-live="polite">
+          </div>
+
+        </div>
+
+
+
+        <!-- CALENDAR LEGEND -->
+
+        <div class="booking-calendar-legend">
+
+          <span>
+            <i
+              class="booking-legend-swatch standard"
+              aria-hidden="true">
+            </i>
+            Standard
+          </span>
+
+
+          <span>
+            <i
+              class="booking-legend-swatch international"
+              aria-hidden="true">
+            </i>
+            International
+          </span>
+
+
+          <span>
+            <i
+              class="booking-legend-swatch advanced"
+              aria-hidden="true">
+            </i>
+            Advanced
+          </span>
+
+
+          <span>
+            <i
+              class="booking-legend-swatch blackout"
+              aria-hidden="true">
+            </i>
+            Blackout
+          </span>
+
+
+          <span>
+            <i
+              class="booking-legend-x"
+              aria-hidden="true">
+              ×
+            </i>
+            No departures remaining
+          </span>
+
+        </div>
+
+
+
+        <p class="dashboard-booking-note">
+          Standard domestic GoWild! booking begins the day before departure.
+          International trips may be booked earlier. Blackout dates may have a
+          Peak Day Charge. Flight availability remains subject to Frontier
+          inventory and pass validity.
+        </p>
+
+      </section>
+
+
+
+      <!-- =========================================
+           UPCOMING FRONTIER DEPARTURES
+      ========================================== -->
+
+      <section class="dashboard-departures">
+
+        <div class="dashboard-departures-heading">
+
+          <div>
+
+            <div class="dashboard-departures-kicker">
+              FRONTIER DEPARTURES
+            </div>
+
+            <h3 id="departuresTitle">
+              Upcoming nonstop departures
+            </h3>
+
+            <p id="departuresSubtitle">
+              Loading your airport schedule...
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="departure-board">
+
+          <div class="departure-board-header">
+            <span>DAY</span>
+            <span>TIME</span>
+            <span>DESTINATION</span>
+            <span>FLIGHT / GATE</span>
+            <span>GOWILD! BOOKING</span>
+          </div>
+
+
+          <div
+            id="departureRows"
+            class="departure-board-rows">
+
+            <div class="departure-board-loading">
+              Loading upcoming Frontier departures...
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="departureShowMore"
+          class="departure-show-more"
+          type="button"
+          hidden>
+          Show more departures
+        </button>
+
+
+        <p class="dashboard-departures-note">
+          Shows scheduled Frontier nonstop departures from your selected airport.
+          Status and departure-gate checks begin within 60 minutes of departure.
+          Delayed flights continue to be checked until departure. Boarding uses
+          a 45-minute timing rule; departed flights remain visible for one hour.
+        </p>
+
+      </section>
+
+
+    </div>
+    <!-- /#dashboardMain -->
+
+  </div>
+  <!-- /.container -->
+
+</section>
+<!-- /#dashboard -->
 
   <!-- HELPFUL TOOLS -->
   <section class="section tools-section" id="tools">
