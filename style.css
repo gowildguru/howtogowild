@@ -6667,21 +6667,30 @@ body.tool-modal-open {
   color: #526158;
 }
 /* =====================================================
-   AIRPORT WEATHER RADAR
-   Desktop-only enhancement inside weather card
+   AIRPORT COMMAND CENTER — RADAR + LIVE CAMERA
    ===================================================== */
 
-.dashboard-radar {
+/*
+ * The outer media cards stay frosted to match the rest
+ * of the Command Center. The radar map and live video
+ * themselves remain crisp and solid inside the glass.
+ */
+
+
+/* =====================================================
+   SHARED MEDIA CARD TREATMENT
+   ===================================================== */
+
+.dashboard-radar,
+.dashboard-live-cam {
   width: 100%;
-
-  margin-top: 14px;
-
-  padding: 10px;
-
   box-sizing: border-box;
 
+  margin-top: 12px;
+  padding: 10px;
+
   border:
-    1px solid rgba(255, 255, 255, 0.18);
+    1px solid rgba(255, 255, 255, 0.20);
 
   border-radius: 16px;
 
@@ -6692,30 +6701,32 @@ body.tool-modal-open {
   backdrop-filter: blur(8px);
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
     0 7px 20px rgba(20, 34, 25, 0.10);
 }
 
 
 /* =====================================================
-   RADAR HEADER
+   SHARED MEDIA HEADERS
    ===================================================== */
 
-.dashboard-radar-heading {
+.dashboard-radar-heading,
+.dashboard-live-cam-heading {
   display: flex;
-
   align-items: center;
   justify-content: space-between;
 
   gap: 12px;
 
+  min-height: 14px;
   margin-bottom: 7px;
 }
 
 
-.dashboard-radar-label {
+.dashboard-radar-label,
+.dashboard-live-cam-label {
   color:
-    rgba(255, 255, 255, 0.88);
+    rgba(255, 255, 255, 0.90);
 
   font-size: 8px;
   font-weight: 800;
@@ -6725,9 +6736,10 @@ body.tool-modal-open {
 }
 
 
-.dashboard-radar-time {
+.dashboard-radar-time,
+.dashboard-live-cam-source {
   color:
-    rgba(255, 255, 255, 0.68);
+    rgba(255, 255, 255, 0.70);
 
   font-size: 8px;
   font-weight: 600;
@@ -6736,94 +6748,144 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   RADAR WINDOW
+   WEATHER RADAR — LEAFLET
    ===================================================== */
 
 .dashboard-radar-map {
   position: relative;
 
   width: 100%;
-
-  aspect-ratio: 16 / 7;
+  height: 220px;
 
   overflow: hidden;
 
   border-radius: 12px;
 
-  background:
-    rgba(20, 34, 25, 0.35);
+  background: #dfe5df;
 
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    inset 0 0 0 1px rgba(53, 77, 61, 0.12),
+    0 3px 10px rgba(20, 34, 25, 0.12);
 }
 
 
-.dashboard-radar-image {
-  position: absolute;
+/*
+ * Leaflet itself is mounted directly on
+ * #weatherRadarMap, so keep its container full size.
+ */
 
-  inset: 0;
-
+.dashboard-radar-map.leaflet-container,
+.dashboard-radar-map .leaflet-container {
   width: 100%;
   height: 100%;
 
-  display: block;
+  border-radius: inherit;
 
-  object-fit: cover;
+  font-family:
+    "Montserrat",
+    sans-serif;
 
-  opacity: 0.92;
+  background: #dfe5df;
+}
 
+
+/* Keep radar tiles smooth while frames switch. */
+
+.dashboard-radar-map
+.leaflet-tile-pane {
   transition:
     opacity 0.16s ease;
 }
 
 
-/* =====================================================
-   AIRPORT CENTER MARKER
-   ===================================================== */
+/* Slightly mute the basemap so precipitation stays primary. */
 
-.dashboard-radar-airport {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  z-index: 3;
-
-  width: 18px;
-  height: 18px;
-
-  transform:
-    translate(-50%, -50%);
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 50%;
-
-  background:
-    rgba(255, 255, 255, 0.94);
-
-  box-shadow:
-    0 2px 7px rgba(20, 34, 25, 0.35),
-    0 0 0 4px rgba(255, 255, 255, 0.16);
-
-  pointer-events: none;
+.dashboard-radar-map
+.leaflet-tile-pane:first-child {
+  filter:
+    saturate(0.72)
+    contrast(0.94)
+    brightness(1.03);
 }
 
 
-.dashboard-radar-airport::before {
-  content: "";
+/* Hide zoom buttons — this is a status panel, not a map app. */
 
-  width: 6px;
-  height: 6px;
+.dashboard-radar-map
+.leaflet-control-zoom {
+  display: none;
+}
+
+
+/* Clean, tiny map attribution. */
+
+.dashboard-radar-map
+.leaflet-control-attribution {
+  margin: 0;
+
+  padding: 2px 5px;
+
+  border-radius: 7px 0 0 0;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  color: #526158;
+
+  font-size: 6.5px;
+  line-height: 1.25;
+
+  box-shadow:
+    0 1px 4px rgba(20, 34, 25, 0.08);
+}
+
+
+.dashboard-radar-map
+.leaflet-control-attribution a {
+  color: #526158;
+
+  text-decoration: none;
+}
+
+
+.dashboard-radar-map
+.leaflet-control-attribution a:hover {
+  text-decoration: underline;
+}
+
+
+/* Airport position marker rendered by Leaflet. */
+
+.dashboard-radar-airport-marker {
+  width: 16px;
+  height: 16px;
+
+  border:
+    3px solid #ffffff;
 
   border-radius: 50%;
 
   background: #526158;
+
+  box-shadow:
+    0 2px 8px rgba(20, 34, 25, 0.38),
+    0 0 0 4px rgba(82, 97, 88, 0.16);
 }
 
 
-.dashboard-radar-airport span {
+/* Optional pulse around the selected airport marker. */
+
+.dashboard-radar-airport-marker-wrap {
+  position: relative;
+
+  width: 16px;
+  height: 16px;
+}
+
+
+.dashboard-radar-airport-marker-wrap::after {
+  content: "";
+
   position: absolute;
 
   left: 50%;
@@ -6833,24 +6895,27 @@ body.tool-modal-open {
   height: 28px;
 
   transform:
-    translate(-50%, -50%);
+    translate(-50%, -50%)
+    scale(0.65);
 
   border:
-    1px solid rgba(255, 255, 255, 0.55);
+    1px solid rgba(82, 97, 88, 0.60);
 
   border-radius: 50%;
 
   animation:
-    dashboard-radar-pulse
+    dashboard-radar-marker-pulse
     2.2s ease-out
     infinite;
+
+  pointer-events: none;
 }
 
 
-@keyframes dashboard-radar-pulse {
+@keyframes dashboard-radar-marker-pulse {
 
   0% {
-    opacity: 0.65;
+    opacity: 0.62;
 
     transform:
       translate(-50%, -50%)
@@ -6869,123 +6934,10 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   DESKTOP WEATHER CARD RADAR FIT
+   LIVE AIRPORT CAMERA
    ===================================================== */
-
-@media (min-width: 701px) {
-
-  .dashboard-middle-grid
-  .dashboard-weather-content {
-    display: flex;
-
-    flex-direction: column;
-  }
-
-
-  .dashboard-middle-grid
-  .dashboard-radar {
-    margin-top: auto;
-  }
-
-}
-
-
-/* =====================================================
-   MOBILE
-   Radar remains hidden.
-   ===================================================== */
-
-@media (max-width: 700px) {
-
-  .dashboard-radar {
-    display: none !important;
-  }
-
-}
-
-
-/* =====================================================
-   REDUCED MOTION
-   ===================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .dashboard-radar-airport span {
-    animation: none;
-  }
-
-
-  .dashboard-radar-image {
-    transition: none;
-  }
-
-}
-/* =====================================================
-   AIRPORT COMMAND CENTER — LIVE CAMERA
-   ===================================================== */
-
-.dashboard-live-cam {
-  width: 100%;
-
-  margin-top: 12px;
-
-  padding: 10px;
-
-  box-sizing: border-box;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.18);
-
-  border-radius: 16px;
-
-  background:
-    rgba(20, 34, 25, 0.22);
-
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
-    0 7px 20px rgba(20, 34, 25, 0.10);
-}
-
-
-/* =====================================================
-   LIVE CAMERA HEADER
-   ===================================================== */
-
-.dashboard-live-cam-heading {
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 12px;
-
-  margin-bottom: 7px;
-}
-
-
-.dashboard-live-cam-label {
-  color:
-    rgba(255, 255, 255, 0.88);
-
-  font-size: 8px;
-  font-weight: 800;
-  line-height: 1;
-
-  letter-spacing: 0.8px;
-}
-
 
 .dashboard-live-cam-source {
-  color:
-    rgba(255, 255, 255, 0.72);
-
-  font-size: 8px;
-  font-weight: 600;
-  line-height: 1;
-
   text-decoration: none;
 }
 
@@ -6996,10 +6948,6 @@ body.tool-modal-open {
   text-decoration: underline;
 }
 
-
-/* =====================================================
-   LIVE CAMERA FRAME
-   ===================================================== */
 
 .dashboard-live-cam-frame {
   position: relative;
@@ -7013,10 +6961,11 @@ body.tool-modal-open {
   border-radius: 12px;
 
   background:
-    rgba(20, 34, 25, 0.42);
+    rgba(20, 34, 25, 0.48);
 
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 3px 10px rgba(20, 34, 25, 0.12);
 }
 
 
@@ -7028,15 +6977,13 @@ body.tool-modal-open {
   width: 100%;
   height: 100%;
 
-  border: 0;
-
   display: block;
+
+  border: 0;
 }
 
 
-/* =====================================================
-   LIVE INDICATOR
-   ===================================================== */
+/* Small live indicator. */
 
 .dashboard-live-cam-label::before {
   content: "";
@@ -7060,14 +7007,34 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   DESKTOP FIT
+   DESKTOP COMMAND CENTER MEDIA FIT
    ===================================================== */
 
 @media (min-width: 701px) {
 
   .dashboard-middle-grid
+  .dashboard-weather-content {
+    display: flex;
+
+    flex-direction: column;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-radar,
+  .dashboard-middle-grid
   .dashboard-live-cam {
     flex: 0 0 auto;
+  }
+
+
+  /*
+   * Keep the radar substantial without making the
+   * Command Center dramatically taller than the calendar.
+   */
+
+  .dashboard-radar-map {
+    height: 220px;
   }
 
 }
@@ -7075,11 +7042,12 @@ body.tool-modal-open {
 
 /* =====================================================
    MOBILE
-   Hide live video to keep the dashboard light.
+   Keep the Command Center lightweight.
    ===================================================== */
 
 @media (max-width: 700px) {
 
+  .dashboard-radar,
   .dashboard-live-cam {
     display: none !important;
   }
@@ -7093,11 +7061,24 @@ body.tool-modal-open {
 
 @media (prefers-reduced-motion: reduce) {
 
+  .dashboard-radar-airport-marker-wrap::after {
+    animation: none;
+  }
+
+
+  .dashboard-radar-map
+  .leaflet-tile-pane {
+    transition: none;
+  }
+
+
   .dashboard-live-cam-label::before {
     box-shadow: none;
   }
 
 }
+
+
 /* =====================================================
    KEEP COMMAND CENTER + BOOKING SIDE BY SIDE ON DESKTOP
    ===================================================== */
