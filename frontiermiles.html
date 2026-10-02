@@ -186,21 +186,6 @@
       line-height:1.55;
     }
 
-    .fm-accordion-arrow {
-      flex:0 0 auto;
-      width:38px;
-      height:38px;
-      display:grid;
-      place-items:center;
-      border-radius:50%;
-      background:#ffffff14;
-      font-size:1.35rem;
-      transition:transform .22s ease, background .2s ease;
-    }
-
-    .fm-accordion-trigger:hover .fm-accordion-arrow { background:#ffffff22; }
-    .fm-accordion-trigger[aria-expanded="true"] .fm-accordion-arrow { transform:rotate(180deg); }
-
     .fm-accordion-content {
       padding:0 24px 24px;
     }
@@ -323,16 +308,18 @@
     .fm-threshold-card span { display:block; margin-top:6px; font-size:1.2rem; font-weight:800; }
     .fm-threshold-card small { display:block; margin-top:3px; font-size:.62rem; opacity:.68; }
 
-    .fm-jump-button {
-      display:inline-block;
-      margin-top:14px;
-      padding:10px 14px;
-      border-radius:999px;
-      background:var(--sage);
-      color:#fff;
-      text-decoration:none;
-      font-size:.76rem;
-      font-weight:700;
+ .fm-jump-button {
+  display:block;
+  width:fit-content;
+  margin:14px auto 0;
+  padding:10px 14px;
+  border-radius:999px;
+  background:var(--sage);
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  font-size:.76rem;
+  font-weight:700;
     }
 
     /* Benefit cards */
@@ -373,15 +360,19 @@
     .fm-tier-name.platinum { color:#a3a3a3; }
     .fm-tier-name.diamond { color:#72afe0; }
 
-    .fm-benefit-pill {
-      display:inline-block;
-      padding:5px 8px;
-      border-radius:999px;
-      font-size:.54rem;
-      font-weight:800;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-    }
+   .fm-benefit-pill {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:.54rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  line-height:1.2;
+  text-transform:uppercase;
+}
     .fm-benefit-pill.included { background:#e9f0ec; color:var(--sage-dark); }
     .fm-benefit-pill.bundle { border:1px solid #d9aaa5; background:var(--red-soft); color:#9d3027; }
 
@@ -561,7 +552,6 @@
           <h2>FrontierMiles Earning Rates</h2>
           <p>See how many Travel Miles + Status Points you earn based on your status, fare type, and Frontier Mastercard.</p>
         </span>
-        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
       </button>
 
       <div class="fm-accordion-content" id="earningRatesContent" hidden>
@@ -614,7 +604,6 @@
           <h2>Elite Status</h2>
           <p>Qualification requirements, FAQs, and 2027 benefits for Silver, Gold, Platinum, and Diamond.</p>
         </span>
-        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
       </button>
 
       <div class="fm-accordion-content" id="eliteStatusContent" hidden>
@@ -638,7 +627,9 @@
                 <div class="fm-threshold-card"><strong>Elite Platinum</strong><span>50,000</span><small>points annually</small></div>
                 <div class="fm-threshold-card"><strong>Elite Diamond</strong><span>75,000</span><small>points annually</small></div>
               </div>
-              <a class="fm-jump-button" href="#true-cost" data-open-target="true-cost">Calculate the true cost of Elite Status →</a>
+<a class="fm-jump-button" href="#true-cost" data-open-target="true-cost">
+  Calculate the true cost of Elite Status
+</a>
             </div>
           </div>
 
@@ -763,7 +754,6 @@
           <h2>The True Cost of Elite Status</h2>
           <p>Estimate how much qualifying Frontier spending it could take to reach Silver, Gold, Platinum, or Diamond.</p>
         </span>
-        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
       </button>
 
       <div class="fm-accordion-content" id="trueCostContent" hidden>
@@ -830,7 +820,6 @@
           <h2>Status Points vs. Travel Miles</h2>
           <p>Two balances that are often earned together—but serve very different purposes.</p>
         </span>
-        <span class="fm-accordion-arrow" aria-hidden="true">⌄</span>
       </button>
 
       <div class="fm-accordion-content" id="pointsMilesContent" hidden>
