@@ -1789,6 +1789,7 @@ let radarMap = null;
 let radarBaseLayer = null;
 let radarMarker = null;
 let radarTileLayers = [];
+let radarResizeObserver = null;
 
 
 /* Only show radar in the desktop dashboard layout. */
@@ -1950,7 +1951,8 @@ function refreshRadarMapLayout() {
     radarMap.invalidateSize(
       {
         animate: false,
-        pan: false
+        pan: false,
+        debounceMoveend: false
       }
     );
 
@@ -1965,12 +1967,6 @@ function refreshRadarMapLayout() {
   };
 
 
-  /*
-   * The Command Center can transition from hidden to
-   * visible in the same render cycle. Give Leaflet
-   * several chances to measure the final container.
-   */
-
   requestAnimationFrame(
     () => {
 
@@ -1979,13 +1975,19 @@ function refreshRadarMapLayout() {
 
       setTimeout(
         refresh,
-        80
+        60
       );
 
 
       setTimeout(
         refresh,
-        260
+        180
+      );
+
+
+      setTimeout(
+        refresh,
+        420
       );
 
     }
@@ -2077,6 +2079,28 @@ function ensureRadarMap(
     );
 
 
+    if (
+      !radarResizeObserver &&
+      typeof ResizeObserver !== "undefined"
+    ) {
+
+      radarResizeObserver =
+        new ResizeObserver(
+          () => {
+
+            refreshRadarMapLayout();
+
+          }
+        );
+
+
+      radarResizeObserver.observe(
+        mapElement
+      );
+
+    }
+
+
   } else {
 
     radarMap.setView(
@@ -2137,10 +2161,66 @@ function ensureRadarMap(
   /*
    * Leaflet may initialize while the surrounding card is
    * transitioning from hidden to visible. Recalculate its
-   * geometry after the browser has laid out the card.
+   * geometry after the browser has laid out the card, then
+   * reapply the airport center using the final map width.
    */
 
   refreshRadarMapLayout();
+
+
+  requestAnimationFrame(
+    () => {
+
+      radarMap?.invalidateSize(
+        {
+          animate: false,
+          pan: false
+        }
+      );
+
+
+      radarMap?.setView(
+        center,
+        6,
+        {
+          animate: false
+        }
+      );
+
+
+      setTimeout(
+        () => {
+
+          radarMap?.invalidateSize(
+            {
+              animate: false,
+              pan: false
+            }
+          );
+
+
+          radarMap?.setView(
+            center,
+            6,
+            {
+              animate: false
+            }
+          );
+
+
+          radarBaseLayer?.redraw();
+
+
+          radarTileLayers.forEach(
+            layer => layer.redraw()
+          );
+
+        },
+        220
+      );
+
+    }
+  );
 
 
   return radarMap;
