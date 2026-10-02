@@ -4469,15 +4469,52 @@ body.tool-modal-open {
   position: relative;
   padding: 90px 24px 110px;
   overflow: hidden;
+  color: #ffffff;
+  background: #0d1713;
+  isolation: isolate;
+}
+
+.credit-cards-section::before {
+  content: "";
+  position: absolute;
+
+  inset: -8% -12%;
+
+  z-index: -2;
+
+  background:
+    url("images/ccbackground.jpg")
+    center center / cover no-repeat;
+
+  animation: credit-card-sky-drift 45s ease-in-out infinite alternate;
+
+  will-change: transform;
+}
+
+.credit-cards-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
 
   background:
     linear-gradient(
       rgba(8, 16, 13, 0.10),
       rgba(8, 16, 13, 0.20)
-    ),
-    url("images/ccbackground.jpg") center center / cover no-repeat;
+    );
 
-  color: #ffffff;
+  pointer-events: none;
+}
+
+@keyframes credit-card-sky-drift {
+  from {
+    transform: translateX(-2%) scale(1.04);
+  }
+
+  to {
+    transform: translateX(2%) scale(1.04);
+  }
 }
 
 
@@ -4951,6 +4988,11 @@ body.tool-modal-open {
 /* REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {
+
+  .credit-cards-section::before {
+    animation: none !important;
+    transform: scale(1.04);
+  }
 
   .credit-card-panel,
   .credit-card-image,
