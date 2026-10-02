@@ -1271,16 +1271,15 @@ function showAirport(
     airport.name;
 
 
-  document.getElementById(
-    "score"
-  ).textContent =
-    airport.score;
+  const scoreElement =
+    document.getElementById(
+      "score"
+    );
 
-
-  document.getElementById(
-    "routeCount"
-  ).textContent =
-    airport.routes;
+  if (scoreElement) {
+    scoreElement.textContent =
+      airport.score;
+  }
 
 
   const connections =
@@ -1289,43 +1288,25 @@ function showAirport(
     );
 
 
-  document.getElementById(
-    "routeLabel"
-  ).textContent =
-
-    `${airport.routes} ` +
-
-    `${airport.routes === 1
-      ? "nonstop destination"
-      : "nonstop destinations"
-    } · ` +
-
-    `${connections.size} possible one-stop`;
-
-
-  document.getElementById(
-    "rank"
-  ).textContent =
-
-    airport.rank === null
-
-      ? "—"
-
-      : `#${airport.rank}`;
-
-
-  document.getElementById(
-    "scoreBar"
-  ).style.width =
-    `${airport.score}%`;
-
-
-  document.getElementById(
-    "networkDescription"
-  ).textContent =
-    networkCopy(
-      airport
+  const routeLabel =
+    document.getElementById(
+      "routeLabel"
     );
+
+  if (routeLabel) {
+
+    routeLabel.textContent =
+
+      `${airport.routes} ` +
+
+      `${airport.routes === 1
+        ? "nonstop destination"
+        : "nonstop destinations"
+      } · ` +
+
+      `${connections.size} possible one-stop`;
+
+  }
 
 
   document.getElementById(
@@ -2284,7 +2265,7 @@ async function updateWeather(airport) {
    INITIALIZE
    ===================================================== */
 /* =====================================================
-   STAGE 3 — GOWILD BOOKING WINDOW
+   STAGE 3 — GOWILD BOOKING CALENDAR
    ===================================================== */
 
 const goWildBlackouts = {
@@ -2333,6 +2314,8 @@ const goWildSlugs = {
 let bookingAirport = null;
 let bookingTarget = null;
 let bookingDayKey = "";
+let bookingCalendarOffset = 0;
+let bookingCalendarSignature = "";
 
 
 const bookingPad =
@@ -2492,6 +2475,28 @@ function bookingLabel(date) {
 }
 
 
+function bookingShortLabel(date) {
+
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC"
+    }
+  ).format(
+    new Date(
+      Date.UTC(
+        date.year,
+        date.month - 1,
+        date.day
+      )
+    )
+  );
+
+}
+
+
 /* Convert midnight in the selected airport's
    timezone into a real instant. */
 
@@ -2547,56 +2552,640 @@ function bookingMidnight(
 }
 
 
-function bookingCard(
-  id,
-  date,
-  which
+/* =====================================================
+   CALENDAR MONTH HELPERS
+   ===================================================== */
+
+function bookingMonth(
+  today,
+  offset = 0
 ) {
 
-  const card =
-    document.getElementById(id);
-
-
-  if (!card)
-    return;
-
-
-  const dateElement =
-    card.querySelector(
-      ".booking-date"
+  const date =
+    new Date(
+      Date.UTC(
+        today.year,
+        today.month - 1 + offset,
+        1
+      )
     );
 
-  const statusElement =
-    card.querySelector(
-      ".booking-status"
-    );
 
-  if (dateElement) {
-    dateElement.textContent =
-      bookingLabel(date);
-  }
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1
+  };
 
-  card.classList.toggle(
-    "is-blackout",
-    bookingBlackout(date)
+}
+
+
+function bookingMonthName(
+  year,
+  month
+) {
+
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC"
+    }
+  ).format(
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        1
+      )
+    )
   );
 
-  if (statusElement) {
-    statusElement.textContent =
+}
 
-      !bookingKnown(date)
 
-        ? "Check Frontier for newly posted blackout dates."
+function bookingDaysInMonth(
+  year,
+  month
+) {
 
-        : bookingBlackout(date)
+  return new Date(
+    Date.UTC(
+      year,
+      month,
+      0
+    )
+  ).getUTCDate();
 
-          ? `${which} is a blackout date. Standard GoWild booking is unavailable; a Peak Day Charge may apply.`
+}
 
-          : `Flights departing ${which.toLowerCase()} are within the standard booking window.`;
+
+/* =====================================================
+   DEPARTURE-DAY CALENDAR STATUS
+   Uses the same 3-day schedule already loaded by
+   the departure board. No additional request.
+   ===================================================== */
+
+function bookingDepartureDayStatus(
+  date
+) {
+
+  if (
+    !departureState ||
+    !bookingAirport ||
+    departureState.airport.code !== bookingAirport.code
+  ) {
+    return null;
+  }
+
+
+  const key =
+    bookingKey(date);
+
+
+  const localToday =
+    bookingDate(
+      bookingParts(
+        new Date(),
+        bookingAirport.timezone
+      ),
+      0
+    );
+
+
+  const knownRollingKeys =
+    new Set(
+      [0, 1, 2].map(
+        offset =>
+          bookingKey(
+            bookingDate(
+              localToday,
+              offset
+            )
+          )
+      )
+    );
+
+
+  if (!knownRollingKeys.has(key)) {
+    return null;
+  }
+
+
+  if (
+    departureState.missingKeys?.has(key)
+  ) {
+    return "unknown";
+  }
+
+
+  if (
+    !departureState.loadedKeys?.has(key)
+  ) {
+    return "loading";
+  }
+
+
+  const dayFlights =
+    departureState.flights.filter(
+      flight =>
+        bookingKey(flight.date) === key
+    );
+
+
+  if (!dayFlights.length) {
+    return "none";
+  }
+
+
+  const now =
+    Date.now();
+
+
+  const activeFlights =
+    dayFlights.filter(
+      flight => {
+
+        const live =
+          boardStatusInfo(
+            departureState.airport,
+            flight,
+            now
+          );
+
+
+        if (
+          live?.kind === "departed" ||
+          live?.kind === "cancelled"
+        ) {
+          return false;
+        }
+
+
+        if (live) {
+          return live.visible;
+        }
+
+
+        return flight.instant > now;
+
+      }
+    );
+
+
+  return activeFlights.length
+    ? "active"
+    : "finished";
+
+}
+
+
+/* =====================================================
+   RENDER BOOKING CALENDAR
+   ===================================================== */
+
+function renderBookingCalendar() {
+
+  if (
+    !bookingAirport ||
+    !bookingAirport.timezone
+  ) {
+    return;
+  }
+
+
+  const container =
+    document.getElementById(
+      "bookingCalendarDays"
+    );
+
+
+  const heading =
+    document.getElementById(
+      "bookingCalendarMonth"
+    );
+
+
+  if (
+    !container ||
+    !heading
+  ) {
+    return;
+  }
+
+
+  const today =
+    bookingDate(
+      bookingParts(
+        new Date(),
+        bookingAirport.timezone
+      ),
+      0
+    );
+
+
+  const tomorrow =
+    bookingDate(
+      today,
+      1
+    );
+
+
+  const internationalEnd =
+    bookingDate(
+      today,
+      10
+    );
+
+
+  const displayedMonth =
+    bookingMonth(
+      today,
+      bookingCalendarOffset
+    );
+
+
+  const year =
+    displayedMonth.year;
+
+
+  const month =
+    displayedMonth.month;
+
+
+  const firstWeekday =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        1
+      )
+    ).getUTCDay();
+
+
+  const totalDays =
+    bookingDaysInMonth(
+      year,
+      month
+    );
+
+
+  const departureSignature =
+    departureState &&
+    departureState.airport.code === bookingAirport.code
+
+      ? departureState.flights.map(
+          flight => {
+
+            const live =
+              boardStatusInfo(
+                departureState.airport,
+                flight
+              );
+
+            return [
+              bookingKey(flight.date),
+              flight.flightNumber,
+              live?.kind || "",
+              live?.label || ""
+            ];
+
+          }
+        )
+
+      : [];
+
+
+  const signature =
+    JSON.stringify({
+      airport: bookingAirport.code,
+      month: `${year}-${month}`,
+      today: bookingKey(today),
+      loaded:
+        departureState?.loadedKeys
+          ? [...departureState.loadedKeys]
+          : [],
+      missing:
+        departureState?.missingKeys
+          ? [...departureState.missingKeys]
+          : [],
+      flights: departureSignature
+    });
+
+
+  if (
+    bookingCalendarSignature === signature
+  ) {
+    return;
+  }
+
+
+  bookingCalendarSignature =
+    signature;
+
+
+  heading.textContent =
+    bookingMonthName(
+      year,
+      month
+    );
+
+
+  container.replaceChildren();
+
+
+  for (
+    let i = 0;
+    i < firstWeekday;
+    i++
+  ) {
+
+    const blank =
+      document.createElement(
+        "span"
+      );
+
+    blank.className =
+      "booking-calendar-day is-empty";
+
+    blank.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    container.appendChild(
+      blank
+    );
+
+  }
+
+
+  for (
+    let dayNumber = 1;
+    dayNumber <= totalDays;
+    dayNumber++
+  ) {
+
+    const date =
+      bookingDate(
+        {
+          year,
+          month,
+          day: dayNumber
+        },
+        0
+      );
+
+
+    const key =
+      bookingKey(date);
+
+
+    const cell =
+      document.createElement(
+        "div"
+      );
+
+
+    cell.className =
+      "booking-calendar-day";
+
+
+    const number =
+      document.createElement(
+        "span"
+      );
+
+
+    number.className =
+      "booking-calendar-number";
+
+
+    number.textContent =
+      dayNumber;
+
+
+    cell.appendChild(
+      number
+    );
+
+
+    if (
+      key === bookingKey(today)
+    ) {
+
+      cell.classList.add(
+        "is-today"
+      );
+
+    }
+
+
+    if (
+      key === bookingKey(today) ||
+      key === bookingKey(tomorrow)
+    ) {
+
+      cell.classList.add(
+        "is-standard"
+      );
+
+    }
+
+
+    if (
+      key >= bookingKey(today) &&
+      key <= bookingKey(internationalEnd)
+    ) {
+
+      cell.classList.add(
+        "is-international"
+      );
+
+    }
+
+
+    const dayStatus =
+      bookingDepartureDayStatus(
+        date
+      );
+
+
+    const daysFromToday =
+      Math.round(
+        (
+          Date.UTC(
+            date.year,
+            date.month - 1,
+            date.day
+          ) -
+          Date.UTC(
+            today.year,
+            today.month - 1,
+            today.day
+          )
+        ) /
+        86400000
+      );
+
+
+    if (
+      daysFromToday > 1 &&
+      dayStatus === "active"
+    ) {
+
+      cell.classList.add(
+        "is-advanced"
+      );
+
+    }
+
+
+    if (
+      bookingKnown(date) &&
+      bookingBlackout(date)
+    ) {
+
+      cell.classList.add(
+        "is-blackout"
+      );
+
+    }
+
+
+    if (
+      dayStatus === "none" ||
+      dayStatus === "finished"
+    ) {
+
+      cell.classList.add(
+        "no-departures"
+      );
+
+
+      const x =
+        document.createElement(
+          "span"
+        );
+
+
+      x.className =
+        "booking-calendar-no-departures";
+
+
+      x.textContent =
+        "×";
+
+
+      x.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      cell.appendChild(
+        x
+      );
+
+    }
+
+
+    const descriptions = [];
+
+
+    if (
+      key === bookingKey(today)
+    ) {
+      descriptions.push(
+        "today"
+      );
+    }
+
+
+    if (
+      cell.classList.contains(
+        "is-standard"
+      )
+    ) {
+      descriptions.push(
+        "standard domestic booking window"
+      );
+    }
+
+
+    if (
+      cell.classList.contains(
+        "is-international"
+      )
+    ) {
+      descriptions.push(
+        "international booking window"
+      );
+    }
+
+
+    if (
+      cell.classList.contains(
+        "is-advanced"
+      )
+    ) {
+      descriptions.push(
+        "advanced booking"
+      );
+    }
+
+
+    if (
+      cell.classList.contains(
+        "is-blackout"
+      )
+    ) {
+      descriptions.push(
+        "GoWild blackout date"
+      );
+    }
+
+
+    if (
+      dayStatus === "none"
+    ) {
+      descriptions.push(
+        "no Frontier departures scheduled"
+      );
+    }
+
+
+    if (
+      dayStatus === "finished"
+    ) {
+      descriptions.push(
+        "no departures remaining"
+      );
+    }
+
+
+    cell.setAttribute(
+      "aria-label",
+      `${bookingLabel(date)}${
+        descriptions.length
+          ? `: ${descriptions.join(", ")}`
+          : ""
+      }`
+    );
+
+
+    container.appendChild(
+      cell
+    );
+
   }
 
 }
 
+
+/* =====================================================
+   UPDATE BOOKING SUMMARY
+   ===================================================== */
 
 function updateBookingDashboard() {
 
@@ -2604,9 +3193,7 @@ function updateBookingDashboard() {
     !bookingAirport ||
     !bookingAirport.timezone
   ) {
-
     return;
-
   }
 
 
@@ -2628,6 +3215,20 @@ function updateBookingDashboard() {
     );
 
 
+  const tomorrow =
+    bookingDate(
+      today,
+      1
+    );
+
+
+  const internationalEnd =
+    bookingDate(
+      today,
+      10
+    );
+
+
   const key =
     `${bookingAirport.code}:${bookingKey(today)}`;
 
@@ -2640,21 +3241,78 @@ function updateBookingDashboard() {
       key;
 
 
-    bookingCard(
-      "bookingToday",
-      today,
-      "Today"
-    );
+    bookingCalendarSignature =
+      "";
 
 
-    bookingCard(
-      "bookingTomorrow",
-      bookingDate(today, 1),
-      "Tomorrow"
-    );
+    const standardStatus =
+      document.getElementById(
+        "bookingStandardStatus"
+      );
 
 
-    let offset = 2;
+    const standardDate =
+      document.getElementById(
+        "bookingStandardDate"
+      );
+
+
+    if (standardStatus) {
+
+      standardStatus.textContent =
+
+        !bookingKnown(tomorrow)
+
+          ? "Check Frontier"
+
+          : bookingBlackout(tomorrow)
+
+            ? "Tomorrow is a blackout"
+
+            : "Open now";
+
+    }
+
+
+    if (standardDate) {
+
+      standardDate.textContent =
+        bookingBlackout(tomorrow)
+
+          ? `${bookingShortLabel(tomorrow)} · Peak Day Charge may apply`
+
+          : `Departing ${bookingShortLabel(tomorrow)}`;
+
+    }
+
+
+    const internationalStatus =
+      document.getElementById(
+        "bookingInternationalStatus"
+      );
+
+
+    const internationalDate =
+      document.getElementById(
+        "bookingInternationalDate"
+      );
+
+
+    if (internationalStatus) {
+      internationalStatus.textContent =
+        "Open now";
+    }
+
+
+    if (internationalDate) {
+      internationalDate.textContent =
+        `Through ${bookingShortLabel(internationalEnd)}`;
+    }
+
+
+    let offset =
+      2;
+
 
     let departure =
       bookingDate(
@@ -2669,10 +3327,12 @@ function updateBookingDashboard() {
       offset < 370
     ) {
 
+      offset++;
+
       departure =
         bookingDate(
           today,
-          ++offset
+          offset
         );
 
     }
@@ -2692,52 +3352,20 @@ function updateBookingDashboard() {
       );
 
 
-    const next =
+    const nextDate =
       document.getElementById(
-        "bookingNext"
+        "bookingNextDate"
       );
 
-    if (next) {
 
-      next.classList.toggle(
-        "is-blackout",
-        !bookingKnown(departure)
-      );
+    if (nextDate) {
 
-      const nextDate =
-        next.querySelector(
-          ".booking-date"
-        );
+      nextDate.textContent =
+        bookingKnown(departure)
 
-      const nextStatus =
-        next.querySelector(
-          ".booking-status"
-        );
+          ? `For ${bookingShortLabel(departure)}`
 
-      if (nextDate) {
-        nextDate.textContent =
-          bookingLabel(
-            departure
-          );
-      }
-
-      if (nextStatus) {
-        nextStatus.textContent =
-
-          bookingKnown(departure)
-
-            ? `Flights departing ${[
-                "Sunday",
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday"
-              ][departure.weekday]} open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)} (${bookingAirport.code} local time).`
-
-            : `Expected to open at midnight ${bookingPad(opensOn.month)}/${bookingPad(opensOn.day)}. Check Frontier for newly posted blackout dates.`;
-      }
+          : `Expected ${bookingShortLabel(departure)}`;
 
     }
 
@@ -2748,7 +3376,10 @@ function updateBookingDashboard() {
     Math.max(
       0,
       Math.ceil(
-        (bookingTarget - now) /
+        (
+          bookingTarget -
+          now
+        ) /
         1000
       )
     );
@@ -2756,23 +3387,26 @@ function updateBookingDashboard() {
 
   const hours =
     Math.floor(
-      remaining / 3600
+      remaining /
+      3600
     );
 
 
   const minutes =
     Math.floor(
-      remaining / 60
+      remaining /
+      60
     ) % 60;
 
 
   const seconds =
-    remaining % 60;
+    remaining %
+    60;
 
 
   const timer =
-    document.querySelector(
-      "#bookingNext .booking-timer"
+    document.getElementById(
+      "bookingCountdown"
     );
 
 
@@ -2785,8 +3419,15 @@ function updateBookingDashboard() {
 
   }
 
+
+  renderBookingCalendar();
+
 }
 
+
+/* =====================================================
+   SET SELECTED BOOKING AIRPORT
+   ===================================================== */
 
 function setBookingAirport(
   airport
@@ -2799,41 +3440,104 @@ function setBookingAirport(
     return;
   }
 
+
   bookingAirport =
     airport;
 
+
   bookingDayKey =
     "";
+
+
+  bookingCalendarOffset =
+    0;
+
+
+  bookingCalendarSignature =
+    "";
+
 
   const zone =
     document.getElementById(
       "bookingZone"
     );
 
+
   const link =
     document.getElementById(
       "bookingLink"
     );
 
+
   if (zone) {
+
     zone.textContent =
       `Dates and countdown use ${airport.city} (${airport.code}) local time.`;
+
   }
 
+
   if (link) {
+
     link.href =
       "https://flights.flyfrontier.com/en/flights-from-" +
       bookingSlug(airport);
+
 
     link.setAttribute(
       "aria-label",
       `Explore Frontier flights from ${airport.city}`
     );
+
   }
+
 
   updateBookingDashboard();
 
 }
+
+
+/* =====================================================
+   CALENDAR NAVIGATION
+   ===================================================== */
+
+document
+  .getElementById(
+    "bookingCalendarPrevious"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      bookingCalendarOffset--;
+
+      bookingCalendarSignature =
+        "";
+
+      renderBookingCalendar();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "bookingCalendarNext"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      bookingCalendarOffset++;
+
+      bookingCalendarSignature =
+        "";
+
+      renderBookingCalendar();
+
+    }
+  );
+
 
 setInterval(
   updateBookingDashboard,
@@ -3082,6 +3786,8 @@ function renderDepartureBoard() {
   if (subtitle) subtitle.textContent = `Times are local to ${airport.city} (${airport.code}).` +
     (missing.length ? ` ${missing.join(' and ')} schedule unavailable; showing the available days.` : departureState.loading ? ' Loading the remaining days...' : ' Today, tomorrow, and upcoming.');
   updateDepartureCountdowns();
+  bookingCalendarSignature = "";
+  renderBookingCalendar();
 }
 
 async function loadDepartureBoard(airport) {
@@ -3102,11 +3808,14 @@ async function loadDepartureBoard(airport) {
       ? previousBoardState.flights.filter(flight => bookingKey(flight.date) < bookingKey(today) && boardFlightVisible(airport, flight, Date.now()))
       : [];
     const missing = [];
-    const state = {airport, flights, missing, loading: true, limit: 8, dayKey: bookingKey(today)};
+    const missingKeys = new Set();
+    const loadedKeys = new Set();
+    const state = {airport, flights, missing, missingKeys, loadedKeys, loading: true, limit: 8, dayKey: bookingKey(today)};
     departureState = state;
     await Promise.allSettled(days.map(async day => {
       try {
         const data = await departureSnapshot(bookingKey(day.date));
+        loadedKeys.add(bookingKey(day.date));
         if (request !== departureRequest) return;
         const source = data.airports[airport.code] || [];
         const seen = new Set();
@@ -3121,6 +3830,7 @@ async function loadDepartureBoard(airport) {
       } catch (error) {
         if (request !== departureRequest) return;
         missing.push(day.label);
+        missingKeys.add(bookingKey(day.date));
         console.info(`Departure snapshot unavailable: ${bookingKey(day.date)}`, error);
       }
       if (request !== departureRequest) return;
