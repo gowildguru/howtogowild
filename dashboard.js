@@ -2267,6 +2267,11 @@ async function updateWeather(airport) {
 /* =====================================================
    STAGE 3 — GOWILD BOOKING CALENDAR
    ===================================================== */
+const goWildAdvancedBookingEnd = {
+  year: 2027,
+  month: 4,
+  day: 4
+};
 
 const goWildBlackouts = {
 
@@ -3028,17 +3033,21 @@ function renderBookingCalendar() {
         86400000
       );
 
+const advancedEndKey =
+  bookingKey(
+    goWildAdvancedBookingEnd
+  );
 
-    if (
-      daysFromToday > 1 &&
-      dayStatus === "active"
-    ) {
+if (
+  daysFromToday > 1 &&
+  key <= advancedEndKey
+) {
 
-      cell.classList.add(
-        "is-advanced"
-      );
+  cell.classList.add(
+    "is-advanced"
+  );
 
-    }
+}
 
 
     if (
