@@ -7098,3 +7098,44 @@ body.tool-modal-open {
   }
 
 }
+/* =====================================================
+   KEEP COMMAND CENTER + BOOKING SIDE BY SIDE ON DESKTOP
+   ===================================================== */
+
+@media (min-width: 701px) {
+
+  .dashboard-middle-grid {
+    display: grid !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr) !important;
+
+    gap: 12px;
+
+    align-items: start;
+  }
+
+
+  .dashboard-middle-grid > .dashboard-weather {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+
+  .dashboard-middle-grid > .dashboard-booking-calendar {
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+
+    margin-top: 0;
+  }
+
+}
