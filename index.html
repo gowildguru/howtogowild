@@ -413,6 +413,47 @@
           </div>
 
 
+                 <!-- =========================================
+               AIRPORT RADAR
+          ========================================== -->
+
+          <div
+            id="weatherRadar"
+            class="dashboard-radar"
+            hidden>
+
+            <div class="dashboard-radar-heading">
+
+              <span
+                id="weatherRadarLabel"
+                class="dashboard-radar-label">
+                LIVE RADAR
+              </span>
+
+              <span
+                id="weatherRadarTime"
+                class="dashboard-radar-time">
+              </span>
+
+            </div>
+
+            <div class="dashboard-radar-map">
+
+              <img
+                id="weatherRadarImage"
+                class="dashboard-radar-image"
+                alt=""
+                decoding="async">
+
+              <div
+                id="weatherRadarAirport"
+                class="dashboard-radar-airport"
+                aria-hidden="true">
+                <span></span>
+              </div>
+
+            </div>
+
           </div>
           <!-- /.dashboard-radar -->
 
@@ -450,11 +491,7 @@
               id="airportLiveCamFrame"
               class="dashboard-live-cam-frame">
 
-              <!--
-                The video iframe is created by dashboard.js
-                only when a supported airport is selected
-                and this section is actually needed.
-              -->
+              <!-- Loaded by dashboard.js -->
 
             </div>
 
