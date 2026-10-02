@@ -1935,6 +1935,66 @@ function radarTimeLabel(
 
 
 /* =====================================================
+   LEAFLET SIZE / TILE REFRESH
+   ===================================================== */
+
+function refreshRadarMapLayout() {
+
+  if (!radarMap) {
+    return;
+  }
+
+
+  const refresh = () => {
+
+    radarMap.invalidateSize(
+      {
+        animate: false,
+        pan: false
+      }
+    );
+
+
+    radarBaseLayer?.redraw();
+
+
+    radarTileLayers.forEach(
+      layer => layer.redraw()
+    );
+
+  };
+
+
+  /*
+   * The Command Center can transition from hidden to
+   * visible in the same render cycle. Give Leaflet
+   * several chances to measure the final container.
+   */
+
+  requestAnimationFrame(
+    () => {
+
+      refresh();
+
+
+      setTimeout(
+        refresh,
+        80
+      );
+
+
+      setTimeout(
+        refresh,
+        260
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
    INITIALIZE LEAFLET MAP
    ===================================================== */
 
@@ -1992,13 +2052,29 @@ function ensureRadarMap(
           minZoom: 6,
           maxZoom: 6,
           maxNativeZoom: 19,
+          updateWhenIdle: false,
+          keepBuffer: 2,
+          crossOrigin: true,
           attribution:
             '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
         }
-      )
-      .addTo(
-        radarMap
       );
+
+
+    radarBaseLayer.on(
+      "tileerror",
+      event => {
+        console.info(
+          "OpenStreetMap tile failed:",
+          event?.tile?.src || ""
+        );
+      }
+    );
+
+
+    radarBaseLayer.addTo(
+      radarMap
+    );
 
 
   } else {
@@ -2064,13 +2140,7 @@ function ensureRadarMap(
    * geometry after the browser has laid out the card.
    */
 
-  requestAnimationFrame(
-    () => {
-      radarMap?.invalidateSize(
-        false
-      );
-    }
-  );
+  refreshRadarMapLayout();
 
 
   return radarMap;
@@ -2152,15 +2222,30 @@ function buildRadarTileLayers() {
                   ? 0.80
                   : 0,
               zIndex: 240,
-              updateWhenIdle: true,
-              keepBuffer: 1,
+              updateWhenIdle: false,
+              updateWhenZooming: false,
+              keepBuffer: 2,
+              crossOrigin: true,
               attribution:
                 '<a href="https://www.rainviewer.com/" target="_blank" rel="noopener">Radar: RainViewer</a>'
             }
-          )
-          .addTo(
-            radarMap
           );
+
+
+        layer.on(
+          "tileerror",
+          event => {
+            console.info(
+              "RainViewer radar tile failed:",
+              event?.tile?.src || tileURL
+            );
+          }
+        );
+
+
+        layer.addTo(
+          radarMap
+        );
 
 
         return layer;
@@ -2177,6 +2262,9 @@ function buildRadarTileLayers() {
   radarMarker?.setZIndexOffset(
     1000
   );
+
+
+  refreshRadarMapLayout();
 
 }
 
@@ -2247,13 +2335,7 @@ function showRadarFrame() {
     false;
 
 
-  requestAnimationFrame(
-    () => {
-      radarMap?.invalidateSize(
-        false
-      );
-    }
-  );
+  refreshRadarMapLayout();
 
 }
 
@@ -2509,13 +2591,7 @@ function syncRadarActivity() {
       radarTileLayers.length
     ) {
 
-      requestAnimationFrame(
-        () => {
-          radarMap?.invalidateSize(
-            false
-          );
-        }
-      );
+      refreshRadarMapLayout();
 
 
       startRadarAnimation();
