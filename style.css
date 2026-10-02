@@ -5326,3 +5326,886 @@ body.tool-modal-open {
     font-size: 0.85rem;
   }
 }
+/* =====================================================
+   DASHBOARD REFINEMENT
+   COMPACT AIRPORT SCORE + GOWILD BOOKING CALENDAR
+   ===================================================== */
+
+
+/* =====================================================
+   AIRPORT SCORE — ROUTE SUMMARY
+   ===================================================== */
+
+.dashboard-score-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.dashboard-score-routes {
+  max-width: 190px;
+  margin-top: 7px;
+
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  color: rgba(255, 255, 255, 0.82);
+}
+
+
+/* =====================================================
+   GOWILD BOOKING CARD
+   ===================================================== */
+
+.dashboard-booking-calendar {
+  width: min(100%, 900px);
+  max-width: 900px;
+
+  margin: 12px auto 0;
+  padding: 24px 26px;
+
+  box-sizing: border-box;
+
+  border-radius: 22px;
+
+  background: #ffffff;
+  color: #66766c;
+
+  box-shadow:
+    0 8px 24px rgba(20, 34, 25, 0.09);
+}
+
+
+/* =====================================================
+   BOOKING HEADER
+   ===================================================== */
+
+.dashboard-booking-calendar .dashboard-booking-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.dashboard-booking-calendar .dashboard-booking-kicker {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+
+  color: #66766c;
+}
+
+.dashboard-booking-calendar .dashboard-booking-heading h3 {
+  margin: 4px 0;
+
+  color: #4e5851;
+
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.dashboard-booking-calendar .dashboard-booking-heading p {
+  margin: 0;
+
+  font-size: 10px;
+  line-height: 1.4;
+
+  color: #6b756e;
+}
+
+.dashboard-booking-calendar .dashboard-booking-button {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 17px;
+
+  border-radius: 999px;
+
+  background: #66766c;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.dashboard-booking-calendar .dashboard-booking-button:hover {
+  background: #526158;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   BOOKING SUMMARY
+   ===================================================== */
+
+.dashboard-booking-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 9px;
+
+  margin-bottom: 16px;
+}
+
+.booking-summary-item {
+  min-width: 0;
+
+  padding: 12px 13px;
+
+  border:
+    1px solid rgba(102, 118, 108, 0.16);
+
+  border-radius: 13px;
+
+  background: #f7f9f7;
+}
+
+.booking-summary-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #66766c;
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.booking-summary-item strong {
+  display: block;
+
+  color: #4e5851;
+
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.booking-summary-item > span:last-child {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #6b756e;
+
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.booking-summary-countdown .booking-timer {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #4e5851;
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* =====================================================
+   CALENDAR SHELL
+   ===================================================== */
+
+.booking-calendar {
+  width: min(100%, 520px);
+
+  margin: 0 auto;
+
+  padding: 15px;
+
+  border:
+    1px solid rgba(102, 118, 108, 0.17);
+
+  border-radius: 18px;
+
+  background: #fbfcfb;
+}
+
+
+/* =====================================================
+   MONTH HEADER
+   ===================================================== */
+
+.booking-calendar-header {
+  display: grid;
+
+  grid-template-columns:
+    36px 1fr 36px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.booking-calendar-header strong {
+  text-align: center;
+
+  color: #4e5851;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.booking-calendar-nav {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border:
+    1px solid rgba(102, 118, 108, 0.20);
+
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #66766c;
+
+  font-family: inherit;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.booking-calendar-nav:hover {
+  background: #66766c;
+  color: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   WEEKDAYS
+   ===================================================== */
+
+.booking-calendar-weekdays {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+
+  gap: 5px;
+
+  margin-bottom: 5px;
+}
+
+.booking-calendar-weekdays span {
+  text-align: center;
+
+  color: #7b847e;
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.45px;
+  text-transform: uppercase;
+}
+
+
+/* =====================================================
+   CALENDAR GRID
+   ===================================================== */
+
+.booking-calendar-days {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+
+  gap: 5px;
+}
+
+.booking-calendar-day {
+  position: relative;
+
+  min-width: 0;
+  aspect-ratio: 1 / 0.88;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(102, 118, 108, 0.11);
+
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #526158;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  isolation: isolate;
+}
+
+.booking-calendar-day.is-empty {
+  border-color: transparent;
+
+  background: transparent;
+}
+
+
+/* =====================================================
+   DATE NUMBER
+   ===================================================== */
+
+.booking-calendar-number {
+  position: relative;
+  z-index: 4;
+
+  line-height: 1;
+}
+
+
+/* =====================================================
+   TODAY
+   ===================================================== */
+
+.booking-calendar-day.is-today {
+  outline: 2px solid #354d3d;
+  outline-offset: -2px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   STANDARD DOMESTIC WINDOW
+   ===================================================== */
+
+.booking-calendar-day.is-standard {
+  border-color: #66766c;
+
+  background: #66766c;
+  color: #ffffff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+
+/* =====================================================
+   INTERNATIONAL WINDOW
+   Uses an inset ring instead of another full fill,
+   so it can overlap the standard window cleanly.
+   ===================================================== */
+
+.booking-calendar-day.is-international:not(.is-standard) {
+  border-color: rgba(102, 118, 108, 0.38);
+
+  background: #eef2ef;
+
+  box-shadow:
+    inset 0 0 0 2px rgba(102, 118, 108, 0.20);
+}
+
+
+/* =====================================================
+   ADVANCED BOOKING
+   ===================================================== */
+
+.booking-calendar-day.is-advanced:not(.is-standard) {
+  border-color: #d7c59f;
+
+  background: #f8f2e7;
+  color: #805d26;
+}
+
+.booking-calendar-day.is-advanced::before {
+  content: "";
+
+  position: absolute;
+
+  left: 5px;
+  bottom: 5px;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #a77b36;
+}
+
+
+/* =====================================================
+   BLACKOUT DATES
+   Blackout takes visual priority over booking-window
+   backgrounds because it is the most important warning.
+   ===================================================== */
+
+.booking-calendar-day.is-blackout {
+  border-color: #d7a9a9;
+
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #fff4f4,
+      #fff4f4 5px,
+      #faeaea 5px,
+      #faeaea 10px
+    );
+
+  color: #934747;
+
+  box-shadow: none;
+}
+
+.booking-calendar-day.is-blackout::before {
+  display: none;
+}
+
+
+/* =====================================================
+   NO DEPARTURES REMAINING
+   ===================================================== */
+
+.booking-calendar-day.no-departures {
+  padding-right: 8px;
+}
+
+.booking-calendar-no-departures {
+  position: absolute;
+
+  top: 3px;
+  right: 4px;
+
+  z-index: 6;
+
+  color: currentColor;
+
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+
+  opacity: 0.72;
+}
+
+
+/* Make the X especially readable over standard fill. */
+
+.booking-calendar-day.is-standard
+.booking-calendar-no-departures {
+  color: #ffffff;
+}
+
+
+/* Blackout + no departures can both exist. */
+
+.booking-calendar-day.is-blackout
+.booking-calendar-no-departures {
+  color: #934747;
+}
+
+
+/* =====================================================
+   CALENDAR LEGEND
+   ===================================================== */
+
+.booking-calendar-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 8px 15px;
+
+  margin-top: 14px;
+}
+
+.booking-calendar-legend > span {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #6b756e;
+
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.booking-legend-swatch {
+  width: 10px;
+  height: 10px;
+
+  flex: 0 0 auto;
+
+  display: inline-block;
+
+  border-radius: 3px;
+}
+
+.booking-legend-swatch.standard {
+  background: #66766c;
+}
+
+.booking-legend-swatch.international {
+  border:
+    2px solid rgba(102, 118, 108, 0.45);
+
+  background: #eef2ef;
+}
+
+.booking-legend-swatch.advanced {
+  border:
+    1px solid #d7c59f;
+
+  background: #f8f2e7;
+}
+
+.booking-legend-swatch.blackout {
+  border:
+    1px solid #d7a9a9;
+
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #fff4f4,
+      #fff4f4 3px,
+      #faeaea 3px,
+      #faeaea 6px
+    );
+}
+
+.booking-legend-x {
+  display: inline-grid;
+  place-items: center;
+
+  width: 10px;
+  height: 10px;
+
+  color: #66766c;
+
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+
+/* =====================================================
+   BOOKING NOTE
+   ===================================================== */
+
+.dashboard-booking-calendar
+.dashboard-booking-note {
+  max-width: 650px;
+
+  margin:
+    13px auto 0;
+
+  color: #6b756e;
+
+  text-align: center;
+
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+  .dashboard-booking-calendar {
+    padding: 20px;
+  }
+
+  .dashboard-booking-summary {
+    gap: 7px;
+  }
+
+  .booking-summary-item {
+    padding: 10px;
+  }
+
+  .booking-calendar {
+    width: min(100%, 470px);
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+  .dashboard-score-routes {
+    max-width: 145px;
+
+    font-size: 7px;
+  }
+
+
+  .dashboard-booking-calendar {
+    width: auto;
+    max-width: none;
+
+    margin-left: 0;
+    margin-right: 0;
+
+    padding: 17px;
+
+    border-radius: 18px;
+  }
+
+
+  .dashboard-booking-calendar
+  .dashboard-booking-heading {
+    align-items: flex-start;
+
+    margin-bottom: 14px;
+  }
+
+
+  .dashboard-booking-calendar
+  .dashboard-booking-heading h3 {
+    font-size: 17px;
+  }
+
+
+  .dashboard-booking-calendar
+  .dashboard-booking-button {
+    padding: 8px 13px;
+
+    font-size: 9px;
+  }
+
+
+  .dashboard-booking-summary {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+  }
+
+
+  .booking-summary-countdown {
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    grid-template-columns:
+      1fr auto;
+
+    align-items: center;
+
+    column-gap: 12px;
+  }
+
+
+  .booking-summary-countdown
+  .booking-summary-label {
+    grid-column: 1 / -1;
+  }
+
+
+  .booking-summary-countdown
+  .booking-timer {
+    margin: 0;
+
+    font-size: 17px;
+
+    text-align: right;
+  }
+
+
+  .booking-calendar {
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 15px;
+  }
+
+
+  .booking-calendar-header {
+    margin-bottom: 9px;
+  }
+
+
+  .booking-calendar-header strong {
+    font-size: 12px;
+  }
+
+
+  .booking-calendar-nav {
+    width: 29px;
+    height: 29px;
+
+    font-size: 18px;
+  }
+
+
+  .booking-calendar-days,
+  .booking-calendar-weekdays {
+    gap: 4px;
+  }
+
+
+  .booking-calendar-day {
+    border-radius: 8px;
+
+    font-size: 9px;
+  }
+
+
+  .booking-calendar-no-departures {
+    top: 2px;
+    right: 3px;
+
+    font-size: 9px;
+  }
+
+
+  .booking-calendar-legend {
+    justify-content: flex-start;
+
+    gap: 7px 12px;
+
+    margin-top: 12px;
+  }
+
+
+  .booking-calendar-legend > span {
+    font-size: 7px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 430px) {
+
+  .dashboard-airport-content {
+    gap: 8px;
+  }
+
+
+  .dashboard-score {
+    max-width: 46%;
+  }
+
+
+  .dashboard-score-routes {
+    max-width: 125px;
+
+    margin-top: 5px;
+
+    font-size: 6.5px;
+    line-height: 1.35;
+  }
+
+
+  .dashboard-booking-calendar
+  .dashboard-booking-heading {
+    flex-wrap: wrap;
+  }
+
+
+  .dashboard-booking-calendar
+  .dashboard-booking-button {
+    margin-left: auto;
+  }
+
+
+  .booking-summary-item strong {
+    font-size: 10px;
+  }
+
+
+  .booking-summary-item > span:last-child {
+    font-size: 8px;
+  }
+
+
+  .booking-calendar {
+    padding: 10px;
+  }
+
+
+  .booking-calendar-days,
+  .booking-calendar-weekdays {
+    gap: 3px;
+  }
+
+
+  .booking-calendar-day {
+    border-radius: 7px;
+
+    font-size: 8px;
+  }
+
+
+  .booking-calendar-weekdays span {
+    font-size: 6px;
+  }
+
+
+  .booking-calendar-no-departures {
+    font-size: 8px;
+  }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .booking-calendar-nav,
+  .dashboard-booking-button {
+    transition: none;
+  }
+
+}
