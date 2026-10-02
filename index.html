@@ -12,6 +12,13 @@
 
   <link rel="stylesheet" href="style.css?v=27">
 
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIINfQ3ynHTjZwMZMPMZfQ3xZAG4Y6Qp1lQ="
+    crossorigin=""
+  >
+
   <!-- Needed by the Award Booking Calculator for community recent finds -->
   <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
@@ -437,21 +444,10 @@
 
             </div>
 
-            <div class="dashboard-radar-map">
-
-              <img
-                id="weatherRadarImage"
-                class="dashboard-radar-image"
-                alt=""
-                decoding="async">
-
-              <div
-                id="weatherRadarAirport"
-                class="dashboard-radar-airport"
-                aria-hidden="true">
-                <span></span>
-              </div>
-
+            <div
+              id="weatherRadarMap"
+              class="dashboard-radar-map"
+              aria-label="Recent weather radar around the selected airport">
             </div>
 
           </div>
@@ -2559,7 +2555,14 @@
 
 
   <script src="faq-booking.js?v=1" defer></script>
-  <script src="dashboard.js?v=17"></script>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="">
+  </script>
+
+  <script src="dashboard.js?v=18"></script>
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
   <script src="search.js?v=2" defer></script>
