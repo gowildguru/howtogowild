@@ -6263,3 +6263,296 @@ body.tool-modal-open {
   }
 
 }
+/* =====================================================
+   DASHBOARD DESKTOP PAIR
+   WEATHER + BOOKING CALENDAR
+   ===================================================== */
+
+.dashboard-middle-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+  gap: 12px;
+
+  margin-top: 12px;
+
+  align-items: stretch;
+}
+
+
+/* =====================================================
+   REMOVE OLD TOP MARGINS INSIDE THE NEW GRID
+   ===================================================== */
+
+.dashboard-middle-grid .dashboard-weather,
+.dashboard-middle-grid .dashboard-booking-calendar {
+  width: 100%;
+  max-width: none;
+
+  min-width: 0;
+
+  margin-top: 0;
+}
+
+
+/* =====================================================
+   FROSTED BOOKING CARD
+   ===================================================== */
+
+.dashboard-middle-grid .dashboard-booking-calendar {
+  display: flex;
+  flex-direction: column;
+
+  padding: 22px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.22);
+
+  border-radius: 22px;
+
+  background:
+    rgba(53, 77, 61, 0.14);
+
+  color: #ffffff;
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    0 10px 30px rgba(20, 34, 25, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+
+/* =====================================================
+   BOOKING HEADER ON GLASS
+   ===================================================== */
+
+.dashboard-middle-grid
+.dashboard-booking-calendar
+.dashboard-booking-kicker {
+  color: rgba(255, 255, 255, 0.80);
+}
+
+
+.dashboard-middle-grid
+.dashboard-booking-calendar
+.dashboard-booking-heading h3 {
+  color: #ffffff;
+}
+
+
+.dashboard-middle-grid
+.dashboard-booking-calendar
+.dashboard-booking-heading p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+
+/* =====================================================
+   BOOK NOW BUTTON
+   ===================================================== */
+
+.dashboard-middle-grid
+.dashboard-booking-calendar
+.dashboard-booking-button {
+  border:
+    1px solid rgba(255, 255, 255, 0.20);
+
+  background:
+    rgba(255, 255, 255, 0.14);
+
+  color: #ffffff;
+
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+
+.dashboard-middle-grid
+.dashboard-booking-calendar
+.dashboard-booking-button:hover {
+  background:
+    rgba(255, 255, 255, 0.22);
+}
+
+
+/* =====================================================
+   BOOKING STATUS BOXES
+   ===================================================== */
+
+.dashboard-middle-grid
+.booking-summary-item {
+  padding: 10px 11px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.16);
+
+  background:
+    rgba(255, 255, 255, 0.10);
+
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+
+.dashboard-middle-grid
+.booking-summary-label {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+
+.dashboard-middle-grid
+.booking-summary-item strong {
+  color: #ffffff;
+}
+
+
+.dashboard-middle-grid
+.booking-summary-item > span:last-child {
+  color: rgba(255, 255, 255, 0.80);
+}
+
+
+.dashboard-middle-grid
+.booking-summary-countdown
+.booking-timer {
+  color: #ffffff;
+}
+
+
+/* =====================================================
+   SOLID CALENDAR PANEL
+   ===================================================== */
+
+.dashboard-middle-grid
+.booking-calendar {
+  width: 100%;
+  max-width: none;
+
+  margin-top: 0;
+
+  padding: 12px;
+
+  background: #ffffff;
+
+  border:
+    1px solid rgba(102, 118, 108, 0.14);
+
+  box-shadow:
+    0 8px 22px rgba(20, 34, 25, 0.10);
+}
+
+
+/* =====================================================
+   CALENDAR LEGEND + NOTE ON GLASS
+   ===================================================== */
+
+.dashboard-middle-grid
+.booking-calendar-legend > span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+
+.dashboard-middle-grid
+.booking-legend-x {
+  color: #ffffff;
+}
+
+
+.dashboard-middle-grid
+.dashboard-booking-note {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+
+/* =====================================================
+   DESKTOP — MATCH WEATHER + CALENDAR HEIGHTS
+   ===================================================== */
+
+@media (min-width: 701px) {
+
+  .dashboard-middle-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-weather,
+
+  .dashboard-middle-grid
+  .dashboard-booking-calendar {
+    min-height: 430px;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-weather-content {
+    min-height: 430px;
+
+    padding: 24px;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-booking-calendar {
+    justify-content: flex-start;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-booking-heading {
+    margin-bottom: 12px;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-booking-summary {
+    gap: 7px;
+
+    margin-bottom: 12px;
+  }
+
+
+  .dashboard-middle-grid
+  .booking-calendar {
+    flex: 0 0 auto;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE / TABLET STACK
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+  .dashboard-middle-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-weather,
+
+  .dashboard-middle-grid
+  .dashboard-booking-calendar {
+    min-height: unset;
+  }
+
+
+  .dashboard-middle-grid
+  .dashboard-booking-calendar {
+    width: auto;
+    max-width: none;
+
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+}
