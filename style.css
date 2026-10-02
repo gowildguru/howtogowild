@@ -6653,3 +6653,16 @@ body.tool-modal-open {
 .dashboard-departures-note {
   color: rgba(255, 255, 255, 0.68);
 }
+/* Keep all departure-board flight data sage */
+
+.departure-board-rows,
+.departure-row,
+.departure-day,
+.departure-time,
+.departure-destination,
+.departure-destination strong,
+.departure-destination span,
+.departure-flight,
+.departure-booking {
+  color: #526158;
+}
