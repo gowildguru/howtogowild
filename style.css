@@ -5704,14 +5704,13 @@ body.tool-modal-open {
 .booking-calendar-day.is-today {
   outline: 2px solid #354d3d;
   outline-offset: -2px;
-
   font-weight: 800;
 }
 
 
 /* =====================================================
    STANDARD + INTERNATIONAL
-   Today and tomorrow only.
+   Today and tomorrow.
    Half green / half blue.
    ===================================================== */
 
@@ -5737,8 +5736,7 @@ body.tool-modal-open {
 /* =====================================================
    STANDARD ONLY
    Green.
-   This is mostly a fallback in case a date is ever
-   standard but not international.
+   Fallback if a date is standard but not international.
    ===================================================== */
 
 .booking-calendar-day.is-standard:not(.is-international):not(.is-blackout) {
@@ -5754,7 +5752,6 @@ body.tool-modal-open {
 
 /* =====================================================
    INTERNATIONAL + ADVANCED DOMESTIC
-   Later dates inside the international window.
    Half yellow / half blue.
    ===================================================== */
 
@@ -5780,18 +5777,16 @@ body.tool-modal-open {
 /* =====================================================
    INTERNATIONAL ONLY
    Blue.
-   Fallback in case a date is international but not
-   standard or advanced.
    ===================================================== */
 
 .booking-calendar-day.is-international:not(.is-standard):not(.is-advanced):not(.is-blackout) {
   border-color: #5f8aa6;
 
-  background: #dceaf3;
-  color: #47697e;
+  background: #5f8aa6;
+  color: #ffffff;
 
   box-shadow:
-    inset 0 0 0 2px rgba(95, 138, 166, 0.14);
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 
@@ -5810,7 +5805,7 @@ body.tool-modal-open {
 
 /* =====================================================
    BLACKOUT
-   Always overrides every other state.
+   Red always wins over every other booking state.
    ===================================================== */
 
 .booking-calendar-day.is-blackout {
@@ -5857,19 +5852,36 @@ body.tool-modal-open {
   opacity: 0.72;
 }
 
+
+/* White X on green standard dates */
+
 .booking-calendar-day.is-standard:not(.is-blackout)
 .booking-calendar-no-departures {
   color: #ffffff;
 }
 
-.booking-calendar-day.is-international.is-advanced:not(.is-blackout)
+
+/* White X on blue international-only dates */
+
+.booking-calendar-day.is-international:not(.is-standard):not(.is-advanced):not(.is-blackout)
 .booking-calendar-no-departures {
   color: #ffffff;
 }
 
+
+/* Dark X on yellow/blue International + Advanced dates */
+
+.booking-calendar-day.is-international.is-advanced:not(.is-standard):not(.is-blackout)
+.booking-calendar-no-departures {
+  color: #4e5851;
+}
+
+
+/* Dark red X on blackout dates */
+
 .booking-calendar-day.is-blackout
 .booking-calendar-no-departures {
-  color: #8d2f2f;
+  color: #8d2f2f !important;
 }
 
 
@@ -5913,44 +5925,34 @@ body.tool-modal-open {
 }
 
 
-/* Standard + International */
+/* Standard
+   Green represents the domestic standard window.
+   The actual calendar will show green/blue when
+   Standard and International overlap. */
 
 .booking-legend-swatch.standard {
-  background:
-    linear-gradient(
-      90deg,
-      #66766c 0%,
-      #66766c 50%,
-      #5f8aa6 50%,
-      #5f8aa6 100%
-    );
+  border: 1px solid #66766c;
+  background: #66766c;
 }
 
 
-/* International + Advanced */
+/* International = blue */
 
 .booking-legend-swatch.international {
-  background:
-    linear-gradient(
-      90deg,
-      #f6e7b5 0%,
-      #f6e7b5 50%,
-      #5f8aa6 50%,
-      #5f8aa6 100%
-    );
+  border: 1px solid #5f8aa6;
+  background: #5f8aa6;
 }
 
 
-/* Advanced Domestic */
+/* Advanced Domestic = yellow */
 
 .booking-legend-swatch.advanced {
   border: 1px solid #d8bd76;
-
   background: #f6e7b5;
 }
 
 
-/* Blackout */
+/* Blackout = red */
 
 .booking-legend-swatch.blackout {
   border: 1px solid #c96a6a;
@@ -5983,6 +5985,7 @@ body.tool-modal-open {
   line-height: 1;
 }
 
+
 /* =====================================================
    BOOKING NOTE
    ===================================================== */
@@ -5991,8 +5994,7 @@ body.tool-modal-open {
 .dashboard-booking-note {
   max-width: 650px;
 
-  margin:
-    13px auto 0;
+  margin: 13px auto 0;
 
   color: #6b756e;
 
@@ -6036,7 +6038,6 @@ body.tool-modal-open {
 
   .dashboard-score-routes {
     max-width: 145px;
-
     font-size: 7px;
   }
 
@@ -6057,7 +6058,6 @@ body.tool-modal-open {
   .dashboard-booking-calendar
   .dashboard-booking-heading {
     align-items: flex-start;
-
     margin-bottom: 14px;
   }
 
@@ -6071,14 +6071,12 @@ body.tool-modal-open {
   .dashboard-booking-calendar
   .dashboard-booking-button {
     padding: 8px 13px;
-
     font-size: 9px;
   }
 
 
   .dashboard-booking-summary {
     grid-template-columns: 1fr 1fr;
-
     gap: 7px;
   }
 
@@ -6148,7 +6146,6 @@ body.tool-modal-open {
 
   .booking-calendar-day {
     border-radius: 8px;
-
     font-size: 9px;
   }
 
@@ -6238,7 +6235,6 @@ body.tool-modal-open {
 
   .booking-calendar-day {
     border-radius: 7px;
-
     font-size: 8px;
   }
 
