@@ -5744,8 +5744,7 @@ body.tool-modal-open {
    ADVANCED BOOKING
    ===================================================== */
 
-.booking-calendar-day.is-advanced:not(.is-standard) {
-  border-color: #d7c59f;
+.booking-calendar-day.is-advanced:not(.is-standard):not(.is-international) {  border-color: #d7c59f;
 
   background: #f8f2e7;
   color: #805d26;
