@@ -1432,6 +1432,7 @@ const radarManifestURL =
 let radarAirport = null;
 let radarFrames = [];
 let radarFrameIndex = 0;
+let radarHost = "";
 
 let radarManifestCache = null;
 let radarManifestFetchedAt = 0;
@@ -1671,7 +1672,7 @@ function showRadarFrame() {
 
   image.src =
     radarImageURL(
-      radarFrames.host,
+      radarHost,
       frame,
       radarAirport
     );
@@ -1862,11 +1863,11 @@ async function updateRadar(
 
 
     /*
-     * Store host directly on the array so
-     * frame rendering stays lightweight.
+     * Keep the RainViewer host separate from
+     * the frame array for cleaner state.
      */
 
-    radarFrames.host =
+    radarHost =
       manifest.host;
 
 
@@ -2296,6 +2297,7 @@ async function refreshFAA() {
 
 function syncWeatherActivity() {
   syncWeatherVideo();
+  syncRadarActivity();
   if (weatherIsActive()) refreshFAA();
   else {
     faaSequence++;
