@@ -6774,12 +6774,13 @@ body.tool-modal-open {
  * #weatherRadarMap, so keep its container full size.
  */
 
-.dashboard-radar-map.leaflet-container,
-.dashboard-radar-map .leaflet-container {
+.dashboard-radar-map.leaflet-container {
   width: 100%;
-  height: 100%;
+  height: 150px !important;
+  min-height: 150px;
+  max-height: 150px;
 
-  border-radius: inherit;
+  border-radius: 12px;
 
   font-family:
     "Montserrat",
@@ -7033,9 +7034,11 @@ body.tool-modal-open {
    * Command Center dramatically taller than the calendar.
    */
 
-  .dashboard-radar-map {
-    height: 220px;
-  }
+.dashboard-radar-map {
+  height: 150px;
+  min-height: 150px;
+  max-height: 150px;
+}
 
 }
 
