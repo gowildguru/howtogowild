@@ -5710,28 +5710,12 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   STANDARD DOMESTIC WINDOW
-   ===================================================== */
-
-.booking-calendar-day.is-standard:not(.is-international):not(.is-blackout) {
-  border-color: #66766c;
-
-  background: #66766c;
-  color: #ffffff;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-
-/* =====================================================
-   INTERNATIONAL WINDOW
+   STANDARD + INTERNATIONAL
+   Today and tomorrow only.
    Half green / half blue.
-   Can overlap Advanced Booking.
-   Blackout always overrides it.
    ===================================================== */
 
-.booking-calendar-day.is-international:not(.is-blackout) {
+.booking-calendar-day.is-standard.is-international:not(.is-blackout) {
   border-color: #66766c;
 
   background:
@@ -5751,10 +5735,69 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   ADVANCED / EARLY BOOKING
-   Yellow when it is not also International or Blackout.
-   International + Advanced keeps the green/blue split
-   and uses the gold dot as the Advanced indicator.
+   STANDARD ONLY
+   Green.
+   This is mostly a fallback in case a date is ever
+   standard but not international.
+   ===================================================== */
+
+.booking-calendar-day.is-standard:not(.is-international):not(.is-blackout) {
+  border-color: #66766c;
+
+  background: #66766c;
+  color: #ffffff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+
+/* =====================================================
+   INTERNATIONAL + ADVANCED DOMESTIC
+   Later dates inside the international window.
+   Half yellow / half blue.
+   ===================================================== */
+
+.booking-calendar-day.is-international.is-advanced:not(.is-standard):not(.is-blackout) {
+  border-color: #c7b26f;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f6e7b5 0%,
+      #f6e7b5 50%,
+      #5f8aa6 50%,
+      #5f8aa6 100%
+    );
+
+  color: #4e5851;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+
+/* =====================================================
+   INTERNATIONAL ONLY
+   Blue.
+   Fallback in case a date is international but not
+   standard or advanced.
+   ===================================================== */
+
+.booking-calendar-day.is-international:not(.is-standard):not(.is-advanced):not(.is-blackout) {
+  border-color: #5f8aa6;
+
+  background: #dceaf3;
+  color: #47697e;
+
+  box-shadow:
+    inset 0 0 0 2px rgba(95, 138, 166, 0.14);
+}
+
+
+/* =====================================================
+   ADVANCED DOMESTIC ONLY
+   Yellow.
    ===================================================== */
 
 .booking-calendar-day.is-advanced:not(.is-standard):not(.is-international):not(.is-blackout) {
@@ -5764,29 +5807,10 @@ body.tool-modal-open {
   color: #72551b;
 }
 
-.booking-calendar-day.is-advanced:not(.is-blackout)::before {
-  content: "";
-
-  position: absolute;
-
-  left: 5px;
-  bottom: 5px;
-
-  width: 4px;
-  height: 4px;
-
-  border-radius: 50%;
-
-  background: #a77b36;
-}
-
 
 /* =====================================================
-   BLACKOUT DATES
-   Blackout always takes visual priority over:
-   - Standard
-   - International
-   - Advanced Booking
+   BLACKOUT
+   Always overrides every other state.
    ===================================================== */
 
 .booking-calendar-day.is-blackout {
@@ -5805,10 +5829,6 @@ body.tool-modal-open {
 
   box-shadow:
     inset 0 0 0 2px rgba(141, 47, 47, 0.10) !important;
-}
-
-.booking-calendar-day.is-blackout::before {
-  display: none !important;
 }
 
 
@@ -5837,24 +5857,15 @@ body.tool-modal-open {
   opacity: 0.72;
 }
 
-
-/* Keep X readable on Standard dates. */
-
 .booking-calendar-day.is-standard:not(.is-blackout)
 .booking-calendar-no-departures {
   color: #ffffff;
 }
 
-
-/* Keep X readable on International dates. */
-
-.booking-calendar-day.is-international:not(.is-blackout)
+.booking-calendar-day.is-international.is-advanced:not(.is-blackout)
 .booking-calendar-no-departures {
   color: #ffffff;
 }
-
-
-/* Blackout + no departures can both exist. */
 
 .booking-calendar-day.is-blackout
 .booking-calendar-no-departures {
@@ -5902,19 +5913,9 @@ body.tool-modal-open {
 }
 
 
-/* Standard = green */
+/* Standard + International */
 
 .booking-legend-swatch.standard {
-  background: #66766c;
-}
-
-
-/* International = half green / half blue */
-
-.booking-legend-swatch.international {
-  border:
-    1px solid rgba(72, 116, 150, 0.35);
-
   background:
     linear-gradient(
       90deg,
@@ -5926,21 +5927,33 @@ body.tool-modal-open {
 }
 
 
-/* Advanced / Early Booking = yellow */
+/* International + Advanced */
+
+.booking-legend-swatch.international {
+  background:
+    linear-gradient(
+      90deg,
+      #f6e7b5 0%,
+      #f6e7b5 50%,
+      #5f8aa6 50%,
+      #5f8aa6 100%
+    );
+}
+
+
+/* Advanced Domestic */
 
 .booking-legend-swatch.advanced {
-  border:
-    1px solid #d8bd76;
+  border: 1px solid #d8bd76;
 
   background: #f6e7b5;
 }
 
 
-/* Blackout = red */
+/* Blackout */
 
 .booking-legend-swatch.blackout {
-  border:
-    1px solid #c96a6a;
+  border: 1px solid #c96a6a;
 
   background:
     repeating-linear-gradient(
@@ -5953,7 +5966,7 @@ body.tool-modal-open {
 }
 
 
-/* No departures remaining = X */
+/* No departures remaining */
 
 .booking-legend-x {
   display: inline-grid;
