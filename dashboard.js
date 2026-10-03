@@ -1767,890 +1767,403 @@ window
 
 
 /* =====================================================
-   AIRPORT WEATHER RADAR — LEAFLET + RAINVIEWER
+   AIRPORT WEATHER RADAR — STATIC MAP + RAINVIEWER
+   Existing HTML IDs and weather activity hooks are retained.
+   No Leaflet, basemap tiles, API key, or external CSS required.
    ===================================================== */
 
 const radarManifestURL =
   "https://api.rainviewer.com/public/weather-maps.json";
-
+const radarRefreshMilliseconds = 300000;
+const radarImageWidth = 640;
+const radarImageHeight = 360;
+const radarZoom = 6;
+const radarWorldPixels = 256 * (2 ** radarZoom);
+const radarWorldMeters = 2 * Math.PI * 6378137;
 
 let radarAirport = null;
-let radarFrames = [];
-let radarFrameIndex = 0;
-let radarHost = "";
-
+let radarView = null;
+let radarRefreshTimer = null;
+let radarRequestSequence = 0;
+let radarController = null;
 let radarManifestCache = null;
 let radarManifestFetchedAt = 0;
-
-let radarAnimationTimer = null;
-let radarRequestSequence = 0;
-
-let radarMap = null;
-let radarBaseLayer = null;
-let radarMarker = null;
-let radarTileLayers = [];
-let radarResizeObserver = null;
-
-
-/* Only show radar in the desktop dashboard layout. */
+let radarLastAttemptAt = 0;
+const radarBaseCache = new Map();
 
 function radarDesktopEnabled() {
-
-  return window.matchMedia(
-    "(min-width: 701px)"
-  ).matches;
-
+  return window.matchMedia("(min-width: 701px)").matches;
 }
-
-
-/* Radar should pause when the tab/card is not active. */
 
 function radarIsActive() {
-
-  return (
-    radarDesktopEnabled() &&
-    !document.hidden &&
-    weatherCardVisible
-  );
-
+  return radarDesktopEnabled() && !document.hidden && weatherCardVisible;
 }
 
+function radarAirportKey(airport) {
+  return `${airport.code}:${airport.lat}:${airport.lon}`;
+}
 
-/* =====================================================
-   GET RAINVIEWER MANIFEST
-   Cache for 10 minutes.
-   ===================================================== */
+function radarTimeLabel(frame, airport) {
+  const date = new Date(frame.time * 1000);
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      timeZone: airport.timezone,
+      hour: "numeric", minute: "2-digit", timeZoneName: "short"
+    }).format(date);
+  } catch (_) {
+    return date.toLocaleTimeString("en-US", {
+      timeZone: "UTC", hour: "numeric", minute: "2-digit", timeZoneName: "short"
+    });
+  }
+}
 
-async function getRadarManifest() {
+/* Fixed logical geometry avoids measuring a hidden/transitioning card.
+ * Both layers share this exact EPSG:3857 extent and centered crop.
+ */
+function radarGeometry(airport) {
+  const lat = Number(airport.lat);
+  const lon = Number(airport.lon);
+  if (airport.lat == null || airport.lon == null ||
+      !Number.isFinite(lat) || !Number.isFinite(lon) ||
+      Math.abs(lat) > 85.05112878 || Math.abs(lon) > 180) {
+    throw new Error("Airport map coordinates are unavailable.");
+  }
+  const sin = Math.sin(lat * Math.PI / 180);
+  const x = (lon + 180) / 360 * radarWorldPixels;
+  const y = (0.5 - Math.log((1 + sin) / (1 - sin)) / (4 * Math.PI)) * radarWorldPixels;
+  const metersPerPixel = radarWorldMeters / radarWorldPixels;
+  const centerX = (x / radarWorldPixels - 0.5) * radarWorldMeters;
+  const centerY = (0.5 - y / radarWorldPixels) * radarWorldMeters;
+  const halfWidth = radarImageWidth * metersPerPixel / 2;
+  const halfHeight = radarImageHeight * metersPerPixel / 2;
+  return {
+    left: x - radarImageWidth / 2,
+    top: y - radarImageHeight / 2,
+    bbox: [centerX - halfWidth, centerY - halfHeight,
+      centerX + halfWidth, centerY + halfHeight].join(",")
+  };
+}
 
-  const now =
-    Date.now();
+function installRadarStyles() {
+  if (document.getElementById("dashboardStaticRadarStyles")) return;
+  const style = document.createElement("style");
+  style.id = "dashboardStaticRadarStyles";
+  style.textContent = `
+    #weatherRadar { min-width: 0; max-width: 100%; }
+    #weatherRadar[hidden] { display: none !important; }
+    #weatherRadarMap {
+      position: relative !important; display: block !important;
+      width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+      height: 240px !important; min-height: 240px !important; max-height: 240px !important;
+      flex: 0 0 240px !important; aspect-ratio: auto !important;
+      padding: 0 !important; box-sizing: border-box !important;
+      overflow: hidden !important; isolation: isolate;
+      background: #e6e9e2 !important; border-radius: 12px;
+    }
+    #weatherRadarMap .dashboard-radar-static-layer {
+      position: absolute !important; display: block !important;
+      left: 50% !important; top: 50% !important; right: auto !important; bottom: auto !important;
+      width: 100% !important; height: 100% !important;
+      min-width: 0 !important; max-width: none !important;
+      min-height: 0 !important; max-height: none !important;
+      margin: 0 !important; padding: 0 !important;
+      transform: translate(-50%, -50%) !important;
+      object-fit: cover !important; object-position: center !important;
+      pointer-events: none;
+    }
+    #weatherRadarMap .dashboard-radar-static-base { z-index: 0; }
+    #weatherRadarMap .dashboard-radar-static-overlay { z-index: 1; opacity: .82; }
+    #weatherRadarMap .dashboard-radar-static-marker {
+      position: absolute; left: 50%; top: 50%; z-index: 2;
+      width: 14px; height: 14px; box-sizing: border-box;
+      transform: translate(-50%, -50%); border: 3px solid white;
+      border-radius: 50%; background: #234d37; box-shadow: 0 0 0 2px #234d37, 0 2px 7px #0007;
+    }
+    #weatherRadarMap .dashboard-radar-static-message {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      padding: 20px; text-align: center; color: #33463b; font-size: 13px;
+    }
+    #weatherRadarMap .dashboard-radar-static-credit {
+      position: absolute; bottom: 0; right: 0; z-index: 3;
+      max-width: 100%; padding: 3px 6px; background: #ffffffeb;
+      color: #26352d; font: 10px/1.3 sans-serif; text-align: right;
+    }
+    #weatherRadarMap .dashboard-radar-static-credit a { color: #26352d; text-decoration: underline; }
+  `;
+  document.head.appendChild(style);
+}
 
+function radarLink(label, url) {
+  const link = document.createElement("a");
+  link.textContent = label;
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  return link;
+}
 
-  if (
-    radarManifestCache &&
-    now - radarManifestFetchedAt < 600000
-  ) {
+function prepareRadarView(airport) {
+  const map = document.getElementById("weatherRadarMap");
+  if (!map) return null;
+  const key = radarAirportKey(airport);
+  if (radarView?.key === key && radarView.map === map) return radarView;
+  installRadarStyles();
+  map.replaceChildren();
+  map.setAttribute("role", "group");
+  map.setAttribute("aria-label", `Weather radar map centered on ${airport.code}`);
+  const message = document.createElement("div");
+  message.className = "dashboard-radar-static-message";
+  message.textContent = "Loading airport map…";
+  const marker = document.createElement("div");
+  marker.className = "dashboard-radar-airport-marker dashboard-radar-static-marker";
+  marker.title = `${airport.code} airport`;
+  marker.setAttribute("aria-label", `${airport.code} airport location`);
+  const credit = document.createElement("div");
+  credit.className = "dashboard-radar-static-credit";
+  credit.append(
+    radarLink("Map: Esri & contributors", "https://goto.arcgisonline.com/maps/World_Street_Map"),
+    document.createTextNode(" · "),
+    radarLink("Radar: RainViewer", "https://www.rainviewer.com/")
+  );
+  map.append(message, marker, credit);
+  const source = document.getElementById("weatherRadarSource");
+  if (source?.tagName === "A") {
+    source.href = "https://www.rainviewer.com/";
+    source.textContent = "RainViewer ↗";
+    source.hidden = false;
+  }
+  radarView = {key, map, message, marker, credit, base: null, overlay: null, framePath: ""};
+  return radarView;
+}
+
+function radarStatus(text) {
+  const time = document.getElementById("weatherRadarTime");
+  if (time) time.textContent = text;
+  if (radarView) radarView.map.title = text;
+}
+
+/* Decode an image before displaying it. No cross-origin pixel reads are
+ * needed: the radar canvas is displayed directly, never exported.
+ */
+function loadRadarImage(url, signal) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.referrerPolicy = "strict-origin-when-cross-origin";
+    let finished = false;
+    const timer = setTimeout(() => finish(new Error("Map image timed out.")), 15000);
+    const abort = () => finish(new DOMException("Radar request canceled.", "AbortError"));
+    function finish(error) {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      signal.removeEventListener("abort", abort);
+      image.onload = image.onerror = null;
+      if (error) { image.removeAttribute("src"); reject(error); }
+      else resolve(image);
+    }
+    image.onload = () => {
+      if (!image.naturalWidth || !image.naturalHeight) {
+        finish(new Error("Map image was empty."));
+        return;
+      }
+      // onload already guarantees image decoding; avoid decode() incompatibilities.
+      finish();
+    };
+    image.onerror = () => finish(new Error("Map image could not load."));
+    signal.addEventListener("abort", abort, {once: true});
+    if (signal.aborted) abort();
+    else image.src = url;
+  });
+}
+
+async function loadRadarBase(geometry, key, signal) {
+  if (radarBaseCache.has(key)) return radarBaseCache.get(key).cloneNode();
+  const parameters = new URLSearchParams({
+    bbox: geometry.bbox, bboxSR: "3857", imageSR: "3857",
+    size: `${radarImageWidth},${radarImageHeight}`,
+    format: "png32", transparent: "false", dpi: "96", f: "image"
+  });
+  // Each service returns ONE complete image; no browser basemap tile grid.
+  for (const service of ["World_Street_Map", "World_Topo_Map"]) {
+    try {
+      const image = await loadRadarImage(
+        `https://services.arcgisonline.com/ArcGIS/rest/services/${service}/MapServer/export?${parameters}`,
+        signal
+      );
+      image.className = "dashboard-radar-static-layer dashboard-radar-static-base";
+      image.alt = "";
+      image.dataset.mapService = service;
+      radarBaseCache.set(key, image);
+      if (radarBaseCache.size > 12) radarBaseCache.delete(radarBaseCache.keys().next().value);
+      return image;
+    } catch (error) {
+      if (signal.aborted) throw error;
+    }
+  }
+  throw new Error("Static map services are unavailable.");
+}
+
+async function getRadarManifest(signal) {
+  if (radarManifestCache && Date.now() - radarManifestFetchedAt < radarRefreshMilliseconds) {
     return radarManifestCache;
   }
-
-
-  const controller =
-    new AbortController();
-
-
-  const timer =
-    setTimeout(
-      () => controller.abort(),
-      12000
-    );
-
-
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  signal.addEventListener("abort", abort, {once: true});
+  if (signal.aborted) controller.abort();
+  const timer = setTimeout(abort, 12000);
   try {
-
-    const response =
-      await fetch(
-        radarManifestURL,
-        {
-          signal: controller.signal,
-          cache: "no-cache"
-        }
-      );
-
-
-    if (!response.ok) {
-      throw new Error(
-        `Radar API returned HTTP ${response.status}`
-      );
+    const response = await fetch(radarManifestURL, {signal: controller.signal, cache: "no-cache"});
+    if (!response.ok) throw new Error(`Radar API returned HTTP ${response.status}`);
+    const data = await response.json();
+    if (!data?.host || !Array.isArray(data?.radar?.past)) {
+      throw new Error("Radar API response was invalid.");
     }
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !data?.host ||
-      !Array.isArray(
-        data?.radar?.past
-      )
-    ) {
-      throw new Error(
-        "Radar API response was invalid."
-      );
+    const host = new URL(data.host);
+    if (host.protocol !== "https:" ||
+        !(host.hostname === "rainviewer.com" || host.hostname.endsWith(".rainviewer.com"))) {
+      throw new Error("Radar image host was invalid.");
     }
-
-
-    radarManifestCache =
-      data;
-
-
-    radarManifestFetchedAt =
-      now;
-
-
+    radarManifestCache = data;
+    radarManifestFetchedAt = Date.now();
     return data;
-
   } finally {
-
-    clearTimeout(
-      timer
-    );
-
+    clearTimeout(timer);
+    signal.removeEventListener("abort", abort);
   }
-
 }
 
-
-/* =====================================================
-   FORMAT RADAR FRAME TIME
-   ===================================================== */
-
-function radarTimeLabel(
-  frame,
-  airport
-) {
-
-  return new Intl.DateTimeFormat(
-    "en-US",
-    {
-      timeZone:
-        airport.timezone,
-
-      hour:
-        "numeric",
-
-      minute:
-        "2-digit",
-
-      timeZoneName:
-        "short"
+async function loadRadarOverlay(manifest, frame, geometry, signal) {
+  const canvas = document.createElement("canvas");
+  canvas.width = radarImageWidth;
+  canvas.height = radarImageHeight;
+  canvas.className = "dashboard-radar-static-layer dashboard-radar-static-overlay";
+  canvas.setAttribute("aria-hidden", "true");
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Radar image rendering is unavailable.");
+  const jobs = [];
+  const count = 2 ** radarZoom;
+  for (let y = Math.floor(geometry.top / 256);
+       y <= Math.floor((geometry.top + radarImageHeight - 1) / 256); y++) {
+    for (let x = Math.floor(geometry.left / 256);
+         x <= Math.floor((geometry.left + radarImageWidth - 1) / 256); x++) {
+      if (y < 0 || y >= count) continue;
+      const wrappedX = ((x % count) + count) % count;
+      const url = `${manifest.host.replace(/\/$/, "")}${frame.path}/256/${radarZoom}/${wrappedX}/${y}/2/1_1.png`;
+      jobs.push(loadRadarImage(url, signal).then(image => {
+        context.drawImage(image, x * 256 - geometry.left, y * 256 - geometry.top, 256, 256);
+      }));
     }
-  ).format(
-    new Date(
-      frame.time * 1000
-    )
-  );
-
+  }
+  // Atomic commit: one failed radar tile leaves the COMPLETE base visible.
+  await Promise.all(jobs);
+  return canvas;
 }
 
-
-/* =====================================================
-   LEAFLET SIZE / TILE REFRESH
-   ===================================================== */
-
-function refreshRadarMapLayout() {
-
-  if (!radarMap) {
-    return;
-  }
-
-
-  requestAnimationFrame(
-    () => {
-
-      radarMap.invalidateSize(
-        {
-          animate: false,
-          pan: false
-        }
-      );
-
+async function refreshRadar() {
+  if (!radarAirport || !radarView || !radarIsActive() || radarController) return;
+  const airport = radarAirport;
+  const view = radarView;
+  const sequence = ++radarRequestSequence;
+  const controller = new AbortController();
+  radarController = controller;
+  radarLastAttemptAt = Date.now();
+  const current = () => sequence === radarRequestSequence && radarView === view && radarIsActive();
+  try {
+    const geometry = radarGeometry(airport);
+    if (!view.base) {
+      const image = await loadRadarBase(geometry, view.key, controller.signal);
+      if (!current()) return;
+      view.map.prepend(image);
+      view.base = image;
+      view.message.remove();
+      view.credit.firstChild.href = `https://goto.arcgisonline.com/maps/${image.dataset.mapService}`;
+      radarStatus("Map ready · Loading radar…");
     }
-  );
-
-}
-
-
-/* =====================================================
-   INITIALIZE LEAFLET MAP
-   ===================================================== */
-
-function ensureRadarMap(
-  airport
-) {
-
-  const mapElement =
-    document.getElementById(
-      "weatherRadarMap"
-    );
-
-
-  if (
-    !mapElement ||
-    typeof window.L === "undefined"
-  ) {
-    return null;
-  }
-
-
-  const center = [
-    Number(airport.lat),
-    Number(airport.lon)
-  ];
-
-
-  if (!radarMap) {
-
-    radarMap =
-      L.map(
-        mapElement,
-        {
-          center,
-          zoom: 6,
-          minZoom: 6,
-          maxZoom: 6,
-          zoomControl: false,
-          attributionControl: true,
-          dragging: false,
-          scrollWheelZoom: false,
-          doubleClickZoom: false,
-          boxZoom: false,
-          keyboard: false,
-          touchZoom: false,
-          tap: false
-        }
-      );
-
-
-    radarBaseLayer =
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-          subdomains:
-            "abcd",
-
-          minZoom: 6,
-          maxZoom: 6,
-          maxNativeZoom: 20,
-
-          updateWhenIdle: true,
-          keepBuffer: 1,
-
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
-        }
-      );
-
-
-    radarBaseLayer.on(
-      "tileerror",
-      event => {
-        console.info(
-          "CARTO basemap tile failed:",
-          event?.tile?.src || ""
-        );
-      }
-    );
-
-
-    radarBaseLayer.addTo(
-      radarMap
-    );
-
-
-    if (
-      !radarResizeObserver &&
-      typeof ResizeObserver !== "undefined"
-    ) {
-
-      radarResizeObserver =
-        new ResizeObserver(
-          () => {
-
-            refreshRadarMapLayout();
-
-          }
-        );
-
-
-      radarResizeObserver.observe(
-        mapElement
-      );
-
+    const manifest = await getRadarManifest(controller.signal);
+    if (!current()) return;
+    const frame = manifest.radar.past
+      .filter(item => Number.isFinite(item.time) && /^\/v2\/radar\/[^?#]+$/.test(item.path))
+      .reduce((latest, item) => !latest || item.time > latest.time ? item : latest, null);
+    if (!frame) throw new Error("No radar frames available.");
+    // Do not present an old feed as current weather.
+    if (Date.now() - frame.time * 1000 > 1800000 || frame.time * 1000 > Date.now() + 300000) {
+      throw new Error("Latest radar frame is stale.");
     }
-
-
-  } else {
-
-    radarMap.setView(
-      center,
-      6,
-      {
-        animate: false
-      }
-    );
-
-  }
-
-
-  if (radarMarker) {
-    radarMap.removeLayer(
-      radarMarker
-    );
-  }
-
-
-  const markerIcon =
-    L.divIcon(
-      {
-        className:
-          "dashboard-radar-airport-marker-wrap",
-
-        html:
-          '<div class="dashboard-radar-airport-marker" aria-hidden="true"></div>',
-
-        iconSize:
-          [16, 16],
-
-        iconAnchor:
-          [8, 8]
-      }
-    );
-
-
-  radarMarker =
-    L.marker(
-      center,
-      {
-        icon:
-          markerIcon,
-
-        interactive:
-          false,
-
-        keyboard:
-          false
-      }
-    )
-    .addTo(
-      radarMap
-    );
-
-
-  /*
-   * Leaflet may initialize while the surrounding card is
-   * transitioning from hidden to visible. Recalculate its
-   * geometry after the browser has laid out the card, then
-   * reapply the airport center using the final map width.
-   */
-
-  refreshRadarMapLayout();
-
-
-  requestAnimationFrame(
-    () => {
-
-      radarMap?.invalidateSize(
-        {
-          animate: false,
-          pan: false
-        }
-      );
-
-
-      radarMap?.setView(
-        center,
-        6,
-        {
-          animate: false
-        }
-      );
-
-
-      setTimeout(
-        () => {
-
-          radarMap?.invalidateSize(
-            {
-              animate: false,
-              pan: false
-            }
-          );
-
-
-          radarMap?.setView(
-            center,
-            6,
-            {
-              animate: false
-            }
-          );
-
-
-          /*
-           * Do not force tile-layer redraws here.
-           * Leaflet will request only the tiles needed for
-           * the final viewport after invalidateSize().
-           */
-
-        },
-        220
-      );
-
+    if (view.framePath !== frame.path || !view.overlay) {
+      const overlay = await loadRadarOverlay(manifest, frame, geometry, controller.signal);
+      if (!current()) return;
+      view.overlay?.remove();
+      view.map.insertBefore(overlay, view.marker);
+      view.overlay = overlay;
+      view.framePath = frame.path;
     }
-  );
-
-
-  return radarMap;
-
-}
-
-
-/* =====================================================
-   REMOVE OLD RADAR TILE LAYERS
-   ===================================================== */
-
-function clearRadarTileLayers() {
-
-  if (!radarMap) {
-    radarTileLayers = [];
-    return;
-  }
-
-
-  radarTileLayers.forEach(
-    layer => {
-
-      if (
-        radarMap.hasLayer(
-          layer
-        )
-      ) {
-        radarMap.removeLayer(
-          layer
-        );
-      }
-
+    radarStatus(`Latest radar · ${radarTimeLabel(frame, airport)}`);
+  } catch (error) {
+    if (!current()) return;
+    controller.abort();
+    view.overlay?.remove();
+    view.overlay = null;
+    view.framePath = "";
+    if (view.base) radarStatus("Radar unavailable · Static map");
+    else {
+      view.message.textContent = "Airport map temporarily unavailable. It will retry automatically.";
+      radarStatus("Map unavailable");
     }
-  );
-
-
-  radarTileLayers = [];
-
-}
-
-
-/* =====================================================
-   BUILD THE SIX RECENT RADAR FRAMES
-   ===================================================== */
-
-function buildRadarTileLayers() {
-
-  if (
-    !radarMap ||
-    !radarFrames.length ||
-    !radarHost
-  ) {
-    return;
+    console.info("Airport radar:", error.message);
+  } finally {
+    if (radarController === controller) radarController = null;
   }
-
-
-  clearRadarTileLayers();
-
-
-  const frame =
-    radarFrames[
-      radarFrames.length - 1
-    ];
-
-
-  const tileURL =
-    `${radarHost}${frame.path}` +
-    "/256/{z}/{x}/{y}/2/1_1.png";
-
-
-  const layer =
-    L.tileLayer(
-      tileURL,
-      {
-        minZoom: 6,
-        maxZoom: 7,
-        maxNativeZoom: 7,
-
-        tileSize: 256,
-
-        opacity: 0.82,
-        zIndex: 240,
-
-        updateWhenIdle: true,
-        keepBuffer: 1,
-
-        attribution:
-          '<a href="https://www.rainviewer.com/" target="_blank" rel="noopener">Radar: RainViewer</a>'
-      }
-    );
-
-
-  layer.on(
-    "tileerror",
-    event => {
-      console.info(
-        "RainViewer radar tile failed:",
-        event?.tile?.src || tileURL
-      );
-    }
-  );
-
-
-  layer.addTo(
-    radarMap
-  );
-
-
-  radarTileLayers = [
-    layer
-  ];
-
-
-  radarFrameIndex =
-    radarFrames.length - 1;
-
-
-  radarMarker?.setZIndexOffset(
-    1000
-  );
-
-
-  refreshRadarMapLayout();
-
 }
-
-
-/* =====================================================
-   DISPLAY ONE RADAR FRAME
-   ===================================================== */
-
-function showRadarFrame() {
-
-  if (
-    !radarAirport ||
-    !radarFrames.length ||
-    !radarTileLayers.length
-  ) {
-    return;
-  }
-
-
-  const time =
-    document.getElementById(
-      "weatherRadarTime"
-    );
-
-
-  const container =
-    document.getElementById(
-      "weatherRadar"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  const frame =
-    radarFrames[
-      radarFrames.length - 1
-    ];
-
-
-  if (time) {
-
-    time.textContent =
-      radarTimeLabel(
-        frame,
-        radarAirport
-      );
-
-  }
-
-
-  container.hidden =
-    false;
-
-
-  refreshRadarMapLayout();
-
-}
-
-
-/* =====================================================
-   START RADAR ANIMATION
-   ===================================================== */
-
-function startRadarAnimation() {
-
-  clearInterval(
-    radarAnimationTimer
-  );
-
-
-  radarAnimationTimer =
-    null;
-
-
-  /*
-   * Intentionally static for stability.
-   * A single latest RainViewer frame dramatically lowers
-   * tile-request volume and avoids rate-limit failures.
-   */
-
-  showRadarFrame();
-
-}
-
-
-/* =====================================================
-   STOP RADAR ANIMATION
-   ===================================================== */
 
 function stopRadarAnimation() {
-
-  clearInterval(
-    radarAnimationTimer
-  );
-
-
-  radarAnimationTimer =
-    null;
-
+  clearInterval(radarRefreshTimer);
+  radarRefreshTimer = null;
+  if (radarController) {
+    radarRequestSequence++;
+    radarController.abort();
+    radarController = null;
+    // An interrupted request should resume immediately on activation.
+    radarLastAttemptAt = 0;
+  }
 }
-
-
-/* =====================================================
-   LOAD RADAR FOR SELECTED AIRPORT
-   ===================================================== */
-
-async function updateRadar(
-  airport
-) {
-
-  radarAirport =
-    airport;
-
-
-  radarRequestSequence++;
-
-
-  const sequence =
-    radarRequestSequence;
-
-
-  const container =
-    document.getElementById(
-      "weatherRadar"
-    );
-
-
-  const label =
-    document.getElementById(
-      "weatherRadarLabel"
-    );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  stopRadarAnimation();
-
-
-  if (
-    !radarDesktopEnabled()
-  ) {
-
-    container.hidden =
-      true;
-
-    return;
-  }
-
-
-  if (label) {
-
-    label.textContent =
-      `RADAR · ${airport.code}`;
-
-  }
-
-
-  /*
-   * Reveal the shell before Leaflet initializes so it can
-   * calculate the map's real dimensions correctly.
-   */
-
-  container.hidden =
-    false;
-
-
-  const map =
-    ensureRadarMap(
-      airport
-    );
-
-
-  if (!map) {
-
-    container.hidden =
-      true;
-
-    console.info(
-      "Airport radar unavailable: Leaflet did not load."
-    );
-
-    return;
-  }
-
-
-  clearRadarTileLayers();
-
-
-  try {
-
-    const manifest =
-      await getRadarManifest();
-
-
-    if (
-      sequence !==
-      radarRequestSequence
-    ) {
-      return;
-    }
-
-
-    /*
-     * Use only the newest historical frame for now.
-     * This keeps request volume low and makes the radar
-     * reliable before animation is reintroduced.
-     */
-
-    const frames =
-      manifest.radar.past
-        .slice(-1);
-
-
-    if (!frames.length) {
-      throw new Error(
-        "No radar frames available."
-      );
-    }
-
-
-    radarFrames =
-      frames;
-
-
-    radarHost =
-      manifest.host;
-
-
-    buildRadarTileLayers();
-
-
-    showRadarFrame();
-
-
-    startRadarAnimation();
-
-  } catch (error) {
-
-    if (
-      sequence !==
-      radarRequestSequence
-    ) {
-      return;
-    }
-
-
-    console.info(
-      "Airport radar unavailable:",
-      error
-    );
-
-
-    clearRadarTileLayers();
-
-
-    container.hidden =
-      true;
-
-  }
-
-}
-
-
-/* =====================================================
-   RADAR ACTIVITY MANAGEMENT
-   ===================================================== */
 
 function syncRadarActivity() {
-
-  if (
-    radarIsActive()
-  ) {
-
-    if (
-      radarAirport &&
-      radarFrames.length &&
-      radarTileLayers.length
-    ) {
-
-      refreshRadarMapLayout();
-
-
-      startRadarAnimation();
-
-    }
-
-  } else {
-
-    stopRadarAnimation();
-
+  const container = document.getElementById("weatherRadar");
+  if (!container || !radarAirport) return;
+  container.hidden = !radarDesktopEnabled();
+  if (!radarIsActive()) { stopRadarAnimation(); return; }
+  if (!radarView) radarView = prepareRadarView(radarAirport);
+  if (!radarView) return;
+  if (!radarLastAttemptAt || Date.now() - radarLastAttemptAt >= radarRefreshMilliseconds) {
+    void refreshRadar();
   }
-
+  if (!radarRefreshTimer) {
+    radarRefreshTimer = setInterval(() => {
+      if (radarIsActive()) void refreshRadar();
+      else stopRadarAnimation();
+    }, radarRefreshMilliseconds);
+  }
 }
 
+function updateRadar(airport) {
+  stopRadarAnimation();
+  radarRequestSequence++;
+  radarAirport = airport;
+  radarLastAttemptAt = 0;
+  const container = document.getElementById("weatherRadar");
+  if (!container) return;
+  const label = document.getElementById("weatherRadarLabel");
+  if (label) label.textContent = `RADAR · ${airport.code}`;
+  // Clear old airport imagery even if its replacement is currently inactive.
+  radarView = prepareRadarView(airport);
+  if (radarView && !radarView.base) radarStatus("Loading airport map…");
+  syncRadarActivity();
+}
 
-window
-  .matchMedia(
-    "(min-width: 701px)"
-  )
-  .addEventListener?.(
-    "change",
-    () => {
+window.matchMedia("(min-width: 701px)").addEventListener?.("change", syncRadarActivity);
 
-      const container =
-        document.getElementById(
-          "weatherRadar"
-        );
-
-
-      if (
-        radarAirport &&
-        radarDesktopEnabled()
-      ) {
-
-        updateRadar(
-          radarAirport
-        );
-
-      } else {
-
-        stopRadarAnimation();
-
-
-        if (container) {
-          container.hidden =
-            true;
-        }
-
-      }
-
-    }
-  );
 
 const weatherImages = {
 
