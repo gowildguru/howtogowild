@@ -2263,6 +2263,31 @@ z-index: 2;
   background-color: #040706;
 }
 
+/*
+  Soft bridge from the search section into the radial dashboard glow.
+  This masks the section edge while allowing the radial gradient to
+  take over naturally below the heading.
+*/
+#dashboard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 190px;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #66766c 0%,
+      rgba(102, 118, 108, 0.86) 18%,
+      rgba(83, 99, 90, 0.48) 52%,
+      rgba(52, 66, 59, 0) 100%
+    );
+}
+
 #dashboard > .container {
   position: relative;
   z-index: 2;
@@ -5179,9 +5204,22 @@ body.tool-modal-open {
 /* Search between the hero and dashboard */
 .guide-search {
   position: relative;
-  background: var(--green-dark);
   color: white;
   padding: 130px 20px 32px;
+
+  /*
+    Carry the homepage green smoothly into the dashboard glow.
+    The bottom color intentionally matches the top blend layer
+    of #dashboard so there is no hard horizontal section break.
+  */
+  background:
+    linear-gradient(
+      to bottom,
+      var(--green-dark) 0%,
+      #3f5748 44%,
+      #53635a 76%,
+      #66766c 100%
+    );
 }
 
 .guide-search-inner {
