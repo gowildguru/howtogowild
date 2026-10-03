@@ -2247,6 +2247,20 @@ z-index: 2;
   position: relative;
   overflow: hidden;
   isolation: isolate;
+
+  /* United-inspired dashboard glow:
+     HowToGoWild sage at the top center, fading into near-black. */
+  background:
+    radial-gradient(
+      ellipse 85% 52% at 50% 0%,
+      #66766c 0%,
+      #53635a 18%,
+      #34423b 36%,
+      #18231f 56%,
+      #0a100e 76%,
+      #040706 100%
+    );
+  background-color: #040706;
 }
 
 #dashboard > .container {
