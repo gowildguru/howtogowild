@@ -5176,29 +5176,15 @@ body.tool-modal-open {
     transform: translateY(14%);
   }
 }
-/* Search between the hero and dashboard */
+/* Search inside the dashboard, above its heading */
 .guide-search {
   position: relative;
+  z-index: 3;
   color: white;
-  padding: 130px 20px 32px;
-
-  /*
-    Continue the homepage hero artwork through the search section.
-    A slightly deeper lower overlay keeps the search readable and
-    gives the image a clean ending immediately before the dashboard.
-  */
-  background-image:
-    linear-gradient(
-      to bottom,
-      rgba(20, 32, 24, 0.18) 0%,
-      rgba(20, 32, 24, 0.28) 55%,
-      rgba(20, 32, 24, 0.52) 100%
-    ),
-    url("images/120425_Airfield_frontier-0055.jpg");
-  background-size: cover;
-  background-position: center bottom;
+  /* Dashboard padding plus this space clears the overlapping hero copy. */
+  padding: 44px 0 40px;
+  background: transparent;
 }
-
 .guide-search-inner {
   max-width: 720px;
   margin: 0 auto;
@@ -5210,6 +5196,7 @@ body.tool-modal-open {
   text-align: center;
   font-size: 1rem;
   font-weight: 600;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 }
 
 .guide-search-field {
@@ -5218,7 +5205,12 @@ body.tool-modal-open {
   padding: 7px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .guide-search-field input {
@@ -5301,7 +5293,7 @@ body.tool-modal-open {
 
 @media (max-width: 700px) {
   .guide-search {
-    padding: 110px 16px 28px;
+    padding: 32px 0 28px;
   }
 
   .guide-search-field input {
