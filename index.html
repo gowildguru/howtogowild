@@ -10,7 +10,7 @@
     content="An independent guide to Frontier Airlines' GoWild! Pass, including booking tools, route information, pricing help, and practical travel resources."
   >
 
-  <link rel="stylesheet" href="style.css?v=32">
+  <link rel="stylesheet" href="style.css?v=34">
 
   <link
     rel="stylesheet"
@@ -105,41 +105,7 @@
 
   </section>
 
-  <!-- GUIDE SEARCH -->
-  <section class="guide-search" aria-label="Search this guide">
-    <div class="guide-search-inner">
-      <form id="guideSearchForm" role="search">
-        <label for="guideSearchInput" class="guide-search-label">
-          How will you GoWild?
-        </label>
 
-        <div class="guide-search-field">
-          <input
-            id="guideSearchInput"
-            type="search"
-            placeholder="Search this guide"
-            autocomplete="off"
-            maxlength="150"
-            aria-controls="guideSearchResults"
-          >
-          <button type="submit">Search</button>
-        </div>
-      </form>
-
-      <p
-        id="guideSearchStatus"
-        class="guide-search-status"
-        role="status"
-        aria-live="polite"
-      ></p>
-
-      <ul
-        id="guideSearchResults"
-        class="guide-search-results"
-        hidden
-      ></ul>
-    </div>
-  </section>
   
  <!-- DASHBOARD -->
 <section
@@ -159,6 +125,42 @@
   </div>
 
   <div class="container">
+
+    <!-- GUIDE SEARCH -->
+    <section class="guide-search" aria-label="Search this guide">
+      <div class="guide-search-inner">
+        <form id="guideSearchForm" role="search">
+          <label for="guideSearchInput" class="guide-search-label">
+            How will you GoWild?
+          </label>
+
+          <div class="guide-search-field">
+            <input
+              id="guideSearchInput"
+              type="search"
+              placeholder="Search this guide"
+              autocomplete="off"
+              maxlength="150"
+              aria-controls="guideSearchResults"
+            >
+            <button type="submit">Search</button>
+          </div>
+        </form>
+
+        <p
+          id="guideSearchStatus"
+          class="guide-search-status"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <ul
+          id="guideSearchResults"
+          class="guide-search-results"
+          hidden
+        ></ul>
+      </div>
+    </section>
 
     <h2 class="section-heading">
       Your Dashboard
