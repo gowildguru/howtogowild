@@ -601,7 +601,7 @@ z-index: 2;
 
 .tools-section {
   padding: 78px 0 54px;
-  background: #ffffff;
+  background: transparent;
 }
 
 .tools-heading {
@@ -4492,34 +4492,17 @@ body.tool-modal-open {
   content: "";
   position: absolute;
 
-  /* Make the image noticeably wider than the section
-     so it has room to glide without exposing edges. */
-  top: -8%;
-  bottom: -8%;
-  left: -18%;
-  right: -18%;
+  inset: -8% -12%;
 
   z-index: -2;
 
-  background-image: url("images/ccbackground.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background:
+    url("images/ccbackground.jpg")
+    center center / cover no-repeat;
 
-  animation: credit-card-sky-drift 28s linear infinite alternate;
+  animation: credit-card-sky-drift 45s ease-in-out infinite alternate;
 
   will-change: transform;
-  pointer-events: none;
-}
-
-@keyframes credit-card-sky-drift {
-  from {
-    transform: translateX(-6%) scale(1.06);
-  }
-
-  to {
-    transform: translateX(6%) scale(1.06);
-  }
 }
 
 .credit-cards-section::after {
@@ -7160,4 +7143,140 @@ body.tool-modal-open {
     margin-top: 0;
   }
 
+}
+
+
+/* =====================================================
+   HELPFUL TOOLS — FLOATING FROSTED TRANSITION
+   Original four-tool grid and responsive sizing preserved.
+   ===================================================== */
+
+.tools-section {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  color: #ffffff;
+}
+
+/* Reuse the next section's sky. Fully dark edges hide crop and
+   animation differences, creating a soft blend without a hard seam. */
+.tools-section::before,
+.tools-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tools-section::before {
+  z-index: -2;
+  background: #040706 url("images/ccbackground.jpg") center top / cover no-repeat;
+}
+
+.tools-section::after {
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #040706 0%,
+    rgba(4, 7, 6, 0.98) 8%,
+    rgba(4, 7, 6, 0.76) 30%,
+    rgba(4, 7, 6, 0.34) 62%,
+    rgba(4, 7, 6, 0.55) 80%,
+    #040706 100%
+  );
+}
+
+.tools-section .tools-heading {
+  color: #ffffff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.tools-section .simple-tool {
+  padding: 18px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 20px;
+  background: rgba(102, 118, 108, 0.18);
+  color: #ffffff;
+  -webkit-backdrop-filter: blur(16px) saturate(115%);
+  backdrop-filter: blur(16px) saturate(115%);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.18s ease, background 0.18s ease,
+    border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tools-section .simple-tool:hover {
+  transform: translateY(-3px);
+  background: rgba(102, 118, 108, 0.28);
+  border-color: rgba(255, 255, 255, 0.34);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.tools-section .simple-tool:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+.tools-section .simple-tool-icon,
+.tools-section .simple-tool-title {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(102, 118, 108, 0.36);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.tools-section .simple-tool:hover .simple-tool-title {
+  background: rgba(102, 118, 108, 0.52);
+}
+
+.tools-section .simple-tool-description {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.30);
+}
+
+/* Blend the matching dark edge into the existing animated sky.
+   Only the immediately following credit-card section is affected.
+   Preserve its original overlay underneath this additional fade. */
+.tools-section + .credit-cards-section::after {
+  background:
+    linear-gradient(
+      180deg,
+      #040706 0,
+      rgba(4, 7, 6, 0.80) 40px,
+      rgba(4, 7, 6, 0.34) 100px,
+      rgba(4, 7, 6, 0) 180px
+    ),
+    linear-gradient(
+      rgba(8, 16, 13, 0.10),
+      rgba(8, 16, 13, 0.20)
+    );
+}
+
+@media (max-width: 600px) {
+  .tools-section .simple-tool {
+    padding: 16px 10px;
+    border-radius: 16px;
+  }
+}
+
+/* Readable translucent fallback for browsers without backdrop blur. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .tools-section .simple-tool {
+    background: rgba(38, 51, 43, 0.78);
+  }
+  .tools-section .simple-tool:hover {
+    background: rgba(53, 77, 61, 0.86);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools-section .simple-tool {
+    transition: none;
+  }
+  .tools-section .simple-tool:hover {
+    transform: none;
+  }
 }
