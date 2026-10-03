@@ -2263,31 +2263,6 @@ z-index: 2;
   background-color: #040706;
 }
 
-/*
-  Soft bridge from the search section into the radial dashboard glow.
-  This masks the section edge while allowing the radial gradient to
-  take over naturally below the heading.
-*/
-#dashboard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 190px;
-  z-index: 0;
-  pointer-events: none;
-
-  background:
-    linear-gradient(
-      to bottom,
-      #66766c 0%,
-      rgba(102, 118, 108, 0.86) 18%,
-      rgba(83, 99, 90, 0.48) 52%,
-      rgba(52, 66, 59, 0) 100%
-    );
-}
-
 #dashboard > .container {
   position: relative;
   z-index: 2;
@@ -5208,18 +5183,20 @@ body.tool-modal-open {
   padding: 130px 20px 32px;
 
   /*
-    Carry the homepage green smoothly into the dashboard glow.
-    The bottom color intentionally matches the top blend layer
-    of #dashboard so there is no hard horizontal section break.
+    Continue the homepage hero artwork through the search section.
+    A slightly deeper lower overlay keeps the search readable and
+    gives the image a clean ending immediately before the dashboard.
   */
-  background:
+  background-image:
     linear-gradient(
       to bottom,
-      var(--green-dark) 0%,
-      #3f5748 44%,
-      #53635a 76%,
-      #66766c 100%
-    );
+      rgba(20, 32, 24, 0.18) 0%,
+      rgba(20, 32, 24, 0.28) 55%,
+      rgba(20, 32, 24, 0.52) 100%
+    ),
+    url("images/120425_Airfield_frontier-0055.jpg");
+  background-size: cover;
+  background-position: center bottom;
 }
 
 .guide-search-inner {
