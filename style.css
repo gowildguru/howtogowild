@@ -4492,17 +4492,34 @@ body.tool-modal-open {
   content: "";
   position: absolute;
 
-  inset: -8% -12%;
+  /* Make the image noticeably wider than the section
+     so it has room to glide without exposing edges. */
+  top: -8%;
+  bottom: -8%;
+  left: -18%;
+  right: -18%;
 
   z-index: -2;
 
-  background:
-    url("images/ccbackground.jpg")
-    center center / cover no-repeat;
+  background-image: url("images/ccbackground.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 
-  animation: credit-card-sky-drift 45s ease-in-out infinite alternate;
+  animation: credit-card-sky-drift 28s linear infinite alternate;
 
   will-change: transform;
+  pointer-events: none;
+}
+
+@keyframes credit-card-sky-drift {
+  from {
+    transform: translateX(-6%) scale(1.06);
+  }
+
+  to {
+    transform: translateX(6%) scale(1.06);
+  }
 }
 
 .credit-cards-section::after {
