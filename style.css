@@ -7372,3 +7372,19 @@ body.tool-modal-open {
   .more-main { padding: 40px 20px 56px; }
   .more-answer { padding: 22px; }
 }
+/* Keep every credit card panel as tall as the largest panel. */
+.credit-card-track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.credit-card-panel,
+.credit-card-panel.is-active {
+  position: relative;
+  inset: auto;
+  grid-area: 1 / 1;
+  align-self: stretch;
+  min-width: 0;
+}
+
