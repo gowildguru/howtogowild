@@ -1,0 +1,2470 @@
+{
+  "date": "2026-10-06",
+  "daysAhead": 2,
+  "generatedAt": "2026-10-04T13:53:50.436Z",
+  "routeLookups": 680,
+  "flightCount": 463,
+  "airports": {
+    "ATL": [
+      {
+        "destination": "PHL",
+        "departureTime": "05:10 AM",
+        "flightNumber": "1004"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "06:00 AM",
+        "flightNumber": "1403"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "06:30 AM",
+        "flightNumber": "1242"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "06:41 AM",
+        "flightNumber": "1449"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "07:20 AM",
+        "flightNumber": "2172"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "07:30 AM",
+        "flightNumber": "2510"
+      },
+      {
+        "destination": "EWR",
+        "departureTime": "08:11 AM",
+        "flightNumber": "2282"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "08:33 AM",
+        "flightNumber": "4891"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "08:35 AM",
+        "flightNumber": "4406"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "08:52 AM",
+        "flightNumber": "2082"
+      },
+      {
+        "destination": "BOS",
+        "departureTime": "09:28 AM",
+        "flightNumber": "3512"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "09:58 AM",
+        "flightNumber": "4315"
+      },
+      {
+        "destination": "MSP",
+        "departureTime": "10:03 AM",
+        "flightNumber": "3045"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "10:05 AM",
+        "flightNumber": "2898"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "10:06 AM",
+        "flightNumber": "3782"
+      },
+      {
+        "destination": "CVG",
+        "departureTime": "10:07 AM",
+        "flightNumber": "4771"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "10:35 AM",
+        "flightNumber": "1269"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "10:35 AM",
+        "flightNumber": "1441"
+      },
+      {
+        "destination": "ORF",
+        "departureTime": "10:48 AM",
+        "flightNumber": "3072"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "11:10 AM",
+        "flightNumber": "1168"
+      },
+      {
+        "destination": "LGA",
+        "departureTime": "01:49 PM",
+        "flightNumber": "3454"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "02:52 PM",
+        "flightNumber": "2634"
+      },
+      {
+        "destination": "IAD",
+        "departureTime": "03:25 PM",
+        "flightNumber": "4410"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "03:30 PM",
+        "flightNumber": "2050"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "03:44 PM",
+        "flightNumber": "2912"
+      },
+      {
+        "destination": "MSY",
+        "departureTime": "03:45 PM",
+        "flightNumber": "1371"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "03:49 PM",
+        "flightNumber": "3215"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "04:06 PM",
+        "flightNumber": "2552"
+      },
+      {
+        "destination": "AUS",
+        "departureTime": "04:19 PM",
+        "flightNumber": "4211"
+      },
+      {
+        "destination": "MDW",
+        "departureTime": "04:50 PM",
+        "flightNumber": "2779"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "05:02 PM",
+        "flightNumber": "1595"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "05:05 PM",
+        "flightNumber": "3097"
+      },
+      {
+        "destination": "CMH",
+        "departureTime": "05:15 PM",
+        "flightNumber": "2540"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "05:45 PM",
+        "flightNumber": "1447"
+      },
+      {
+        "destination": "JAX",
+        "departureTime": "05:49 PM",
+        "flightNumber": "1550"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "06:35 PM",
+        "flightNumber": "2272"
+      },
+      {
+        "destination": "LGA",
+        "departureTime": "06:40 PM",
+        "flightNumber": "3458"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "06:59 PM",
+        "flightNumber": "4036"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "07:00 PM",
+        "flightNumber": "4428"
+      },
+      {
+        "destination": "EWR",
+        "departureTime": "07:01 PM",
+        "flightNumber": "1158"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "07:38 PM",
+        "flightNumber": "3599"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "08:20 PM",
+        "flightNumber": "3508"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "08:59 PM",
+        "flightNumber": "1115"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "08:59 PM",
+        "flightNumber": "3054"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "09:00 PM",
+        "flightNumber": "2174"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "09:07 PM",
+        "flightNumber": "1102"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "09:08 PM",
+        "flightNumber": "4075"
+      },
+      {
+        "destination": "IAD",
+        "departureTime": "10:24 PM",
+        "flightNumber": "3692"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "10:40 PM",
+        "flightNumber": "1264"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "10:55 PM",
+        "flightNumber": "1670"
+      }
+    ],
+    "AUS": [
+      {
+        "destination": "MCO",
+        "departureTime": "10:58 AM",
+        "flightNumber": "4524"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "03:32 PM",
+        "flightNumber": "3645"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "06:33 PM",
+        "flightNumber": "4702"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "08:24 PM",
+        "flightNumber": "2047"
+      }
+    ],
+    "BDL": [
+      {
+        "destination": "SJU",
+        "departureTime": "09:25 PM",
+        "flightNumber": "4420"
+      }
+    ],
+    "BNA": [
+      {
+        "destination": "MCO",
+        "departureTime": "09:43 AM",
+        "flightNumber": "1286"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "03:14 PM",
+        "flightNumber": "1401"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "05:40 PM",
+        "flightNumber": "3560"
+      }
+    ],
+    "BOI": [],
+    "BOS": [
+      {
+        "destination": "ATL",
+        "departureTime": "12:52 PM",
+        "flightNumber": "3511"
+      }
+    ],
+    "BQN": [
+      {
+        "destination": "MCO",
+        "departureTime": "11:12 AM",
+        "flightNumber": "1097"
+      }
+    ],
+    "BUF": [
+      {
+        "destination": "MCO",
+        "departureTime": "06:51 PM",
+        "flightNumber": "1691"
+      }
+    ],
+    "BUR": [
+      {
+        "destination": "LAS",
+        "departureTime": "01:24 PM",
+        "flightNumber": "4108"
+      }
+    ],
+    "BWI": [
+      {
+        "destination": "ATL",
+        "departureTime": "06:38 AM",
+        "flightNumber": "2633"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "08:19 AM",
+        "flightNumber": "2925"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "09:27 AM",
+        "flightNumber": "3663"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "10:22 AM",
+        "flightNumber": "4427"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "12:45 PM",
+        "flightNumber": "1475"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "01:55 PM",
+        "flightNumber": "4411"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "03:10 PM",
+        "flightNumber": "2309"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "05:42 PM",
+        "flightNumber": "3067"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "09:21 PM",
+        "flightNumber": "2266"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "09:25 PM",
+        "flightNumber": "4537"
+      }
+    ],
+    "CLE": [
+      {
+        "destination": "MCO",
+        "departureTime": "06:00 AM",
+        "flightNumber": "2668"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "10:12 AM",
+        "flightNumber": "2683"
+      },
+      {
+        "destination": "RSW",
+        "departureTime": "11:00 AM",
+        "flightNumber": "2338"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "11:10 AM",
+        "flightNumber": "3074"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "03:45 PM",
+        "flightNumber": "2409"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "04:46 PM",
+        "flightNumber": "1491"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "07:00 PM",
+        "flightNumber": "3231"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "07:59 PM",
+        "flightNumber": "3916"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "09:10 PM",
+        "flightNumber": "3736"
+      }
+    ],
+    "CLT": [
+      {
+        "destination": "MCO",
+        "departureTime": "09:32 AM",
+        "flightNumber": "1759"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "12:05 PM",
+        "flightNumber": "3165"
+      },
+      {
+        "destination": "LGA",
+        "departureTime": "04:01 PM",
+        "flightNumber": "3134"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "05:37 PM",
+        "flightNumber": "1328"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "09:40 PM",
+        "flightNumber": "4093"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "09:59 PM",
+        "flightNumber": "3038"
+      }
+    ],
+    "CMH": [
+      {
+        "destination": "ATL",
+        "departureTime": "07:50 PM",
+        "flightNumber": "2539"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "09:16 PM",
+        "flightNumber": "1612"
+      }
+    ],
+    "CTG": [],
+    "CUN": [],
+    "CVG": [
+      {
+        "destination": "MCO",
+        "departureTime": "08:00 AM",
+        "flightNumber": "3624"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "08:45 AM",
+        "flightNumber": "3521"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "09:00 AM",
+        "flightNumber": "1668"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "12:43 PM",
+        "flightNumber": "1846"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "05:16 PM",
+        "flightNumber": "3725"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "08:56 PM",
+        "flightNumber": "1750"
+      }
+    ],
+    "DCA": [
+      {
+        "destination": "DEN",
+        "departureTime": "07:00 AM",
+        "flightNumber": "685"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "06:00 PM",
+        "flightNumber": "689"
+      }
+    ],
+    "DEN": [
+      {
+        "destination": "IAH",
+        "departureTime": "06:09 AM",
+        "flightNumber": "3206"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "06:40 AM",
+        "flightNumber": "4646"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "07:00 AM",
+        "flightNumber": "1375"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "07:30 AM",
+        "flightNumber": "2349"
+      },
+      {
+        "destination": "ONT",
+        "departureTime": "09:05 AM",
+        "flightNumber": "2907"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "09:05 AM",
+        "flightNumber": "1229"
+      },
+      {
+        "destination": "SLC",
+        "departureTime": "09:07 AM",
+        "flightNumber": "3219"
+      },
+      {
+        "destination": "SMF",
+        "departureTime": "09:20 AM",
+        "flightNumber": "3665"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "10:28 AM",
+        "flightNumber": "3566"
+      },
+      {
+        "destination": "BNA",
+        "departureTime": "10:38 AM",
+        "flightNumber": "1402"
+      },
+      {
+        "destination": "MSP",
+        "departureTime": "10:38 AM",
+        "flightNumber": "1150"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "10:40 AM",
+        "flightNumber": "3366"
+      },
+      {
+        "destination": "IND",
+        "departureTime": "10:42 AM",
+        "flightNumber": "2346"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "10:44 AM",
+        "flightNumber": "3600"
+      },
+      {
+        "destination": "GRR",
+        "departureTime": "10:52 AM",
+        "flightNumber": "1248"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "11:21 AM",
+        "flightNumber": "2748"
+      },
+      {
+        "destination": "DCA",
+        "departureTime": "11:23 AM",
+        "flightNumber": "688"
+      },
+      {
+        "destination": "CVG",
+        "departureTime": "11:24 AM",
+        "flightNumber": "3286"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "01:05 PM",
+        "flightNumber": "4967"
+      },
+      {
+        "destination": "SEA",
+        "departureTime": "01:07 PM",
+        "flightNumber": "1175"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "01:10 PM",
+        "flightNumber": "2341"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "01:18 PM",
+        "flightNumber": "2105"
+      },
+      {
+        "destination": "SLC",
+        "departureTime": "01:46 PM",
+        "flightNumber": "3861"
+      },
+      {
+        "destination": "SAN",
+        "departureTime": "02:29 PM",
+        "flightNumber": "2817"
+      },
+      {
+        "destination": "XNA",
+        "departureTime": "03:54 PM",
+        "flightNumber": "4344"
+      },
+      {
+        "destination": "OMA",
+        "departureTime": "04:03 PM",
+        "flightNumber": "1874"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "04:11 PM",
+        "flightNumber": "4464"
+      },
+      {
+        "destination": "SAT",
+        "departureTime": "04:13 PM",
+        "flightNumber": "2356"
+      },
+      {
+        "destination": "AUS",
+        "departureTime": "04:16 PM",
+        "flightNumber": "1816"
+      },
+      {
+        "destination": "DCA",
+        "departureTime": "04:28 PM",
+        "flightNumber": "690"
+      },
+      {
+        "destination": "ELP",
+        "departureTime": "04:47 PM",
+        "flightNumber": "2261"
+      },
+      {
+        "destination": "MCI",
+        "departureTime": "04:56 PM",
+        "flightNumber": "3376"
+      },
+      {
+        "destination": "OKC",
+        "departureTime": "04:59 PM",
+        "flightNumber": "1928"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "06:38 PM",
+        "flightNumber": "1765"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "06:45 PM",
+        "flightNumber": "4765"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "06:56 PM",
+        "flightNumber": "1280"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:10 PM",
+        "flightNumber": "1450"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "07:12 PM",
+        "flightNumber": "2520"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "08:55 PM",
+        "flightNumber": "3174"
+      },
+      {
+        "destination": "MSP",
+        "departureTime": "09:10 PM",
+        "flightNumber": "1292"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "09:16 PM",
+        "flightNumber": "2996"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "09:19 PM",
+        "flightNumber": "2632"
+      },
+      {
+        "destination": "ONT",
+        "departureTime": "10:29 PM",
+        "flightNumber": "1261"
+      },
+      {
+        "destination": "SAN",
+        "departureTime": "10:29 PM",
+        "flightNumber": "2711"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "10:29 PM",
+        "flightNumber": "3439"
+      },
+      {
+        "destination": "SLC",
+        "departureTime": "10:29 PM",
+        "flightNumber": "4251"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "10:44 PM",
+        "flightNumber": "4339"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "10:47 PM",
+        "flightNumber": "4753"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "10:49 PM",
+        "flightNumber": "777"
+      }
+    ],
+    "DFW": [
+      {
+        "destination": "DTW",
+        "departureTime": "06:05 AM",
+        "flightNumber": "3178"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "06:30 AM",
+        "flightNumber": "1649"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "07:00 AM",
+        "flightNumber": "2549"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "07:20 AM",
+        "flightNumber": "1476"
+      },
+      {
+        "destination": "CLT",
+        "departureTime": "07:30 AM",
+        "flightNumber": "3110"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "07:40 AM",
+        "flightNumber": "3330"
+      },
+      {
+        "destination": "EWR",
+        "departureTime": "07:55 AM",
+        "flightNumber": "2472"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "09:21 AM",
+        "flightNumber": "4018"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "09:59 AM",
+        "flightNumber": "2970"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "10:30 AM",
+        "flightNumber": "1051"
+      },
+      {
+        "destination": "IAD",
+        "departureTime": "11:32 AM",
+        "flightNumber": "3208"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "12:17 PM",
+        "flightNumber": "3971"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "01:23 PM",
+        "flightNumber": "2496"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "01:33 PM",
+        "flightNumber": "3318"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "01:35 PM",
+        "flightNumber": "1952"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "01:59 PM",
+        "flightNumber": "4963"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "02:48 PM",
+        "flightNumber": "2631"
+      },
+      {
+        "destination": "LGA",
+        "departureTime": "03:08 PM",
+        "flightNumber": "3424"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "03:20 PM",
+        "flightNumber": "2402"
+      },
+      {
+        "destination": "MSP",
+        "departureTime": "03:30 PM",
+        "flightNumber": "3224"
+      },
+      {
+        "destination": "ONT",
+        "departureTime": "03:30 PM",
+        "flightNumber": "4689"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "04:33 PM",
+        "flightNumber": "3990"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "05:55 PM",
+        "flightNumber": "2676"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "05:56 PM",
+        "flightNumber": "3242"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:48 PM",
+        "flightNumber": "3022"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "08:22 PM",
+        "flightNumber": "3999"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "08:29 PM",
+        "flightNumber": "4463"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "09:04 PM",
+        "flightNumber": "3283"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "09:54 PM",
+        "flightNumber": "4192"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "10:08 PM",
+        "flightNumber": "3211"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "10:59 PM",
+        "flightNumber": "1961"
+      }
+    ],
+    "DJT": [],
+    "DSM": [],
+    "DTW": [
+      {
+        "destination": "PHX",
+        "departureTime": "06:00 AM",
+        "flightNumber": "4671"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:00 AM",
+        "flightNumber": "1263"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "07:08 AM",
+        "flightNumber": "2211"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "07:15 AM",
+        "flightNumber": "2801"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "10:37 AM",
+        "flightNumber": "3177"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "11:28 AM",
+        "flightNumber": "1036"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "12:34 PM",
+        "flightNumber": "4286"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "01:00 PM",
+        "flightNumber": "1957"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "03:25 PM",
+        "flightNumber": "3409"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "04:23 PM",
+        "flightNumber": "2007"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "09:08 PM",
+        "flightNumber": "3175"
+      }
+    ],
+    "ELP": [
+      {
+        "destination": "DEN",
+        "departureTime": "07:35 PM",
+        "flightNumber": "4418"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "09:18 PM",
+        "flightNumber": "3449"
+      }
+    ],
+    "EWR": [
+      {
+        "destination": "MCO",
+        "departureTime": "05:55 AM",
+        "flightNumber": "1659"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "11:35 AM",
+        "flightNumber": "4601"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "01:30 PM",
+        "flightNumber": "2471"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "10:29 PM",
+        "flightNumber": "1157"
+      }
+    ],
+    "FAR": [],
+    "FLL": [
+      {
+        "destination": "ATL",
+        "departureTime": "06:20 AM",
+        "flightNumber": "2173"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "08:00 AM",
+        "flightNumber": "2932"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "10:23 AM",
+        "flightNumber": "1028"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "12:35 PM",
+        "flightNumber": "3018"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "12:53 PM",
+        "flightNumber": "2206"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "01:24 PM",
+        "flightNumber": "1495"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "05:00 PM",
+        "flightNumber": "3451"
+      },
+      {
+        "destination": "IAD",
+        "departureTime": "05:37 PM",
+        "flightNumber": "2960"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "06:37 PM",
+        "flightNumber": "3317"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "08:25 PM",
+        "flightNumber": "2008"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "09:54 PM",
+        "flightNumber": "3013"
+      }
+    ],
+    "FSD": [],
+    "GRR": [
+      {
+        "destination": "DEN",
+        "departureTime": "04:24 PM",
+        "flightNumber": "1247"
+      }
+    ],
+    "GUA": [],
+    "IAD": [
+      {
+        "destination": "LAS",
+        "departureTime": "06:00 AM",
+        "flightNumber": "4277"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:50 AM",
+        "flightNumber": "4707"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "11:12 AM",
+        "flightNumber": "4355"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "04:36 PM",
+        "flightNumber": "4559"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "06:13 PM",
+        "flightNumber": "2959"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "09:04 PM",
+        "flightNumber": "4409"
+      }
+    ],
+    "IAH": [
+      {
+        "destination": "DEN",
+        "departureTime": "06:25 AM",
+        "flightNumber": "3229"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "06:28 AM",
+        "flightNumber": "1404"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "07:00 AM",
+        "flightNumber": "1489"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "08:25 AM",
+        "flightNumber": "1496"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "10:30 AM",
+        "flightNumber": "3227"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "11:25 AM",
+        "flightNumber": "1882"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "12:21 PM",
+        "flightNumber": "1418"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "02:18 PM",
+        "flightNumber": "1462"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "04:12 PM",
+        "flightNumber": "3068"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "04:12 PM",
+        "flightNumber": "1958"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "04:21 PM",
+        "flightNumber": "4978"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "05:53 PM",
+        "flightNumber": "1703"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "09:04 PM",
+        "flightNumber": "4106"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "10:09 PM",
+        "flightNumber": "1755"
+      }
+    ],
+    "IND": [
+      {
+        "destination": "MCO",
+        "departureTime": "11:21 AM",
+        "flightNumber": "3762"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "04:12 PM",
+        "flightNumber": "2345"
+      }
+    ],
+    "ISP": [
+      {
+        "destination": "MCO",
+        "departureTime": "05:43 PM",
+        "flightNumber": "2149"
+      }
+    ],
+    "JAX": [
+      {
+        "destination": "ATL",
+        "departureTime": "07:46 PM",
+        "flightNumber": "1549"
+      }
+    ],
+    "JFK": [],
+    "LAS": [
+      {
+        "destination": "DFW",
+        "departureTime": "12:59 AM",
+        "flightNumber": "1650"
+      },
+      {
+        "destination": "SMF",
+        "departureTime": "06:12 AM",
+        "flightNumber": "4779"
+      },
+      {
+        "destination": "STL",
+        "departureTime": "06:15 AM",
+        "flightNumber": "3108"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "06:30 AM",
+        "flightNumber": "3291"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "06:30 AM",
+        "flightNumber": "3019"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "06:45 AM",
+        "flightNumber": "2350"
+      },
+      {
+        "destination": "SEA",
+        "departureTime": "06:50 AM",
+        "flightNumber": "2407"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:30 AM",
+        "flightNumber": "1116"
+      },
+      {
+        "destination": "ONT",
+        "departureTime": "08:00 AM",
+        "flightNumber": "1283"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "08:40 AM",
+        "flightNumber": "3886"
+      },
+      {
+        "destination": "SAT",
+        "departureTime": "09:32 AM",
+        "flightNumber": "3420"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "09:40 AM",
+        "flightNumber": "1766"
+      },
+      {
+        "destination": "AUS",
+        "departureTime": "09:45 AM",
+        "flightNumber": "4684"
+      },
+      {
+        "destination": "SLC",
+        "departureTime": "10:05 AM",
+        "flightNumber": "3016"
+      },
+      {
+        "destination": "OAK",
+        "departureTime": "10:15 AM",
+        "flightNumber": "2045"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "10:35 AM",
+        "flightNumber": "4048"
+      },
+      {
+        "destination": "BUR",
+        "departureTime": "11:20 AM",
+        "flightNumber": "4107"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "12:30 PM",
+        "flightNumber": "4401"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "12:59 PM",
+        "flightNumber": "1966"
+      },
+      {
+        "destination": "MSP",
+        "departureTime": "01:53 PM",
+        "flightNumber": "4746"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "02:55 PM",
+        "flightNumber": "2263"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "03:10 PM",
+        "flightNumber": "3540"
+      },
+      {
+        "destination": "SAN",
+        "departureTime": "03:33 PM",
+        "flightNumber": "1325"
+      },
+      {
+        "destination": "SMF",
+        "departureTime": "03:42 PM",
+        "flightNumber": "2069"
+      },
+      {
+        "destination": "ONT",
+        "departureTime": "03:45 PM",
+        "flightNumber": "1923"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "04:30 PM",
+        "flightNumber": "4157"
+      },
+      {
+        "destination": "RNO",
+        "departureTime": "04:45 PM",
+        "flightNumber": "4241"
+      },
+      {
+        "destination": "ELP",
+        "departureTime": "05:26 PM",
+        "flightNumber": "3450"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "05:36 PM",
+        "flightNumber": "1020"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "06:00 PM",
+        "flightNumber": "1948"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "08:43 PM",
+        "flightNumber": "4612"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "09:51 PM",
+        "flightNumber": "2802"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "10:04 PM",
+        "flightNumber": "2428"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "10:06 PM",
+        "flightNumber": "1876"
+      },
+      {
+        "destination": "IAD",
+        "departureTime": "10:46 PM",
+        "flightNumber": "3494"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "11:16 PM",
+        "flightNumber": "1822"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "11:50 PM",
+        "flightNumber": "2146"
+      }
+    ],
+    "LAX": [
+      {
+        "destination": "DFW",
+        "departureTime": "12:59 AM",
+        "flightNumber": "4964"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "06:00 AM",
+        "flightNumber": "1756"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "06:05 AM",
+        "flightNumber": "3156"
+      },
+      {
+        "destination": "SLC",
+        "departureTime": "08:11 AM",
+        "flightNumber": "1268"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "08:44 AM",
+        "flightNumber": "2857"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "11:30 AM",
+        "flightNumber": "3292"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "12:38 PM",
+        "flightNumber": "4316"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "02:01 PM",
+        "flightNumber": "4346"
+      },
+      {
+        "destination": "SEA",
+        "departureTime": "03:35 PM",
+        "flightNumber": "1177"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "04:10 PM",
+        "flightNumber": "2564"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "05:20 PM",
+        "flightNumber": "2334"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "08:25 PM",
+        "flightNumber": "3606"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "09:40 PM",
+        "flightNumber": "4146"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "11:50 PM",
+        "flightNumber": "3216"
+      }
+    ],
+    "LGA": [
+      {
+        "destination": "ATL",
+        "departureTime": "06:15 AM",
+        "flightNumber": "3287"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "04:55 PM",
+        "flightNumber": "3453"
+      },
+      {
+        "destination": "CLT",
+        "departureTime": "06:43 PM",
+        "flightNumber": "3133"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "08:29 PM",
+        "flightNumber": "3423"
+      }
+    ],
+    "LIT": [],
+    "MBJ": [],
+    "MCI": [
+      {
+        "destination": "DEN",
+        "departureTime": "08:32 PM",
+        "flightNumber": "4827"
+      }
+    ],
+    "MCO": [
+      {
+        "destination": "DEN",
+        "departureTime": "05:55 AM",
+        "flightNumber": "1733"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "06:00 AM",
+        "flightNumber": "4017"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "06:00 AM",
+        "flightNumber": "1875"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "06:12 AM",
+        "flightNumber": "3274"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "06:29 AM",
+        "flightNumber": "1915"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "06:35 AM",
+        "flightNumber": "3506"
+      },
+      {
+        "destination": "CLT",
+        "departureTime": "06:40 AM",
+        "flightNumber": "1760"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "06:55 AM",
+        "flightNumber": "2506"
+      },
+      {
+        "destination": "BQN",
+        "departureTime": "07:20 AM",
+        "flightNumber": "1098"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "07:20 AM",
+        "flightNumber": "1112"
+      },
+      {
+        "destination": "BNA",
+        "departureTime": "07:40 AM",
+        "flightNumber": "1285"
+      },
+      {
+        "destination": "IND",
+        "departureTime": "07:52 AM",
+        "flightNumber": "1539"
+      },
+      {
+        "destination": "IAD",
+        "departureTime": "08:06 AM",
+        "flightNumber": "4230"
+      },
+      {
+        "destination": "AUS",
+        "departureTime": "08:10 AM",
+        "flightNumber": "4523"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "08:52 AM",
+        "flightNumber": "2529"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "09:30 AM",
+        "flightNumber": "1241"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "10:13 AM",
+        "flightNumber": "2885"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "11:05 AM",
+        "flightNumber": "3856"
+      },
+      {
+        "destination": "PIT",
+        "departureTime": "11:11 AM",
+        "flightNumber": "1620"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "11:49 AM",
+        "flightNumber": "4004"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "12:50 PM",
+        "flightNumber": "3507"
+      },
+      {
+        "destination": "MSY",
+        "departureTime": "01:23 PM",
+        "flightNumber": "1431"
+      },
+      {
+        "destination": "CLT",
+        "departureTime": "01:24 PM",
+        "flightNumber": "2452"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "01:28 PM",
+        "flightNumber": "4919"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "01:36 PM",
+        "flightNumber": "1417"
+      },
+      {
+        "destination": "ISP",
+        "departureTime": "02:20 PM",
+        "flightNumber": "1238"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "02:38 PM",
+        "flightNumber": "1786"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "02:40 PM",
+        "flightNumber": "1824"
+      },
+      {
+        "destination": "BUF",
+        "departureTime": "03:12 PM",
+        "flightNumber": "1692"
+      },
+      {
+        "destination": "BNA",
+        "departureTime": "03:38 PM",
+        "flightNumber": "3559"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "03:48 PM",
+        "flightNumber": "4145"
+      },
+      {
+        "destination": "TTN",
+        "departureTime": "04:02 PM",
+        "flightNumber": "2742"
+      },
+      {
+        "destination": "ORF",
+        "departureTime": "04:44 PM",
+        "flightNumber": "2288"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "05:19 PM",
+        "flightNumber": "4025"
+      },
+      {
+        "destination": "CVG",
+        "departureTime": "05:19 PM",
+        "flightNumber": "1565"
+      },
+      {
+        "destination": "CMH",
+        "departureTime": "06:04 PM",
+        "flightNumber": "2757"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "06:29 PM",
+        "flightNumber": "1481"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "06:43 PM",
+        "flightNumber": "4404"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "07:27 PM",
+        "flightNumber": "3469"
+      },
+      {
+        "destination": "ORD",
+        "departureTime": "08:51 PM",
+        "flightNumber": "1349"
+      },
+      {
+        "destination": "CVG",
+        "departureTime": "09:25 PM",
+        "flightNumber": "2547"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "09:36 PM",
+        "flightNumber": "2508"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "09:53 PM",
+        "flightNumber": "2251"
+      },
+      {
+        "destination": "EWR",
+        "departureTime": "10:18 PM",
+        "flightNumber": "2512"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "11:00 PM",
+        "flightNumber": "4726"
+      }
+    ],
+    "MDE": [],
+    "MDW": [
+      {
+        "destination": "ATL",
+        "departureTime": "06:25 AM",
+        "flightNumber": "2292"
+      }
+    ],
+    "MEM": [],
+    "MIA": [
+      {
+        "destination": "ATL",
+        "departureTime": "05:32 AM",
+        "flightNumber": "2483"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "05:55 AM",
+        "flightNumber": "1279"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "11:25 AM",
+        "flightNumber": "1067"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "02:37 PM",
+        "flightNumber": "2135"
+      },
+      {
+        "destination": "CLT",
+        "departureTime": "06:54 PM",
+        "flightNumber": "3700"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "08:50 PM",
+        "flightNumber": "1204"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "09:43 PM",
+        "flightNumber": "2271"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "11:30 PM",
+        "flightNumber": "3378"
+      }
+    ],
+    "MKE": [],
+    "MSN": [],
+    "MSP": [
+      {
+        "destination": "DEN",
+        "departureTime": "07:00 AM",
+        "flightNumber": "1291"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "12:45 PM",
+        "flightNumber": "3046"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "02:33 PM",
+        "flightNumber": "3199"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "06:56 PM",
+        "flightNumber": "3223"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "07:54 PM",
+        "flightNumber": "4745"
+      }
+    ],
+    "MSY": [
+      {
+        "destination": "MCO",
+        "departureTime": "03:17 PM",
+        "flightNumber": "3554"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "05:17 PM",
+        "flightNumber": "2052"
+      }
+    ],
+    "MYR": [],
+    "OAK": [
+      {
+        "destination": "LAS",
+        "departureTime": "12:47 PM",
+        "flightNumber": "2046"
+      }
+    ],
+    "OKC": [
+      {
+        "destination": "DEN",
+        "departureTime": "08:30 PM",
+        "flightNumber": "1927"
+      }
+    ],
+    "OMA": [
+      {
+        "destination": "DEN",
+        "departureTime": "07:29 PM",
+        "flightNumber": "1873"
+      }
+    ],
+    "ONT": [
+      {
+        "destination": "DEN",
+        "departureTime": "06:15 AM",
+        "flightNumber": "1500"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "10:04 AM",
+        "flightNumber": "2232"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "11:45 AM",
+        "flightNumber": "2908"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "05:31 PM",
+        "flightNumber": "4690"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "05:44 PM",
+        "flightNumber": "4206"
+      }
+    ],
+    "ORD": [
+      {
+        "destination": "DFW",
+        "departureTime": "06:00 AM",
+        "flightNumber": "1341"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "06:20 AM",
+        "flightNumber": "1596"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "06:30 AM",
+        "flightNumber": "1483"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "07:11 AM",
+        "flightNumber": "2205"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "07:25 AM",
+        "flightNumber": "3135"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "01:21 PM",
+        "flightNumber": "3647"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "03:50 PM",
+        "flightNumber": "3044"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:28 PM",
+        "flightNumber": "1442"
+      }
+    ],
+    "ORF": [
+      {
+        "destination": "ATL",
+        "departureTime": "01:18 PM",
+        "flightNumber": "3071"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "07:43 PM",
+        "flightNumber": "3783"
+      }
+    ],
+    "PDX": [],
+    "PHL": [
+      {
+        "destination": "DFW",
+        "departureTime": "06:00 AM",
+        "flightNumber": "3985"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "06:24 AM",
+        "flightNumber": "1016"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "07:15 AM",
+        "flightNumber": "1807"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "08:41 AM",
+        "flightNumber": "2297"
+      },
+      {
+        "destination": "RDU",
+        "departureTime": "09:30 AM",
+        "flightNumber": "2059"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "10:37 AM",
+        "flightNumber": "2507"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "11:57 AM",
+        "flightNumber": "4455"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "11:59 AM",
+        "flightNumber": "4807"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "12:25 PM",
+        "flightNumber": "1166"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "12:40 PM",
+        "flightNumber": "1101"
+      },
+      {
+        "destination": "CLT",
+        "departureTime": "02:48 PM",
+        "flightNumber": "4353"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "02:50 PM",
+        "flightNumber": "4173"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "04:42 PM",
+        "flightNumber": "1203"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "05:32 PM",
+        "flightNumber": "1147"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "05:45 PM",
+        "flightNumber": "2505"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "07:59 PM",
+        "flightNumber": "2269"
+      }
+    ],
+    "PHX": [
+      {
+        "destination": "DEN",
+        "departureTime": "06:25 AM",
+        "flightNumber": "1376"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "06:30 AM",
+        "flightNumber": "2532"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "07:37 AM",
+        "flightNumber": "4392"
+      },
+      {
+        "destination": "SAN",
+        "departureTime": "08:21 AM",
+        "flightNumber": "1571"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "08:30 AM",
+        "flightNumber": "1019"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "09:15 AM",
+        "flightNumber": "4768"
+      },
+      {
+        "destination": "IAH",
+        "departureTime": "12:25 PM",
+        "flightNumber": "1704"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "01:22 PM",
+        "flightNumber": "1191"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "03:21 PM",
+        "flightNumber": "2142"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "03:22 PM",
+        "flightNumber": "3972"
+      },
+      {
+        "destination": "SLC",
+        "departureTime": "04:23 PM",
+        "flightNumber": "2526"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "06:14 PM",
+        "flightNumber": "2133"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "08:39 PM",
+        "flightNumber": "1895"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "08:56 PM",
+        "flightNumber": "1820"
+      }
+    ],
+    "PIT": [
+      {
+        "destination": "MCO",
+        "departureTime": "02:42 PM",
+        "flightNumber": "3819"
+      }
+    ],
+    "PNS": [],
+    "PSE": [],
+    "PUJ": [
+      {
+        "destination": "SJU",
+        "departureTime": "01:59 PM",
+        "flightNumber": "38"
+      }
+    ],
+    "RDU": [
+      {
+        "destination": "ATL",
+        "departureTime": "06:35 AM",
+        "flightNumber": "4797"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "10:07 AM",
+        "flightNumber": "1111"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "12:05 PM",
+        "flightNumber": "2060"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "12:21 PM",
+        "flightNumber": "2343"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "01:39 PM",
+        "flightNumber": "3073"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "01:56 PM",
+        "flightNumber": "1669"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "05:27 PM",
+        "flightNumber": "1039"
+      }
+    ],
+    "RIC": [],
+    "RNO": [
+      {
+        "destination": "LAS",
+        "departureTime": "07:03 PM",
+        "flightNumber": "4242"
+      }
+    ],
+    "RSW": [
+      {
+        "destination": "CLE",
+        "departureTime": "02:41 PM",
+        "flightNumber": "2715"
+      }
+    ],
+    "SAL": [],
+    "SAN": [
+      {
+        "destination": "DEN",
+        "departureTime": "06:25 AM",
+        "flightNumber": "2818"
+      },
+      {
+        "destination": "SFO",
+        "departureTime": "10:28 AM",
+        "flightNumber": "3381"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "04:54 PM",
+        "flightNumber": "4990"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "05:54 PM",
+        "flightNumber": "1466"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "06:54 PM",
+        "flightNumber": "2084"
+      }
+    ],
+    "SAP": [],
+    "SAT": [
+      {
+        "destination": "LAS",
+        "departureTime": "03:19 PM",
+        "flightNumber": "3419"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "08:20 PM",
+        "flightNumber": "2355"
+      }
+    ],
+    "SDQ": [],
+    "SEA": [
+      {
+        "destination": "LAS",
+        "departureTime": "10:57 AM",
+        "flightNumber": "4668"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "04:27 PM",
+        "flightNumber": "3406"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "08:15 PM",
+        "flightNumber": "1178"
+      }
+    ],
+    "SFO": [
+      {
+        "destination": "DEN",
+        "departureTime": "06:04 AM",
+        "flightNumber": "1230"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "09:00 AM",
+        "flightNumber": "3308"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "11:17 AM",
+        "flightNumber": "4158"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "11:53 AM",
+        "flightNumber": "3436"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "01:10 PM",
+        "flightNumber": "2638"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "03:15 PM",
+        "flightNumber": "2486"
+      },
+      {
+        "destination": "SAN",
+        "departureTime": "04:21 PM",
+        "flightNumber": "3382"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "07:11 PM",
+        "flightNumber": "4402"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "10:05 PM",
+        "flightNumber": "1448"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "11:58 PM",
+        "flightNumber": "2930"
+      }
+    ],
+    "SJC": [],
+    "SJO": [],
+    "SJU": [
+      {
+        "destination": "PHL",
+        "departureTime": "12:59 AM",
+        "flightNumber": "2695"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "02:57 AM",
+        "flightNumber": "1823"
+      },
+      {
+        "destination": "MIA",
+        "departureTime": "03:08 AM",
+        "flightNumber": "3377"
+      },
+      {
+        "destination": "FLL",
+        "departureTime": "08:45 AM",
+        "flightNumber": "3017"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "10:42 AM",
+        "flightNumber": "2981"
+      },
+      {
+        "destination": "PUJ",
+        "departureTime": "11:44 AM",
+        "flightNumber": "239"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "01:47 PM",
+        "flightNumber": "2871"
+      },
+      {
+        "destination": "BDL",
+        "departureTime": "04:28 PM",
+        "flightNumber": "3937"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "04:30 PM",
+        "flightNumber": "2265"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "05:27 PM",
+        "flightNumber": "1725"
+      },
+      {
+        "destination": "TPA",
+        "departureTime": "06:05 PM",
+        "flightNumber": "2541"
+      },
+      {
+        "destination": "MCO",
+        "departureTime": "06:42 PM",
+        "flightNumber": "2249"
+      }
+    ],
+    "SLC": [
+      {
+        "destination": "DEN",
+        "departureTime": "08:00 AM",
+        "flightNumber": "3862"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "11:40 AM",
+        "flightNumber": "3982"
+      },
+      {
+        "destination": "LAX",
+        "departureTime": "12:04 PM",
+        "flightNumber": "4129"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "01:38 PM",
+        "flightNumber": "2575"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "04:16 PM",
+        "flightNumber": "4252"
+      },
+      {
+        "destination": "PHX",
+        "departureTime": "07:48 PM",
+        "flightNumber": "1439"
+      }
+    ],
+    "SMF": [
+      {
+        "destination": "LAS",
+        "departureTime": "08:37 AM",
+        "flightNumber": "4144"
+      },
+      {
+        "destination": "DEN",
+        "departureTime": "11:53 AM",
+        "flightNumber": "3666"
+      },
+      {
+        "destination": "LAS",
+        "departureTime": "06:23 PM",
+        "flightNumber": "2070"
+      }
+    ],
+    "SNA": [],
+    "STI": [],
+    "STL": [
+      {
+        "destination": "LAS",
+        "departureTime": "12:17 PM",
+        "flightNumber": "3107"
+      }
+    ],
+    "SYR": [],
+    "TPA": [
+      {
+        "destination": "DEN",
+        "departureTime": "06:15 AM",
+        "flightNumber": "1113"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "07:15 AM",
+        "flightNumber": "1853"
+      },
+      {
+        "destination": "DTW",
+        "departureTime": "08:00 AM",
+        "flightNumber": "1035"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "08:25 AM",
+        "flightNumber": "2538"
+      },
+      {
+        "destination": "DFW",
+        "departureTime": "12:17 PM",
+        "flightNumber": "1333"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "12:52 PM",
+        "flightNumber": "4435"
+      },
+      {
+        "destination": "SJU",
+        "departureTime": "01:40 PM",
+        "flightNumber": "2216"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "01:52 PM",
+        "flightNumber": "1832"
+      },
+      {
+        "destination": "PHL",
+        "departureTime": "04:25 PM",
+        "flightNumber": "4808"
+      },
+      {
+        "destination": "ATL",
+        "departureTime": "06:00 PM",
+        "flightNumber": "2723"
+      },
+      {
+        "destination": "BWI",
+        "departureTime": "06:23 PM",
+        "flightNumber": "1538"
+      },
+      {
+        "destination": "CLE",
+        "departureTime": "08:28 PM",
+        "flightNumber": "2920"
+      },
+      {
+        "destination": "CVG",
+        "departureTime": "09:00 PM",
+        "flightNumber": "1667"
+      }
+    ],
+    "TTN": [
+      {
+        "destination": "MCO",
+        "departureTime": "07:39 PM",
+        "flightNumber": "2013"
+      }
+    ],
+    "XNA": [
+      {
+        "destination": "DEN",
+        "departureTime": "07:29 PM",
+        "flightNumber": "1091"
+      }
+    ]
+  }
+}
