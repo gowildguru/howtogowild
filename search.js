@@ -55,13 +55,18 @@
 
     if (!cleanedTitle || !url) return;
 
+    const fleetKeywords =
+      /seatmaps\.html(?:#|$)/i.test(url)
+        ? "meet the fleet frontier fleet frontier aircraft airplane plane seat map seat maps seatmap seatmaps seating seats legroom unlimited legroom seat pitch pitch a320 a320neo 320 320neo a321 321 a321neo 321neo exit row emergency exit bulkhead galley lavatory bathroom restroom storage overhead bin window aisle middle seat"
+        : "";
+
     entries.push({
       type: "remote",
       title: cleanedTitle,
       pageTitle: cleanText(pageTitle),
       text: cleanedText,
       searchable: normalize(
-        `${cleanedTitle} ${pageTitle} ${cleanedText}`
+        `${cleanedTitle} ${pageTitle} ${cleanedText} ${fleetKeywords}`
       ),
       url
     });
@@ -185,6 +190,13 @@
 
     /* More! hosts individual answers, including entries added later. */
     urls.add(new URL("more.html", window.location.href).href);
+
+    /*
+     * Meet The Fleet / interactive Frontier seat maps.
+     * Include this explicitly so fleet searches continue to work
+     * even if the homepage navigation changes later.
+     */
+    urls.add(new URL("seatmaps.html", window.location.href).href);
 
     /*
      * Always include homepage.
