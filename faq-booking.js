@@ -1,18 +1,41 @@
 (() => {
   const root = document.getElementById('faq');
   if (!root) return;
-  root.classList.add('gw-faq-ready');
-  root.querySelectorAll('.gw-faq-trigger').forEach(button => {
+  const tickets = Array.from(root.querySelectorAll('.gw-faq-trigger'), button => {
+    const card = button.closest('.gw-faq-card');
     const panel = document.getElementById(button.getAttribute('aria-controls'));
-    button.setAttribute('aria-expanded', 'false');
-    panel.inert = true;
-    button.addEventListener('click', () => {
-      const open = button.getAttribute('aria-expanded') !== 'true';
-      button.setAttribute('aria-expanded', String(open));
-      button.closest('.gw-faq-card').classList.toggle('is-open', open);
-      panel.inert = !open;
+    return { button, card, panel };
+  }).filter(ticket => ticket.card && ticket.panel && root.contains(ticket.panel));
+  if (!tickets.length) return;
+
+  function setOpen(ticket, open) {
+    // Return focus before removing an answer's controls from the tab order.
+    if (!open && ticket.panel.contains(document.activeElement)) {
+      ticket.button.focus({ preventScroll: true });
+    }
+    ticket.button.setAttribute('aria-expanded', String(open));
+    ticket.card.classList.toggle('is-open', open);
+    ticket.panel.inert = !open;
+    ticket.panel.setAttribute('aria-hidden', String(!open));
+  }
+
+  tickets.forEach(ticket => {
+    setOpen(ticket, false);
+    ticket.button.addEventListener('click', () => {
+      const open = ticket.button.getAttribute('aria-expanded') !== 'true';
+      tickets.forEach(other => { if (other !== ticket) setOpen(other, false); });
+      setOpen(ticket, open);
+    });
+    ticket.card.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && ticket.card.classList.contains('is-open')) {
+        event.preventDefault();
+        setOpen(ticket, false);
+        ticket.button.focus({ preventScroll: true });
+      }
     });
   });
+  // Without JavaScript the answers remain visible and the calculator keeps its markup.
+  root.classList.add('gw-faq-ready');
 })();
 (() => {
 "use strict";
