@@ -31,7 +31,7 @@
 <p class="muted">Red corner dot = exit-seat rules. Dark lower dot = a special seat note. Empty positions are blocked middle seats or missing passenger seats. Dashed “Crew” markers are jumpseats.</p>
 <div class="rule selected" aria-live="polite"><strong id="selectedTitle">Choose a seat</strong><p id="selectedInfo">Seat details open in a centered card. This guide shows cabin geometry, not live booking availability.</p></div>
 <h3>Cabin notes</h3><ul id="cabinNotes" class="note-list"></ul>
-<details class="rule"><summary>What is verified?</summary><p class="muted">Pitch values and the three-row UpFront Plus version follow the supplied chat. Missing seats, category exceptions and staggered rows were compared with published Frontier and AeroLOPA diagrams. The schematic is not to scale and does not rate window alignment.</p><p class="muted">The reference only exposed its latest exchanges. Earlier screenshots and all earlier hardware/storage notes were unavailable; unresolved details are marked in each card. No unknown pitch is replaced with a guess.</p><p class="muted">Every concept seat is estimated. First letters, pitch, hardware and restrictions remain unverified. Row 3 retains the current blocked-middle UpFront Plus arrangement as the continuation assumption; its final retrofit treatment is unknown.</p></details>
+<details class="rule"><summary>What is verified?</summary><p class="muted">Pitch values and the three-row UpFront Plus version follow the supplied chat. Missing seats, category exceptions and staggered rows were compared with published Frontier and AeroLOPA diagrams. The schematic is not to scale and does not rate window alignment.</p><p class="muted">The reference only exposed its latest exchanges. Earlier screenshots and all earlier hardware/storage notes were unavailable; unresolved details are marked in each card. No unknown pitch is replaced with a guess.</p><p class="muted">Every concept seat is estimated. Rows 1–2 use A/C and D/F labels for the requested 2×2 illustration; row 3 is removed entirely. Final First lettering, pitch, hardware and restrictions remain unverified.</p></details>
 </aside>
 </div>
 <footer><p>Independent HowToGoWild guide · checked October 4, 2026. Compare against the aircraft and seats offered in your own reservation.</p><div class="sources"><a href="https://www.flyfrontier.com/about-us/aircraft-configuration/">Frontier published cabin diagrams</a><a id="geometrySource" href="https://www.aerolopa.com/f9-32n">AeroLOPA geometry</a><a href="https://faq.flyfrontier.com/help/what-is-the-difference-between-first-upfront-premium-preferred-seating">Seat categories</a></div></footer>
@@ -84,9 +84,9 @@ function categoryFor(aircraft,row,letter){
 function buildSeats(aircraft,configuration){
  const model=AIRCRAFT[aircraft],seats=[];
  for(let row=1;row<=model.rows;row++){
-  if(model.skipRows.includes(row))continue;
+  if(model.skipRows.includes(row)||(configuration==='concept'&&row===3))continue;
   if(configuration==='concept'&&row<=2){
-   for(const [side,position] of [['left','window'],['left','aisle'],['right','aisle'],['right','window']])seats.push({id:`${row}-${side}-${position}`,aircraft,row,side,position,first:true,category:'first',pitch:null,exit:false,blocked:false,estimated:true,special:{notes:[]}});
+   for(const [letter,side,position] of [['A','left','window'],['C','left','aisle'],['D','right','aisle'],['F','right','window']])seats.push({id:row+letter,letter,aircraft,row,side,position,first:true,category:'first',pitch:null,exit:false,blocked:false,estimated:true,special:{notes:[]}});
    continue;
   }
   for(const letter of LETTERS){
@@ -96,25 +96,26 @@ function buildSeats(aircraft,configuration){
  }
  return seats;
 }
-// Concept row 3 deliberately keeps the current cabin. Final row-3 treatment is unknown.
+// Requested concept: larger square First seats, A/C and D/F labels, no row 3.
 let aircraft='a320neo',configuration='current',visibleSeats=[],activeSeat=null,opener=null;
 const $=id=>document.getElementById(id),map=$('map'),dialog=$('seatDialog');
 const el=(tag,className,text)=>{const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n;};
 function pitchLabel(seat){return seat.pitch==='infinity'?'∞ · Unlimited legroom':seat.pitch===null?'Not yet published / verified':`${seat.pitch}″${seat.estimated?' · inherited estimate':''}`;}
-function identity(seat){return seat.first?`Row ${seat.row} · ${seat.side} ${seat.position}`:`Seat ${seat.id}`;}
+function identity(seat){return `Seat ${seat.id}`;}
+function firstSeatSize(size){return (3*size+4)/2;}
 function rowCoordinates(){
  const model=AIRCRAFT[aircraft],step=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--step')),coords={};let y=0;
  for(let r=1;r<=model.rows;r++){
-  if(model.skipRows.includes(r))continue;
+  if(model.skipRows.includes(r)||(configuration==='concept'&&r===3))continue;
   if((aircraft==='a321'&&[13,27].includes(r))||(aircraft==='a321neo'&&r===29))y+=48;
   else if(model.exitRows.includes(r))y+=24;
-  coords[r]=y;y+=step;
+  coords[r]=y;y+=configuration==='concept'&&r<=2?firstSeatSize(step-8)+8:step;
  }
  return {coords,height:y+48,step};
 }
 function seatX(seat,size){
  const gap=4,aisle=36;
- if(seat.first){return seat.side==='left'?(seat.position==='window'?0:2*(size+gap)):(seat.position==='aisle'?3*(size+gap)+aisle:5*(size+gap)+aisle);}
+ if(seat.first){return (seat.side==='right'?3*(size+gap)+aisle:0)+(seat.position===(seat.side==='left'?'aisle':'window')?firstSeatSize(size)+gap:0);}
  const i=LETTERS.indexOf(seat.letter);return i*(size+gap)+(i>=3?aisle:0);
 }
 function render(){
@@ -122,22 +123,23 @@ function render(){
  const model=AIRCRAFT[aircraft],concept=configuration==='concept',blocked=visibleSeats.filter(s=>s.blocked).length;
  $('mapTitle').textContent=model.name+(concept?' · First Concept':' · Current');
  $('summary').textContent=`${visibleSeats.length} ${concept?'estimated physical':'physical'} seats · ${blocked} blocked middles · ${visibleSeats.length-blocked} selectable`;
- $('mapNotice').textContent=concept?'ENTIRE MAP ESTIMATED. Rows 1–2 show eight First seats in 2×2. The rest retains current geometry, pitch and categories, including blocked middles in row 3. Final row 3, First letters, dimensions and retrofit details are unverified.':'Current three-row UpFront Plus version: rows 1–3 B/E are completely blank. Supplied pitch and seat notes override older published front-cabin labeling.';
+ $('mapNotice').textContent=concept?'ENTIRE MAP ESTIMATED. Rows 1–2 show eight larger square First seats, labeled A/C and D/F. Row 3 is removed; economy continues at row 4 with inherited geometry, pitch and categories. Final First lettering, dimensions and retrofit details are unverified.':'Current three-row UpFront Plus version: rows 1–3 B/E are completely blank. Supplied pitch and seat notes override older published front-cabin labeling.';
  $('mapNotice').classList.toggle('estimate',concept);$('geometrySource').href=model.source;
  $('selectedTitle').textContent='Choose a seat';$('selectedInfo').textContent='Seat details open in a centered card. This guide shows cabin geometry, not live booking availability.';
- $('cabinNotes').replaceChildren(...model.notes.map(t=>el('li','',t)));
+ $('cabinNotes').replaceChildren(...model.notes.filter(t=>!concept||!t.startsWith('Pitch:')).map(t=>el('li','',concept?t.replace('Rows 1–3: UpFront Plus with B/E blank.','Rows 1–2: 2×2 First concept; row 3 removed.'):t)));
  const {coords,height}=rowCoordinates(),size=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--seat'));
  map.style.height=height+'px';map.setAttribute('aria-label',model.name+(concept?' estimated concept':' current')+' seat map');
  for(const [r,y] of Object.entries(coords)){
-  const num=el('span','rownum',r);num.style.top=y+'px';num.setAttribute('aria-hidden','true');map.append(num);
+  const num=el('span','rownum',r);num.style.top=(y+(concept&&+r<=2?(firstSeatSize(size)-size)/2:0))+'px';num.setAttribute('aria-hidden','true');map.append(num);
   if(model.exitRows.includes(+r)){const bar=el('div','exitbar');bar.append(el('span','','← EXIT'),el('span','','EXIT →'));bar.style.top=(y-20)+'px';map.append(bar);}
   if(aircraft==='a321'&&+r===13){const gap=el('div','gapnote','Rows 11–12 absent');gap.style.top=(y-42)+'px';map.append(gap);}
  }
  for(const seat of visibleSeats){
   if(seat.blocked)continue; // Blank: no graphic, button, label or tab stop.
-  const b=el('button','seat '+seat.category+(seat.exit?' exit':'')+(seat.special.notes.length?' special':''),seat.first?(seat.position==='window'?'W':'A'):seat.letter);
+  const b=el('button','seat '+seat.category+(seat.exit?' exit':'')+(seat.special.notes.length?' special':''),seat.first?seat.id:seat.letter);
   b.type='button';b.dataset.seat=seat.id;b.setAttribute('aria-pressed','false');b.setAttribute('aria-label',`${seat.estimated?'Estimated ':''}${identity(seat)}, ${seat.position}, ${CATEGORY[seat.category]}, ${pitchLabel(seat)}${seat.exit?', exit seat':''}`);
   b.style.left=seatX(seat,size)+'px';b.style.top=(coords[seat.row]+(aircraft==='a321neo'&&seat.row>=29&&seat.side==='right'?18:0))+'px';
+  if(seat.first){b.style.width=firstSeatSize(size)+'px';b.style.height=firstSeatSize(size)+'px';b.style.fontSize='14px';}
   b.addEventListener('click',()=>openDetails(seat,b));map.append(b);
  }
  for(const crew of model.crew){const marker=el('span','jumpseat','Crew');marker.style.left=seatX({letter:crew.letter},size)+'px';marker.style.top=(coords[crew.row]+13)+'px';marker.title='Flight-attendant jumpseat · not a passenger seat';map.append(marker);}
@@ -183,11 +185,10 @@ function openDetails(seat,button){
  $('dialogCategory').textContent=CATEGORY[seat.category]+(seat.exit?' · exit seat':'');$('conceptNotice').hidden=!seat.estimated;$('specs').replaceChildren();
  field('Position',seat.position.toUpperCase()+' · '+seat.side+' side');field('Seat pitch',pitchLabel(seat));
  const f=features(seat);field('Underseat storage',f.storage);field('Armrests',f.armrests);field('Tray table',f.tray);
- if(seat.first)field('Seat identifier','Provisional position only; final First seat letters are unverified.');
+ if(seat.first)field('Seat identifier',seat.id+' · requested concept label; final First lettering is unverified.');
  field('Window alignment','Not rated; window position does not guarantee a well-aligned window.');
  const notes=[...seat.special.notes];
  if(seat.category==='upfront')notes.push('A guaranteed empty middle seat separates window and aisle passengers. B/E remain physical seats but cannot be selected.');
- if(seat.estimated&&seat.row===3)notes.push('Row 3 remains UpFront Plus in this continuation estimate. Its final retrofit category and blocked-middle treatment are unknown.');
  if(seat.aircraft==='a321neo'&&seat.row>=29&&seat.side==='right')notes.push('Right-side rows are staggered aft relative to the same-numbered left rows.');
  if(seat.aircraft==='a321neo'&&seat.row===30&&'BC'.includes(seat.letter||''))notes.push('Standard category with exit restrictions: 28″ pitch. Exit status does not automatically mean extra legroom.');
  if(seat.aircraft==='a321'&&seat.exit&&seat.category==='standard')notes.push('Standard exit seat at 28″ pitch; category and exit eligibility are separate.');
