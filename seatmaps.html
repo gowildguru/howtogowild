@@ -73,6 +73,48 @@ dialog::backdrop{background:#050b1c75;backdrop-filter:blur(1px)}.seat-card-top{p
 .aircraft-card .fleet-plane,.aircraft-card .fleet-plane.plane-neo{width:45%;height:170px;max-height:170px;right:24px;bottom:0;object-fit:contain;transform:none}
 .seat-card-art img,.seat-card-art img.plane-neo{width:100%;height:98px;max-height:98px;object-fit:contain;transform:none}
 @media(max-width:550px){.aircraft-card .fleet-plane,.aircraft-card .fleet-plane.plane-neo{width:78%;height:135px;max-height:135px;right:11%;bottom:0;object-fit:contain;transform:none}}
+
+/* Animal carousel: scoped to preserve the cabin guide and seat dialogs. */
+.fleet-widget{--sage:#c1d6bd;--pale:#cbdacb0d;--line:#94a18b77;--muted:#b5c9ba;margin:34px 0 0;padding:24px;border:1px solid var(--line);border-radius:23px;background:#202a2bce;color:var(--text);font-family:Montserrat,Arial,sans-serif;backdrop-filter:blur(3px);box-shadow:inset 0 1px 0 #d4dfc31a,0 18px 55px #0003;min-width:0}
+.fleet-widget .eyebrow{font-size:11px;letter-spacing:.16em;color:var(--sage);margin-bottom:8px}
+.fleet-widget #fleet-title{font-size:clamp(24px,3.5vw,30px);line-height:1.15;margin:0 0 8px;font-weight:800;letter-spacing:-.025em}
+.fleet-widget .sub{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 22px}
+.fleet-widget .card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#1b2529a8}
+.fleet-widget figure{margin:0;position:relative;min-height:430px;background:radial-gradient(circle at 25% 25%,#aec8bb1a,transparent 65%),#14202aba;display:grid;place-items:center;overflow:hidden}
+.fleet-widget figure img{width:100%;height:100%;position:absolute;object-fit:cover}
+.fleet-widget .placeholder{width:100%;text-align:center;padding:26px}
+.fleet-widget .placeholder svg{width:min(100%,300px);height:230px;color:var(--sage)}
+.fleet-widget .photo-status{font-size:12px;color:var(--muted);line-height:1.6}
+.fleet-widget figcaption{position:absolute;bottom:12px;left:12px;right:12px;font-size:11px;line-height:1.5;max-height:90px;overflow:auto;overflow-wrap:anywhere;background:#101a22f2;border:1px solid var(--line);border-radius:12px;padding:9px 11px}
+.fleet-widget .copy{padding:26px;min-width:0;overflow-wrap:anywhere}
+.fleet-widget .pill{display:inline-block;background:var(--pale);border:1px solid #b7cbb340;color:var(--sage);font-size:11px;font-weight:700;padding:7px 11px;border-radius:999px}
+.fleet-widget #fleet-name{font-size:clamp(25px,3.5vw,33px);line-height:1.2;letter-spacing:-.025em;margin:14px 0 8px}
+.fleet-widget .muted{color:var(--muted);font-size:13px;line-height:1.7}
+.fleet-widget #fleet-identity{margin:0 0 18px;font-size:12px}
+.fleet-widget #fleet-meet{font-size:14px;margin:0 0 7px}
+.fleet-widget #fleet-fact{min-height:66px;margin:0}
+.fleet-widget dl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0;padding:17px;background:var(--pale);border:1px solid #b7cbb326;border-radius:14px}
+.fleet-widget dt{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.fleet-widget dd{margin:5px 0 0;font-size:13px;font-weight:600;line-height:1.5}
+.fleet-widget a{color:#d0e3d6;text-underline-offset:3px}
+.fleet-widget #fleet-wiki{display:inline-block;font-size:12px;font-weight:700;padding:8px 0}
+.fleet-widget button,.fleet-widget select{font:600 13px Montserrat,Arial,sans-serif;color:var(--text);background:#101a22ca;border:1px solid var(--line);border-radius:999px;min-height:44px;padding:10px 15px;cursor:pointer}
+.fleet-widget button:hover{background:#293736dc;border-color:#b4c2a9aa}
+.fleet-widget button:focus-visible,.fleet-widget select:focus-visible,.fleet-widget a:focus-visible{outline:3px solid #e4eace;outline-offset:3px}
+.fleet-widget #fleet-play{background:#aec8bb;color:#193421;border-color:#aec8bb}
+.fleet-widget .fleet-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:20px 0 8px}
+.fleet-widget #fleet-count{font-size:12px;min-width:65px;text-align:center}
+.fleet-widget #fleet-dots{display:flex;justify-content:center;gap:0;flex-wrap:wrap}
+.fleet-widget #fleet-dots button{padding:0;min-height:44px;width:44px;border:0;background:transparent}
+.fleet-widget #fleet-dots button:after{content:"";display:block;width:8px;height:8px;background:#829d8a;border-radius:50%;margin:auto}
+.fleet-widget #fleet-dots button[aria-current="true"]:after{width:22px;border-radius:99px;background:var(--sage)}
+.fleet-widget .jump{text-align:center;margin-top:12px}
+.fleet-widget .jump label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+.fleet-widget .jump select{width:420px;max-width:100%;border-radius:12px;background:#101a22}
+.fleet-widget .note{text-align:center;margin:20px 0 0;font-size:11px;color:var(--muted);line-height:1.7}
+.fleet-widget .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:700px){.fleet-widget{padding:18px;border-radius:18px}.fleet-widget .card{grid-template-columns:1fr}.fleet-widget figure{min-height:240px;height:280px}.fleet-widget .copy{padding:20px}.fleet-widget #fleet-fact{min-height:0}.fleet-widget dl{gap:14px;padding:14px}.fleet-widget .fleet-controls{gap:8px}}
+@media(max-width:390px){.fleet-widget{padding:14px}.fleet-widget .copy{padding:16px}.fleet-widget figure{height:240px}.fleet-widget .fleet-controls button{padding:10px 12px}.fleet-widget #fleet-count{flex-basis:100%}.fleet-widget dl{grid-template-columns:1fr}.fleet-widget dd{margin-bottom:0}}
 </style>
 </head>
 <body><main>
@@ -99,6 +141,36 @@ dialog::backdrop{background:#050b1c75;backdrop-filter:blur(1px)}.seat-card-top{p
 </div>
 <footer><p>Independent HowToGoWild guide · checked October 4, 2026. Compare against the aircraft and seats offered in your own reservation.</p><div class="sources"><a href="https://www.airbus.com/en/products-services/commercial-aircraft/passenger-aircraft/a320-family">Airbus aircraft facts</a><a href="https://mediaassets.airbus.com/pm_38_914_914157-tlwvtuuhjj.pdf?fileName=airbus-a320-family-facts-and-figures-june-2026.pdf">Airbus dimensions</a><a href="https://www.flyfrontier.com/about-us/aircraft-configuration/">Frontier published cabin diagrams</a><a id="geometrySource" href="https://www.aerolopa.com/f9-32n">AeroLOPA geometry</a><a href="https://faq.flyfrontier.com/help/what-is-the-difference-between-first-upfront-premium-preferred-seating">Seat categories</a></div></footer>
 </div>
+<section class="fleet-widget" id="fleet-widget" aria-labelledby="fleet-title" aria-roledescription="carousel">
+<div class="fleet-heading"><div class="eyebrow">The animals behind the tails</div><h2 id="fleet-title">Meet the fleet</h2><p class="sub">Get to know the animals that give Frontier’s aircraft their names.</p></div>
+<article id="fleet-slide" class="card" aria-roledescription="slide" aria-labelledby="fleet-name">
+<figure>
+<div class="placeholder" id="fleet-placeholder">
+<svg viewBox="0 0 320 250" fill="none" role="img" aria-label="Airplane illustration">
+<circle cx="160" cy="125" r="106" stroke="#b5c5b2" stroke-dasharray="3 8"/>
+<path d="M30 173h50m160-96h50M52 65h26m163 137h29" stroke="#a3b59f" stroke-width="2" stroke-linecap="round"/>
+<g transform="translate(160 125) rotate(32)">
+<path d="M-7-72Q0-98 7-72L11-22 86 22 86 34 10 9 7 62 31 81 31 89 0 79-31 89-31 81-7 62-10 9-86 34-86 22-11-22Z" fill="#f9faf5" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+<path d="M-6-58Q0-64 6-58M0-46V61M-45 11v16m90-16v16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<path d="m-31 81 31-9 31 9" stroke="currentColor" stroke-width="2"/>
+</g></svg><p class="photo-status" id="fleet-photo-status" role="status">Loading animal photo…</p>
+</div>
+<img id="fleet-photo" alt="" hidden>
+<figcaption id="fleet-credit" hidden></figcaption>
+</figure>
+<div class="copy"><span class="pill" id="fleet-species"></span><h3 id="fleet-name"></h3><p class="muted" id="fleet-identity"></p>
+<p id="fleet-meet"><b></b></p><p id="fleet-fact" class="muted"></p>
+<dl><div><dt>Fleet number</dt><dd id="fleet-fleet"></dd></div><div><dt>Delivered</dt><dd id="fleet-delivered"></dd></div><div><dt>Time since delivery</dt><dd id="fleet-age"></dd></div><div><dt>Configuration</dt><dd id="fleet-seats"></dd></div></dl>
+<a id="fleet-wiki" target="_blank" rel="noopener noreferrer">Explore this animal <span aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a>
+</div></article>
+<div class="fleet-controls" role="group" aria-label="Slideshow controls"><button type="button" aria-controls="fleet-slide" id="fleet-prev" aria-label="Previous aircraft">← Previous</button><button type="button" aria-controls="fleet-slide" id="fleet-play" aria-label="Pause automatic slideshow">Pause</button><button type="button" aria-controls="fleet-slide" id="fleet-next" aria-label="Next aircraft">Next →</button><span id="fleet-count" class="muted"></span></div>
+<div id="fleet-dots" aria-label="Nearby slides"></div>
+<div class="jump"><label for="fleet-choose">Choose an aircraft</label><select id="fleet-choose"></select></div>
+<p class="note">Delivery age is approximate to the month. Aircraft types and seat counts reproduce the supplied fleet table; see the cards above for current cabin layouts. Stored and parked aircraft are included.<br>Independent HowToGoWild feature · Not affiliated with Frontier Airlines.</p>
+<p class="sr" id="fleet-announcement" aria-live="polite" aria-atomic="true"></p>
+<noscript>Enable JavaScript to view the fleet slideshow.</noscript>
+</section>
+
 </main>
 <dialog id="seatDialog" aria-labelledby="dialogTitle">
 <div class="seat-card-top"><div class="dialog-head"><h2 id="dialogTitle"></h2><button class="close" id="closeDialog" type="button" aria-label="Close seat details" autofocus>×</button></div>
@@ -349,5 +421,782 @@ dialog.addEventListener('close',()=>{if(opener?.isConnected)opener.focus();});
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 for(const breakpoint of ['(max-width:390px)','(max-width:360px)'])matchMedia(breakpoint).addEventListener('change',()=>render());
 createAircraftCards();render();
+</script>
+<script>
+
+
+(() => {
+"use strict";
+/* Source: user's pasted fleet table. Only Remark containing "lsd".
+   Compact columns: fleet number | delivery month/year | aircraft name | remark.
+   Omitted remark means "lsd". Parked/stored rows are intentionally retained.
+   Types/seats below reproduce the groups in this particular source table. */
+const DATA = `230|Oct 2015|Betty the Bluebird
+232|Nov 2015|Sammy the Squirrel
+233|May 2016|Buck the Pronghorn
+235|Sep 2016|Pike the Otter
+317|Nov 2017|Georgia the Painted Bunting
+318|Dec 2017|Flower the Hummingbird
+323|Dec 2017|Colorado the Bighorn Sheep
+324|Dec 2017|Summer the Swan
+326|Mar 2018|Skye the Blue Jay
+329|Apr 2018|Trixie the Fox
+330|Apr 2018|Junior the Lynx
+331|Jun 2018|Choo the Pika
+332|Aug 2018|Hazel the Chipmunk
+335|Aug 2018|Jo Jo the Grizzly Bear
+336|Jul 2018|Rosie the River Otter
+337|Oct 2018|Hunter the Bobcat
+341|Oct 2018|Fran the Sea Lion
+343|Dec 2018|Meadow & West the Horses
+349|Mar 2019|Hops the Rabbit|Parked / Maintenance, lsd
+351|May 2019|Joey the Opossum
+353|Jun 2019|Blanco the Polar Bear|Parked at P08, lsd
+354|Jun 2019|Scarlet the Tanager
+358|Aug 2019|Ichabod the Whooping Crane
+359|Sep 2019|Cookie the Oriole|Parked / Maintenance, lsd
+360|Oct 2019|Ruby the Reindeer
+361|Oct 2019|Wylie the Coati
+363|Nov 2019|Ward the Beaver
+366|Mar 2020|Kit the Kermode Bear
+368|Jul 2020|Cortez the Green Turtle
+369|Jul 2020|Chinook the Gray Wolf
+370|Mar 2020|Elrey the Elk
+371|Jul 2020|Parish & Daisy the Burrowing Owls
+372|Sep 2020|Watson the Key Deer
+373|Mar 2021|Francie the Piping Plover
+374|Apr 2021|Crystal the Florida Manatee
+375|Dec 2020|Piper the White Pelican
+376|Dec 2020|Cruz the Island Fox
+377|Mar 2021|Odell the Lynx|Parked / Maintenance, lsd
+378|Apr 2021|Lewis the Greater Sage-Grouse|Parked / Maintenance, lsd
+379|Mar 2021|Hudson the Bog Turtle
+380|May 2021|Verde the Resplendent Quetzal
+381|Apr 2021|Monte the Margay Cat
+382|Jul 2021|Sonny the Lemon Shark
+383|Jun 2021|Manteo the Red Wolf
+384|Aug 2021|Mojave the Desert Tortoise
+385|Aug 2021|Percy the Florida Panther
+386|Sep 2021|Forest the Northern Spotted Owl
+388|Jan 2022|Rocket the Hammerhead Shark
+389|Mar 2022|Rocky the Saw-Whet Owl
+390|Apr 2022|Juan the Puerto Rican Parrot
+391|Apr 2022|Grizwald the Bear
+392|Jun 2022|Kenai the Beluga Whale
+393|Aug 2022|Nevada the Red Fox
+394|Aug 2022|Rivero the Puerto Rican Crested Toad
+395|Oct 2022|Sage the Pygmy Rabbit
+396|Nov 2022|Ted the Sea Turtle
+402|Oct 2025|Peary the Red Knot
+405|Oct 2025|McCall the Flat-tail Horned Lizard
+409|Oct 2025|Owen the Relict Frog
+413|Nov 2025|Adams the Green Salamander
+414|Dec 2025|Penny the Short Eared Owl
+430|Nov 2025|Sandy the Black-Crowned Night Heron
+432|Dec 2025|Orville the Red Cardinal
+434|Jan 2026|Paxton the Puffin
+435|Feb 2026|Skye the Blue Jay
+436|Mar 2026|Choo the Pika
+437|Feb 2026|Rosie the River Otter
+438|Mar 2026|Carl the Coyote
+439|Apr 2026|Yoro the Honduran Emerald
+440|Apr 2026|Tia the Great Green Macaw
+441|Jul 2026|Chloe the White-tailed Deer Fawn
+701|Oct 2015|Otto the Owl
+702|Oct 2015|Courtney The Cougar
+704|Nov 2015|Virginia the Wolf
+705|Dec 2015|Ferndale the Pygmy Owl
+706|Dec 2015|Max the Lynx
+708|Mar 2016|Joe Bob the Badger
+709|Apr 2016|Steve the Eagle
+710|Jun 2016|Fallon the Falcon
+711|Jun 2016|Powder the Polar Bear
+712|Jul 2016|Spot the Jaguar
+713|Aug 2016|Mitch the Wolverine|Parked / Maintenance, lsd
+714|Sep 2016|Cubby the Bear
+715|Sep 2016|Cactus the Coyote
+716|Jan 2017|Seymour the Walrus
+717|Feb 2017|Luna & Lilly the Wolves
+718|Mar 2017|Cali the Mountain Lion
+719|Jun 2017|Midnight the Wolf
+720|Oct 2017|Crockett the Raccoon
+721|Nov 2017|Cody & Dakota the Coyotes
+722|Nov 2018|Xavier the Mountain Goat
+723|Dec 2018|Gordon the Golden Eagle
+603|Sep 2022|Frederick the Bald Eagle|lsd, America's Green Airline cs
+604|Dec 2022|Maria the Bald Eagle|lsd, America's Green Airline cs
+605|Dec 2022|Edward the Bald Eagle|lsd, America's Green Airline cs
+607|Dec 2022|Chopper the Great White Shark
+609|Jan 2023|Hamber The California Condor
+610|Jan 2023|Ozzy the Orca|Parked / Maintenance, lsd
+611|Mar 2023|Bori the Coquí Llanero
+612|May 2023|Kari the Fisher
+615|Jul 2023|Manuel the Squirrel Monkey
+616|May 2023|Sierra the Bighorn Sheep
+621|Jul 2023|Wilhelm the Steller’s Eider
+624|Aug 2023|Cloud the Three-wattled bellbird
+625|Aug 2023|Pine the Red-Cockaded Woodpecker
+626|Aug 2023|Grace the Oncilla
+629|Sep 2023|Harper the American Alligator
+630|Oct 2023|Abaco the Kirtland's Warbler
+631|Nov 2023|Pearl the Spotted Eagle Ray
+633|Nov 2023|Stewart the Red-billed Streamertail
+634|Dec 2023|Holly the Aplomado Falcon
+635|Feb 2024|Domingo & Andrea the Hispaniolan Parakeets
+636|Feb 2024|Savannah the Yellow-Headed Amazon
+637|Feb 2024|Finn the Oceanic Whitetip Shark
+638|Mar 2024|Rosa the Pink-headed Warbler
+639|Mar 2024|Axl the Axolotl
+640|May 2024|Pike the Sea Otter
+641|Mar 2024|Emmitt the Golden-cheeked Warbler
+642|Apr 2024|Hugh the Manatee
+644|Apr 2024|Leaf the Morelet's Tree Frog
+645|May 2024|Thunder the Bison
+646|Apr 2024|Cedar the Florida Scrub Jay|Stored at DEN after incident, lsd
+648|Oct 2024|Sheldon the Sea Turtle
+649|Jun 2024|Yukon the Caribou
+650|Jul 2024|Morrison the Crested Caracara
+651|Aug 2024|Jaragua the Ricord‘s Rock Iguana
+652|Jul 2024|Lobo the Gray Wolf
+653|Aug 2024|Klondike the Polar Bear
+654|Sep 2024|Carmen the Black Bear
+655|Oct 2024|Buck the Pronghorn
+656|Nov 2024|Quin the Great Curassow
+657|Dec 2024|Davis the Mexican Spotted Owl
+658|Dec 2024|Brazos the Ridgway's Hawk
+659|Apr 2026|Maya the Jaguar
+660|Feb 2025|Flint The Wood Stork
+662|Dec 2024|Martillo the Bonnethead Shark
+663|Mar 2025|Falkner the Roseate Tern
+664|Mar 2025|Miguel & Lina the Island Foxes
+665|Mar 2025|George the Steller Sea Lion
+667|Jun 2025|Clark W. the Grizzly Bear
+668|May 2025|Lupe the Fur Seal
+669|Jun 2025|Mason the Texas Horned Lizard
+670|Sep 2025|Kevin the Gila Monster
+671|Jul 2025|Honey the Badger
+672|Oct 2025|Allie the Evening Grosbeak
+673|Nov 2025|Martaan the Brown Pelican
+674|Dec 2025|Peachy the Fox
+675|Feb 2026|Flip & Bob the Bottlenose Dolphins
+676|Apr 2026|Geneva the American Bittern
+677|Mar 2026|Isla the Mona Ground Iguana
+678|May 2026|Jo Jo the Bear
+679|May 2026|Colorado the Bighorn Sheep
+680|Jul 2026|Spirit the Golden Eagle
+681|Jul 2026|Sal the Cougar`;
+const fleet = DATA.split("\n").map(line => {
+  const [number, delivered, name, remark = "lsd"] = line.split("|");
+  const n = Number(number), parts = name.split(/ the /i);
+  const type = n < 300 ? "Airbus A320-200" : n < 500 ? "Airbus A320neo" : n < 700 ? "Airbus A321neo" : "Airbus A321-200";
+  const seats = n < 235 ? 180 : n < 500 ? 186 : n < 700 ? 240 : 230;
+  return {number, registration:"N"+number+"FR", delivered, name, remark,
+    type, seats, configuration:"Y"+seats, animalName:parts[0], species:parts[1]};
+}).filter(a => a.remark.toLowerCase().includes("lsd"));
+
+/* ENRICHMENT HOOKS: keyed by species, shared across aircraft.
+   You can also override any field per registration in AIRCRAFT.
+   Use a direct HTTPS Wikimedia image URL, and include author/license and
+   the Commons file-page URL in imageSource. Photos load from Wikipedia and Wikimedia Commons when online.
+   Example shape (replace placeholders with verified values):
+   "Blue Jay": {
+     fact: "Your short, verified animal fact.",
+     wikiPage: "Blue jay",
+     imageUrl: "https://upload.wikimedia.org/...",
+     imageCredit: "Author · CC BY-SA 4.0",
+     imageSource: "https://commons.wikimedia.org/wiki/File:..."
+   }
+   Leave imageUrl empty until a real image is selected. */
+const ANIMALS = {
+  "Bluebird": {
+    "fact": "Bluebirds often hunt by watching from a perch, then dropping to the ground to catch insects. They nest in cavities, including specially built nest boxes."
+  },
+  "Squirrel": {
+    "fact": "Squirrels use their bushy tails for balance. Some bury nuts for later, and forgotten seeds can grow into new trees."
+  },
+  "Pronghorn": {
+    "fact": "Pronghorns are native to North America and are built for fast, sustained running. Despite their appearance, they are not true antelopes."
+  },
+  "Otter": {
+    "fact": "Otters have streamlined bodies and dense fur that help them hunt in water. Their sensitive whiskers help them detect prey."
+  },
+  "Painted Bunting": {
+    "fact": "Male painted buntings wear a striking mix of blue, green, and red feathers. Females are mostly green, blending into leafy vegetation."
+  },
+  "Hummingbird": {
+    "fact": "Hummingbirds can hover and fly backward. They fuel their flight with nectar and also eat tiny insects."
+  },
+  "Bighorn Sheep": {
+    "fact": "Bighorn sheep have split hooves with grippy pads that help them climb steep terrain. Males use their large curved horns in contests with rivals."
+  },
+  "Swan": {
+    "fact": "Swans use their long necks to reach aquatic plants beneath the surface. Their young are called cygnets."
+  },
+  "Blue Jay": {
+    "fact": "Blue jays store acorns for later meals. Acorns they leave behind can sprout, helping new oak trees grow."
+  },
+  "Fox": {
+    "fact": "Foxes use keen hearing to locate prey, including small animals hidden in vegetation. Their bushy tails help with balance and warmth."
+  },
+  "Lynx": {
+    "fact": "Lynx have tufted ears and short tails. Their broad, furry paws help them move through snow."
+  },
+  "Pika": {
+    "fact": "Pikas are small relatives of rabbits that often live among mountain rocks. They gather plants into hay piles to eat during winter."
+  },
+  "Chipmunk": {
+    "fact": "Chipmunks carry food in stretchy cheek pouches. They store seeds and nuts in caches for later meals."
+  },
+  "Grizzly Bear": {
+    "fact": "Grizzly bears have a prominent shoulder hump made of muscle. It helps power their digging for roots and other food."
+  },
+  "River Otter": {
+    "fact": "River otters use webbed feet and muscular tails to move through water. They can close their nostrils and ears when diving."
+  },
+  "Bobcat": {
+    "fact": "Bobcats are named for their short, bobbed tails. These adaptable wild cats hunt animals such as rabbits and rodents."
+  },
+  "Sea Lion": {
+    "fact": "Sea lions have visible external ear flaps. They can rotate their rear flippers beneath their bodies to help them walk on land."
+  },
+  "Horses": {
+    "fact": "Horses are social grazing animals that communicate through body posture and ear movements. Their eyes sit on the sides of their heads, giving them a wide view."
+  },
+  "Rabbit": {
+    "fact": "Rabbits have teeth that keep growing throughout their lives. Chewing fibrous plants helps wear those teeth down."
+  },
+  "Opossum": {
+    "fact": "Opossums are marsupials, and their young develop in a pouch. Their prehensile tails can help them grip branches."
+  },
+  "Polar Bear": {
+    "fact": "Polar bears have black skin beneath their pale-looking fur. Their large paws help them paddle through water and spread their weight on ice."
+  },
+  "Tanager": {
+    "fact": "Tanagers include many brightly colored birds. Depending on the species, they feed on fruit, insects, or both."
+  },
+  "Whooping Crane": {
+    "fact": "Whooping cranes are tall white birds with black wingtips visible in flight. Their loud calls carry over long distances."
+  },
+  "Oriole": {
+    "fact": "Many orioles weave hanging nests from plant fibers. They eat insects and may also visit fruit or nectar sources."
+  },
+  "Reindeer": {
+    "fact": "Reindeer and caribou are the same species. Unlike most deer, both males and females can grow antlers."
+  },
+  "Coati": {
+    "fact": "Coatis are relatives of raccoons with long, flexible noses. They use those noses to search for food in leaf litter."
+  },
+  "Beaver": {
+    "fact": "Beavers have strong teeth that grow continuously. Their dams can create ponds and wetland habitat for other wildlife."
+  },
+  "Kermode Bear": {
+    "fact": "Kermode bears are a subspecies of American black bear. Some have a naturally white coat caused by an inherited color variation."
+  },
+  "Green Turtle": {
+    "fact": "Green sea turtles get their name from the color of their body fat. Adults feed mainly on seagrasses and algae."
+  },
+  "Gray Wolf": {
+    "fact": "Gray wolves live in social groups that are often family units. Howling helps them communicate over long distances."
+  },
+  "Elk": {
+    "fact": "Male elk grow and shed antlers each year. During the breeding season, their bugling calls can carry across open country."
+  },
+  "Burrowing Owls": {
+    "fact": "Burrowing owls nest and shelter underground, often in burrows made by other animals. They are frequently active during daylight."
+  },
+  "Key Deer": {
+    "fact": "Key deer are a small subspecies of white-tailed deer native to the Florida Keys. They can swim between islands."
+  },
+  "Piping Plover": {
+    "fact": "Piping plovers nest on open sand or gravel. Their pale coloring helps them blend into beaches."
+  },
+  "Florida Manatee": {
+    "fact": "Florida manatees are plant-eating aquatic mammals. They must come to the surface to breathe air."
+  },
+  "White Pelican": {
+    "fact": "White pelicans often work together to herd fish into shallow water. They scoop up prey with their bills rather than plunge-diving."
+  },
+  "Island Fox": {
+    "fact": "Island foxes are native to California's Channel Islands. They are much smaller than their mainland relative, the gray fox."
+  },
+  "Greater Sage-Grouse": {
+    "fact": "Male greater sage-grouse gather at display grounds called leks. They fan their tails and inflate chest sacs during courtship."
+  },
+  "Bog Turtle": {
+    "fact": "Bog turtles are tiny freshwater turtles with an orange or yellow patch on each side of the neck. They live in shallow, spring-fed wetlands."
+  },
+  "Resplendent Quetzal": {
+    "fact": "Resplendent quetzals live in Central American mountain forests. Breeding males have long trailing feathers that extend well beyond the tail."
+  },
+  "Margay Cat": {
+    "fact": "Margays are skilled tree-climbing cats. Flexible ankles help them climb down trunks headfirst."
+  },
+  "Lemon Shark": {
+    "fact": "Lemon sharks have a yellowish-brown color that helps them blend into sandy surroundings. Young lemon sharks often use shallow coastal habitats."
+  },
+  "Red Wolf": {
+    "fact": "Red wolves are native to North America. Like other wolves, they communicate through scent, body language, and vocal calls."
+  },
+  "Desert Tortoise": {
+    "fact": "Desert tortoises spend much of their lives in burrows. These shelters help them avoid extreme heat and conserve water."
+  },
+  "Florida Panther": {
+    "fact": "The Florida panther is a population of cougar. These cats usually live and hunt alone."
+  },
+  "Northern Spotted Owl": {
+    "fact": "Northern spotted owls live in forests of western North America. They hunt mostly at night for small mammals."
+  },
+  "Hammerhead Shark": {
+    "fact": "A hammerhead's wide head places its eyes far apart. Like other sharks, it can detect weak electrical signals produced by prey."
+  },
+  "Saw-Whet Owl": {
+    "fact": "Saw-whet owls are small owls with large, round heads. They hunt mainly at night, often catching mice."
+  },
+  "Puerto Rican Parrot": {
+    "fact": "Puerto Rican parrots are green birds with a red forehead and a pale ring around each eye. They nest in tree cavities."
+  },
+  "Bear": {
+    "fact": "Bears rely strongly on their sense of smell to find food. Most species eat a mixture of plant and animal foods."
+  },
+  "Beluga Whale": {
+    "fact": "Belugas are toothed whales that turn white as they mature. Their whistles and other sounds have earned them the nickname sea canaries."
+  },
+  "Red Fox": {
+    "fact": "Red foxes use their long tails for balance and as a warm wrap while resting. They can locate small prey by listening carefully."
+  },
+  "Puerto Rican Crested Toad": {
+    "fact": "Puerto Rican crested toads have raised ridges on their heads. Their tadpoles develop in freshwater pools."
+  },
+  "Pygmy Rabbit": {
+    "fact": "Pygmy rabbits are small rabbits of sagebrush country. They dig their own burrows for shelter."
+  },
+  "Sea Turtle": {
+    "fact": "Sea turtles breathe air and must surface even though they spend most of their lives at sea. Females come ashore to lay eggs in sand."
+  },
+  "Red Knot": {
+    "fact": "Red knots are shorebirds that travel long distances between breeding and wintering grounds. Their bills help them find small animals in sand and mud."
+  },
+  "Flat-tail Horned Lizard": {
+    "fact": "Flat-tailed horned lizards are camouflaged for sandy desert habitats. Ants make up much of their diet."
+  },
+  "Relict Frog": {
+    "fact": "Relict leopard frogs live around desert springs, streams, and spring-fed wetlands. These small patches of permanent water are essential to their survival.",
+    "factSource": "https://www.nps.gov/para/learn/nature/relict-leopard-frog.htm"
+  },
+  "Green Salamander": {
+    "fact": "Green salamanders have mottled coloring that resembles lichen. They shelter in narrow rock crevices."
+  },
+  "Short Eared Owl": {
+    "fact": "Short-eared owls often hunt over open grasslands. Their small ear tufts can be difficult to see."
+  },
+  "Black-Crowned Night Heron": {
+    "fact": "Black-crowned night herons often feed at dusk or at night. They wait near water to catch fish and other small animals."
+  },
+  "Red Cardinal": {
+    "fact": "Male northern cardinals are bright red, while females are mostly brown with reddish accents. Both sexes can sing."
+  },
+  "Puffin": {
+    "fact": "Puffins use their wings to swim underwater while chasing fish. Their colorful breeding-season bills make them easy to recognize."
+  },
+  "Coyote": {
+    "fact": "Coyotes are adaptable members of the dog family. They communicate with yips, barks, and howls."
+  },
+  "Honduran Emerald": {
+    "fact": "The Honduran emerald is a hummingbird native only to Honduras. Its shining green plumage gives it its gemstone name.",
+    "factSource": "https://en.wikipedia.org/wiki/Honduran_emerald"
+  },
+  "Great Green Macaw": {
+    "fact": "Great green macaws use their powerful bills to open hard fruits and seeds. They nest in large tree cavities."
+  },
+  "White-tailed Deer Fawn": {
+    "fact": "White-tailed deer fawns are born with spotted coats. The spots help camouflage them in dappled light."
+  },
+  "Owl": {
+    "fact": "Owls have forward-facing eyes and excellent hearing that help them locate prey. Many species have specially shaped feathers that make their flight quiet."
+  },
+  "Cougar": {
+    "fact": "Cougars are also known as mountain lions and pumas. These powerful cats usually hunt alone."
+  },
+  "Wolf": {
+    "fact": "Wolves use howls to communicate with their pack. Packs are often family groups with parents and their young."
+  },
+  "Pygmy Owl": {
+    "fact": "Pygmy owls are small predators that can catch birds and other animals. Many species are active during daylight."
+  },
+  "Badger": {
+    "fact": "Badgers have strong forelimbs and long claws for digging. Their underground burrows provide shelter and access to prey."
+  },
+  "Eagle": {
+    "fact": "Eagles have powerful talons and hooked bills. Their sharp eyesight helps them locate food from a distance."
+  },
+  "Falcon": {
+    "fact": "Falcons have pointed wings suited to fast flight. Many catch birds or insects on the wing."
+  },
+  "Jaguar": {
+    "fact": "Jaguars are strong swimmers and often live near water. Their spotted coats help break up their outline in forest shade."
+  },
+  "Wolverine": {
+    "fact": "Wolverines are large members of the weasel family. Their broad paws help them travel through snow."
+  },
+  "Walrus": {
+    "fact": "Walruses use sensitive whiskers to find food on the seafloor. Both males and females can grow long tusks."
+  },
+  "Wolves": {
+    "fact": "Wolves use howls to communicate with their pack. Packs are often family groups with parents and their young."
+  },
+  "Mountain Lion": {
+    "fact": "Mountain lions are also called cougars and pumas. They stalk prey quietly before making a short, powerful leap."
+  },
+  "Raccoon": {
+    "fact": "Raccoons use their sensitive front paws to examine food and objects. They are adaptable climbers and often forage at night."
+  },
+  "Coyotes": {
+    "fact": "Coyotes are adaptable members of the dog family. They communicate with yips, barks, and howls."
+  },
+  "Mountain Goat": {
+    "fact": "Mountain goats have specialized hooves that grip steep, rocky slopes. Their thick white coats help insulate them in cold mountain weather."
+  },
+  "Golden Eagle": {
+    "fact": "Golden eagles are named for the golden-brown feathers on the back of their heads and necks. They hunt using sharp eyesight and powerful talons."
+  },
+  "Bald Eagle": {
+    "fact": "Adult bald eagles have white heads and tails, but young birds are mostly brown. They often live near water where fish are available."
+  },
+  "Great White Shark": {
+    "fact": "Great white sharks have rows of teeth that are replaced throughout their lives. Their pale undersides and darker backs provide camouflage in the water."
+  },
+  "California Condor": {
+    "fact": "California condors are large soaring birds that feed on carrion. They ride rising air currents to travel with little wing-flapping."
+  },
+  "Orca": {
+    "fact": "Orcas are the largest members of the dolphin family. They live in social groups and use sound to communicate and find prey."
+  },
+  "Coquí Llanero": {
+    "fact": "The coquí llanero is a tiny frog native only to Puerto Rico. It lives in freshwater wetland habitat.",
+    "factSource": "https://biologicaldiversity.org/species/amphibians/coqui_llanero/natural_history.html"
+  },
+  "Fisher": {
+    "fact": "Fishers are members of the weasel family, despite their name. These agile forest mammals are skilled climbers."
+  },
+  "Squirrel Monkey": {
+    "fact": "Squirrel monkeys are social primates of Central and South America. They move through trees in groups while searching for insects and fruit."
+  },
+  "Steller’s Eider": {
+    "fact": "Steller's eiders are small sea ducks. They dive underwater to feed on small aquatic animals."
+  },
+  "Three-wattled bellbird": {
+    "fact": "Male three-wattled bellbirds have three dangling wattles near the bill. Their loud, unusual calls can reveal them before they are seen.",
+    "factSource": "https://abcbirds.org/birds/three-wattled-bellbird/"
+  },
+  "Red-Cockaded Woodpecker": {
+    "fact": "Red-cockaded woodpeckers excavate nest cavities in living pine trees. Family groups can work together to raise young."
+  },
+  "Oncilla": {
+    "fact": "Oncillas are small spotted wild cats of the Americas. Their patterned coats help them blend into vegetation."
+  },
+  "American Alligator": {
+    "fact": "American alligators build nests from vegetation and other material. Mothers guard their nests and help protect newly hatched young."
+  },
+  "Kirtland's Warbler": {
+    "fact": "Kirtland's warblers breed in young pine habitats and nest close to the ground. They migrate south for the winter."
+  },
+  "Spotted Eagle Ray": {
+    "fact": "Spotted eagle rays have long tails and white spots across their dark backs. Their flattened teeth help crush hard-shelled prey."
+  },
+  "Red-billed Streamertail": {
+    "fact": "The red-billed streamertail is a hummingbird native to Jamaica. Adult males have two very long tail feathers."
+  },
+  "Aplomado Falcon": {
+    "fact": "Aplomado falcons hunt in open habitats. They feed on birds and large insects."
+  },
+  "Hispaniolan Parakeets": {
+    "fact": "Hispaniolan parakeets are green parrots native to Hispaniola. They are social birds often seen in noisy flocks."
+  },
+  "Yellow-Headed Amazon": {
+    "fact": "Yellow-headed amazons are green parrots with yellow head feathers. Their strong, curved bills help them handle seeds and other plant foods."
+  },
+  "Oceanic Whitetip Shark": {
+    "fact": "Oceanic whitetip sharks live in the open ocean. Their long, rounded fins often have conspicuous pale tips."
+  },
+  "Pink-headed Warbler": {
+    "fact": "Pink-headed warblers live in highland forests of southern Mexico and Guatemala. Their rosy heads stand out against darker bodies.",
+    "factSource": "https://en.wikipedia.org/wiki/Pink-headed_warbler"
+  },
+  "Axolotl": {
+    "fact": "Axolotls keep their feathery external gills as adults. These aquatic salamanders can regrow lost limbs."
+  },
+  "Sea Otter": {
+    "fact": "Sea otters use dense fur rather than a thick layer of blubber for insulation. Some use rocks to help open hard-shelled prey."
+  },
+  "Golden-cheeked Warbler": {
+    "fact": "Golden-cheeked warblers breed in central Texas. They use strips of juniper bark in their nests."
+  },
+  "Manatee": {
+    "fact": "Manatees are aquatic mammals that graze on plants. They surface regularly to breathe air."
+  },
+  "Morelet's Tree Frog": {
+    "fact": "Morelet's tree frogs lay eggs on vegetation above water. When the eggs hatch, the tadpoles drop into the water below.",
+    "factSource": "https://en.wikipedia.org/wiki/Morelet%27s_tree_frog"
+  },
+  "Bison": {
+    "fact": "Bison are North America's largest land mammals. Their heavy shoulder muscles help them push through snow to reach food."
+  },
+  "Florida Scrub Jay": {
+    "fact": "Florida scrub-jays are native only to Florida. Young birds may stay with their family and help raise later broods."
+  },
+  "Caribou": {
+    "fact": "Caribou and reindeer are the same species. Their broad hooves help them travel over soft ground and snow."
+  },
+  "Crested Caracara": {
+    "fact": "Crested caracaras are members of the falcon family. They often walk on the ground while looking for food."
+  },
+  "Ricord‘s Rock Iguana": {
+    "fact": "Ricord's rock iguanas are native to the island of Hispaniola. They occur in the Dominican Republic and Haiti.",
+    "factSource": "https://www.iguanafoundation.org/what-we-support/rock-iguanas/ricords-rock-iguana/"
+  },
+  "Black Bear": {
+    "fact": "American black bears are skilled climbers. Despite their name, their fur can also be brown or cinnamon-colored."
+  },
+  "Great Curassow": {
+    "fact": "Great curassows are large forest birds with curled crests. They spend much of their time walking on the forest floor in search of food."
+  },
+  "Mexican Spotted Owl": {
+    "fact": "Mexican spotted owls have dark eyes and pale spots on their plumage. They hunt small mammals at night."
+  },
+  "Ridgway's Hawk": {
+    "fact": "Ridgway's hawks are native to Hispaniola. They hunt small animals, including lizards."
+  },
+  "Wood Stork": {
+    "fact": "Wood storks feed by moving an open bill through shallow water. The bill snaps shut when it touches prey."
+  },
+  "Bonnethead Shark": {
+    "fact": "Bonnethead sharks have a small, shovel-shaped head. They use crushing teeth at the back of their jaws to eat hard-shelled prey."
+  },
+  "Roseate Tern": {
+    "fact": "Roseate terns are slender seabirds that plunge into the water to catch fish. Their long, forked tails are especially noticeable in flight."
+  },
+  "Island Foxes": {
+    "fact": "Island foxes are native to California's Channel Islands. They are much smaller than their mainland relative, the gray fox."
+  },
+  "Steller Sea Lion": {
+    "fact": "Steller sea lions are the largest sea lions. Adult males develop thick necks and a mane-like covering of coarse hair."
+  },
+  "Fur Seal": {
+    "fact": "Fur seals have a dense undercoat that helps keep them warm. Like sea lions, they have visible ear flaps."
+  },
+  "Texas Horned Lizard": {
+    "fact": "Texas horned lizards have flattened bodies and a crown of horns. Ants are an important part of their diet."
+  },
+  "Gila Monster": {
+    "fact": "Gila monsters are venomous lizards of the southwestern United States and Mexico. They store energy in their thick tails."
+  },
+  "Evening Grosbeak": {
+    "fact": "Evening grosbeaks have thick bills that can crack hard seeds. They often gather in flocks outside the breeding season."
+  },
+  "Brown Pelican": {
+    "fact": "Brown pelicans dive from the air to catch fish. Their expandable throat pouches help them scoop up prey and drain away water."
+  },
+  "Bottlenose Dolphins": {
+    "fact": "Bottlenose dolphins use echolocation to find prey and explore their surroundings. Each breath is taken at the surface through a blowhole."
+  },
+  "American Bittern": {
+    "fact": "American bitterns blend into reeds with their streaked brown plumage. When disturbed, they may stand still with their bills pointed upward."
+  },
+  "Mona Ground Iguana": {
+    "fact": "Mona ground iguanas are native to Mona Island near Puerto Rico. They feed mainly on plant material.",
+    "factSource": "https://en.wikipedia.org/wiki/Mona_ground_iguana"
+  }
+};
+const AIRCRAFT = {};
+const $ = id => document.querySelector("#fleet-widget #fleet-"+id);
+const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function deliveryDate(value) {
+  const [month, year] = value.split(" ");
+  return new Date(Number(year), monthNames.indexOf(month), 1);
+}
+function ageSince(value, now = new Date()) {
+  const date = deliveryDate(value);
+  const months = (now.getFullYear()-date.getFullYear())*12 + now.getMonth()-date.getMonth();
+  if (months < 0) return "Delivery month is in the future";
+  if (months === 0) return "Less than 1 month";
+  const years = Math.floor(months/12), rest = months%12;
+  return [years ? years+" year"+(years===1?"":"s") : "",
+    rest ? rest+" month"+(rest===1?"":"s") : ""].filter(Boolean).join(", ");
+}
+function https(value) {
+  try {const u = new URL(value); return u.protocol==="https:" ? u.href : "";}
+  catch {return "";}
+}
+
+// Wikipedia article titles for animal names that differ from the fleet labels.
+const PHOTO_PAGES = {
+  "Horses":"Horse","Burrowing Owls":"Burrowing owl",
+  "Florida Manatee":"West Indian manatee","White Pelican":"American white pelican",
+  "Margay Cat":"Margay","Saw-Whet Owl":"Northern saw-whet owl",
+  "Flat-tail Horned Lizard":"Flat-tailed horned lizard","Relict Frog":"Relict leopard frog",
+  "Short Eared Owl":"Short-eared owl","Red Cardinal":"Northern cardinal",
+  "White-tailed Deer Fawn":"White-tailed deer","Wolf":"Wolf","Wolves":"Wolf",
+  "Coyotes":"Coyote","Coquí Llanero":"Eleutherodactylus juanariveroi",
+  "Steller’s Eider":"Steller's eider","Hispaniolan Parakeets":"Hispaniolan parakeet",
+  "Ricord‘s Rock Iguana":"Cyclura ricordii","Island Foxes":"Island fox",
+  "Bottlenose Dolphins":"Bottlenose dolphin","Mountain Lion":"Cougar",
+  "Gray Wolf":"Wolf","Reindeer":"Reindeer","Caribou":"Reindeer",
+  "Green Turtle":"Green sea turtle","Puffin":"Atlantic puffin"
+};
+const photoCache = new Map();
+function plain(html) {
+  const doc = new DOMParser().parseFromString(html || "", "text/html");
+  return (doc.body.textContent || "").replace(/\s+/g," ").trim();
+}
+async function getJSON(url) {
+  const response = await fetch(url, {signal:AbortSignal.timeout(10000)});
+  if (!response.ok) throw new Error("Photo source unavailable");
+  return response.json();
+}
+function animalPhoto(species) {
+  if (photoCache.has(species)) return photoCache.get(species);
+  const task = (async () => {
+    const title = PHOTO_PAGES[species] || species[0]+species.slice(1).toLowerCase();
+    const data = await getJSON("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title));
+    if (data.type === "disambiguation" || !data.originalimage?.source) return null;
+    const original = data.originalimage.source;
+    const filename = decodeURIComponent(new URL(original).pathname.split("/").pop());
+    // Resolve Commons attribution and a suitable thumbnail before showing the photo.
+    const params = new URLSearchParams({action:"query",format:"json",origin:"*",
+      prop:"imageinfo",iiprop:"url|extmetadata",iiurlwidth:"900",titles:"File:"+filename});
+    const commons = await getJSON("https://commons.wikimedia.org/w/api.php?"+params);
+    const page = Object.values(commons.query?.pages || {})[0];
+    const info = page?.imageinfo?.[0];
+    if (!info) return null;
+    const meta = info.extmetadata || {};
+    const author = plain(meta.Artist?.value);
+    const license = plain(meta.LicenseShortName?.value);
+    return {
+      imageUrl:info.thumburl || info.url,
+      imageSource:info.descriptionurl,
+      imageCredit:[author || "Wikimedia Commons",license].filter(Boolean).join(" · ")
+    };
+  })().catch(() => {
+    photoCache.delete(species); // Retry a transient failure on the next visit.
+    return null;
+  });
+  photoCache.set(species,task);
+  return task;
+}
+function displayPhoto(photo, profile) {
+  if ($("photo") !== photo) return;
+  if (!profile || !https(profile.imageUrl)) {$("photo-status").textContent = "Animal photo unavailable. Fleet details are shown alongside."; return;}
+  photo.onload = () => {
+    if ($("photo") !== photo) return;
+    photo.hidden = false; $("placeholder").hidden = true;
+    $("credit").replaceChildren();
+    const link = document.createElement("a");
+    link.href = https(profile.imageSource) || "https://commons.wikimedia.org/";
+    link.target = "_blank"; link.rel = "noopener noreferrer";
+    link.textContent = profile.imageCredit || "Wikimedia Commons · Photo details";
+    $("credit").append(link); $("credit").hidden = false;
+  };
+  photo.onerror = () => {
+    if ($("photo") !== photo) return;
+    photo.hidden = true; $("placeholder").hidden = false; $("credit").hidden = true;
+    $("photo-status").textContent = "Animal photo unavailable. Fleet details are shown alongside.";
+  };
+  photo.src = https(profile.imageUrl);
+}
+
+let index = 0, timer, hovering = false;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let paused = true; // Visitors choose when to start automatic rotation.
+const dots = [];
+for (let slot=0; slot<7; slot++) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.setAttribute("aria-controls", "fleet-slide");
+  button.onclick = () => show(Number(button.dataset.index), true);
+  $("dots").append(button); dots.push(button);
+}
+fleet.forEach((a,i) => {
+  const option = document.createElement("option");
+  option.value = i; option.textContent = a.registration+" · "+a.name;
+  $("choose").append(option);
+});
+function schedule() {
+  clearTimeout(timer);
+  if (!paused && !hovering && !document.hidden)
+    timer = setTimeout(() => show(index+1), 9000);
+  $("play").textContent = paused ? "Play" : "Pause";
+  $("play").setAttribute("aria-label", paused ? "Start automatic slideshow" : "Pause automatic slideshow");
+}
+function show(next, announce = false) {
+  index = (next+fleet.length)%fleet.length;
+  const a = fleet[index], profile = {...ANIMALS[a.species], ...AIRCRAFT[a.registration]};
+  $("name").textContent = a.name;
+  $("identity").textContent = a.registration+" · "+a.type;
+  $("species").textContent = a.species;
+  $("meet").firstElementChild.textContent = "Meet "+a.animalName;
+  $("fact").textContent = profile.fact || "";
+  $("fleet").textContent = "#"+a.number;
+  $("delivered").textContent = deliveryDate(a.delivered).toLocaleDateString("en-US",{month:"long",year:"numeric"});
+  $("age").textContent = ageSince(a.delivered);
+  $("seats").textContent = a.configuration+" · "+a.seats+" seats";
+  $("wiki").href = https(profile.factSource) || (profile.wikiPage
+    ? "https://en.wikipedia.org/wiki/"+encodeURIComponent(profile.wikiPage.replaceAll(" ","_"))
+    : "https://en.wikipedia.org/w/index.php?search="+encodeURIComponent(a.species));
+  const oldPhoto = $("photo"), photo = document.createElement("img");
+  photo.id = "fleet-photo"; photo.alt = a.species; photo.hidden = true;
+  oldPhoto.replaceWith(photo);
+  $("placeholder").hidden = false; $("credit").hidden = true; $("credit").replaceChildren();
+  $("photo-status").textContent = "Loading animal photo…";
+  if (https(profile.imageUrl)) displayPhoto(photo, profile);
+  else animalPhoto(a.species).then(result => displayPhoto(photo, result));
+  // Warm the next animal's metadata so most transitions have a photo ready.
+  animalPhoto(fleet[(index+1)%fleet.length].species);
+  $("count").textContent = (index+1)+" / "+fleet.length;
+  $("choose").value = index;
+  const start = Math.max(0, Math.min(index-3, fleet.length-dots.length));
+  dots.forEach((button, slot) => {
+    const target = start+slot;
+    button.dataset.index = target;
+    button.setAttribute("aria-label","Slide "+(target+1)+": "+fleet[target].name);
+    button.setAttribute("aria-current", String(target===index));
+  });
+  if (announce) $("announcement").textContent = "Slide "+(index+1)+" of "+fleet.length+": "+a.name;
+  schedule();
+}
+$("prev").onclick = () => show(index-1, true);
+$("next").onclick = () => show(index+1, true);
+$("choose").onchange = event => show(Number(event.target.value), true);
+$("play").onclick = () => {paused = !paused; schedule();};
+$("widget").addEventListener("pointerenter", event => {
+  if (event.pointerType === "mouse") {hovering = true; schedule();}
+});
+$("widget").addEventListener("pointerleave", event => {
+  if (event.pointerType === "mouse") {hovering = false; schedule();}
+});
+$("widget").addEventListener("pointerdown", event => {
+  if (event.pointerType !== "mouse" && !event.target.closest("#fleet-play")) {
+    paused = true; schedule(); // Touch pauses until Play is tapped.
+  }
+});
+$("widget").addEventListener("focusin", () => {
+  paused = true; schedule(); // Keyboard focus stops rotation until Play is selected.
+});
+$("widget").addEventListener("keydown", event => {
+  if (event.target.closest("select, input, textarea")) return;
+  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    event.preventDefault(); show(index+(event.key==="ArrowRight"?1:-1), true);
+  }
+});
+document.addEventListener("visibilitychange", () => {
+  $("age").textContent = ageSince(fleet[index].delivered); schedule();
+});
+reduceMotion.addEventListener("change", event => {
+  if (event.matches) {paused = true; schedule();}
+});
+setInterval(() => {$("age").textContent = ageSince(fleet[index].delivered);}, 60000);
+show(0);
+})();
+
+
 </script>
 </body></html>
