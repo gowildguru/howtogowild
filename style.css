@@ -7473,4 +7473,13 @@ body.tool-modal-open {
 @media (prefers-reduced-motion: reduce) {
   .dashboard-middle-grid > .dashboard-ad-slot { transition: none; }
 }
+/* Faster, more visible star drift behind the credit cards. */
+.credit-cards-section::before {
+  animation-duration: 20s;
+}
+
+@keyframes credit-card-sky-drift {
+  from { transform: translateX(-4%) scale(1.04); }
+  to { transform: translateX(4%) scale(1.04); }
+}
 
