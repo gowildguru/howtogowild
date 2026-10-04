@@ -7430,4 +7430,47 @@ body.tool-modal-open {
 @media (prefers-reduced-motion: reduce) {
   .dashboard-middle-grid > .dashboard-ad-slot { transition: none; }
 }
+/* Compact ID90Travel sponsor pill below the airport command center. */
+.dashboard-middle-grid > .dashboard-ad-slot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 56px;
+  padding: 9px 16px;
+  border: 1px solid rgba(210, 218, 255, .38);
+  border-radius: 999px;
+  background: linear-gradient(115deg, #5540bd, #376ea6 65%, #3c899b);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 5px 18px rgba(26, 22, 70, .16), inset 0 1px 0 rgba(255, 255, 255, .18);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .dashboard-middle-grid > .dashboard-ad-slot {
+    background: linear-gradient(115deg, rgba(82, 51, 239, .55), rgba(49, 111, 222, .48) 65%, rgba(48, 173, 207, .42));
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+  }
+}
+.dashboard-ad-logo { flex: 0 0 70px; width: 70px; height: 28px; object-fit: contain; }
+.dashboard-ad-content { flex: 1; min-width: 0; }
+.dashboard-ad-label { display: block; margin-bottom: 2px; font-size: 9px; font-weight: 600; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; }
+.dashboard-ad-copy { display: block; font-size: 13px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.dashboard-ad-arrow { flex: 0 0 auto; font-size: 20px; line-height: 1; }
+.dashboard-middle-grid > .dashboard-ad-slot:hover { color: #fff; border-color: rgba(230, 237, 255, .7); box-shadow: 0 6px 20px rgba(26, 22, 70, .24), inset 0 1px 0 rgba(255, 255, 255, .22); }
+.dashboard-middle-grid > .dashboard-ad-slot:focus-visible { outline: 3px solid #d8e3ff; outline-offset: 3px; }
+@media (min-width: 701px) {
+  .dashboard-middle-grid > .dashboard-ad-slot { grid-column: 1; grid-row: 2; align-self: end; }
+  .dashboard-middle-grid > .dashboard-booking-calendar { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; }
+}
+@media (max-width: 390px) {
+  .dashboard-middle-grid > .dashboard-ad-slot { padding-inline: 12px; gap: 9px; }
+  .dashboard-ad-logo { flex-basis: 54px; width: 54px; height: 26px; }
+  .dashboard-ad-copy { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-middle-grid > .dashboard-ad-slot { transition: none; }
+}
 
