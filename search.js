@@ -183,6 +183,9 @@
   function discoverSitePages() {
     const urls = new Set();
 
+    /* More! hosts individual answers, including entries added later. */
+    urls.add(new URL("more.html", window.location.href).href);
+
     /*
      * Always include homepage.
      */
