@@ -59,3 +59,12 @@ body:has(.latest-blog-no-script) .latest-blog-status { display: none; }
 .blog-article-subheading { margin: 32px 0 14px; font-size: clamp(1.25rem, 2.5vw, 1.6rem); line-height: 1.35; }
 .blog-article-content ul { padding-left: 24px; }
 .blog-article-content li { margin-bottom: 12px; }
+
+/* Fare comparisons remain readable on narrow screens. */
+.blog-fare-scroll { max-width: 100%; overflow-x: auto; margin: 0 0 24px; }
+.blog-fare-scroll:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.blog-fare-table { width: 100%; border-collapse: collapse; font-size: .9rem; line-height: 1.6; }
+.blog-fare-table caption { text-align: left; font-size: .8rem; padding-bottom: 10px; color: rgba(255,255,255,.85); }
+.blog-fare-table th, .blog-fare-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,.25); overflow-wrap: anywhere; }
+.blog-fare-table thead { background: rgba(255,255,255,.08); }
+.blog-fare-table td:last-child { white-space: nowrap; }
