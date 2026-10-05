@@ -11,6 +11,7 @@
   >
 
   <link rel="stylesheet" href="style.css?v=boarding-pass-11">
+  <link rel="stylesheet" href="den-gate-map.css?v=1">
   <link rel="stylesheet" href="blog.css?v=2">
 
   <link
@@ -750,6 +751,25 @@
       </div>
       <!-- /.dashboard-middle-grid -->
 
+      <section class="den-map" id="denGateMap" hidden aria-labelledby="denMapTitle">
+        <div class="den-map-heading"><div><span class="den-map-kicker">WHERE’S FRONTIER?</span>
+          <h3 id="denMapTitle">Denver gate activity</h3><p>A-East · A56–A84 · approximate concourse proportions</p></div>
+          <span class="den-map-badge">Uses dashboard status</span></div>
+        <div class="den-map-filters" role="group" aria-label="Gate map flights">
+          <button type="button" data-map-filter="all" aria-pressed="true">All flights</button>
+          <button type="button" data-map-filter="departure" aria-pressed="false">Departures</button>
+          <button type="button" data-map-filter="arrival" aria-pressed="false">Arrivals</button>
+        </div>
+        <p id="denMapSummary" class="den-map-summary" role="status"></p>
+        <div class="den-map-scroll"><svg id="denMapSVG" viewBox="0 0 1200 565" role="group" aria-label="Denver A-East Level 1 footprint, focused on A56 and the mapped A71–A84 gates. Select a gate for flight details."></svg></div>
+        <p class="den-map-source">Layout adapted from <a href="https://maps.flydenver.com/" target="_blank" rel="noopener noreferrer">DEN’s official interactive map</a>. Approximate proportions; gate markers are offset for readability.</p>
+        <div class="den-map-legend"><span>◇ Scheduled / status unknown</span><span>◐ Estimated boarding</span><span>↘ Arrival</span><span class="den-map-amber">● Delayed / cancelled</span></div>
+        <div id="denMapDetails" class="den-map-details" aria-live="polite"></div>
+        <details class="den-map-unplaced"><summary id="denMapUnplacedTitle">Flights without a mapped gate</summary><div id="denMapUnplaced"></div></details>
+        <p class="den-map-note">Aircraft fill estimates time from 45 to 20 minutes before scheduled departure for flights with a fresh on-time status. At 20 minutes, the gate is shown closed by the timing rule. It does not represent passenger count or confirmed boarding. Gate movement is illustrative, not aircraft tracking. Gates and schedules can change.</p>
+        <p class="den-map-note">Arrivals reuse the loaded schedule and any available cached arrival status. Without an arrival time or gate, we list the origin’s scheduled departure time. No additional flight-status requests are made.</p>
+      </section>
+
       <!-- =========================================
            UPCOMING FRONTIER DEPARTURES
       ========================================== -->
@@ -812,12 +832,15 @@
 
         <p class="dashboard-departures-note">
           Shows scheduled Frontier nonstop departures from your selected airport.
-          Status and departure-gate checks begin within 60 minutes of departure.
+          Status and departure-gate checks begin within two hours of departure, earliest departures first.
           Delayed flights continue to be checked until departure. Boarding uses
-          a 45-minute timing rule; departed flights remain visible for one hour.
+          a timing rule from 45 to 20 minutes before scheduled departure; gates are shown closed at 20 minutes. Departed flights remain visible for one hour.
         </p>
 
       </section>
+
+
+
 
 
     </div>
@@ -2542,7 +2565,8 @@
     crossorigin="">
   </script>
 
-  <script src="dashboard.js?v=22"></script>
+  <script src="den-gate-map.js?v=1"></script>
+  <script src="dashboard.js?v=den-map-1"></script>
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
   <script src="search.js?v=4" defer></script>
