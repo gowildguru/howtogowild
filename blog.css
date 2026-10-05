@@ -1,7 +1,10 @@
 /* Uses the homepage's existing type, spacing, sage palette, and frosted cards. */
 .latest-blog {
-  background: radial-gradient(ellipse at top left, rgba(230, 244, 233, .12), transparent 65%), var(--green-dark);
+  background: #66786b;
+  color: #fff;
 }
+.latest-blog .section-heading { text-align: center; }
+.latest-blog .section-description { text-align: center; margin-left: auto; margin-right: auto; }
 .latest-blog-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .latest-blog-card {
   min-width: 0;
