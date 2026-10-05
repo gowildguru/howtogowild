@@ -5,6 +5,12 @@
 }
 .latest-blog .section-heading { text-align: center; }
 .latest-blog .section-description { text-align: center; margin-left: auto; margin-right: auto; }
+.latest-blog-actions { margin-top: 28px; text-align: center; }
+.latest-blog-actions .button { border-color: rgba(255,255,255,.6); color: #fff; }
+.latest-blog-actions .button:hover { background: rgba(255,255,255,.12); }
+.latest-blog-actions .button:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.blog-page { background: #66786b; }
+.blog-listing { min-height: 65vh; }
 .latest-blog-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .latest-blog-card {
   min-width: 0;
@@ -40,5 +46,5 @@ body:has(.latest-blog-no-script) .latest-blog-status { display: none; }
 @media (max-width: 700px) {
   .latest-blog { padding: 48px 0; }
   .latest-blog-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .latest-blog-card:nth-child(n+3) { display: none; }
+  .latest-blog:not(.blog-listing) .latest-blog-card:nth-child(n+3) { display: none; }
 }
