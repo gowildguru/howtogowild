@@ -11,6 +11,13 @@
 .latest-blog-actions .button:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 .blog-page { background: #66786b; }
 .blog-listing { min-height: 65vh; }
+.blog-article-container { width: min(calc(100% - 40px), 860px); margin: 0 auto; }
+.blog-article-heading { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; overflow-wrap: anywhere; }
+.blog-article-meta { text-align: center; margin: 0 0 28px; color: rgba(255,255,255,.85); }
+.blog-article-content { padding: clamp(22px, 4vw, 40px); font-size: 1rem; line-height: 1.85; overflow-wrap: anywhere; }
+.blog-article-content p { margin: 0 0 24px; }
+.blog-article-content p:last-child { margin-bottom: 0; }
+.blog-article-content a { text-underline-offset: 4px; }
 .latest-blog-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .latest-blog-card {
   min-width: 0;
