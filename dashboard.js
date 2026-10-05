@@ -4685,12 +4685,12 @@ async function initializeDashboard() {
 initializeWeatherEnhancements();
 initializeDashboard();
 
-/* DEN/ATL map is a read-only consumer of the existing schedule and status caches. */
+/* DEN/ATL/LAS/MCO/PHX map is a read-only consumer of the existing schedule and status caches. */
 function renderFrontierGateMap() {
   const widget = window.FrontierDENGateMap;
   if (!widget || !departureState) return;
   const {airport, flights, snapshots, loading, missing} = departureState;
-  if (!['DEN','ATL'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
+  if (!['DEN','ATL','LAS','MCO','PHX'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
   const now = Date.now();
   const today = bookingKey(bookingDate(bookingParts(new Date(now), airport.timezone), 0));
   const models = [];
