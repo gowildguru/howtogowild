@@ -11,6 +11,7 @@
   >
 
   <link rel="stylesheet" href="style.css?v=boarding-pass-11">
+  <link rel="stylesheet" href="blog.css?v=1">
 
   <link
     rel="stylesheet"
@@ -2357,6 +2358,17 @@
   </section>
 
 
+  <!-- LATEST BLOG POSTS: maintained in blog/posts.json -->
+  <section class="section section-green latest-blog" id="blog" aria-labelledby="latestBlogHeading">
+    <div class="container">
+      <h2 class="section-heading" id="latestBlogHeading">Latest from the Blog</h2>
+      <p class="section-description">GoWild! news, practical tips, and stories from the community.</p>
+      <div class="latest-blog-grid" id="latestBlogPosts" aria-busy="true"></div>
+      <p class="latest-blog-status" id="latestBlogStatus" role="status">Loading the latest posts…</p>
+      <noscript><p class="latest-blog-no-script">Enable JavaScript to see the latest blog posts.</p></noscript>
+    </div>
+  </section>
+
   <section class="credit-cards-section">
 
   <div class="credit-cards-overlay">
@@ -2533,6 +2545,7 @@
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
   <script src="search.js?v=4" defer></script>
+  <script src="latest-blog.js?v=1" defer></script>
 
 </body>
 </html>
