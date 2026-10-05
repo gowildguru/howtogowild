@@ -755,11 +755,11 @@
         <summary class="den-map-heading">
           <span class="den-map-heading-copy"><span class="den-map-kicker">WHERE’S FRONTIER?</span>
             <span class="den-map-title" id="denMapTitle">Denver gate activity</span>
-            <span class="den-map-description">Explore Frontier arrivals, departures, and estimated boarding at Denver’s gates.</span></span>
+            <span class="den-map-description" id="gateMapDescription">Explore Frontier arrivals, departures, and estimated boarding at Denver’s gates.</span></span>
           <span class="den-map-toggle"><span class="den-map-open-label">View gate map</span><span class="den-map-close-label">Close gate map</span><span class="den-map-chevron" aria-hidden="true">⌄</span></span>
         </summary>
         <div class="den-map-content">
-        <p class="den-map-summary">A-East · A56–A84 · approximate concourse proportions</p>
+        <p class="den-map-summary" id="gateMapCaption">A-East · A56–A84 · approximate concourse proportions</p>
         <div class="den-map-filters" role="group" aria-label="Gate map flights">
           <button type="button" data-map-filter="all" aria-pressed="true">All flights</button>
           <button type="button" data-map-filter="departure" aria-pressed="false">Departures</button>
@@ -767,7 +767,7 @@
         </div>
         <p id="denMapSummary" class="den-map-summary" role="status"></p>
         <div class="den-map-scroll"><svg id="denMapSVG" viewBox="0 0 1200 565" role="group" aria-label="Denver A-East Level 1 footprint, focused on A56 and the mapped A71–A84 gates. Select a gate for flight details."></svg></div>
-        <p class="den-map-source">Layout adapted from <a href="https://maps.flydenver.com/" target="_blank" rel="noopener noreferrer">DEN’s official interactive map</a>. Approximate proportions; gate markers are offset for readability.</p>
+        <p class="den-map-source">Layout adapted from <a id="gateMapSource" href="https://maps.flydenver.com/" target="_blank" rel="noopener noreferrer">DEN’s official interactive map</a>. Approximate proportions; gate markers are offset for readability.</p>
         <div class="den-map-legend"><span>◇ Scheduled / status unknown</span><span>◐ Estimated boarding</span><span>↘ Arrival</span><span class="den-map-amber">● Delayed / cancelled</span></div>
         <div id="denMapDetails" class="den-map-details" aria-live="polite"></div>
         <details class="den-map-unplaced"><summary id="denMapUnplacedTitle">Flights without a mapped gate</summary><div id="denMapUnplaced"></div></details>
@@ -2571,8 +2571,8 @@
     crossorigin="">
   </script>
 
-  <script src="den-gate-map.js?v=2"></script>
-  <script src="dashboard.js?v=den-map-1"></script>
+  <script src="den-gate-map.js?v=4"></script>
+  <script src="dashboard.js?v=gate-maps-4"></script>
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
   <script src="search.js?v=4" defer></script>
