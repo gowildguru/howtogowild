@@ -55,18 +55,13 @@
 
     if (!cleanedTitle || !url) return;
 
-    const fleetKeywords =
-      /seatmaps\.html(?:#|$)/i.test(url)
-        ? "meet the fleet frontier fleet frontier aircraft airplane plane seat map seat maps seatmap seatmaps seating seats legroom unlimited legroom seat pitch pitch a320 a320neo 320 320neo a321 321 a321neo 321neo exit row emergency exit bulkhead galley lavatory bathroom restroom storage overhead bin window aisle middle seat"
-        : "";
-
     entries.push({
       type: "remote",
       title: cleanedTitle,
       pageTitle: cleanText(pageTitle),
       text: cleanedText,
       searchable: normalize(
-        `${cleanedTitle} ${pageTitle} ${cleanedText} ${fleetKeywords}`
+        `${cleanedTitle} ${pageTitle} ${cleanedText}`
       ),
       url
     });
@@ -190,13 +185,6 @@
 
     /* More! hosts individual answers, including entries added later. */
     urls.add(new URL("more.html", window.location.href).href);
-
-    /*
-     * Meet The Fleet / interactive Frontier seat maps.
-     * Include this explicitly so fleet searches continue to work
-     * even if the homepage navigation changes later.
-     */
-    urls.add(new URL("seatmaps.html", window.location.href).href);
 
     /*
      * Always include homepage.
@@ -433,6 +421,95 @@
 
   /*
    * =====================================================
+   * BLOG POSTS — MANIFEST AND FULL ARTICLE TEXT
+   * =====================================================
+   */
+
+  async function fetchBlogResource(url) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(url, {
+        cache: "no-cache",
+        signal: controller.signal
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      // Keep the timeout active while reading the response body too.
+      return await response.text();
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  async function indexBlogPosts() {
+    let posts;
+    try {
+      posts = JSON.parse(await fetchBlogResource(
+        new URL("blog/posts.json", document.baseURI).href
+      ));
+      if (!Array.isArray(posts)) return;
+    } catch (error) {
+      console.info("Search could not load the blog post list", error);
+      return;
+    }
+
+    // Use the same publication cutoff as the existing blog listing.
+    const today = new Date();
+    const cutoff = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const seen = new Set();
+    const publishedPosts = [];
+    for (const post of posts) {
+      if (!post || post.published === false ||
+          typeof post.title !== "string" || !post.title.trim() ||
+          typeof post.url !== "string" || !post.url.trim() ||
+          typeof post.date !== "string" ||
+          !/^\d{4}-\d{2}-\d{2}$/.test(post.date) || post.date > cutoff) continue;
+      const date = new Date(`${post.date}T00:00:00Z`);
+      if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== post.date) continue;
+
+      let url;
+      try { url = new URL(post.url, document.baseURI); } catch { continue; }
+      if (!["http:", "https:"].includes(url.protocol) ||
+          url.origin !== window.location.origin ||
+          !url.pathname.toLowerCase().endsWith(".html")) continue;
+      url.hash = "";
+      url.search = "";
+      if (seen.has(url.href)) continue;
+      seen.add(url.href);
+      publishedPosts.push({ post, url: url.href });
+    }
+
+    async function indexPost({ post, url }) {
+      const metadata = [post.title, post.category, post.excerpt]
+        .filter(value => typeof value === "string").join(" ");
+      let articleText = "";
+      try {
+        const html = await fetchBlogResource(url);
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        doc.querySelectorAll("script, style, noscript, svg, header, footer, nav, .more-footer, .latest-blog-actions")
+          .forEach(element => element.remove());
+        const article = doc.querySelector(".blog-article-content") ||
+          doc.querySelector("main article") || doc.querySelector("main") || doc.body;
+        articleText = article?.textContent || "";
+      } catch (error) {
+        // Retain the title, category and excerpt if an article is temporarily unavailable.
+        console.info(`Search could not load blog article ${url}`, error);
+      }
+      addRemoteEntry(post.title, `${metadata} ${articleText}`, url, "Blog");
+    }
+
+    // Limit simultaneous article requests as the archive grows.
+    let next = 0;
+    await Promise.all(Array.from({ length: Math.min(4, publishedPosts.length) }, async () => {
+      while (next < publishedPosts.length) {
+        const entry = publishedPosts[next++];
+        await indexPost(entry);
+      }
+    }));
+  }
+
+  /*
+   * =====================================================
    * BUILD SITE-WIDE INDEX
    * =====================================================
    */
@@ -451,7 +528,7 @@
       discoverSitePages();
 
     await Promise.all(
-      pages.map(indexPage)
+      [...pages.map(indexPage), indexBlogPosts()]
     );
 
     siteIndexReady = true;
