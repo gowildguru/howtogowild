@@ -73,10 +73,10 @@
     svg.append(el('text', {x:720,y:208,'text-anchor':'middle',class:'den-map-concourse'}, 'NORTH CORRIDOR · A71–A84'));
     svg.append(el('text', {x:720,y:225,'text-anchor':'middle',class:'den-map-subtext'}, 'A-East ground boarding · Level 1'));
     svg.append(el('text', {x:400,y:369,'text-anchor':'middle',class:'den-map-concourse'}, 'SOUTH CORRIDOR'));
-    svg.append(el('text', {x:165,y:455,'text-anchor':'middle',class:'den-map-subtext'}, '← Concourse core / train'));
-    svg.append(el('text', {x:165,y:475,'text-anchor':'middle',class:'den-map-subtext'}, 'A54 lies west of A56, outside this focus'));
+    svg.append(el('text', {x:165,y:455,'text-anchor':'middle',class:'den-map-subtext den-map-outside'}, '← Concourse core / train'));
+    svg.append(el('text', {x:165,y:475,'text-anchor':'middle',class:'den-map-subtext den-map-outside'}, 'A54 lies west of A56, outside this focus'));
     svg.append(el('path',{d:'M 72 116 L 72 68 M 64 80 L 72 68 L 80 80',fill:'none',stroke:'#66766c','stroke-width':2}));
-    svg.append(el('text',{x:72,y:55,'text-anchor':'middle',class:'den-map-concourse'},'N'));
+    svg.append(el('text',{x:72,y:55,'text-anchor':'middle',class:'den-map-concourse den-map-outside'},'N'));
     for (const [index,g] of gates.entries()) {
       const at = flights.filter(f => normalizeGate(f.gate) === g.gate).sort((a,b) => (a.instant ?? Infinity) - (b.instant ?? Infinity));
       // Show one representative icon; all flights at this gate remain in details.
