@@ -11,6 +11,7 @@
   // Relative positions transcribed from DEN's public A-East / Level 1 map.
   // Marker cards use outward leader lines so paired doors remain readable.
   const denGates = [
+    {gate:'A54', x:430,y:480, ax:430,ay:388},
     {gate:'A56', x:665,y:480, ax:655,ay:405},
     {gate:'A71', x:440,y:88, ax:470,ay:175},
     {gate:'A73', x:510,y:88, ax:495,ay:175},
@@ -26,19 +27,37 @@
     {gate:'A84', x:1160,y:310, ax:1110,ay:240}
   ];
   const airportMaps = {
-    DEN: {city:'Denver', timezone:'America/Denver', gates:denGates, focus:'A56–A84',
-      caption:'A-East · A56–A84 · approximate concourse proportions', source:'https://maps.flydenver.com/',
+    DEN: {city:'Denver', timezone:'America/Denver', gates:denGates, focus:'A54–A84',
+      caption:'A-East · A54–A84 · approximate concourse proportions', source:'https://maps.flydenver.com/',
       sourceName:'DEN’s official interactive map',
       description:'Approximate footprint of DEN’s A-East Level 1: the longer north corridor and shorter south spur.'},
     ATL: {city:'Atlanta', timezone:'America/New_York', focus:'concourses T and A–F',
       caption:'T · A · B · C · D · E · F · schematic gate positions, not to scale', source:'https://www.atl.com/maps/',
       sourceName:'ATL’s official interactive map',
-      description:'Slim vertical concourses T and A through F connected by the Plane Train. Reported gates are positioned schematically by gate number, not exact door coordinates.', gates:[]}
+      description:'Slim vertical concourses T and A through F connected by the Plane Train. Reported gates are positioned schematically by gate number, not exact door coordinates.', gates:[]},
+    LAS: {city:'Las Vegas', timezone:'America/Los_Angeles', focus:'D and E gates',
+      caption:'D satellite + E gates · approximate footprint and gate positions', source:'https://www.harryreidairport.com/map',
+      sourceName:'LAS’s official airport maps',
+      description:'X-shaped D satellite and linear Terminal 3 E concourse, connected by tram context. Gate doors, relative scale, and building separation are schematic.', gates:[]},
+    MCO: {city:'Orlando', timezone:'America/New_York', focus:'Airside 1 · gates 1–29',
+      caption:'Airside 1 · gates 1–29 · schematic positions', source:'https://flymco.com/terminal-maps/',
+      sourceName:'MCO’s official terminal maps',
+      description:'Three-arm Airside 1 satellite for gates 1 through 29 with terminal and Gate Link context. Orientation and gate-door spacing are simplified. Occasional common-use assignments outside this area are listed below.', gates:[]},
+    PHX: {city:'Phoenix', timezone:'America/Phoenix', focus:'Terminal 3 · F1–F15',
+      caption:'Terminal 3 · F1–F15 · schematic positions', source:'https://www.skyharbor.com/maps-directions/',
+      sourceName:'PHX’s official airport maps',
+      description:'Terminal 3 south F concourse, gates F1 through F15, with bridge and terminal core context. Other reported assignments remain in the flight list below. Gate-door positions are approximate.', gates:[]}
 
   };
   let layout = airportMaps.DEN, gates = layout.gates;
   const normalizeGate = value => {
-    const match = String(value || '').trim().toUpperCase().match(/^(?:GATE\s*)?([A-Z])\s*0*(\d{1,2})([A-Z]?)$/);
+    const raw = String(value || '').trim().toUpperCase();
+    // MCO uses numeric gate IDs, unlike the letter-prefixed airports.
+    if (payload.airport === 'MCO') {
+      const numeric = raw.match(/^(?:GATE\s*)?0*(\d{1,3})$/);
+      return numeric ? String(Number(numeric[1])) : '';
+    }
+    const match = raw.match(/^(?:GATE\s*)?([A-Z])\s*0*(\d{1,2})([A-Z]?)$/);
     return match ? `${match[1]}${Number(match[2])}${match[3]}` : '';
   };
   function el(tag, attrs = {}, content) {
@@ -76,8 +95,8 @@
     signature = next;
     const focusedGate = document.activeElement?.getAttribute('data-gate');
     svg.replaceChildren(el('title', {}, `Frontier ${payload.airport} gate activity`), el('desc', {}, layout.description + ' Gate marker cards connect to approximate doors. Activity is not aircraft tracking; no rotations are inferred.'));
-    const compact = payload.airport === 'ATL';
-    svg.setAttribute('viewBox', compact ? '0 0 1200 600' : '0 0 1200 565');
+    const compact = payload.airport !== 'DEN';
+    svg.setAttribute('viewBox', payload.airport === 'LAS' ? '0 0 1200 820' : payload.airport === 'MCO' ? '0 0 1200 760' : payload.airport === 'PHX' ? '0 0 1200 530' : compact ? '0 0 1200 600' : '0 0 1200 565');
     const defs = el('defs'); svg.append(defs);
     if (payload.airport === 'DEN') {
     // A-East has an offset north wing reached by a diagonal connector,
@@ -89,10 +108,10 @@
     svg.append(el('text', {x:720,y:225,'text-anchor':'middle',class:'den-map-subtext'}, 'A-East ground boarding · Level 1'));
     svg.append(el('text', {x:400,y:369,'text-anchor':'middle',class:'den-map-concourse'}, 'SOUTH CORRIDOR'));
     svg.append(el('text', {x:165,y:455,'text-anchor':'middle',class:'den-map-subtext den-map-outside'}, '← Concourse core / train'));
-    svg.append(el('text', {x:165,y:475,'text-anchor':'middle',class:'den-map-subtext den-map-outside'}, 'A54 lies west of A56, outside this focus'));
+    svg.append(el('text', {x:165,y:475,'text-anchor':'middle',class:'den-map-subtext den-map-outside'}, 'A54 and A56 · south corridor'));
     svg.append(el('path',{d:'M 72 116 L 72 68 M 64 80 L 72 68 L 80 80',fill:'none',stroke:'#66766c','stroke-width':2}));
     svg.append(el('text',{x:72,y:55,'text-anchor':'middle',class:'den-map-concourse den-map-outside'},'N'));
-    } else {
+    } else if (payload.airport === 'ATL') {
       // Whole-airport overview. Numeric positions are schematic, not surveyed doors.
       const concourses = [{name:'T',max:21,split:8},{name:'A',max:34,split:18},
         {name:'B',max:36,split:18},{name:'C',max:57,split:22},
@@ -132,6 +151,102 @@
         const count=flights.filter(f=>assigned.includes(normalizeGate(f.gate))).length;
         svg.append(el('text',{x,y:509,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},`${count} flight${count===1?'':'s'}`));
       }
+    } else if (payload.airport === 'LAS') {
+      const body = {fill:'#e5ede6',stroke:'#bac9be','stroke-width':2};
+      // Preserve the four-arm D silhouette and separate E building.
+      svg.append(el('path',{d:'M 285 108 L 895 432 M 285 432 L 895 108',fill:'none',stroke:'#bac9be','stroke-width':58,'stroke-linecap':'round','data-concourse':'D'}));
+      svg.append(el('path',{d:'M 285 108 L 895 432 M 285 432 L 895 108',fill:'none',stroke:'#e5ede6','stroke-width':54,'stroke-linecap':'round'}));
+      svg.append(el('circle',{cx:590,cy:270,r:58,...body}));
+      svg.append(el('text',{x:590,y:260,'text-anchor':'middle',class:'den-map-concourse'},'D GATES'));
+      svg.append(el('text',{x:590,y:283,'text-anchor':'middle',class:'den-map-subtext'},'Satellite core'));
+      svg.append(el('text',{x:300,y:63,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'D50–D59'));
+      svg.append(el('text',{x:880,y:63,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'D16–D26'));
+      svg.append(el('text',{x:300,y:490,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'D32–D43'));
+      svg.append(el('text',{x:880,y:490,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'D1–D14'));
+      svg.append(el('path',{d:'M 590 328 V 605',fill:'none',stroke:'#bac9be','stroke-width':3,'stroke-dasharray':'8 8'}));
+      svg.append(el('text',{x:604,y:552,class:'den-map-subtext den-map-outside'},'Tram to Terminal 3 · schematic link'));
+      svg.append(el('rect',{x:155,y:605,width:890,height:46,rx:12,...body,'data-concourse':'E'}));
+      svg.append(el('text',{x:590,y:634,'text-anchor':'middle',class:'den-map-concourse'},'TERMINAL 3 · E GATES'));
+      svg.append(el('text',{x:590,y:794,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Assigned flight gates only · select a marker for details · not a navigation map'));
+      const range=(lo,hi)=>Array.from({length:hi-lo+1},(_,i)=>lo+i);
+      const arms=[{numbers:[50,51,52,53,54,55,56,57,58,59],dx:-305,dy:-162},
+        {numbers:[16,17,18,19,20,21,22,24,25,26],dx:305,dy:-162},
+        {numbers:range(32,43),dx:-305,dy:162},
+        {numbers:[1,...range(3,12),14],dx:305,dy:162}];
+      const doorPositions=[];
+      arms.forEach((arm,armIndex)=>arm.numbers.forEach((n,i)=>{
+        const t=.27+.68*i/Math.max(1,arm.numbers.length-1);
+        const side=i%2?1:-1;
+        const ax=590+arm.dx*t+side*12,ay=270+arm.dy*t+side*22;
+        doorPositions.push({gate:`D${n}`,ax,ay,armIndex});
+        svg.append(el('circle',{cx:ax,cy:ay,r:3,fill:'#a5b8ab'}));
+      }));
+      const eNumbers=[15,14,12,11,10,9,8,7,6,5,4,3,2,1];
+      eNumbers.forEach((n,i)=>{
+        const ax=180+i*62,ay=651;
+        doorPositions.push({gate:`E${n}`,ax,ay,eIndex:i});
+        svg.append(el('circle',{cx:ax,cy:ay,r:3,fill:'#a5b8ab'}));
+      });
+      const assigned = new Set(flights.map(f=>normalizeGate(f.gate)));
+      gates=doorPositions.filter(g=>assigned.has(g.gate));
+      for(const west of [true,false]) {
+        const lane=gates.filter(g=>g.armIndex!==undefined && (g.ax<590)===west).sort((a,b)=>a.ay-b.ay);
+        const step=Math.min(40,380/Math.max(1,lane.length-1));
+        lane.forEach((g,i)=>{g.x=west?100:1090;g.y=90+i*step;});
+      }
+      gates.filter(g=>g.eIndex!==undefined).forEach(g=>{g.x=g.ax;g.y=700+(g.eIndex%2)*50;});
+    } else if (payload.airport === 'MCO') {
+      const body = {fill:'#e5ede6',stroke:'#bac9be','stroke-width':2};
+      const assigned=new Set(flights.map(f=>normalizeGate(f.gate)));
+      gates=[];
+      svg.append(el('rect',{x:430,y:622,width:340,height:65,rx:18,...body}));
+      svg.append(el('text',{x:600,y:659,'text-anchor':'middle',class:'den-map-concourse'},'TERMINALS A / B · CONTEXT'));
+      for (const area of [{name:'Airside 1',cx:600,start:1}]) {
+        const {cx,start}=area;
+        svg.append(el('text',{x:cx,y:64,'text-anchor':'middle',class:'den-map-concourse den-map-outside'},`${area.name.toUpperCase()} · ${start}–${start===1?29:99}`));
+        const arms=[{lo:start,hi:start===1?9:79,dx:-140,dy:-130},
+          {lo:start===1?10:80,hi:start===1?19:89,dx:140,dy:-130},
+          {lo:start===1?20:90,hi:start===1?29:99,dx:0,dy:190}];
+        for(const arm of arms) {
+          const d=`M ${cx} 300 L ${cx+arm.dx} ${300+arm.dy}`;
+          svg.append(el('path',{d,fill:'none',stroke:'#bac9be','stroke-width':54,'stroke-linecap':'round','data-concourse':area.name}));
+          svg.append(el('path',{d,fill:'none',stroke:'#e5ede6','stroke-width':50,'stroke-linecap':'round'}));
+          for(let n=arm.lo;n<=arm.hi;n++) {
+            const t=.3+.62*(n-arm.lo)/Math.max(1,arm.hi-arm.lo),side=(n-arm.lo)%2?1:-1;
+            const length=Math.hypot(arm.dx,arm.dy);
+            const ax=cx+arm.dx*t-side*arm.dy/length*25,ay=300+arm.dy*t+side*arm.dx/length*25;
+            svg.append(el('circle',{cx:ax,cy:ay,r:3,fill:'#a5b8ab'}));
+            if(assigned.has(String(n))) gates.push({gate:String(n),ax,ay,cx});
+          }
+        }
+        svg.append(el('circle',{cx,cy:300,r:44,...body}));
+        svg.append(el('text',{x:cx,y:305,'text-anchor':'middle',class:'den-map-subtext'},'Gate Link'));
+        svg.append(el('path',{d:`M ${cx+50} 310 V 580 L 600 622`,fill:'none',stroke:'#bac9be','stroke-width':2,'stroke-dasharray':'8 8'}));
+        for(const west of [true,false]) {
+          const lane=gates.filter(g=>g.cx===cx && (g.ax<cx)===west).sort((a,b)=>a.ay-b.ay);
+          const step=Math.min(40,420/Math.max(1,lane.length-1));
+          lane.forEach((g,i)=>{g.x=cx+(west?-215:215);g.y=120+i*step;});
+        }
+      }
+      svg.append(el('text',{x:600,y:724,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Occasional common-use gates outside 1–29 (including 70–99) are listed below.'));
+    } else if (payload.airport === 'PHX') {
+      const body = {fill:'#e5ede6',stroke:'#bac9be','stroke-width':2};
+      const assigned=new Set(flights.map(f=>normalizeGate(f.gate)));
+      gates=[];
+      svg.append(el('text',{x:600,y:49,'text-anchor':'middle',class:'den-map-concourse den-map-outside'},'TERMINAL 3 · SOUTH CONCOURSE · F1–F15'));
+      svg.append(el('rect',{x:510,y:75,width:180,height:60,rx:15,...body}));
+      svg.append(el('text',{x:600,y:110,'text-anchor':'middle',class:'den-map-concourse'},'TERMINAL CORE'));
+      svg.append(el('path',{d:'M 600 135 V 240',fill:'none',stroke:'#e5ede6','stroke-width':28}));
+      svg.append(el('text',{x:622,y:194,class:'den-map-subtext den-map-outside'},'Concourse bridge'));
+      svg.append(el('rect',{x:100,y:240,width:1000,height:60,rx:12,...body,'data-concourse':'F'}));
+      svg.append(el('text',{x:600,y:275,'text-anchor':'middle',class:'den-map-concourse'},'F GATES'));
+      for(let n=1;n<=15;n++) {
+        const ax=145+65*(n-1),ay=n%2?240:300;
+        svg.append(el('circle',{cx:ax,cy:ay,r:3,fill:'#a5b8ab'}));
+        if(assigned.has(`F${n}`))gates.push({gate:`F${n}`,ax,ay,x:ax,y:n%2?170:365});
+      }
+      svg.append(el('text',{x:600,y:449,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Assignments outside F1–F15 are shown in the flight list below.'));
+      svg.append(el('text',{x:600,y:484,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Phoenix local time (Arizona) · approximate gate positions'));
     }
     for (const [index,g] of gates.entries()) {
       const at = flights.filter(f => normalizeGate(f.gate) === g.gate).sort((a,b) => (a.instant ?? Infinity) - (b.instant ?? Infinity));
