@@ -56,3 +56,6 @@ body:has(.latest-blog-no-script) .latest-blog-status { display: none; }
   .latest-blog-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .latest-blog:not(.blog-listing) .latest-blog-card:nth-child(n+3) { display: none; }
 }
+.blog-article-subheading { margin: 32px 0 14px; font-size: clamp(1.25rem, 2.5vw, 1.6rem); line-height: 1.35; }
+.blog-article-content ul { padding-left: 24px; }
+.blog-article-content li { margin-bottom: 12px; }
