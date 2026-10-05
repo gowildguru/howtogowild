@@ -5,6 +5,8 @@
     "url": "blog/frontier-airlines-to-end-jfk-service.html",
     "excerpt": "Frontier’s April 28 schedule extension points to an October 24 end for its final JFK route: a daily flight to Atlanta.",
     "category": "Airline News",
-    "published": true
+    "published": true,
+    "image": "images/blog/frontier-jfk.jpg",
+    "imageAlt": ""
   }
 ]
