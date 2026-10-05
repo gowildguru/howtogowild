@@ -4465,7 +4465,7 @@ async function pollBoardStatuses() {
 setInterval(pollBoardStatuses, 10000);
 
 function renderDepartureBoard() {
-  renderDENGateMap();
+  renderFrontierGateMap();
   if (!departureState) return;
   const {airport, flights, missing} = departureState;
   const now = Date.now();
@@ -4685,12 +4685,12 @@ async function initializeDashboard() {
 initializeWeatherEnhancements();
 initializeDashboard();
 
-/* DEN map is a read-only consumer of the existing schedule and status caches. */
-function renderDENGateMap() {
+/* DEN/ATL map is a read-only consumer of the existing schedule and status caches. */
+function renderFrontierGateMap() {
   const widget = window.FrontierDENGateMap;
   if (!widget || !departureState) return;
   const {airport, flights, snapshots, loading, missing} = departureState;
-  if (airport.code !== 'DEN') { widget.update({airport: airport.code, flights: []}); return; }
+  if (!['DEN','ATL'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
   const now = Date.now();
   const today = bookingKey(bookingDate(bookingParts(new Date(now), airport.timezone), 0));
   const models = [];
@@ -4709,7 +4709,7 @@ function renderDENGateMap() {
     if (kind === 'arrival') {
       const minutes = departureMinutes(endpoint?.scheduled || flight.arrivalTime);
       instant = minutes === null ? null : departureInstant(flight.date, minutes, airport.timezone);
-      // Arrival clocks belong to DEN; anchor the date to the origin departure.
+      // Arrival clocks belong to the selected airport; anchor the date to the origin departure.
       if (instant !== null && instant < flight.instant) instant = departureInstant(bookingDate(flight.date, 1), minutes, airport.timezone);
     }
     if (!finished && !delayed && instant !== null && (instant < now - 4*3600000 || instant > now + 6*3600000)) return;
@@ -4734,17 +4734,17 @@ function renderDENGateMap() {
       originTime: flight.departureTime, origin, status, fresh, delayed: !!delayed || cancelled, finished,
       progress: gateClosed ? 1 : boarding ? Math.max(0, Math.min(1, (now - (instant - 45*60000))/(25*60000))) : 0});
   };
-  flights.forEach(f => add(f, 'DEN', 'departure'));
+  flights.forEach(f => add(f, airport.code, 'departure'));
   const seen = new Set();
   for (const [key, snapshot] of snapshots || []) {
     const [year, month, day] = key.split('-').map(Number);
     const date = {year, month, day};
     for (const [origin, inbound] of Object.entries(snapshot.airports)) {
-      if (origin === 'DEN') continue;
+      if (origin === airport.code) continue;
       const originAirport = airportByCode(origin);
       if (!originAirport) continue;
       for (const item of inbound) {
-        if (item.destination !== 'DEN') continue;
+        if (item.destination !== airport.code) continue;
         const minutes = departureMinutes(item.departureTime);
         if (minutes === null) continue;
         const id = `${origin}:${key}:${item.flightNumber}:${minutes}`;
@@ -4754,5 +4754,5 @@ function renderDENGateMap() {
       }
     }
   }
-  widget.update({airport: 'DEN', flights: models, loading, missing: missing.length > 0});
+  widget.update({airport: airport.code, flights: models, loading, missing: missing.length > 0});
 }
