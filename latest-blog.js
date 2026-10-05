@@ -74,11 +74,11 @@
       if (!response.ok) throw new Error('Post list unavailable');
       const data = await response.json();
       if (!Array.isArray(data)) throw new Error('Expected a post list');
-      const posts = data.filter(post => post && post.published !== false &&
+      const sortedPosts = data.filter(post => post && post.published !== false &&
         typeof post.title === 'string' && post.title.trim() &&
         validDate(post.date) && post.date <= publicationCutoff && safeUrl(post.url))
-        .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title))
-        .slice(0, 4);
+        .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
+      const posts = grid.dataset.showAll === 'true' ? sortedPosts : sortedPosts.slice(0, 4);
       grid.replaceChildren(...posts.map(card));
       status.textContent = posts.length ? '' : 'Posts coming soon. Check back for GoWild! tips and community stories.';
       status.hidden = posts.length > 0;
