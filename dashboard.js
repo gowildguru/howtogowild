@@ -4396,7 +4396,7 @@ function boardStatusInfo(airport, flight, now = Date.now()) {
   const entry = boardStatuses.get(boardStatusKey(airport, flight));
   const data = entry?.data;
   const fresh = data && (now - Date.parse(data.fetchedAt) < 180000 || ['departed','arrived','cancelled'].includes(data.statusCode) || data.departure.actual);
-  const near = flight.instant <= now + 3600000;
+  const near = flight.instant <= now + 2 * 3600000;
   if (!fresh) return near ? {label: entry?.error ? 'Status unavailable' : 'Checking status…', kind: 'live', visible: flight.instant > now - 4 * 3600000 || boardStatusDelayed(entry, flight, airport)} : null;
   const actual = boardStatusTime(data.departure.actual, flight, airport);
   const estimate = boardStatusTime(data.departure.estimated, flight, airport);
@@ -4409,7 +4409,8 @@ function boardStatusInfo(airport, flight, now = Date.now()) {
     return {label: data.departure.estimated ? `Delayed · ${data.departure.estimated}` : 'Delayed', kind: 'delayed', visible: true};
   }
   const departure = estimate ?? flight.instant;
-  if (now >= departure - 45 * 60000 && now <= departure) return {label: 'Boarding', kind: 'boarding', visible: true};
+  if (now >= flight.instant - 20 * 60000) return {label: 'Gate closed', kind: 'gate-closed', visible: true};
+  if (now >= flight.instant - 45 * 60000) return {label: 'Boarding', kind: 'boarding', visible: true};
   if (now > departure) return {label: 'Awaiting departure update', kind: 'live', visible: true};
   return {label: data.status || 'On Time', kind: 'live', visible: true};
 }
@@ -4425,12 +4426,12 @@ async function pollBoardStatuses() {
   const state = departureState;
   const now = Date.now();
   const candidates = state.flights.filter(flight => {
-    if (flight.instant > now + 3600000) return false;
+    if (flight.instant > now + 2 * 3600000) return false;
     const entry = boardStatuses.get(boardStatusKey(state.airport, flight));
     if (['departed','arrived','cancelled'].includes(entry?.data?.statusCode)) return false;
     const delayed = boardStatusDelayed(entry, flight, state.airport);
     return (flight.instant > now - 4 * 3600000 || delayed) && (!entry || now - entry.checkedAt >= 60000);
-  });
+  }).sort((a, b) => a.instant - b.instant); // Earliest scheduled departure first.
   try {
     let cursor = 0;
     await Promise.all(Array.from({length: Math.min(3, candidates.length)}, async () => {
@@ -4464,6 +4465,7 @@ async function pollBoardStatuses() {
 setInterval(pollBoardStatuses, 10000);
 
 function renderDepartureBoard() {
+  renderDENGateMap();
   if (!departureState) return;
   const {airport, flights, missing} = departureState;
   const now = Date.now();
@@ -4517,7 +4519,7 @@ function renderDepartureBoard() {
     if (live) {
       const prefix = live.booking ? (blackout ? 'Blackout' : standard ? 'Standard Window' : 'Advanced Booking') + ' · ' : '';
       booking.append(departureText('span', 'departure-booking-status ' + live.kind, prefix + live.label));
-      if (live.kind === 'boarding') booking.title = 'Boarding label uses the 45-minute timing rule.';
+      if (live.kind === 'boarding' || live.kind === 'gate-closed') booking.title = 'Estimated timing: boarding begins 45 minutes before scheduled departure; gate closes 20 minutes before scheduled departure.';
     } else {
     booking.append(departureText('span', `departure-booking-status ${blackout ? 'blackout' : standard ? 'standard' : 'advance'}`,
       blackout ? 'Blackout · peak day charge may apply' : standard ? 'Standard Window' : 'Advanced Booking'));
@@ -4553,6 +4555,7 @@ async function loadDepartureBoard(airport) {
   const request = ++departureRequest;
   const previousBoardState = departureState;
   departureState = null;
+  window.FrontierDENGateMap?.update({airport: airport.code, loading: true, flights: []});
   rows.replaceChildren(departureText('div', 'departure-board-loading', 'Loading upcoming Frontier departures...'));
   const more = document.getElementById('departureShowMore');
   if (more) more.hidden = true;
@@ -4567,13 +4570,14 @@ async function loadDepartureBoard(airport) {
     const missing = [];
     const missingKeys = new Set();
     const loadedKeys = new Set();
-    const state = {airport, flights, missing, missingKeys, loadedKeys, loading: true, limit: 8, dayKey: bookingKey(today)};
+    const state = {airport, flights, snapshots: new Map(), missing, missingKeys, loadedKeys, loading: true, limit: 8, dayKey: bookingKey(today)};
     departureState = state;
     await Promise.allSettled(days.map(async day => {
       try {
         const data = await departureSnapshot(bookingKey(day.date));
         loadedKeys.add(bookingKey(day.date));
         if (request !== departureRequest) return;
+        state.snapshots.set(bookingKey(day.date), data);
         const source = data.airports[airport.code] || [];
         const seen = new Set();
         for (const item of source) {
@@ -4601,6 +4605,7 @@ async function loadDepartureBoard(airport) {
   } catch (error) {
     if (request !== departureRequest) return;
     rows.replaceChildren(departureText('div', 'departure-board-empty', 'The schedule could not load. Please refresh to try again.'));
+    window.FrontierDENGateMap?.update({airport: airport.code, flights: [], missing: true});
     console.warn('Departure board unavailable:', error);
   }
 }
@@ -4679,3 +4684,75 @@ async function initializeDashboard() {
 
 initializeWeatherEnhancements();
 initializeDashboard();
+
+/* DEN map is a read-only consumer of the existing schedule and status caches. */
+function renderDENGateMap() {
+  const widget = window.FrontierDENGateMap;
+  if (!widget || !departureState) return;
+  const {airport, flights, snapshots, loading, missing} = departureState;
+  if (airport.code !== 'DEN') { widget.update({airport: airport.code, flights: []}); return; }
+  const now = Date.now();
+  const today = bookingKey(bookingDate(bookingParts(new Date(now), airport.timezone), 0));
+  const models = [];
+  const add = (flight, origin, kind) => {
+    const originAirport = airportByCode(origin);
+    if (!originAirport) return;
+    const entry = boardStatuses.get(boardStatusKey(originAirport, flight));
+    const data = entry?.data;
+    const endpoint = kind === 'departure' ? data?.departure : data?.arrival;
+    const fresh = !!data && !entry.error && now - Date.parse(data.fetchedAt) < 180000;
+    const finished = kind === 'departure' ? !!data?.departure?.actual || ['departed','arrived'].includes(data?.statusCode)
+      : !!data?.arrival?.actual || data?.statusCode === 'arrived';
+    const cancelled = data?.statusCode === 'cancelled';
+    const delayed = data?.statusCode === 'delayed' || boardStatusDelayed(entry, flight, originAirport);
+    let instant = flight.instant;
+    if (kind === 'arrival') {
+      const minutes = departureMinutes(endpoint?.scheduled || flight.arrivalTime);
+      instant = minutes === null ? null : departureInstant(flight.date, minutes, airport.timezone);
+      // Arrival clocks belong to DEN; anchor the date to the origin departure.
+      if (instant !== null && instant < flight.instant) instant = departureInstant(bookingDate(flight.date, 1), minutes, airport.timezone);
+    }
+    if (!finished && !delayed && instant !== null && (instant < now - 4*3600000 || instant > now + 6*3600000)) return;
+    if (kind === 'arrival' && instant === null && bookingKey(flight.date) !== today) return;
+    if (finished) {
+      const actualMinutes = departureMinutes(endpoint?.actual);
+      const actual = actualMinutes === null || instant === null ? entry?.checkedAt : (() => {
+        let result = departureInstant(flight.date, actualMinutes, airport.timezone);
+        if (result < instant - 12*3600000) result = departureInstant(bookingDate(flight.date, 1), actualMinutes, airport.timezone);
+        return result;
+      })();
+      if (!Number.isFinite(actual) || now - actual > 15*60000) return;
+    }
+    const explicitOnTime = /^(on[ _-]?time|scheduled)$/i.test(String(data?.statusCode || '')) || /^on time$/i.test(String(data?.status || ''));
+    const eligible = kind === 'departure' && fresh && explicitOnTime && !delayed && !cancelled && !finished;
+    const gateClosed = eligible && now >= instant - 20*60000;
+    const boarding = eligible && now >= instant - 45*60000 && now < instant - 20*60000;
+    const status = finished ? (kind === 'arrival' ? 'Arrived' : 'Departed') : cancelled ? 'Cancelled' : delayed ? 'Delayed' : gateClosed ? 'Gate closed' : boarding ? 'Estimated boarding' : fresh ? (data.status || 'Scheduled') : data ? 'Status stale / unavailable' : 'Scheduled · status unavailable';
+    models.push({id: `${origin}:${flight.destination}:${bookingKey(flight.date)}:${flight.flightNumber}:${kind}`,
+      flight: `F9 ${flight.flightNumber}`, kind, route: kind === 'arrival' ? origin : flight.destination,
+      gate: endpoint?.gate || (kind === 'departure' ? flight.gate : flight.arrivalGate), instant,
+      originTime: flight.departureTime, origin, status, fresh, delayed: !!delayed || cancelled, finished,
+      progress: gateClosed ? 1 : boarding ? Math.max(0, Math.min(1, (now - (instant - 45*60000))/(25*60000))) : 0});
+  };
+  flights.forEach(f => add(f, 'DEN', 'departure'));
+  const seen = new Set();
+  for (const [key, snapshot] of snapshots || []) {
+    const [year, month, day] = key.split('-').map(Number);
+    const date = {year, month, day};
+    for (const [origin, inbound] of Object.entries(snapshot.airports)) {
+      if (origin === 'DEN') continue;
+      const originAirport = airportByCode(origin);
+      if (!originAirport) continue;
+      for (const item of inbound) {
+        if (item.destination !== 'DEN') continue;
+        const minutes = departureMinutes(item.departureTime);
+        if (minutes === null) continue;
+        const id = `${origin}:${key}:${item.flightNumber}:${minutes}`;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        add({...item, date, instant: departureInstant(date, minutes, originAirport.timezone)}, origin, 'arrival');
+      }
+    }
+  }
+  widget.update({airport: 'DEN', flights: models, loading, missing: missing.length > 0});
+}
