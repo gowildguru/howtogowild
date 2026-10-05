@@ -1,0 +1,27 @@
+.den-map[hidden]{display:none!important}
+.den-map{grid-column:1/-1;margin:22px 0;padding:24px;border:1px solid #ffffff80;border-radius:24px;background:rgba(255,255,255,.91);color:#35473c;box-shadow:0 8px 25px #2944350a;font-family:Montserrat,Arial,sans-serif;text-align:left}
+.den-map-heading{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.den-map-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#66766c}
+.den-map h3{font-size:22px;margin:6px 0}.den-map-heading p,.den-map-summary{font-size:12px;line-height:1.6;margin:6px 0;color:#596d5e}
+.den-map-badge{font-size:10px;border-radius:30px;background:#edf3ee;padding:8px 12px;white-space:nowrap}
+.den-map-filters{display:flex;gap:8px;margin:18px 0 10px;flex-wrap:wrap}
+.den-map-filters button{font:600 12px Montserrat,Arial,sans-serif;color:#53675a;background:#fff;border:1px solid #d0ddd3;border-radius:24px;padding:10px 16px;cursor:pointer}
+.den-map-filters button[aria-pressed=true]{background:#66766c;color:white;border-color:#66766c}
+.den-map-scroll{overflow:auto;border:1px solid #dce5de;border-radius:18px;background:linear-gradient(150deg,#f9fbf9,#eef4ef);margin:14px 0}
+.den-map svg{display:block;width:100%;min-width:960px;height:auto}
+.den-map-concourse{font-size:13px;fill:#53675a;font-weight:700;letter-spacing:.08em}.den-map-subtext{font-size:10px;fill:#66766c}
+.den-map-gate{cursor:pointer;outline:none}.den-map-gate:focus-visible>rect{stroke:#294b38;stroke-width:4}
+.den-map-gate-name{font-size:13px;font-weight:800;fill:#35473c}.den-map-count{font-size:9px;fill:#66766c}.den-map-flight-label{font-size:10px;fill:#53675a;font-weight:600}
+.den-map-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:10px;color:#66766c;margin-bottom:16px}.den-map-amber{color:#94621f}
+.den-map-details{background:#f3f7f3;border-radius:16px;padding:16px}.den-map-details h4{margin:0 0 12px}.den-map-details p,.den-map-unplaced p{font-size:12px;margin:0;line-height:1.6}
+.den-map-flight{display:flex;flex-direction:column;gap:5px;font-size:12px;padding:12px 0;line-height:1.6;border-bottom:1px solid #dce5de}.den-map-flight:last-child{border:0}.den-map-flight strong{font-size:13px}.den-map-flight small{font-size:10px;color:#66766c}
+.den-map-unplaced{margin:14px 0}.den-map-unplaced summary{cursor:pointer;font-size:12px;font-weight:600;padding:10px 0}.den-map-unplaced>div{max-height:260px;overflow:auto}
+.den-map-note{font-size:10px;line-height:1.65;color:#637367;margin:10px 0 0}
+.den-map-incoming{animation:den-map-arrive 1s ease-out}.den-map-left{opacity:.35}
+@keyframes den-map-arrive{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.den-map-incoming{animation:none}}
+@media(max-width:600px){.den-map{padding:16px;margin:16px 0;border-radius:20px}.den-map-heading{align-items:flex-start;flex-direction:column;gap:6px}.den-map h3{font-size:20px}.den-map-scroll{margin:12px 0}.den-map-filters button{padding:10px 13px}.den-map-legend{line-height:1.7}}
+
+#departureRows .departure-booking-status.gate-closed{color:#66766c;font-weight:700}
+
+.den-map-source{font-size:10px;line-height:1.6;color:#637367;margin:0 0 12px}.den-map-source a{color:#53675a;text-decoration:underline}
