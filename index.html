@@ -11,7 +11,7 @@
   >
 
   <link rel="stylesheet" href="style.css?v=boarding-pass-11">
-  <link rel="stylesheet" href="den-gate-map.css?v=1">
+  <link rel="stylesheet" href="den-gate-map.css?v=2">
   <link rel="stylesheet" href="blog.css?v=2">
 
   <link
@@ -751,10 +751,15 @@
       </div>
       <!-- /.dashboard-middle-grid -->
 
-      <section class="den-map" id="denGateMap" hidden aria-labelledby="denMapTitle">
-        <div class="den-map-heading"><div><span class="den-map-kicker">WHERE’S FRONTIER?</span>
-          <h3 id="denMapTitle">Denver gate activity</h3><p>A-East · A56–A84 · approximate concourse proportions</p></div>
-          <span class="den-map-badge">Uses dashboard status</span></div>
+      <details class="den-map" id="denGateMap" hidden aria-labelledby="denMapTitle">
+        <summary class="den-map-heading">
+          <span class="den-map-heading-copy"><span class="den-map-kicker">WHERE’S FRONTIER?</span>
+            <span class="den-map-title" id="denMapTitle">Denver gate activity</span>
+            <span class="den-map-description">Explore Frontier arrivals, departures, and estimated boarding at Denver’s gates.</span></span>
+          <span class="den-map-toggle"><span class="den-map-open-label">View gate map</span><span class="den-map-close-label">Close gate map</span><span class="den-map-chevron" aria-hidden="true">⌄</span></span>
+        </summary>
+        <div class="den-map-content">
+        <p class="den-map-summary">A-East · A56–A84 · approximate concourse proportions</p>
         <div class="den-map-filters" role="group" aria-label="Gate map flights">
           <button type="button" data-map-filter="all" aria-pressed="true">All flights</button>
           <button type="button" data-map-filter="departure" aria-pressed="false">Departures</button>
@@ -768,7 +773,8 @@
         <details class="den-map-unplaced"><summary id="denMapUnplacedTitle">Flights without a mapped gate</summary><div id="denMapUnplaced"></div></details>
         <p class="den-map-note">Aircraft fill estimates time from 45 to 20 minutes before scheduled departure for flights with a fresh on-time status. At 20 minutes, the gate is shown closed by the timing rule. It does not represent passenger count or confirmed boarding. Gate movement is illustrative, not aircraft tracking. Gates and schedules can change.</p>
         <p class="den-map-note">Arrivals reuse the loaded schedule and any available cached arrival status. Without an arrival time or gate, we list the origin’s scheduled departure time. No additional flight-status requests are made.</p>
-      </section>
+        </div>
+      </details>
 
       <!-- =========================================
            UPCOMING FRONTIER DEPARTURES
@@ -2565,7 +2571,7 @@
     crossorigin="">
   </script>
 
-  <script src="den-gate-map.js?v=1"></script>
+  <script src="den-gate-map.js?v=2"></script>
   <script src="dashboard.js?v=den-map-1"></script>
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
