@@ -7481,3 +7481,30 @@ body.tool-modal-open {
   to { transform: translateX(4%) scale(1.04); }
 }
 
+
+/* Airport Command Center — source-backed security checkpoint module. */
+.dashboard-security[hidden]{display:none!important}
+.dashboard-security{margin:0 0 24px;padding:24px;background:rgba(255,255,255,.94);border:1px solid rgba(82,103,91,.18);border-radius:22px;box-shadow:0 8px 28px rgba(31,51,39,.06);color:#344d3e}
+.security-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.security-heading h3{margin:5px 0 16px;font-size:22px;font-weight:800;color:#314d3b}
+.security-source{font-size:12px;color:#596e60;text-decoration:none;white-space:nowrap;padding-top:3px}
+.security-source:hover{text-decoration:underline}
+.security-lane-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.security-lane-button{padding:8px 14px;border:1px solid #d4ddd6;border-radius:999px;background:#f4f7f4;color:#435c4d;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.security-lane-button[aria-pressed=true]{background:#596e60;color:white;border-color:#596e60}
+.security-lane-button:focus-visible,.security-more summary:focus-visible{outline:3px solid #83998a;outline-offset:3px}
+.security-checkpoints{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.security-checkpoint{padding:16px;background:#f3f6f2;border:1px solid #e2e8e0;border-radius:14px;min-width:0}
+.security-checkpoint h4{margin:0 0 10px;font-size:14px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}
+.security-lane-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:8px 0}
+.security-lane-name{font-size:12px;color:#637368}
+.security-wait{font-size:15px;font-weight:800;text-align:right;overflow-wrap:anywhere}
+.security-wait.is-closed{color:#7e847f;font-weight:600}
+.security-hours,.security-lane-updated,.security-note{margin:5px 0 0;color:#6c7b70;font-size:11px;line-height:1.5}
+.security-closing{margin:7px 0 0;color:#8b632b;font-size:12px;font-weight:700}
+.security-recommendation{background:#e8eee6;border-radius:12px;margin:0 0 16px;padding:12px 14px;font-size:12px;line-height:1.6;color:#48604f}
+.security-footer{margin:15px 0 0;font-size:11px;line-height:1.6;color:#708075}
+.security-more{margin-top:12px}
+.security-more summary{font-size:12px;font-weight:700;cursor:pointer;padding:8px 0;color:#546c5b}
+.security-more[open] summary{margin-bottom:8px}
+@media(max-width:640px){.dashboard-security{padding:18px;border-radius:18px}.security-heading h3{font-size:19px}.security-heading{gap:8px}.security-source{font-size:10px}.security-checkpoints{grid-template-columns:1fr}.security-lane-button{padding:8px 11px}}
