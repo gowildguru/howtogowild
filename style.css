@@ -7482,9 +7482,9 @@ body.tool-modal-open {
 }
 
 
-/* Airport Command Center — source-backed security checkpoint module. */
+/* Airport Command Center — frosted security card beneath the radar. */
 .dashboard-security[hidden]{display:none!important}
-.dashboard-security{margin:0 0 24px;padding:24px;background:rgba(255,255,255,.94);border:1px solid rgba(82,103,91,.18);border-radius:22px;box-shadow:0 8px 28px rgba(31,51,39,.06);color:#344d3e}
+.dashboard-security{width:100%;box-sizing:border-box;margin:12px 0 0;padding:16px;background:rgba(20,34,25,.22);border:1px solid rgba(255,255,255,.20);border-radius:16px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 7px 20px rgba(20,34,25,.10);color:rgba(255,255,255,.95)}
 .security-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
 .security-heading h3{margin:5px 0 16px;font-size:22px;font-weight:800;color:#314d3b}
 .security-source{font-size:12px;color:#596e60;text-decoration:none;white-space:nowrap;padding-top:3px}
@@ -7508,3 +7508,24 @@ body.tool-modal-open {
 .security-more summary{font-size:12px;font-weight:700;cursor:pointer;padding:8px 0;color:#546c5b}
 .security-more[open] summary{margin-bottom:8px}
 @media(max-width:640px){.dashboard-security{padding:18px;border-radius:18px}.security-heading h3{font-size:19px}.security-heading{gap:8px}.security-source{font-size:10px}.security-checkpoints{grid-template-columns:1fr}.security-lane-button{padding:8px 11px}}
+
+/* White typography and translucent surfaces match the radar's frosted frame. */
+.dashboard-security .dashboard-booking-kicker{color:rgba(255,255,255,.80);font-size:9px;letter-spacing:.8px}
+.dashboard-security .security-heading h3{color:#fff;font-size:18px}
+.dashboard-security .security-source{color:rgba(255,255,255,.85);font-size:10px}
+.security-lane-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;max-width:100%;flex-wrap:wrap;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.09);color:#fff;font-size:11px}
+.security-lane-button[aria-pressed=true]{background:rgba(255,255,255,.23);border-color:rgba(255,255,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.security-lane-logo{display:block;object-fit:contain;max-width:72px;height:18px;flex:none}
+.security-lane-logo[hidden]{display:none}
+.security-logo-clear{max-width:50px}
+.security-lane-button:focus-visible,.security-more summary:focus-visible,.security-source:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.security-checkpoints{grid-template-columns:1fr;gap:10px}
+.security-checkpoint{padding:12px;background:rgba(20,34,25,.16);border-color:rgba(255,255,255,.14);border-radius:12px}
+.security-checkpoint h4,.security-wait{color:#fff}
+.security-lane-name,.security-wait.is-closed{color:rgba(255,255,255,.85)}
+.security-hours,.security-lane-updated,.security-note{color:rgba(255,255,255,.82)}
+.security-closing{color:#ffe4ac}
+.security-recommendation{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.14);color:#fff}
+.security-footer{color:rgba(255,255,255,.80)}
+.security-more summary{color:rgba(255,255,255,.90)}
+@media(max-width:640px){.dashboard-security{padding:14px;border-radius:16px}.dashboard-security .security-heading h3{font-size:17px}}
