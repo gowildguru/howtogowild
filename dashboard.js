@@ -1332,6 +1332,7 @@ function showAirport(
     );
   }
 
+selectSecurityAirport(airport);
 loadDepartureBoard(airport);
 
 updateWeather(
@@ -4682,8 +4683,7 @@ async function initializeDashboard() {
 }
 
 
-initializeWeatherEnhancements();
-initializeDashboard();
+/* Dashboard boot follows the security module initialization below. */
 
 /* DEN/ATL/LAS/MCO/PHX map is a read-only consumer of the existing schedule and status caches. */
 function renderFrontierGateMap() {
@@ -4756,3 +4756,127 @@ function renderFrontierGateMap() {
   }
   widget.update({airport: airport.code, flights: models, loading, missing: missing.length > 0});
 }
+
+/* Airport security: one selected airport, demand-driven; no airport sweep. */
+const securityEndpoint = 'https://frontier-flight-times.jacob-brown-6700.workers.dev/security';
+const securityResults = new Map();
+let securityAirport = null;
+let securityController = null;
+let securitySequence = 0;
+let securityVisible = !('IntersectionObserver' in window);
+let securityLane = 'standard';
+const securityLabels = {standard:'Standard',precheck:'TSA PreCheck',clear:'CLEAR',clear_precheck:'CLEAR + PreCheck',combined:'Checkpoint estimates',priority:'Priority'};
+
+function securityText(tag,className,value) {
+  const el=document.createElement(tag);el.className=className;el.textContent=value;return el;
+}
+function securityActive() {
+  const dashboard=document.getElementById('dashboardMain');
+  return !document.hidden && securityVisible && dashboard && dashboard.getClientRects().length>0;
+}
+function securityAge(iso) {
+  const ms=Date.parse(iso);if(!Number.isFinite(ms))return '';
+  const minutes=Math.max(0,Math.floor((Date.now()-ms)/60000));
+  return minutes<1?'just now':`${minutes} min ago`;
+}
+function securityHide() {
+  const card=document.getElementById('airportSecurity');if(card){card.hidden=true;card.replaceChildren();}
+}
+function securityWaitCurrent(l) {
+  return !l.stale && l.status!=='closed' && l.wait?.display && !['closed','unknown','stale'].includes(l.wait.kind) &&
+    (!l.validUntil||Date.now()<Date.parse(l.validUntil)) &&
+    (l.timestampKind!=='source'||Date.now()-Date.parse(l.updatedAt)<900000);
+}
+function securitySchedule(schedule,timezone) {
+  if(!schedule?.intervals?.length)return null;
+  const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:timezone,hour:'2-digit',minute:'2-digit',weekday:'short',hourCycle:'h23'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
+  const minute=+p.hour*60 + +p.minute,day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday);
+  let closing=Infinity;
+  for(const i of schedule.intervals){
+    const start=+i.open.slice(0,2)*60 + +i.open.slice(3),end=+i.close.slice(0,2)*60 + +i.close.slice(3);
+    const today=!i.days||i.days.includes(day),yesterday=!i.days||i.days.includes((day+6)%7);
+    if(start===end&&today&&schedule.open24h)return {status:'open',closingInMinutes:null};
+    if(start<end&&today&&minute>=start&&minute<end)closing=Math.min(closing,end-minute);
+    if(start>end&&((today&&minute>=start)||(yesterday&&minute<end)))closing=Math.min(closing,minute>=start?1440-minute+end:end-minute);
+  }
+  return Number.isFinite(closing)?{status:'open',closingInMinutes:closing}:{status:'closed',closingInMinutes:null};
+}
+function renderSecurity(data) {
+  const card=document.getElementById('airportSecurity');
+  if(!card||data.airport!==securityAirport?.code)return;
+  // Reevaluate hours locally between refreshes, including a closing during the 5-minute cache.
+  if(Array.isArray(data.checkpoints))data={...data,checkpoints:data.checkpoints.map(c=>({...c,lanes:c.lanes.map(l=>{const state=securitySchedule(l.hours||c.hours,data.timezone);return state?{...l,status:state.status==='closed'?'closed':l.status==='unknown'?'open':l.status,closingInMinutes:state.closingInMinutes}:l;})}))};
+  if(!data.available||!Array.isArray(data.checkpoints)||!data.checkpoints.some(c=>c.hours||c.lanes.some(l=>securityWaitCurrent(l)||l.hours||l.status==='closed'))){securityHide();return;}
+  card.replaceChildren();card.hidden=false;
+  const heading=securityText('div','security-heading','');
+  const copy=securityText('div','security-heading-copy','');
+  copy.append(securityText('div','dashboard-booking-kicker','AIRPORT SECURITY'),securityText('h3','',`${data.airport} security checkpoints`));
+  const source=securityText('a','security-source','Airport source ↗');
+  try{const url=new URL(data.source?.url);if(url.protocol==='https:')source.href=url.href;}catch{}
+  source.target='_blank';source.rel='noopener';heading.append(copy,source);card.append(heading);
+  const types=[...new Set(data.checkpoints.flatMap(c=>c.lanes.map(l=>l.type)))].filter(t=>securityLabels[t]);
+  if(!types.includes(securityLane))securityLane=types.includes('standard')?'standard':types[0];
+  const options=securityText('div','security-lane-options','');options.setAttribute('role','group');options.setAttribute('aria-label','Security lane');
+  for(const type of ['standard','precheck','clear','clear_precheck','combined','priority'].filter(t=>types.includes(t))){
+    const button=securityText('button','security-lane-button',securityLabels[type]);button.type='button';button.setAttribute('aria-pressed',String(type===securityLane));
+    button.addEventListener('click',()=>{securityLane=type;renderSecurity(data);});options.append(button);
+  }card.append(options);
+  const recommendation=data.recommendations?.find(r=>r.lane===securityLane);
+  if(recommendation){const cp=data.checkpoints.find(c=>c.name===recommendation.checkpoint);
+    if(cp?.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))card.append(securityText('p','security-recommendation',`${recommendation.label}: ${recommendation.checkpoint} · ${recommendation.displayWait}. ${recommendation.note||''}`));}
+  const selected=data.checkpoints.filter(c=>c.lanes.some(l=>l.type===securityLane||l.type==='combined'));
+  const grid=securityText('div','security-checkpoints','');
+  const remaining=securityText('details','security-more','');remaining.append(securityText('summary','',`See all ${selected.length} checkpoints`));
+  const rest=securityText('div','security-checkpoints','');remaining.append(rest);
+  selected.forEach((cp,index)=>{
+    const box=securityText('section','security-checkpoint','');box.append(securityText('h4','',cp.name));
+    if(cp.hours)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} · airport local time`));
+    for(const l of cp.lanes.filter(l=>l.type===securityLane||l.type==='combined')){
+      const line=securityText('div','security-lane-row','');const current=securityWaitCurrent(l);
+      const value=l.status==='closed'?'Closed':current?l.wait.display:l.stale?'Wait temporarily unavailable':l.status==='open'?'Open · wait not published':'Wait not published';
+      line.append(securityText('span','security-lane-name',l.label||securityLabels[l.type]),securityText('strong','security-wait'+(l.status==='closed'?' is-closed':''),value));box.append(line);
+      if(l.hours)box.append(securityText('p','security-hours',`${l.hours.display} · airport local time`));
+      if(l.status==='closed'&&l.statusMessage)box.append(securityText('p','security-hours',l.statusMessage));
+      if(l.closingInMinutes!==null&&l.closingInMinutes<=45&&l.status==='open')box.append(securityText('p','security-closing',`Closes in ${l.closingInMinutes} min`));
+      if(current&&l.timestampKind==='source')box.append(securityText('p','security-lane-updated',`Updated ${securityAge(l.updatedAt)}`));
+      if(current&&l.timestampKind!=='source'&&l.sourceUpdatedText)box.append(securityText('p','security-lane-updated',l.sourceUpdatedText));
+      if(l.notes)box.append(securityText('p','security-note',l.notes));
+    }
+    (index<4?grid:rest).append(box);
+  });card.append(grid);if(selected.length>4)card.append(remaining);
+  card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'} · Checked ${securityAge(data.fetchedAt)} · Times can change. Confirm the checkpoint serves your gate.`));
+}
+
+function selectSecurityAirport(airport) {
+  securitySequence++;securityController?.abort();securityController=null;securityAirport=airport;securityHide();refreshSecurity();
+}
+async function refreshSecurity() {
+  if(!securityAirport||!securityActive()||securityController)return;
+  const airport=securityAirport,sequence=securitySequence,cached=securityResults.get(airport.code);
+  if(cached&&cached.expires>Date.now()){renderSecurity(cached.data);return;}
+  securityHide();
+  const controller=new AbortController();securityController=controller;
+  const timeout=setTimeout(()=>controller.abort(),28000);
+  try{
+    const url=new URL(securityEndpoint);url.searchParams.set('airport',airport.code);
+    const response=await fetch(url,{signal:controller.signal,cache:'no-store'});if(!response.ok)throw new Error('Security source unavailable');
+    const data=await response.json();if(data.schemaVersion!==1||data.airport!==airport.code||typeof data.available!=='boolean')throw new Error('Invalid security response');
+    if(sequence!==securitySequence||securityAirport?.code!==airport.code||!securityActive())return;
+    const expires=Date.parse(data.expiresAt);
+    if(data.available && (!Number.isFinite(expires)||expires<=Date.now()||expires>Date.now()+301000))throw new Error('Expired security response');
+    securityResults.set(airport.code,{data,expires:Number.isFinite(expires)?expires:Date.now()+300000});renderSecurity(data);
+  }catch(error){
+    if(sequence===securitySequence && error.name!=='AbortError'){
+      securityResults.set(airport.code,{data:{airport:airport.code,available:false},expires:Date.now()+300000});securityHide();
+    }
+  }finally{clearTimeout(timeout);if(securityController===controller)securityController=null;}
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden){securitySequence++;securityController?.abort();securityController=null;}else refreshSecurity();});
+if('IntersectionObserver' in window){const target=document.getElementById('dashboardMain');if(target){
+  const observer=new IntersectionObserver(entries=>{securityVisible=entries[0].isIntersecting;
+    if(securityVisible)refreshSecurity();else{securitySequence++;securityController?.abort();securityController=null;}},{threshold:0});observer.observe(target);
+}}
+setInterval(()=>{if(securityActive())refreshSecurity();},60000);
+
+initializeWeatherEnhancements();
+initializeDashboard();
