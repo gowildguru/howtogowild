@@ -4819,6 +4819,8 @@ function renderSecurity(data) {
   const options=securityText('div','security-lane-options','');options.setAttribute('role','group');options.setAttribute('aria-label','Security lane');
   for(const type of ['standard','precheck','clear','clear_precheck','combined','priority'].filter(t=>types.includes(t))){
     const button=securityText('button','security-lane-button',securityLabels[type]);button.type='button';button.setAttribute('aria-pressed',String(type===securityLane));
+    const logos=type==='precheck'?['precheck']:type==='clear'?['clear']:type==='clear_precheck'?['clear','precheck']:[];
+    for(const brand of logos.reverse()){const logo=document.createElement('img');logo.className='security-lane-logo security-logo-'+brand;logo.src='images/'+brand+'.jpg';logo.alt='';logo.width=brand==='precheck'?72:50;logo.height=18;logo.addEventListener('error',()=>{logo.hidden=true;});button.prepend(logo);}
     button.addEventListener('click',()=>{securityLane=type;renderSecurity(data);});options.append(button);
   }card.append(options);
   const recommendation=data.recommendations?.find(r=>r.lane===securityLane);
