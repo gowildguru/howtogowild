@@ -121,6 +121,11 @@ dialog::backdrop{background:#050b1c75;backdrop-filter:blur(1px)}.seat-card-top{p
 .seat-details h3{margin:14px 0 5px}.seat-details ul{margin:5px 0;padding-left:17px}.seat-details li{margin:4px 0}.seat-details p{margin:6px 0}.quick-notes:empty{display:none}
 .seat-rating{margin-top:12px;padding-top:11px;border-top:1px solid #b7cbb326}.rating-heading{font-size:11px;font-weight:750;margin:0 0 3px}.rating-result{font-size:11px;margin:0 0 6px;line-height:1.4}.rating-bar{height:8px;border-radius:99px;overflow:hidden;background:#82908744;display:flex}.rating-bar.has-votes{background:#a57570}.rating-green{height:100%;width:0;background:#829d8a;transition:width .3s ease}.rating-votes{display:flex;align-items:center;gap:7px;margin-top:8px}.rating-votes>span{font-size:10px;margin-right:auto}.rating-votes button{min-width:44px;min-height:44px;border:1px solid #b7cbb340;border-radius:12px;color:var(--text);background:#cbdacb0d;padding:7px;font-size:17px}.rating-votes button[data-vote=up][aria-pressed=true]{background:#829d8a44;border-color:#829d8a}.rating-votes button[data-vote=down][aria-pressed=true]{background:#a5757044;border-color:#a57570}.rating-votes button:disabled{cursor:default;opacity:.45}.rating-status{font-size:10px;color:var(--muted);margin:5px 0 0;line-height:1.4}.rating-status:empty{display:none}
 @media(prefers-reduced-motion:reduce){.rating-green{transition:none}}
+
+/* Mini community recommendation bars within each seat square. */
+.seat-mini-rating{position:absolute;bottom:3px;left:3px;right:3px;height:4px;border-radius:99px;background:#64796b66;overflow:hidden;pointer-events:none}
+.seat-mini-rating.rated{background:#a57570}.seat-mini-green{display:block;height:100%;width:0;background:#829d8a;transition:width .25s ease}.seat.special:before{bottom:7px}.map-rating-key{font-size:10px;color:var(--muted);margin:6px 0 10px}.mini-key-swatch{display:inline-block;width:22px;height:4px;border-radius:99px;background:linear-gradient(90deg,#829d8a 65%,#a57570 65%);vertical-align:middle;margin-right:5px}
+@media(prefers-reduced-motion:reduce){.seat-mini-green{transition:none}}
 </style>
 </head>
 <body><main>
@@ -143,6 +148,7 @@ dialog::backdrop{background:#050b1c75;backdrop-filter:blur(1px)}.seat-card-top{p
 <h2 id="mapTitle"></h2><p id="summary" class="count" aria-live="polite"></p><p id="mapNotice" class="notice"></p>
 <div class="legend" aria-label="Seat category legend"><span class="upfront">UpFront Plus</span><span class="first">First concept</span><span class="premium">Premium</span><span class="preferred">Preferred</span><span class="standard">Standard</span></div>
 <div class="symbol-key" aria-label="Seat symbols"><span><i class="key-dot exit-dot" aria-hidden="true"></i>Exit row</span><span><i class="key-dot special-dot" aria-hidden="true"></i>Special note</span><span><i class="key-empty" aria-hidden="true"></i>Unavailable</span><span><i class="key-crew" aria-hidden="true"></i>Crew</span></div>
+<p class="map-rating-key" id="mapRatingStatus"><span class="mini-key-swatch" aria-hidden="true"></span>Seat bars: sage recommends · muted red does not</p>
 <div class="rule selected" aria-live="polite"><strong id="selectedTitle">Choose a seat</strong><p id="selectedInfo">Tap a seat for details.</p></div>
 <details class="pill-details"><summary><span class="pill-info" aria-hidden="true">i</span>Cabin notes</summary><ul id="cabinNotes" class="note-list"></ul></details>
 <details class="pill-details"><summary><span class="pill-info" aria-hidden="true">i</span>About this map</summary><p class="muted">Cabin geometry and supplied seat notes; not live availability or a scale drawing. Unknown details stay unverified.</p><p class="muted">First concepts are entirely estimated: eight seats in rows 1–2, no row 3, economy from row 4. Final pitch, hardware and restrictions are unconfirmed.</p></details>
@@ -295,8 +301,11 @@ function render(){
   b.type='button';b.dataset.seat=seat.id;b.setAttribute('aria-pressed','false');b.setAttribute('aria-label',`${seat.estimated?'Estimated ':''}${identity(seat)}, ${seat.position}, ${CATEGORY[seat.category]}, ${pitchLabel(seat)}${seat.exit?', exit seat':''}`);
   b.style.left=seatX(seat,size)+'px';b.style.top=(coords[seat.row]+(aircraft==='a321neo'&&seat.row>=29&&seat.side==='right'?18:0))+'px';
   if(seat.first){b.style.width=firstSeatSize(size)+'px';b.style.height=firstSeatSize(size)+'px';b.style.fontSize='14px';}
+  const mini=el('span','seat-mini-rating');mini.setAttribute('aria-hidden','true');mini.append(el('span','seat-mini-green'));b.append(mini);
+  b.dataset.baseLabel=b.getAttribute('aria-label');
   b.addEventListener('click',()=>openDetails(seat,b));map.append(b);
  }
+ loadMapRatings();
  for(const crew of model.crew){const marker=el('span','jumpseat','Crew');marker.style.left=seatX({letter:crew.letter},size)+'px';marker.style.top=(coords[crew.row]+13)+'px';marker.title='Flight-attendant jumpseat · not a passenger seat';map.append(marker);}
 }
 function adjacentExit(seat){
@@ -434,7 +443,54 @@ function renderQuickNotes(seat){
 // POST JSON {seat, voter, vote:"up"|"down"}; both return {up,down,vote:null|"up"|"down"}.
 // The server must upsert one vote per (seat,voter), allowing vote changes atomically.
 const SEAT_RATINGS_API = 'https://frontier-flight-times.jacob-brown-6700.workers.dev/seat-ratings';
- let ratingRequest=0,ratingBusy=false;
+
+const cabinRatingsCache=new Map(),seatRatingEdits=new Map();
+let mapRatingRequest=0,seatRatingEdit=0;
+function checkedCounts(data){return data&&Number.isSafeInteger(data.up)&&data.up>=0&&Number.isSafeInteger(data.down)&&data.down>=0&&Number.isSafeInteger(data.up+data.down);}
+function paintMiniRating(button,data,loaded){
+ const bar=button.querySelector('.seat-mini-rating');if(!bar)return;
+ const total=checkedCounts(data)?data.up+data.down:0;
+ bar.classList.toggle('rated',total>0);bar.querySelector('.seat-mini-green').style.width=(total?data.up/total*100:0)+'%';
+ const label=total?`${data.up}/${total} recommend this seat`:loaded?'No votes yet':'Ratings unavailable';
+ button.setAttribute('aria-label',button.dataset.baseLabel+', '+label);button.title=label;
+}
+function applyCabinRatings(prefix,ratings,loaded){
+ if(prefix!==aircraft+':'+configuration)return;
+ map.querySelectorAll('.seat').forEach(button=>paintMiniRating(button,ratings?.[button.dataset.seat],loaded));
+}
+function updateMapRating(seat,data){
+ if(!checkedCounts(data))return;
+ const prefix=seat.aircraft+':'+(seat.estimated?'concept':'current');
+ let entry=cabinRatingsCache.get(prefix);if(!entry){entry={ratings:{},fetchedAt:0};cabinRatingsCache.set(prefix,entry);}
+ entry.ratings[seat.id]={up:data.up,down:data.down};seatRatingEdits.set(prefix+':'+seat.id,++seatRatingEdit);
+ if(prefix===aircraft+':'+configuration){const b=map.querySelector(`[data-seat="${seat.id}"]`);if(b)paintMiniRating(b,data,true);}
+}
+async function loadMapRatings(){
+ const request=++mapRatingRequest,prefix=aircraft+':'+configuration,startEdit=seatRatingEdit;
+ const cached=cabinRatingsCache.get(prefix);
+ applyCabinRatings(prefix,cached?.ratings,Boolean(cached?.fetchedAt));
+ const status=$('mapRatingStatus');
+ const showStatus=message=>{status.replaceChildren(el('span','mini-key-swatch'),document.createTextNode(message));};
+ if(!SEAT_RATINGS_API){showStatus('Community seat bars coming soon');return;}
+ if(cached&&Date.now()-cached.fetchedAt<60000){showStatus('Seat bars: sage recommends · muted red does not');return;}
+ showStatus('Loading seat recommendation bars…');
+ try{
+  const url=new URL(SEAT_RATINGS_API,location.href);url.searchParams.set('aircraft',aircraft);url.searchParams.set('cabin',configuration);
+  const response=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(10000)});
+  if(!response.ok)throw new Error('Map ratings unavailable');
+  const data=await response.json();if(data.aircraft+':'+data.cabin!==prefix||!data.ratings||typeof data.ratings!=='object'||Array.isArray(data.ratings)||!Object.values(data.ratings).every(checkedCounts))throw new Error('Invalid cabin ratings');
+  const current=cabinRatingsCache.get(prefix);
+  for(const [id,counts]of Object.entries(current?.ratings||{})){if((seatRatingEdits.get(prefix+':'+id)||0)>startEdit)data.ratings[id]=counts;}
+  cabinRatingsCache.set(prefix,{ratings:data.ratings,fetchedAt:Date.now()});
+  if(request!==mapRatingRequest)return;
+  applyCabinRatings(prefix,data.ratings,true);showStatus('Seat bars: sage recommends · muted red does not');
+ }catch{
+  if(request!==mapRatingRequest)return;
+  showStatus(cached?'Showing previously loaded seat bars':'Seat ratings unavailable · neutral bars');
+ }
+}
+
+let ratingRequest=0,ratingBusy=false;
 function ratingKey(seat){return [seat.aircraft,seat.estimated?'concept':'current',seat.id].join(':');}
 function voterId(){
  try{let id=localStorage.getItem('htgw-seat-voter');if(!id){id=crypto.randomUUID();localStorage.setItem('htgw-seat-voter',id);}return id;}catch{return null;}
@@ -445,6 +501,7 @@ function ratingButtons(enabled,vote=null){
 function paintRating(data){
  const up=data.up,down=data.down;
  if(!Number.isSafeInteger(up)||up<0||!Number.isSafeInteger(down)||down<0||!Number.isSafeInteger(up+down))throw new Error('Invalid rating counts');
+ if(activeSeat)updateMapRating(activeSeat,data);
  const total=up+down,percent=total?Math.round(up/total*100):0;
  $('ratingResult').textContent=total?`${up}/${total} recommend this seat · ${percent}%`:'Be the first to rate this seat!';
  $('ratingBar').classList.toggle('has-votes',total>0);$('ratingGreen').style.width=(total?up/total*100:0)+'%';
@@ -469,7 +526,7 @@ async function loadRating(seat){
 async function submitRating(vote){
  if(!activeSeat||!SEAT_RATINGS_API||ratingBusy||!voterId())return;
  const seat=activeSeat,request=ratingRequest;ratingBusy=true;ratingButtons(false);$('ratingStatus').textContent='Saving your vote…';
- try{const data=await ratingFetch(ratingKey(seat),'POST',vote);if(request!==ratingRequest)return;ratingBusy=false;paintRating(data);$('ratingStatus').textContent='Thanks! You can change your vote anytime.';}
+ try{const data=await ratingFetch(ratingKey(seat),'POST',vote);updateMapRating(seat,data);if(request!==ratingRequest)return;ratingBusy=false;paintRating(data);$('ratingStatus').textContent='Thanks! You can change your vote anytime.';}
  catch{if(request===ratingRequest){ratingBusy=false;ratingButtons(true);$('ratingStatus').textContent='Could not save your vote. Please try again.';}}
 }
 $('voteUp').addEventListener('click',()=>submitRating('up'));
