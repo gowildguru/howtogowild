@@ -1,39 +1,41 @@
+/* =========================================================
+   HOWTOGOWILD — FRONTIER GATE ACTIVITY MAP
+   Full replacement for gatemap.css
+   ========================================================= */
+
 .den-map[hidden]{display:none!important}
-.den-map{grid-column:1/-1;margin:22px 0;padding:24px;border:1px solid #ffffff80;border-radius:24px;background:rgba(255,255,255,.91);color:#35473c;box-shadow:0 8px 25px #2944350a;font-family:Montserrat,Arial,sans-serif;text-align:left}
-.den-map-heading{display:flex;justify-content:space-between;align-items:center;gap:16px}
-.den-map-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#66766c}
-.den-map h3{font-size:22px;margin:6px 0}.den-map-heading p,.den-map-summary{font-size:12px;line-height:1.6;margin:6px 0;color:#596d5e}
-.den-map-badge{font-size:10px;border-radius:30px;background:#edf3ee;padding:8px 12px;white-space:nowrap}
-.den-map-filters{display:flex;gap:8px;margin:18px 0 10px;flex-wrap:wrap}
-.den-map-filters button{font:600 12px Montserrat,Arial,sans-serif;color:#53675a;background:#fff;border:1px solid #d0ddd3;border-radius:24px;padding:10px 16px;cursor:pointer}
-.den-map-filters button[aria-pressed=true]{background:#66766c;color:white;border-color:#66766c}
-.den-map-scroll{overflow:auto;border:1px solid #dce5de;border-radius:18px;background:linear-gradient(150deg,#f9fbf9,#eef4ef);margin:14px 0}
-.den-map svg{display:block;width:100%;min-width:960px;height:auto}
-.den-map-concourse{font-size:13px;fill:#53675a;font-weight:700;letter-spacing:.08em}.den-map-subtext{font-size:10px;fill:#66766c}
-.den-map-gate{cursor:pointer;outline:none}.den-map-gate:focus-visible>rect{stroke:#294b38;stroke-width:4}
-.den-map-gate-name{font-size:13px;font-weight:800;fill:#35473c}.den-map-count{font-size:9px;fill:#66766c}.den-map-flight-label{font-size:10px;fill:#53675a;font-weight:600}
-.den-map-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:10px;color:#66766c;margin-bottom:16px}.den-map-amber{color:#94621f}
-.den-map-details{background:#f3f7f3;border-radius:16px;padding:16px}.den-map-details h4{margin:0 0 12px}.den-map-details p,.den-map-unplaced p{font-size:12px;margin:0;line-height:1.6}
-.den-map-flight{display:flex;flex-direction:column;gap:5px;font-size:12px;padding:12px 0;line-height:1.6;border-bottom:1px solid #dce5de}.den-map-flight:last-child{border:0}.den-map-flight strong{font-size:13px}.den-map-flight small{font-size:10px;color:#66766c}
-.den-map-unplaced{margin:14px 0}.den-map-unplaced summary{cursor:pointer;font-size:12px;font-weight:600;padding:10px 0}.den-map-unplaced>div{max-height:260px;overflow:auto}
-.den-map-note{font-size:10px;line-height:1.65;color:#637367;margin:10px 0 0}
-.den-map-incoming{animation:den-map-arrive 1s ease-out}.den-map-left{opacity:.35}
-@keyframes den-map-arrive{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.den-map-incoming{animation:none}}
-@media(max-width:600px){.den-map{padding:16px;margin:16px 0;border-radius:20px}.den-map-heading{align-items:flex-start;flex-direction:column;gap:6px}.den-map h3{font-size:20px}.den-map-scroll{margin:12px 0}.den-map-filters button{padding:10px 13px}.den-map-legend{line-height:1.7}}
+.den-map{
+  grid-column:1/-1;
+  margin:22px 0;
+  padding:0;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:24px;
+  background:rgba(53,77,61,.14);
+  color:#fff;
+  box-shadow:0 10px 30px rgba(20,34,25,.1),inset 0 1px 0 rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  font-family:Montserrat,Arial,sans-serif;
+  text-align:left;
+  overflow:hidden;
+}
 
-#departureRows .departure-booking-status.gate-closed{color:#66766c;font-weight:700}
-
-.den-map-source{font-size:10px;line-height:1.6;color:#637367;margin:0 0 12px}.den-map-source a{color:#53675a;text-decoration:underline}
-
-/* Dashboard glass tile: native details preserves keyboard and screen-reader behavior. */
-.den-map{padding:0;background:rgba(53,77,61,.14);color:#fff;border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(20,34,25,.1),inset 0 1px 0 rgba(255,255,255,.14)}
-.den-map-heading{list-style:none;cursor:pointer;padding:22px 24px;margin:0;border-radius:24px;display:flex;align-items:center;gap:20px}
+.den-map-heading{
+  list-style:none;
+  cursor:pointer;
+  padding:22px 24px;
+  margin:0;
+  border-radius:24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
 .den-map-heading::-webkit-details-marker{display:none}
 .den-map-heading::marker{content:""}
 .den-map-heading:focus-visible{outline:3px solid #fff;outline-offset:4px}
 .den-map-heading-copy{display:block;flex:1;min-width:0}
-.den-map-kicker{display:block;color:rgba(255,255,255,.76)}
+.den-map-kicker{display:block;font-size:10px;letter-spacing:.16em;font-weight:800;color:rgba(255,255,255,.76)}
 .den-map-title{display:block;font-size:22px;font-weight:700;line-height:1.25;margin:6px 0}
 .den-map-description{display:block;color:rgba(255,255,255,.84);font-size:12px;line-height:1.65}
 .den-map-toggle{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:600;white-space:nowrap}
@@ -43,13 +45,122 @@
 .den-map[open]>.den-map-heading .den-map-open-label{display:none}
 .den-map[open]>.den-map-heading .den-map-close-label{display:inline}
 .den-map-content{padding:0 24px 24px}
-.den-map-scroll{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.2)}
-.den-map-summary,.den-map-source,.den-map-source a,.den-map-note,.den-map-legend,.den-map-flight small{color:rgba(255,255,255,.84)}
-.den-map-filters button{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.3)}
+
+.den-map-summary{font-size:12px;line-height:1.6;margin:6px 0;color:rgba(255,255,255,.84)}
+.den-map-source{font-size:10px;line-height:1.6;color:rgba(255,255,255,.84);margin:0 0 12px}
+.den-map-source a{color:rgba(255,255,255,.92);text-decoration:underline}
+.den-map-note{font-size:10px;line-height:1.65;color:rgba(255,255,255,.78);margin:10px 0 0}
+.den-map-badge{font-size:10px;border-radius:30px;background:rgba(255,255,255,.10);padding:8px 12px;white-space:nowrap}
+
+.den-map-filters{display:flex;gap:8px;margin:18px 0 10px;flex-wrap:wrap}
+.den-map-filters button{
+  font:600 12px Montserrat,Arial,sans-serif;
+  color:#fff;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.30);
+  border-radius:24px;
+  padding:10px 16px;
+  cursor:pointer;
+}
 .den-map-filters button[aria-pressed=true]{background:rgba(255,255,255,.92);color:#53675a;border-color:rgba(255,255,255,.92)}
-.den-map-details{background:rgba(255,255,255,.06)}
-.den-map-flight{border-color:rgba(255,255,255,.18)}
+
+/* The map stays horizontally pannable, but JS centers it when opened or switched. */
+.den-map-scroll{
+  position:relative;
+  overflow:auto;
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  border:1px solid rgba(255,255,255,.20);
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+  margin:14px 0;
+}
+.den-map svg{display:block;width:100%;min-width:1080px;height:auto}
+
+/* Airport schematic */
+.den-map-terminal-body{fill:rgba(230,239,232,.90);stroke:rgba(186,201,190,.95);stroke-width:2}
+.den-map-terminal-line{fill:none;stroke:rgba(186,201,190,.95);stroke-width:54;stroke-linecap:round}
+.den-map-terminal-line-inner{fill:none;stroke:rgba(229,237,230,.96);stroke-width:50;stroke-linecap:round}
+.den-map-concourse{font-size:13px;fill:#53675a;font-weight:800;letter-spacing:.08em}
+.den-map-subtext{font-size:10px;fill:#66766c}
+.den-map-outside{fill:rgba(255,255,255,.88)}
+.den-map-door{fill:#9fb2a5}
+
+/* Airport-style gate signs */
+.den-map-gate{cursor:pointer;outline:none}
+.den-map-gate-marker{
+  fill:rgba(102,118,108,.82);
+  stroke:rgba(255,255,255,.55);
+  stroke-width:1.5;
+  filter:drop-shadow(0 4px 8px rgba(14,27,19,.18));
+}
+.den-map-gate.is-occupied .den-map-gate-marker{
+  fill:#f2c94c;
+  stroke:rgba(255,255,255,.72);
+}
+.den-map-gate[aria-pressed=true] .den-map-gate-marker,
+.den-map-gate:focus-visible .den-map-gate-marker{
+  stroke:#fff;
+  stroke-width:3;
+}
+.den-map-gate-plane{font-size:12px;font-weight:800;fill:#f7faf7}
+.den-map-gate.is-occupied .den-map-gate-plane{fill:#344139}
+.den-map-gate-name{font-size:13px;font-weight:900;fill:#fff;letter-spacing:.02em}
+.den-map-gate.is-occupied .den-map-gate-name{fill:#344139}
+
+/* Pinpoint / leader from gate sign to the flight card */
+.den-map-pin{stroke:rgba(255,255,255,.56);stroke-width:1.5;stroke-linecap:round}
+.den-map-pin-dot{fill:#fff;opacity:.82}
+
+/* Compact frosted flight bubble */
+.den-map-flight-bubble{
+  fill:rgba(48,67,55,.80);
+  stroke:rgba(255,255,255,.38);
+  stroke-width:1.25;
+  filter:drop-shadow(0 7px 12px rgba(12,25,17,.22));
+}
+.den-map-flight-number{font-size:13px;font-weight:900;fill:#fff;letter-spacing:.02em}
+.den-map-flight-route{font-size:10px;font-weight:800;fill:rgba(255,255,255,.91);letter-spacing:.08em}
+.den-map-flight-status{font-size:9px;font-weight:900;fill:#dfe8e1;letter-spacing:.08em}
+.den-map-flight-status.is-boarding{fill:#f2c94c}
+.den-map-flight-status.is-delayed{fill:#ffd08b}
+.den-map-flight-status.is-closed{fill:#cdd7d0}
+.den-map-flight-status.is-cancelled{fill:#ffb5a9}
+
+.den-map-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10px;color:rgba(255,255,255,.84);margin-bottom:16px;line-height:1.5}
+.den-map-legend-key{display:inline-flex;align-items:center;gap:6px}
+.den-map-legend-swatch{width:15px;height:10px;border-radius:3px;border:1px solid rgba(255,255,255,.5);background:rgba(102,118,108,.82)}
+.den-map-legend-swatch.is-occupied{background:#f2c94c}
 .den-map-amber{color:#ffd08b}
-.den-map-flight-label,.den-map-outside{fill:rgba(255,255,255,.9)}
-@media(prefers-reduced-motion:reduce){.den-map-chevron{transition:none}}
-@media(max-width:600px){.den-map{padding:0}.den-map-heading{padding:18px 16px;flex-direction:row;align-items:center;gap:12px}.den-map-title{font-size:19px}.den-map-description{font-size:11px}.den-map-toggle{font-size:10px;white-space:normal;max-width:75px}.den-map-content{padding:0 16px 16px}}
+
+.den-map-details{background:rgba(255,255,255,.06);border-radius:16px;padding:16px}
+.den-map-details h4{margin:0 0 12px}
+.den-map-details p,.den-map-unplaced p{font-size:12px;margin:0;line-height:1.6}
+.den-map-flight{display:flex;flex-direction:column;gap:5px;font-size:12px;padding:12px 0;line-height:1.6;border-bottom:1px solid rgba(255,255,255,.18)}
+.den-map-flight:last-child{border:0}
+.den-map-flight strong{font-size:13px}
+.den-map-flight small{font-size:10px;color:rgba(255,255,255,.78)}
+.den-map-unplaced{margin:14px 0}
+.den-map-unplaced summary{cursor:pointer;font-size:12px;font-weight:600;padding:10px 0}
+.den-map-unplaced>div{max-height:260px;overflow:auto}
+
+.den-map-incoming{animation:den-map-arrive .75s ease-out}
+.den-map-left{opacity:.45}
+@keyframes den-map-arrive{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.den-map-incoming{animation:none}.den-map-chevron{transition:none}}
+
+#departureRows .departure-booking-status.gate-closed{color:#66766c;font-weight:700}
+
+@media(max-width:600px){
+  .den-map{margin:16px 0;border-radius:20px}
+  .den-map-heading{padding:18px 16px;flex-direction:row;align-items:center;gap:12px}
+  .den-map-title{font-size:19px}
+  .den-map-description{font-size:11px}
+  .den-map-toggle{font-size:10px;white-space:normal;max-width:75px}
+  .den-map-content{padding:0 16px 16px}
+  .den-map-scroll{margin:12px 0}
+  .den-map svg{min-width:1040px}
+  .den-map-filters button{padding:10px 13px}
+  .den-map-legend{line-height:1.7}
+}
