@@ -1201,7 +1201,18 @@ reduceMotion.addEventListener("change", event => {
 });
 setInterval(() => {$("age").textContent = ageSince(fleet[index].delivered);}, 60000);
 show(Math.floor(Math.random() * fleet.length));})();
-
+show(Math.floor(Math.random() * fleet.length));})();
 
 </script>
-</body></html>
+
+<script>
+const betaEnd = new Date("2026-10-10T00:00:00");
+
+if (new Date() >= betaEnd) {
+  document.getElementById("beta-screen")?.remove();
+}
+</script>
+
+</body>
+</html>
+ 
