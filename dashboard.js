@@ -4690,7 +4690,7 @@ function renderFrontierGateMap() {
   const widget = window.FrontierDENGateMap;
   if (!widget || !departureState) return;
   const {airport, flights, snapshots, loading, missing} = departureState;
-  if (!['DEN','ATL','LAS','MCO','PHX'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
+  if (!['DEN','ATL','LAS','MCO','PHX','DFW','TPA','SJU','ORD','STL','LAX','SFO','IAH'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
   const now = Date.now();
   const today = bookingKey(bookingDate(bookingParts(new Date(now), airport.timezone), 0));
   const models = [];
@@ -4721,7 +4721,7 @@ function renderFrontierGateMap() {
         if (result < instant - 12*3600000) result = departureInstant(bookingDate(flight.date, 1), actualMinutes, airport.timezone);
         return result;
       })();
-      if (!Number.isFinite(actual) || now - actual > 15*60000) return;
+      if (!Number.isFinite(actual) || now - actual > 60*60000) return;
     }
     const explicitOnTime = /^(on[ _-]?time|scheduled)$/i.test(String(data?.statusCode || '')) || /^on time$/i.test(String(data?.status || ''));
     const eligible = kind === 'departure' && fresh && explicitOnTime && !delayed && !cancelled && !finished;
