@@ -433,8 +433,8 @@ function renderQuickNotes(seat){
 // GET ?seat=<aircraft:configuration:seat>&voter=<browser UUID>
 // POST JSON {seat, voter, vote:"up"|"down"}; both return {up,down,vote:null|"up"|"down"}.
 // The server must upsert one vote per (seat,voter), allowing vote changes atomically.
-const SEAT_RATINGS_API = '';
-let ratingRequest=0,ratingBusy=false;
+const SEAT_RATINGS_API = 'https://frontier-flight-times.jacob-brown-6700.workers.dev/seat-ratings';
+ let ratingRequest=0,ratingBusy=false;
 function ratingKey(seat){return [seat.aircraft,seat.estimated?'concept':'current',seat.id].join(':');}
 function voterId(){
  try{let id=localStorage.getItem('htgw-seat-voter');if(!id){id=crypto.randomUUID();localStorage.setItem('htgw-seat-voter',id);}return id;}catch{return null;}
