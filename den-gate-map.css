@@ -164,3 +164,13 @@
   .den-map-filters button{padding:10px 13px}
   .den-map-legend{line-height:1.7}
 }
+
+/* v2 gate map refinements: real gate anchors, collision-safe bubbles, plane fill */
+.den-map-connector{fill:none;stroke:rgba(186,201,190,.75);stroke-width:3;stroke-dasharray:8 8}
+.den-map-terminal-line-stl{fill:none;stroke:rgba(186,201,190,.95);stroke-width:64;stroke-linecap:round}
+.den-map-terminal-line-stl-inner{fill:none;stroke:rgba(229,237,230,.96);stroke-width:58;stroke-linecap:round}
+.den-map-plane-outline{fill:#f7faf7;stroke:#66766c;stroke-width:2.2}
+.den-map-plane-outline.is-top{fill:none}
+.den-map-plane-fill{fill:#66766c}
+.den-map-flight-status.is-departed,.den-map-flight-status.is-arrived{fill:#dfe8e1}
+.den-map-flight-status.is-pending{fill:#d8dfda}
