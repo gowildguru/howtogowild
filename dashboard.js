@@ -4685,12 +4685,13 @@ async function initializeDashboard() {
 
 /* Dashboard boot follows the security module initialization below. */
 
-/* DEN/ATL/LAS/MCO/PHX map is a read-only consumer of the existing schedule and status caches. */
+/* Frontier gate map is a read-only consumer of the existing schedule and status caches.
+ * Supported: DEN, ATL, LAS, MCO, PHX, DFW, TPA, SJU, ORD, STL, LAX, SFO, IAH. */
 function renderFrontierGateMap() {
   const widget = window.FrontierDENGateMap;
   if (!widget || !departureState) return;
   const {airport, flights, snapshots, loading, missing} = departureState;
-  if (!['DEN','ATL','LAS','MCO','PHX'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
+  if (!['DEN','ATL','LAS','MCO','PHX','DFW','TPA','SJU','ORD','STL','LAX','SFO','IAH'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
   const now = Date.now();
   const today = bookingKey(bookingDate(bookingParts(new Date(now), airport.timezone), 0));
   const models = [];
