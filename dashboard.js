@@ -4685,13 +4685,12 @@ async function initializeDashboard() {
 
 /* Dashboard boot follows the security module initialization below. */
 
-/* Frontier gate map is a read-only consumer of the existing schedule and status caches.
- * Supported: DEN, ATL, LAS, MCO, PHX, DFW, TPA, SJU, ORD, STL, LAX, SFO, IAH. */
+/* DEN/ATL/LAS/MCO/PHX map is a read-only consumer of the existing schedule and status caches. */
 function renderFrontierGateMap() {
   const widget = window.FrontierDENGateMap;
   if (!widget || !departureState) return;
   const {airport, flights, snapshots, loading, missing} = departureState;
-  if (!['DEN','ATL','LAS','MCO','PHX','DFW','TPA','SJU','ORD','STL','LAX','SFO','IAH'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
+  if (!['DEN','ATL','LAS','MCO','PHX'].includes(airport.code)) { widget.update({airport: airport.code, flights: []}); return; }
   const now = Date.now();
   const today = bookingKey(bookingDate(bookingParts(new Date(now), airport.timezone), 0));
   const models = [];
@@ -4783,8 +4782,22 @@ function securityAge(iso) {
 function securityHide() {
   const card=document.getElementById('airportSecurity');if(card){card.hidden=true;card.replaceChildren();}
 }
+function securityWaitDisplay(l) {
+  const raw=String(l?.wait?.display ?? '').trim();
+  if(!raw)return '';
+  // Some airport feeds (including DEN) publish capped waits such as "35+".
+  // Treat these as valid values rather than falling through to "not published".
+  const capped=raw.match(/^(\d+)\s*\+\s*(?:min(?:ute)?s?)?$/i);
+  if(capped)return `${capped[1]}+ min`;
+  const numeric=raw.match(/^(\d+)\s*(?:min(?:ute)?s?)?$/i);
+  if(numeric)return `${numeric[1]} min`;
+  return raw;
+}
 function securityWaitCurrent(l) {
-  return !l.stale && l.status!=='closed' && l.wait?.display && !['closed','unknown','stale'].includes(l.wait.kind) &&
+  const display=securityWaitDisplay(l);
+  const capped=/^\d+\+ min$/i.test(display);
+  return !l.stale && l.status!=='closed' && display &&
+    (capped || !['closed','unknown','stale'].includes(l.wait?.kind)) &&
     (!l.validUntil||Date.now()<Date.parse(l.validUntil)) &&
     (l.timestampKind!=='source'||Date.now()-Date.parse(l.updatedAt)<900000);
 }
@@ -4836,7 +4849,7 @@ function renderSecurity(data) {
     if(cp.hours)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} · airport local time`));
     for(const l of cp.lanes.filter(l=>l.type===securityLane||l.type==='combined')){
       const line=securityText('div','security-lane-row','');const current=securityWaitCurrent(l);
-      const value=l.status==='closed'?'Closed':current?l.wait.display:l.stale?'Wait temporarily unavailable':l.status==='open'?'Open · wait not published':'Wait not published';
+      const value=l.status==='closed'?'Closed':current?securityWaitDisplay(l):l.stale?'Wait temporarily unavailable':l.status==='open'?'Open · wait not published':'Wait not published';
       line.append(securityText('span','security-lane-name',l.label||securityLabels[l.type]),securityText('strong','security-wait'+(l.status==='closed'?' is-closed':''),value));box.append(line);
       if(l.hours)box.append(securityText('p','security-hours',`${l.hours.display} · airport local time`));
       if(l.status==='closed'&&l.statusMessage)box.append(securityText('p','security-hours',l.statusMessage));
