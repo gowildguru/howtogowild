@@ -1200,8 +1200,7 @@ reduceMotion.addEventListener("change", event => {
   if (event.matches) {paused = true; schedule();}
 });
 setInterval(() => {$("age").textContent = ageSince(fleet[index].delivered);}, 60000);
-show(0);
-})();
+show(Math.floor(Math.random() * fleet.length));})();
 
 
 </script>
