@@ -4704,6 +4704,11 @@ function renderFrontierGateMap() {
     const finished = kind === 'departure' ? !!data?.departure?.actual || ['departed','arrived'].includes(data?.statusCode)
       : !!data?.arrival?.actual || data?.statusCode === 'arrived';
     const cancelled = data?.statusCode === 'cancelled';
+    const inAir = kind === 'arrival' && !finished && !cancelled && (
+      !!data?.departure?.actual ||
+      /^(departed|in[ _-]?air|airborne)$/i.test(String(data?.statusCode || '')) ||
+      /^(departed|in air|airborne)$/i.test(String(data?.status || ''))
+    );
     const delayed = data?.statusCode === 'delayed' || boardStatusDelayed(entry, flight, originAirport);
     let instant = flight.instant;
     if (kind === 'arrival') {
@@ -4727,7 +4732,15 @@ function renderFrontierGateMap() {
     const eligible = kind === 'departure' && fresh && explicitOnTime && !delayed && !cancelled && !finished;
     const gateClosed = eligible && now >= instant - 20*60000;
     const boarding = eligible && now >= instant - 45*60000 && now < instant - 20*60000;
-    const status = finished ? (kind === 'arrival' ? 'Arrived' : 'Departed') : cancelled ? 'Cancelled' : delayed ? 'Delayed' : gateClosed ? 'Gate closed' : boarding ? 'Estimated boarding' : fresh ? (data.status || 'Scheduled') : data ? 'Status stale / unavailable' : 'Scheduled · status unavailable';
+    const status = finished ? (kind === 'arrival' ? 'Arrived' : 'Departed')
+      : cancelled ? 'Cancelled'
+      : inAir ? 'In Air'
+      : delayed ? 'Delayed'
+      : gateClosed ? 'Gate closed'
+      : boarding ? 'Estimated boarding'
+      : fresh ? (data.status || 'Scheduled')
+      : data ? 'Status stale / unavailable'
+      : 'Scheduled · status unavailable';
     models.push({id: `${origin}:${flight.destination}:${bookingKey(flight.date)}:${flight.flightNumber}:${kind}`,
       flight: `F9 ${flight.flightNumber}`, kind, route: kind === 'arrival' ? origin : flight.destination,
       gate: endpoint?.gate || (kind === 'departure' ? flight.gate : flight.arrivalGate), instant,
