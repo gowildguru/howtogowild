@@ -70,7 +70,7 @@
       city:'Las Vegas', timezone:'America/Los_Angeles', type:'las', focus:'D and E gates',
       caption:'D satellite + E gates · approximate footprint',
       source:'https://www.harryreidairport.com/map', sourceName:'LAS’s official airport maps',
-      description:'D satellite and Terminal 3 E gates. Gate positions are schematic.'
+      description:'D satellite and Terminal 3 E gates. Gate markers sit on approximate real gate positions on the concourse footprint.'
     },
     MCO: {
       city:'Orlando', timezone:'America/New_York', type:'linear', prefix:'', gateList:Array.from({length:29},(_,i)=>String(i+1)),
@@ -109,10 +109,10 @@
       description:'Terminal 5 M-gate activity. Frontier can occasionally use another terminal; those assignments remain listed below.'
     },
     STL: {
-      city:'St. Louis', timezone:'America/Chicago', type:'linear', prefix:'C', gateList:['C17','C18','C19','C20','C21','C22','C23','C24'],
+      city:'St. Louis', timezone:'America/Chicago', type:'stl', prefix:'C', gateList:['C1','C2','C3','C5','C6','C7','C8','C9','C10','C12','C15','C16','C17','C18','C19','C23','C24','C27','C28','C29','C30'],
       focus:'Terminal 1 · C19 / C23 area', caption:'Terminal 1 · C concourse · Frontier area',
       source:'https://www.flystl.com/flights-airlines/', sourceName:'STL’s official airline/gate directory',
-      description:'Terminal 1 C-concourse view centered on Frontier’s published C19 and C23 gates.'
+      description:'Terminal 1 C Concourse using the published gate order and Frontier’s C19/C23 locations.'
     },
     LAX: {
       city:'Los Angeles', timezone:'America/Los_Angeles', type:'lax', prefix:'',
@@ -179,9 +179,12 @@
   function conciseStatus(f) {
     const raw = String(f?.status || '').toLowerCase();
     if (raw.includes('cancel')) return {label:'CANCELLED', cls:'is-cancelled'};
+    if (raw.includes('departed')) return {label:'DEPARTED', cls:'is-departed'};
+    if (raw.includes('arrived')) return {label:'ARRIVED', cls:'is-arrived'};
     if (f?.delayed || raw.includes('delay')) return {label:'DELAYED', cls:'is-delayed'};
     if (raw.includes('boarding')) return {label:'BOARDING', cls:'is-boarding'};
-    if (raw.includes('closed') || raw.includes('departed') || raw.includes('arrived') || f?.finished) return {label:'CLOSED', cls:'is-closed'};
+    if (raw.includes('closed')) return {label:'CLOSED', cls:'is-closed'};
+    if (raw.includes('stale') || raw.includes('unavailable')) return {label:'STATUS PENDING', cls:'is-pending'};
     return {label:'ON TIME', cls:'is-on-time'};
   }
 
@@ -295,26 +298,60 @@
   function drawLAS(flights) {
     gates = [];
     svg.setAttribute('viewBox','0 0 1200 820');
-    svg.append(el('path',{d:'M 285 108 L 895 432 M 285 432 L 895 108',class:'den-map-terminal-line'}));
-    svg.append(el('path',{d:'M 285 108 L 895 432 M 285 432 L 895 108',class:'den-map-terminal-line-inner'}));
-    svg.append(el('circle',{cx:590,cy:270,r:58,class:'den-map-terminal-body'}));
+    svg.append(el('path',{d:'M 590 270 L 255 105 M 590 270 L 925 105 M 590 270 L 255 435 M 590 270 L 925 435',class:'den-map-terminal-line'}));
+    svg.append(el('path',{d:'M 590 270 L 255 105 M 590 270 L 925 105 M 590 270 L 255 435 M 590 270 L 925 435',class:'den-map-terminal-line-inner'}));
+    svg.append(el('circle',{cx:590,cy:270,r:62,class:'den-map-terminal-body'}));
     svg.append(el('text',{x:590,y:266,'text-anchor':'middle',class:'den-map-concourse'},'D GATES'));
-    svg.append(el('rect',{x:155,y:605,width:890,height:46,rx:12,class:'den-map-terminal-body'}));
-    svg.append(el('text',{x:590,y:634,'text-anchor':'middle',class:'den-map-concourse'},'TERMINAL 3 · E GATES'));
+    svg.append(el('text',{x:590,y:286,'text-anchor':'middle',class:'den-map-subtext'},'Satellite core'));
+    svg.append(el('path',{d:'M 590 332 V 565',class:'den-map-connector'}));
+    svg.append(el('rect',{x:160,y:605,width:880,height:54,rx:12,class:'den-map-terminal-body'}));
+    svg.append(el('text',{x:600,y:638,'text-anchor':'middle',class:'den-map-concourse'},'TERMINAL 3 · E GATES'));
 
-    const assigned = [...new Set(flights.map(f=>normalizeGate(f.gate)).filter(Boolean))];
-    const expanded = new Set();
-    assigned.forEach(g => {
-      const m=g.match(/^([DE])(\d+)$/); if(!m) return;
-      const n=Number(m[2]); for(let d=-1;d<=1;d++) if(n+d>0) expanded.add(`${m[1]}${n+d}`);
+    const addArm = (numbers, x2, y2, startSide = 1) => {
+      numbers.forEach((n,i) => {
+        const t = .28 + .66 * i / Math.max(1, numbers.length - 1);
+        const cx = 590 + (x2 - 590) * t;
+        const cy = 270 + (y2 - 270) * t;
+        const dx = x2 - 590, dy = y2 - 270;
+        const len = Math.hypot(dx,dy) || 1;
+        const side = ((i + startSide) % 2 ? 1 : -1);
+        const nx = -dy / len, ny = dx / len;
+        const ax = cx + nx * 28 * side;
+        const ay = cy + ny * 28 * side;
+        addGate(`D${n}`, ax, ay, ax, ay, 'auto');
+      });
+    };
+    addArm([50,51,52,53,54,55,56,57,58,59],255,105,0);
+    addArm([16,17,18,19,20,21,22,24,25,26],925,105,1);
+    addArm([32,33,34,35,36,37,38,39,40,41,42,43],255,435,1);
+    addArm([1,2,3,4,5,6,7,8,9,10,11,12,14],925,435,0);
+
+    const eNums=[15,14,12,11,10,9,8,7,6,5,4,3,2,1];
+    eNums.forEach((n,i)=>{
+      const x=190+i*(820/(eNums.length-1));
+      const top=i%2===0;
+      addGate(`E${n}`,x,top?605:659,x,top?605:659,top?'top':'bottom');
     });
-    const ds=[...expanded].filter(g=>g.startsWith('D')).sort((a,b)=>gateNumber(a)-gateNumber(b));
-    ds.forEach((g,i)=>{
-      const left=i%2===0; const y=105+(i%10)*35; const x=left?105:1095; const ax=left?315:865; const ay=135+(i%10)*30;
-      addGate(g,x,y,ax,ay,left?'left':'right');
-    });
-    const es=[...expanded].filter(g=>g.startsWith('E')).sort((a,b)=>gateNumber(a)-gateNumber(b));
-    es.forEach((g,i)=>{const x=210+i*Math.min(90,760/Math.max(1,es.length-1)); addGate(g,x,710,x,651,'bottom');});
+  }
+
+  function drawSTL() {
+    gates = [];
+    svg.setAttribute('viewBox','0 0 1200 560');
+    svg.append(el('path',{d:'M 90 300 H 1010',class:'den-map-terminal-line-stl'}));
+    svg.append(el('path',{d:'M 90 300 H 1010',class:'den-map-terminal-line-stl-inner'}));
+    svg.append(el('path',{d:'M 120 300 L 70 390',class:'den-map-terminal-line-stl'}));
+    svg.append(el('path',{d:'M 120 300 L 70 390',class:'den-map-terminal-line-stl-inner'}));
+    svg.append(el('rect',{x:42,y:250,width:115,height:100,rx:18,class:'den-map-terminal-body'}));
+    svg.append(el('text',{x:100,y:286,'text-anchor':'middle',class:'den-map-concourse'},'T1'));
+    svg.append(el('text',{x:100,y:307,'text-anchor':'middle',class:'den-map-subtext'},'MAIN TERMINAL'));
+    svg.append(el('text',{x:610,y:306,'text-anchor':'middle',class:'den-map-concourse'},'C CONCOURSE'));
+
+    const top=[['C8',250],['C10',340],['C12',420],['C16',545],['C18',625],['C24',755],['C28',900],['C30',990]];
+    top.forEach(([gate,x])=>addGate(gate,x,270,x,270,'top'));
+    const bottom=[['C15',470],['C17',560],['C19',650],['C23',745],['C27',870],['C29',955]];
+    bottom.forEach(([gate,x])=>addGate(gate,x,330,x,330,'bottom'));
+    [['C2',170,330],['C6',245,330],['C9',165,270],['C7',135,345],['C5',110,365],['C3',88,388],['C1',62,408]].forEach(([gate,x,y])=>addGate(gate,x,y,x,y,y<300?'top':'bottom'));
+    svg.append(el('text',{x:700,y:500,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Frontier published gates: C19 and C23 · live assignments may vary'));
   }
 
   function drawLAX(flights) {
@@ -334,55 +371,93 @@
     if (layout.type === 'den') drawDEN();
     else if (layout.type === 'atl') drawATL(flights);
     else if (layout.type === 'las') drawLAS(flights);
+    else if (layout.type === 'stl') drawSTL();
     else if (layout.type === 'lax') drawLAX(flights);
     else linearLayout(layout, flights);
   }
 
-  function bubblePosition(g) {
-    const top = g.y <= g.ay;
-    const left = g.x < g.ax - 5;
-    const right = g.x > g.ax + 5;
-    if (left || right) {
-      const x = left ? g.x - 126 : g.x + 8;
-      return {x,y:g.y-39,w:118,h:76,lineX:left?g.x-2:g.x+58,lineY:g.y};
-    }
-    return {x:g.x-59,y:top?g.y-92:g.y+38,w:118,h:76,lineX:g.x,lineY:top?g.y-16:g.y+16};
+  const PLANE_PATH = 'M 0 -22 C -3 -22 -4 -18 -4 -12 L -4 -3 L -20 7 L -20 12 L -4 7 L -4 17 L -10 22 L -10 25 L 0 22 L 10 25 L 10 22 L 4 17 L 4 7 L 20 12 L 20 7 L 4 -3 L 4 -12 C 4 -18 3 -22 0 -22 Z';
+
+  function viewBoxSize() {
+    const parts=(svg.getAttribute('viewBox')||'0 0 1200 600').split(/\s+/).map(Number);
+    return {w:parts[2]||1200,h:parts[3]||600};
   }
 
-  function renderGate(g, flightsAtGate) {
-    const at = flightsAtGate.sort((a,b)=>(a.instant ?? Infinity)-(b.instant ?? Infinity));
-    const f = at.find(item => item.status === 'Estimated boarding') || at.find(item => !item.finished) || at[0];
-    const occupied = !!f;
-    const markerW = Math.max(58, 32 + String(g.gate).length*9);
-    const markerH = 28;
+  function overlaps(a,b,pad=7) {
+    return !(a.x+a.w+pad<=b.x || b.x+b.w+pad<=a.x || a.y+a.h+pad<=b.y || b.y+b.h+pad<=a.y);
+  }
 
-    const group = el('g', {
-      role:'button', tabindex:0, 'data-gate':g.gate,
-      'aria-label': `${g.gate}, ${at.length} flight${at.length===1?'':'s'}${f?', '+String(f.flight).replace(/\s+/g,'')+', '+conciseStatus(f).label:', no current Frontier activity'}`,
-      'aria-pressed':selected===g.gate,
-      class:`den-map-gate${occupied?' is-occupied':''}`
-    });
-
-    group.append(el('rect',{x:g.x-markerW/2,y:g.y-markerH/2,width:markerW,height:markerH,rx:5,class:'den-map-gate-marker'}));
-    group.append(el('text',{x:g.x-markerW/2+12,y:g.y+4,'text-anchor':'middle',class:'den-map-gate-plane'},'✈'));
-    group.append(el('text',{x:g.x+8,y:g.y+5,'text-anchor':'middle',class:'den-map-gate-name'},g.gate));
-
-    if (f) {
-      const b = bubblePosition(g);
-      const status = conciseStatus(f);
-      const targetX = Math.max(b.x+12,Math.min(b.x+b.w-12,g.x));
-      const targetY = g.y <= g.ay ? b.y+b.h : b.y;
-      svg.append(el('line',{x1:g.x,y1:g.y+(g.y<=g.ay?-markerH/2:markerH/2),x2:targetX,y2:targetY,class:'den-map-pin'}));
-      svg.append(el('circle',{cx:targetX,cy:targetY,r:2.5,class:'den-map-pin-dot'}));
-
-      const bubble = el('g',{class:f.kind==='arrival'?'den-map-incoming':''});
-      bubble.append(el('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:13,class:'den-map-flight-bubble'}));
-      bubble.append(el('text',{x:b.x+12,y:b.y+21,class:'den-map-flight-number'},String(f.flight).replace(/\s+/g,'')));
-      bubble.append(el('text',{x:b.x+12,y:b.y+42,class:'den-map-flight-route'},`${f.kind==='arrival'?'FROM':'TO'} ${f.route}`));
-      bubble.append(el('text',{x:b.x+12,y:b.y+62,class:`den-map-flight-status ${status.cls}`},status.label));
-      svg.append(bubble);
+  function chooseBubble(g, placed) {
+    const {w:vw,h:vh}=viewBoxSize();
+    const w=124,h=78,x=g.ax,y=g.ay;
+    const candidates=[
+      {x:x-w/2,y:y-h-38},{x:x-w/2,y:y+38},
+      {x:x-w-38,y:y-h/2},{x:x+38,y:y-h/2},
+      {x:x-w-30,y:y-h-30},{x:x+30,y:y-h-30},
+      {x:x-w-30,y:y+30},{x:x+30,y:y+30}
+    ];
+    for(let ring=0;ring<6;ring++){
+      for(let i=0;i<candidates.length;i++){
+        const c={...candidates[i],w,h};
+        if(ring){
+          if(i<2)c.x+=(ring%2?1:-1)*ring*42;
+          else c.y+=(ring%2?1:-1)*ring*40;
+        }
+        c.x=Math.max(8,Math.min(vw-w-8,c.x));
+        c.y=Math.max(8,Math.min(vh-h-8,c.y));
+        if(!placed.some(p=>overlaps(c,p)))return c;
+      }
     }
+    for(let x0=12;x0<=vw-w-12;x0+=w+10){
+      const c={x:x0,y:vh-h-12,w,h};
+      if(!placed.some(p=>overlaps(c,p)))return c;
+    }
+    return {x:Math.max(8,Math.min(vw-w-8,x-w/2)),y:Math.max(8,Math.min(vh-h-8,y+42)),w,h};
+  }
 
+  function representativeFlight(at) {
+    const sorted=[...at].sort((a,b)=>(a.instant??Infinity)-(b.instant??Infinity));
+    return sorted.find(f=>/boarding|gate closed/i.test(String(f.status))) || sorted.find(f=>!f.finished) || sorted[sorted.length-1] || null;
+  }
+
+  function renderGate(g, at, bubbleBox) {
+    const f=representativeFlight(at), occupied=!!f;
+    const markerX=g.ax, markerY=g.ay;
+    const markerW=Math.max(54,28+String(g.gate).length*9), markerH=26;
+    const group=el('g',{
+      role:'button',tabindex:0,'data-gate':g.gate,
+      'aria-label':`${g.gate}, ${at.length} flight${at.length===1?'':'s'}${f?', '+String(f.flight).replace(/\s+/g,'')+', '+conciseStatus(f).label:', no current Frontier activity'}`,
+      'aria-pressed':selected===g.gate,class:`den-map-gate${occupied?' is-occupied':''}`
+    });
+    group.append(el('rect',{x:markerX-markerW/2,y:markerY-markerH/2,width:markerW,height:markerH,rx:5,class:'den-map-gate-marker'}));
+    group.append(el('text',{x:markerX-markerW/2+11,y:markerY+4,'text-anchor':'middle',class:'den-map-gate-plane'},'✈'));
+    group.append(el('text',{x:markerX+8,y:markerY+5,'text-anchor':'middle',class:'den-map-gate-name'},g.gate));
+
+    if(f&&bubbleBox){
+      const b=bubbleBox,status=conciseStatus(f);
+      const tx=Math.max(b.x+8,Math.min(b.x+b.w-8,markerX));
+      const ty=Math.max(b.y+8,Math.min(b.y+b.h-8,markerY));
+      group.append(el('line',{x1:markerX,y1:markerY,x2:tx,y2:ty,class:'den-map-pin'}));
+      group.append(el('circle',{cx:tx,cy:ty,r:2.3,class:'den-map-pin-dot'}));
+      const bubble=el('g',{class:f.kind==='arrival'&&!f.finished?'den-map-incoming':''});
+      bubble.append(el('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:13,class:'den-map-flight-bubble'}));
+      bubble.append(el('text',{x:b.x+11,y:b.y+20,class:'den-map-flight-number'},String(f.flight).replace(/\s+/g,'')));
+      bubble.append(el('text',{x:b.x+11,y:b.y+40,class:'den-map-flight-route'},`${f.kind==='arrival'?'FROM':'TO'} ${f.route}`));
+      bubble.append(el('text',{x:b.x+11,y:b.y+61,class:`den-map-flight-status ${status.cls}`},status.label));
+
+      const px=b.x+b.w-22,py=b.y+b.h/2;
+      const plane=el('g',{transform:`translate(${px} ${py}) scale(.52)`,class:f.finished?'den-map-left':''});
+      plane.append(el('path',{d:PLANE_PATH,class:'den-map-plane-outline'}));
+      if((f.progress||0)>0){
+        const amount=Math.max(0,Math.min(1,f.progress));
+        const clipId=`gate-plane-${payload.airport}-${String(g.gate).replace(/[^A-Z0-9]/g,'')}`;
+        let defs=svg.querySelector('defs');if(!defs){defs=el('defs');svg.insertBefore(defs,svg.firstChild);}
+        const clip=el('clipPath',{id:clipId});clip.append(el('path',{d:PLANE_PATH}));defs.append(clip);
+        plane.append(el('rect',{x:-22,y:25-47*amount,width:44,height:47*amount,class:'den-map-plane-fill','clip-path':`url(#${clipId})`}));
+        plane.append(el('path',{d:PLANE_PATH,class:'den-map-plane-outline is-top'}));
+      }
+      bubble.append(plane);group.append(bubble);
+    }
     group.addEventListener('click',()=>select(g.gate));
     group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(g.gate);}});
     svg.append(group);
@@ -409,10 +484,15 @@
 
     buildGeometry(flights);
 
-    for (const g of gates) {
-      const at = flights.filter(f => normalizeGate(f.gate) === g.gate);
-      renderGate(g, at);
+    const gateData = gates.map(g => ({g, at:flights.filter(f => normalizeGate(f.gate) === g.gate)}));
+    const placed = [];
+    const bubbleByGate = new Map();
+    for (const item of gateData.filter(item => representativeFlight(item.at))) {
+      const box = chooseBubble(item.g, placed);
+      placed.push(box);
+      bubbleByGate.set(item.g.gate, box);
     }
+    for (const {g,at} of gateData) renderGate(g, at, bubbleByGate.get(g.gate));
 
     const offMap = flights.filter(f => !gates.some(g => g.gate === normalizeGate(f.gate)));
     unplaced.replaceChildren();
