@@ -115,15 +115,18 @@ dialog::backdrop{background:#050b1c75;backdrop-filter:blur(1px)}.seat-card-top{p
 .fleet-widget .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:700px){.fleet-widget{padding:18px;border-radius:18px}.fleet-widget .card{grid-template-columns:1fr}.fleet-widget figure{min-height:240px;height:280px}.fleet-widget .copy{padding:20px}.fleet-widget #fleet-fact{min-height:0}.fleet-widget dl{gap:14px;padding:14px}.fleet-widget .fleet-controls{gap:8px}}
 @media(max-width:390px){.fleet-widget{padding:14px}.fleet-widget .copy{padding:16px}.fleet-widget figure{height:240px}.fleet-widget .fleet-controls button{padding:10px 12px}.fleet-widget #fleet-count{flex-basis:100%}.fleet-widget dl{grid-template-columns:1fr}.fleet-widget dd{margin-bottom:0}}
+
+/* Seat recommendations are visible before expanding the details. */
+.seat-card-top{padding-bottom:12px}.seat-card-art{height:75px}.seat-card-art img,.seat-card-art img.plane-neo{height:73px;max-height:73px}
+.seat-details h3{margin:14px 0 5px}.seat-details ul{margin:5px 0;padding-left:17px}.seat-details li{margin:4px 0}.seat-details p{margin:6px 0}.quick-notes:empty{display:none}
+.seat-rating{margin-top:12px;padding-top:11px;border-top:1px solid #b7cbb326}.rating-heading{font-size:11px;font-weight:750;margin:0 0 3px}.rating-result{font-size:11px;margin:0 0 6px;line-height:1.4}.rating-bar{height:8px;border-radius:99px;overflow:hidden;background:#82908744;display:flex}.rating-bar.has-votes{background:#a57570}.rating-green{height:100%;width:0;background:#829d8a;transition:width .3s ease}.rating-votes{display:flex;align-items:center;gap:7px;margin-top:8px}.rating-votes>span{font-size:10px;margin-right:auto}.rating-votes button{min-width:44px;min-height:44px;border:1px solid #b7cbb340;border-radius:12px;color:var(--text);background:#cbdacb0d;padding:7px;font-size:17px}.rating-votes button[data-vote=up][aria-pressed=true]{background:#829d8a44;border-color:#829d8a}.rating-votes button[data-vote=down][aria-pressed=true]{background:#a5757044;border-color:#a57570}.rating-votes button:disabled{cursor:default;opacity:.45}.rating-status{font-size:10px;color:var(--muted);margin:5px 0 0;line-height:1.4}.rating-status:empty{display:none}
+@media(prefers-reduced-motion:reduce){.rating-green{transition:none}}
 </style>
 </head>
 <body><main>
- <body><main>
 
 <a href="index.html" class="back-home">← Back to Home</a>
 
-<p class="eyebrow">HOWTOGOWILD! / FLEET GUIDE</p>
-<h1>Meet the Fleet</h1>
 <p class="eyebrow">HOWTOGOWILD! / FLEET GUIDE</p>
 <h1>Meet the Fleet</h1>
 
@@ -180,11 +183,18 @@ dialog::backdrop{background:#050b1c75;backdrop-filter:blur(1px)}.seat-card-top{p
 </main>
 <dialog id="seatDialog" aria-labelledby="dialogTitle">
 <div class="seat-card-top"><div class="dialog-head"><h2 id="dialogTitle"></h2><button class="close" id="closeDialog" type="button" aria-label="Close seat details" autofocus>×</button></div>
-<p id="dialogCategory" class="seat-card-category"></p><p id="cardPitch" class="seat-card-pitch"></p><div id="quickNotes" class="quick-notes"></div><p id="conceptNotice" class="notice estimate" hidden>Estimated concept seat. First lettering and retrofit details are unverified.</p></div>
+<p id="dialogCategory" class="seat-card-category"></p><p id="cardPitch" class="seat-card-pitch"></p><div id="quickNotes" class="quick-notes"></div><p id="conceptNotice" class="notice estimate" hidden>Estimated concept seat. First lettering and retrofit details are unverified.</p>
+<section class="seat-rating" id="seatRating" aria-label="Seat recommendations">
+<p class="rating-heading">GoWilders Recommend</p>
+<p class="rating-result" id="ratingResult" aria-live="polite">Community ratings coming soon</p>
+<div class="rating-bar" id="ratingBar" role="img" aria-label="No community ratings available"><span class="rating-green" id="ratingGreen"></span></div>
+<div class="rating-votes"><span>Was this a good seat?</span><button type="button" data-vote="up" id="voteUp" aria-label="Recommend this seat" aria-pressed="false" disabled>👍</button><button type="button" data-vote="down" id="voteDown" aria-label="Do not recommend this seat" aria-pressed="false" disabled>👎</button></div>
+<p class="rating-status" id="ratingStatus" role="status"></p>
+</section></div>
 <div class="seat-card-art" aria-hidden="true"><img alt=""></div>
 <details class="seat-details" id="fullSeatDetails"><summary>Storage, restrictions &amp; elite access</summary><p id="dialogAircraft" class="muted"></p>
-<dl id="specs"></dl><h3>Special notes</h3><ul id="seatNotes" class="note-list"></ul><h3>Restrictions</h3><ul id="restrictionList"></ul>
-<h3>Bundle access</h3><p id="bundleInfo"></p>
+<dl id="specs"></dl><h3 id="seatNotesHeading">Special notes</h3><ul id="seatNotes" class="note-list"></ul><h3 id="restrictionHeading">Restrictions</h3><ul id="restrictionList"></ul>
+<h3 id="bundleHeading">Bundle access</h3><p id="bundleInfo"></p>
 <h3>Elite seat access</h3><label class="dialog-label" for="rulesDate">Choose by booking date, not travel date</label><select id="rulesDate"><option value="2026">2026 · bookings before January 1, 2027</option><option value="2027">2027 · bookings from January 1, 2027</option></select><div id="upgradeInfo" aria-live="polite"></div>
 <p class="muted">Space available; self-select an eligible seat in Frontier’s app or Manage Booking. Flight-specific safety restrictions still apply.</p>
 <div class="sources muted"><a href="https://faq.flyfrontier.com/help/what-travel-benefits-are-included-with-elite-status">2026 benefits</a><a href="https://faq.flyfrontier.com/help/who-is-eligible-for-upgrades-to-upfront-plus">2026 UpFront Plus windows</a><a href="https://www.flyfrontier.com/frontiermiles/earn-and-elite-status-changes/">2027 changes</a><a href="https://www.flyfrontier.com/frontiermiles/terms-and-conditions/">Program terms</a><a href="https://faq.flyfrontier.com/help/what-is-the-difference-between-economy-premium-and-business-bundles">Bundles</a><a href="https://www.flyfrontier.com/travel/travel-info/family-pets">Family &amp; pets</a><a href="https://www.flyfrontier.com/seat-upgrade-bidding">UpFront Plus pet restriction</a><a href="https://f9qapublishing.flyfrontier.com/legal/ticket-terms-and-conditions/">Exit eligibility</a></div>
@@ -245,7 +255,7 @@ function buildSeats(aircraft,configuration){
 let aircraft='a320neo',configuration='current',visibleSeats=[],activeSeat=null,opener=null;
 const $=id=>document.getElementById(id),map=$('map'),dialog=$('seatDialog');
 const el=(tag,className,text)=>{const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n;};
-function pitchLabel(seat){return seat.pitch==='infinity'?'∞ · Unlimited legroom':seat.pitch===null?'Not yet published / verified':`${seat.pitch}″${seat.estimated?' · inherited estimate':''}`;}
+function pitchLabel(seat){return seat.pitch==='infinity'?'∞ · Unlimited legroom':seat.pitch===null?'':`${seat.pitch}″${seat.estimated?' · inherited estimate':''}`;}
 function identity(seat){return `Seat ${seat.id}`;}
 function firstSeatSize(size){return (3*size+4)/2;}
 function rowCoordinates(){
@@ -296,18 +306,16 @@ function adjacentExit(seat){
 }
 function features(seat){
  const front=seat.row===1,sp=seat.special;
- let storage=front?'No seat ahead for underseat stowage; overhead storage during taxi, takeoff and landing (geometry-based).':sp.far?'Underseat stowage is far ahead and may be difficult to reach. Follow crew instructions.':sp.jump?'Crew jumpseat ahead; a normal passenger-seat storage space is not established. Confirm approved stowage with crew.':'Under the seat ahead; seat-specific clearance and obstructions are not verified.';
- let tray='Seat-specific tray-table location not verified.';
- if(front||sp.far){tray='No nearby seatback ahead. An armrest-mounted tray is expected, but not verified for this seat.';}
- if(seat.first){storage='First underseat storage arrangement is not yet verified.';tray='First tray-table arrangement is not yet verified.';}
- if(seat.estimated&&!seat.first)storage+=' Inherited from current layout; retrofit unverified.';
- return {storage,tray};
+ let storage=front?'No underseat storage; use the overhead bin during taxi, takeoff and landing.':sp.far?'Underseat storage is far ahead and may be difficult to reach. Follow crew instructions.':sp.jump?'Crew jumpseat ahead; ask the crew where to stow your bag.':'Under the seat ahead.';
+ if(seat.first)storage='';
+ if(seat.estimated&&storage)storage+=' Based on the current cabin; confirm after retrofit.';
+ return {storage,tray:''};
 }
 function restrictionsFor(seat){
  if(seat.first)return ['First-specific pet, lap-infant, child-restraint and seatbelt-extender eligibility has not been established. Check the product offered for your flight.','The current economy row-1 restrictions cannot establish the final First seat’s equipment or eligibility.'];
  const notes=[];
  if(seat.exit)notes.push('Exit seat: age 15+, willing and able to perform evacuation duties and understand crew instructions. No seatbelt extender; no passenger responsible for a small child or other dependent requiring assistance. Crew confirms eligibility.','Pets and service animals cannot occupy exit seats. Lap infants and child restraints are not allowed.');
- else notes.push('This is not an exit seat in the current published geometry.');
+
  if(seat.row===1)notes.push('Current row 1: no lap infants or seatbelt extenders. Airbag seatbelts may be fitted.');
  if(!seat.exit&&(seat.category==='upfront'||seat.row===1))notes.push('Pets are prohibited in UpFront Plus (and row 1); pet eligibility differs from trained service-animal eligibility.');
  if(seat.row===1||seat.exit||adjacentExit(seat))notes.push('No car seat / child restraint here: Frontier excludes first-row, exit-row and immediately adjacent-row positions. Mixed rows are treated by cabin side; confirm with Frontier.');
@@ -323,23 +331,27 @@ function bundleFor(category){return {
  upfront:'Business includes UpFront Plus. Individual paid seat selection may also be offered.',
  first:'Business advertises the front product, including 2×2 seats where installed. This is a concept map; confirm First is offered on your flight.'
 }[category];}
-function field(label,value){$('specs').append(el('dt','',label),el('dd','',value));}
+function field(label,value){if(value&&String(value).trim())$('specs').append(el('dt','',label),el('dd','',value));}
 function openDetails(seat,button){
  activeSeat=seat;opener=button;map.querySelectorAll('.seat[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true');
  $('fullSeatDetails').open=false; $('dialogTitle').textContent=seat.id+' - '+AIRCRAFT[aircraft].name;$('dialogAircraft').textContent=AIRCRAFT[aircraft].name+' · '+(seat.estimated?'Estimated Frontier First Concept':'Current cabin');
- $('dialogCategory').replaceChildren(el('strong','',CATEGORY[seat.category]),document.createTextNode(seat.exit?' Exit Row':'')); $('cardPitch').textContent='Seat Pitch: '+pitchLabel(seat);$('conceptNotice').hidden=!seat.estimated;$('specs').replaceChildren();
+ $('dialogCategory').replaceChildren(el('strong','',CATEGORY[seat.category]),document.createTextNode(seat.exit?' Exit Row':'')); $('cardPitch').textContent=seat.pitch===null?'':'Seat pitch: '+pitchLabel(seat);$('cardPitch').hidden=seat.pitch===null;$('conceptNotice').hidden=!seat.estimated;$('specs').replaceChildren();
  field('Position',seat.position.toUpperCase()+' · '+seat.side+' side');field('Seat pitch',pitchLabel(seat));
  const f=features(seat);renderQuickNotes(seat);field('Underseat storage',f.storage);field('Tray table',f.tray);
  if(seat.first)field('Seat identifier',seat.id+' · requested concept label; final First lettering is unverified.');
- field('Window alignment','Not rated; window position does not guarantee a well-aligned window.');
+
  const notes=[...seat.special.notes];
  if(seat.category==='upfront')notes.push('A guaranteed empty middle seat separates window and aisle passengers. B/E remain physical seats but cannot be selected.');
  if(seat.aircraft==='a321neo'&&seat.row>=29&&seat.side==='right')notes.push('Right-side rows are staggered aft relative to the same-numbered left rows.');
  if(seat.aircraft==='a321neo'&&seat.row===30&&'BC'.includes(seat.letter||''))notes.push('Standard category with exit restrictions: 28″ pitch. Exit status does not automatically mean extra legroom.');
  if(seat.aircraft==='a321'&&seat.exit&&seat.category==='standard')notes.push('Standard exit seat at 28″ pitch; category and exit eligibility are separate.');
- if(!notes.length)notes.push('No additional seat-specific note is verified in the available material.');
+
  $('seatNotes').replaceChildren(...notes.map(t=>el('li','',t)));$('restrictionList').replaceChildren(...restrictionsFor(seat).map(t=>el('li','',t)));
- $('bundleInfo').textContent=bundleFor(seat.category);$('selectedTitle').textContent=identity(seat);$('selectedInfo').textContent=`${CATEGORY[seat.category]} · ${seat.position} · ${pitchLabel(seat)}`;
+ $('bundleInfo').textContent=bundleFor(seat.category);$('selectedTitle').textContent=identity(seat);$('selectedInfo').textContent=[CATEGORY[seat.category],seat.position,pitchLabel(seat)].filter(Boolean).join(' · ');
+ $('seatNotesHeading').hidden=$('seatNotes').hidden=!notes.length;
+ $('restrictionHeading').hidden=$('restrictionList').hidden=!$('restrictionList').children.length;
+ $('bundleHeading').hidden=$('bundleInfo').hidden=!$('bundleInfo').textContent.trim();
+ loadRating(seat);
  updateUpgrades();dialog.showModal();dialog.scrollTop=0;
 }
 function upgradeRows(category,year){
@@ -405,16 +417,63 @@ function createAircraftCards(){
 
 function renderQuickNotes(seat){
  const notes=[];
- if(seat.exit||seat.category==='upfront')notes.push(['No pet in cabin at this seat','restrictionList']);
+ if(seat.exit||seat.category==='upfront'||(seat.row===1&&!seat.first))notes.push(['No pet in cabin at this seat','restrictionList']);
  else if(seat.first)notes.push(['First restrictions unverified','restrictionList']);
- else notes.push(['Check pet and infant eligibility','restrictionList']);
+
  if(seat.exit)notes.push(['Must meet exit-seat requirements','restrictionList']);
  else if(seat.special.far)notes.push(['Underseat storage is far ahead','specs']);
  else if(seat.row===1&&!seat.first)notes.push(['No lap infants or seatbelt extenders','restrictionList']);
- else notes.push(['View storage and seat restrictions','specs']);
+
  if(seat.special.notes.length)notes.push([seat.aircraft==='a321neo'&&seat.row===41?'Galley noise; no wall directly behind':seat.special.jump?'Crew jumpseat ahead':seat.special.far?'Unlimited legroom':'Special seat consideration','seatNotes']);
  $('quickNotes').replaceChildren(...notes.map(([text,target])=>{const b=el('button','quick-note');b.type='button';const icon=el('span','info-icon','i');icon.setAttribute('aria-hidden','true');b.append(icon,el('span','',text));b.addEventListener('click',()=>{$('fullSeatDetails').open=true;$(target).scrollIntoView({block:'nearest',behavior:'auto'});});return b;}));
 }
+
+
+// Set this to the deployed Cloudflare seat-rating endpoint to enable shared voting.
+// GET ?seat=<aircraft:configuration:seat>&voter=<browser UUID>
+// POST JSON {seat, voter, vote:"up"|"down"}; both return {up,down,vote:null|"up"|"down"}.
+// The server must upsert one vote per (seat,voter), allowing vote changes atomically.
+const SEAT_RATINGS_API = '';
+let ratingRequest=0,ratingBusy=false;
+function ratingKey(seat){return [seat.aircraft,seat.estimated?'concept':'current',seat.id].join(':');}
+function voterId(){
+ try{let id=localStorage.getItem('htgw-seat-voter');if(!id){id=crypto.randomUUID();localStorage.setItem('htgw-seat-voter',id);}return id;}catch{return null;}
+}
+function ratingButtons(enabled,vote=null){
+ for(const direction of ['up','down']){const button=$(direction==='up'?'voteUp':'voteDown');button.disabled=!enabled;button.setAttribute('aria-pressed',String(vote===direction));}
+}
+function paintRating(data){
+ const up=data.up,down=data.down;
+ if(!Number.isSafeInteger(up)||up<0||!Number.isSafeInteger(down)||down<0||!Number.isSafeInteger(up+down))throw new Error('Invalid rating counts');
+ const total=up+down,percent=total?Math.round(up/total*100):0;
+ $('ratingResult').textContent=total?`${up}/${total} recommend this seat · ${percent}%`:'Be the first to rate this seat!';
+ $('ratingBar').classList.toggle('has-votes',total>0);$('ratingGreen').style.width=(total?up/total*100:0)+'%';
+ $('ratingBar').setAttribute('aria-label',total?`${up} recommend; ${down} do not recommend`:'No votes yet');
+ ratingButtons(Boolean(voterId())&&!ratingBusy,data.vote);
+}
+async function ratingFetch(key,method='GET',vote){
+ const id=voterId();const url=new URL(SEAT_RATINGS_API,location.href);
+ const options={method,signal:AbortSignal.timeout(10000),cache:'no-store'};
+ if(method==='GET'){url.searchParams.set('seat',key);if(id)url.searchParams.set('voter',id);}
+ else{options.headers={'Content-Type':'application/json'};options.body=JSON.stringify({seat:key,voter:id,vote});}
+ const response=await fetch(url,options);if(!response.ok)throw new Error('Ratings unavailable');return response.json();
+}
+async function loadRating(seat){
+ const request=++ratingRequest;ratingBusy=false;ratingButtons(false);
+ $('ratingBar').classList.remove('has-votes');$('ratingGreen').style.width='0%';$('ratingBar').setAttribute('aria-label','No community ratings available');$('ratingStatus').textContent='';
+ if(!SEAT_RATINGS_API){$('ratingResult').textContent='Community ratings coming soon';return;}
+ $('ratingResult').textContent='Loading recommendations…';
+ try{const data=await ratingFetch(ratingKey(seat));if(request!==ratingRequest)return;paintRating(data);if(!voterId())$('ratingStatus').textContent='Enable browser storage to vote.';}
+ catch{if(request===ratingRequest){ratingButtons(false);$('ratingResult').textContent='Ratings temporarily unavailable';}}
+}
+async function submitRating(vote){
+ if(!activeSeat||!SEAT_RATINGS_API||ratingBusy||!voterId())return;
+ const seat=activeSeat,request=ratingRequest;ratingBusy=true;ratingButtons(false);$('ratingStatus').textContent='Saving your vote…';
+ try{const data=await ratingFetch(ratingKey(seat),'POST',vote);if(request!==ratingRequest)return;ratingBusy=false;paintRating(data);$('ratingStatus').textContent='Thanks! You can change your vote anytime.';}
+ catch{if(request===ratingRequest){ratingBusy=false;ratingButtons(true);$('ratingStatus').textContent='Could not save your vote. Please try again.';}}
+}
+$('voteUp').addEventListener('click',()=>submitRating('up'));
+$('voteDown').addEventListener('click',()=>submitRating('down'));
 
 const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
 setInterval(()=>{if(!factsPaused&&!reducedMotion.matches&&!document.hidden&&!dialog.open){factIndex=(factIndex+1)%3;renderFleetHero();}},6500);
@@ -1200,7 +1259,6 @@ reduceMotion.addEventListener("change", event => {
   if (event.matches) {paused = true; schedule();}
 });
 setInterval(() => {$("age").textContent = ageSince(fleet[index].delivered);}, 60000);
-show(Math.floor(Math.random() * fleet.length));})();
 show(Math.floor(Math.random() * fleet.length));})();
 
 </script>
