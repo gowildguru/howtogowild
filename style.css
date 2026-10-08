@@ -7586,3 +7586,71 @@ body.tool-modal-open {
 #airportSecurity .security-section-label{margin:16px 0 9px;font-size:12px;line-height:1.5;color:rgba(255,255,255,.96)}
 #airportSecurity .security-more>summary{line-height:1.6}
 @media(max-width:420px){#airportSecurity .security-heading{flex-wrap:wrap}#airportSecurity .security-source-links{align-items:flex-start;flex-direction:row;flex-wrap:wrap;margin-bottom:12px}#airportSecurity .security-lane-row{flex-wrap:wrap}#airportSecurity .security-wait{text-align:left}}
+
+
+/* BOOKING CALENDAR — SAGE FROSTED GLASS
+   Append at the end of style.css. Date-state rules and layout stay intact. */
+
+.dashboard-middle-grid .dashboard-booking-calendar {
+  background: #465e4f;
+  border-color: rgba(230, 244, 233, .28);
+  box-shadow: 0 8px 24px rgba(20, 34, 25, .14),
+    inset 0 1px 0 rgba(255, 255, 255, .12);
+}
+
+/* Light sage glass keeps dark month labels and neutral dates readable. */
+.dashboard-booking-calendar .booking-calendar {
+  background: #e0e9df;
+  border-color: rgba(230, 244, 233, .42);
+  box-shadow: 0 6px 18px rgba(20, 34, 25, .10),
+    inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .dashboard-middle-grid .dashboard-booking-calendar {
+    background:
+      linear-gradient(120deg, rgba(230, 244, 233, .12), rgba(230, 244, 233, .02)),
+      rgba(16, 31, 22, .38);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+    backdrop-filter: blur(18px) saturate(125%);
+  }
+  .dashboard-booking-calendar .booking-calendar {
+    background:
+      linear-gradient(135deg, rgba(244, 250, 242, .26), rgba(218, 234, 216, .10)),
+      rgba(224, 233, 223, .86);
+    -webkit-backdrop-filter: blur(10px) saturate(115%);
+    backdrop-filter: blur(10px) saturate(115%);
+  }
+}
+
+.dashboard-booking-calendar .booking-calendar-header strong { color: #263c2e; }
+.dashboard-booking-calendar .booking-calendar-weekdays span { color: #425849; }
+
+.dashboard-booking-calendar .booking-calendar-nav {
+  background: rgba(246, 251, 244, .72);
+  border-color: rgba(53, 77, 61, .24);
+  color: #354d3d;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .40);
+}
+.dashboard-booking-calendar .booking-calendar-nav:hover {
+  background: #526b59;
+  color: #ffffff;
+}
+.dashboard-booking-calendar .booking-calendar-nav:focus-visible {
+  outline: 2px solid #354d3d;
+  outline-offset: 2px;
+}
+
+/* Exclude empty placeholders and every booking state. The original split
+   fills, blackout precedence, X markers and today outline remain in force. */
+.dashboard-booking-calendar .booking-calendar-day:not(.is-empty):not(.is-standard):not(.is-international):not(.is-advanced):not(.is-blackout) {
+  background: rgba(247, 251, 245, .68);
+  border-color: rgba(53, 77, 61, .16);
+  color: #2d4434;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
+}
+
+.dashboard-middle-grid .dashboard-booking-calendar .booking-calendar-legend > span,
+.dashboard-middle-grid .dashboard-booking-calendar .dashboard-booking-note {
+  color: rgba(255, 255, 255, .90);
+}
