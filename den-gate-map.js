@@ -24,6 +24,23 @@
   let layout = null;
   let gates = [];
   let centerPending = true;
+  let mapWidthRatio = 1;
+  const originalSVGWidth = svg.style.width;
+
+  /* Keep SVG units at their original scale when DEN needs extra space.
+     Restore the stylesheet width first so responsive sizing still applies. */
+  function resizeExpandedMap() {
+    svg.style.width = originalSVGWidth;
+    if (mapWidthRatio <= 1 || !root.open) return;
+    const baseWidth = svg.getBoundingClientRect().width;
+    if (baseWidth > 0) svg.style.width = `${baseWidth * mapWidthRatio}px`;
+  }
+
+  if (scroller && 'ResizeObserver' in window) {
+    new ResizeObserver(resizeExpandedMap).observe(scroller);
+  } else {
+    window.addEventListener('resize', resizeExpandedMap);
+  }
 
   /* -----------------------------
      CONFIGURATION
@@ -497,6 +514,21 @@
       }
     }
 
+    /* DEN: keep crowded cards near the east end instead of scanning from
+       the far-left corner. Extend the canvas to the right as needed.
+       The finite blocked area guarantees free space farther to the right. */
+    if (layout.type === 'den') {
+      const preferredY = Math.max(8, Math.min(vh-h-8,
+        g.side === 'bottom' ? y+36 : y-h-36));
+      for (let step=0; ; step++) {
+        const c={x:x+24+step*(w+10), y:preferredY, w, h};
+        if (blocked.some(p=>overlaps(c,p,9))) continue;
+        const expandedWidth=Math.max(vw,c.x+c.w+8);
+        if (expandedWidth>vw) svg.setAttribute('viewBox', `0 0 ${expandedWidth} ${vh}`);
+        return c;
+      }
+    }
+
     /* Last resort: scan the preferred half of the map instead of covering
        another gate marker. */
     const startY = g.side === 'bottom' ? Math.min(vh-h-10, y+36) : 10;
@@ -595,6 +627,7 @@
     );
 
     buildGeometry(flights);
+    const baseMapWidth = viewBoxSize().w;
 
     const gateData = gates.map(g => ({g, at:flights.filter(f => normalizeGate(f.gate) === g.gate)}));
 
@@ -612,6 +645,8 @@
       placed.push(box);
       bubbleByGate.set(item.g.gate, box);
     }
+    mapWidthRatio = viewBoxSize().w / baseMapWidth;
+    resizeExpandedMap();
     for (const {g,at} of gateData) renderGate(g, at, bubbleByGate.get(g.gate));
 
     const offMap = flights.filter(f => !gates.some(g => g.gate === normalizeGate(f.gate)));
@@ -643,6 +678,7 @@
   root.addEventListener('toggle',()=>{
     if (root.open) {
       centerPending = true;
+      resizeExpandedMap();
       centerMap(false);
     }
   });
