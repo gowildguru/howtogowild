@@ -6489,22 +6489,27 @@ function securityLink(label,url,className='security-source') {
 }
 const securityAirlineNames={F9:'Frontier',AA:'American',AC:'Air Canada',AS:'Alaska',B6:'JetBlue',DL:'Delta',WN:'Southwest',UA:'United',NK:'Spirit',G4:'Allegiant',MX:'Breeze',SY:'Sun Country',FI:'Icelandair',PD:'Porter',AM:'Aeromexico',AF:'Air France',BA:'British Airways',BW:'Caribbean',CM:'Copa',EK:'Emirates',F8:'Flair',LA:'LATAM',LH:'Lufthansa',RJ:'Royal Jordanian',TK:'Turkish',VB:'Viva',WS:'WestJet',XP:'Avelo',Y4:'Volaris'};
 function securityAirlineChip(code) {
+  const name=`${securityAirlineNames[code]||code} (${code})`;
   const chip=securityText('span','security-airline','');
+  chip.title=name;chip.setAttribute('role','img');chip.setAttribute('aria-label',name);
   const logo=document.createElement('img');logo.src=`/images/airlines/${code.toUpperCase()}.svg`;logo.alt='';logo.width=38;logo.height=26;logo.loading='lazy';
-  logo.addEventListener('error',()=>{logo.hidden=true;},{once:true});
-  chip.append(logo,securityText('span','',`${securityAirlineNames[code]||code} (${code})`));return chip;
+  const fallback=securityText('span','security-airline-fallback',code);fallback.hidden=true;
+  logo.addEventListener('error',()=>{logo.hidden=true;fallback.hidden=false;},{once:true});
+  chip.append(logo,fallback);return chip;
 }
 function securityAirlines(codes,key) {
   codes=[...new Set(codes||[])].filter(c=>/^[A-Z0-9]{2}$/.test(c));
   if(!codes.length)return null;
   const first=codes.includes('F9')?'F9':codes[0],others=codes.filter(c=>c!==first);
   const wrap=securityText('div','security-airlines','');
-  wrap.append(securityText('p','security-airline-caption','Known airlines with access'));
   if(!others.length){wrap.append(securityAirlineChip(first));return wrap;}
   const details=securityText('details','security-airline-details','');details.dataset.securityKey='airlines:'+key;
-  const summary=securityText('summary','','');summary.append(securityAirlineChip(first),securityText('span','',`+ ${others.length} ${others.length===1?'other':'others'}`));
-  const list=securityText('div','security-airline-list','');others.forEach(code=>list.append(securityAirlineChip(code)));
-  details.append(summary,list);wrap.append(details);return wrap;
+  const summary=securityText('summary','','');
+  const stack=securityText('span','security-airline-stack','');stack.append(securityAirlineChip(first));
+  const list=securityText('span','security-airline-list','');others.forEach(code=>list.append(securityAirlineChip(code)));stack.append(list);
+  const pill=securityText('span','security-airline-pill',`+${others.length}`);
+  pill.title=`Show or hide ${others.length} other ${others.length===1?'airline':'airlines'}`;
+  summary.append(stack,pill);details.append(summary);wrap.append(details);return wrap;
 }
 function securityLaneRows(box,cp,data) {
   if(cp.hours?.display)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} · airport local time`));
