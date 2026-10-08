@@ -4815,7 +4815,8 @@ function securityWaitCurrent(l) {
     (l.timestampKind!=='source'||Date.now()-Date.parse(l.updatedAt)<900000);
 }
 function securitySchedule(schedule,timezone) {
-  if(!schedule?.intervals?.length)return null;
+  if(!schedule?.intervals?.length||!timezone)return null;
+  try { new Intl.DateTimeFormat('en-US',{timeZone:timezone}); } catch { return null; }
   const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:timezone,hour:'2-digit',minute:'2-digit',weekday:'short',hourCycle:'h23'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
   const minute=+p.hour*60 + +p.minute,day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday);
   let closing=Infinity;
@@ -4828,52 +4829,1770 @@ function securitySchedule(schedule,timezone) {
   }
   return Number.isFinite(closing)?{status:'open',closingInMinutes:closing}:{status:'closed',closingInMinutes:null};
 }
+/* Curated airport guidance, reviewed 2026-10-07.
+ * Airport source links are data, not live operational status.
+ * Airline lists are known examples with access, not exhaustive checkpoint assignments.
+ * Geographic priorities are HowToGoWild editorial choices.
+ */
+const securityAirportGuidance = {
+  "ATL": {
+    "sourceUrls": [
+      "https://dev.atl.com/atldev/atlsync/passenger-information/passenger-security/",
+      "https://www.atl.com/wp-content/uploads/2018/12/Domestic-Terminal.pdf"
+    ],
+    "note": "All checkpoints reach all gates. Choose a lane you are eligible to use and allow time to reach your gate.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Domestic North Checkpoint",
+        "match": "north",
+        "gateLabel": "Domestic North \u00b7 all concourses",
+        "airlines": [
+          "F9",
+          "AA",
+          "AS",
+          "B6",
+          "WN",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Domestic Main Checkpoint",
+        "match": "main",
+        "gateLabel": "Domestic Terminal \u00b7 all concourses",
+        "airlines": [
+          "F9",
+          "AA",
+          "AS",
+          "B6",
+          "DL",
+          "WN",
+          "UA"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Domestic South Checkpoint",
+        "match": "south",
+        "gateLabel": "Domestic South \u00b7 all concourses",
+        "airlines": [
+          "F9",
+          "DL"
+        ],
+        "priority": "alternate",
+        "note": "Use the published lane information; this entrance may be restricted to expedited screening.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "International Checkpoint",
+        "match": "international",
+        "gateLabel": "International Terminal \u00b7 all concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Check bags at Frontier\u2019s Domestic North counter first.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "BNA": {
+    "sourceUrls": [
+      "https://flynashville.com/flights/airline-information",
+      "https://flynashville.com/inside-bna/bna-passport"
+    ],
+    "note": "Frontier is listed at the T-Gates. Follow your boarding pass; gate assignments can change.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Main Terminal, Level 3 \u00b7 T-Gates and concourses",
+        "airlines": [
+          "F9",
+          "FI",
+          "DL",
+          "AA",
+          "WN"
+        ],
+        "priority": "recommended",
+        "note": "Satellite gates C4\u2013C11 require the post-security shuttle.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "BWI": {
+    "sourceUrls": [
+      "https://bwiairport.com/flying-with-us/security-tsa-guidelines/",
+      "https://bwiairport.com/wp-content/uploads/wayfinding/maps/112Upper%20Level%20Terminal%20Map.pdf"
+    ],
+    "note": "Use D/E for Frontier. A/B/C serve a separate gate area.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Checkpoint D/E",
+        "match": "(?:checkpoint\\s*)?d\\s*[/ &-]?\\s*e",
+        "gateLabel": "Concourses D & E",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "Follow your assigned D/E gate.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint A",
+        "match": "checkpoint A",
+        "gateLabel": "Concourses A/B/C",
+        "airlines": [
+          "WN"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint B",
+        "match": "checkpoint B",
+        "gateLabel": "Concourses A/B/C",
+        "airlines": [
+          "WN"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint C",
+        "match": "checkpoint C",
+        "gateLabel": "Concourses A/B/C",
+        "airlines": [
+          "AA",
+          "WN"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "CHS": {
+    "sourceUrls": [
+      "https://iflychs.com/passengers/security-checkpoint/",
+      "https://iflychs.com/"
+    ],
+    "note": "The main checkpoint serves the terminal\u2019s concourses.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Main Terminal \u00b7 concourses A & B",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "CLE": {
+    "sourceUrls": [
+      "https://www.clevelandairport.com/news-press/security-checkpoints-renamed-cle",
+      "https://www.clevelandairport.com/sites/default/files/cle_digital_map_vertical_1_8_2024%20%281%29.pdf"
+    ],
+    "note": "All checkpoints reach all gates. Choose a lane you are eligible to use and allow time to reach your gate.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "North Security",
+        "match": "north|checkpoint a\\b",
+        "gateLabel": "All departing gates \u00b7 Frontier: Concourse A",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Central Security",
+        "match": "central|checkpoint b\\b",
+        "gateLabel": "All departing gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Check the published lane type before choosing this checkpoint.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "South Security",
+        "match": "south|checkpoint c\\b",
+        "gateLabel": "All departing gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "CLT": {
+    "sourceUrls": [
+      "https://www.cltairport.com/airport-info/security/",
+      "https://www.cltairport.com/airport-info/website-maps/"
+    ],
+    "note": "All checkpoints reach all gates. Choose a lane you are eligible to use and allow time to reach your gate.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Checkpoint 1",
+        "match": "checkpoint 1\\b",
+        "gateLabel": "Main Terminal \u00b7 all concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "Concourse A/B side; follow signs to your Frontier gate.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 2",
+        "match": "checkpoint 2\\b",
+        "gateLabel": "Main Terminal \u00b7 all concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Use the published lane information for PreCheck eligibility.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 3",
+        "match": "checkpoint 3\\b",
+        "gateLabel": "Main Terminal \u00b7 all concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "CMH": {
+    "sourceUrls": [
+      "https://flycolumbus.com/passengers/prepare-for-your-flight/",
+      "https://flycolumbus.com/passengers/security/"
+    ],
+    "note": "Use Concourse C security for Frontier. Airport-wide estimates below are not a Concourse C wait.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Concourse C Security",
+        "match": "concourse c",
+        "gateLabel": "Concourse C",
+        "airlines": [
+          "F9",
+          "AC",
+          "AS",
+          "MX",
+          "DL",
+          "SY"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Concourse A Security",
+        "match": "concourse a",
+        "gateLabel": "Concourse A",
+        "airlines": [
+          "WN"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Concourse B Security",
+        "match": "concourse b",
+        "gateLabel": "Concourse B",
+        "airlines": [
+          "AA",
+          "NK",
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "CVG": {
+    "sourceUrls": [
+      "https://www.cvgairport.com/accessibility/step-by-step-directions/"
+    ],
+    "note": "The main checkpoint leads to the transportation tunnel serving Concourses A and B.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Main Terminal \u00b7 concourses A & B",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "DCA": {
+    "sourceUrls": [
+      "https://www.flyreagan.com/travel-information/security-information"
+    ],
+    "note": "Frontier uses Terminal 1. Terminal 2 checkpoints serve a different gate area.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal 1 Security",
+        "match": "terminal 1|terminal a\\b",
+        "gateLabel": "Terminal 1 \u00b7 gates A1\u2013A9",
+        "airlines": [
+          "F9",
+          "AC",
+          "WN"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal 2 North",
+        "match": "terminal 2 north",
+        "gateLabel": "Terminal 2 \u00b7 gates B10\u2013E59",
+        "airlines": [
+          "AA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal 2 South",
+        "match": "terminal 2 south",
+        "gateLabel": "Terminal 2 \u00b7 gates B10\u2013E59",
+        "airlines": [
+          "AA",
+          "AS",
+          "DL",
+          "B6",
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "DEN": {
+    "sourceUrls": [
+      "https://www.flydenver.com/security/",
+      "https://www.flydenver.com/airlines/",
+      "https://www.flydenver.com/press-release/holiday-travel-rush-arrives-at-denver-international-airport/"
+    ],
+    "note": "Frontier checks in on Level 6 East and departs from Concourse A. East and West security both reach all concourses.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "East Security",
+        "match": "east security",
+        "gateLabel": "Level 6 East \u00b7 A, B & C gates",
+        "airlines": [
+          "F9",
+          "WN",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "Convenient after Frontier\u2019s East-side check-in. Allow time to reach your A gate.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "West Security",
+        "match": "west security",
+        "gateLabel": "Level 6 West \u00b7 A, B & C gates",
+        "airlines": [
+          "F9",
+          "WN",
+          "UA"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "DFW": {
+    "sourceUrls": [
+      "https://www.dfwairport.com/explore/plan/airlines/",
+      "https://www.dfwairport.com/security/",
+      "https://www.dfwairport.com/explore/plan/connect/"
+    ],
+    "note": "Frontier is listed at E20; use your boarding pass for the actual gate. Other terminals require extra travel after security.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "E18",
+        "match": "\\be18\\b",
+        "gateLabel": "Terminal E \u00b7 near Frontier\u2019s published E20 gate",
+        "airlines": [
+          "F9",
+          "AC",
+          "AS",
+          "B6",
+          "DL",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "Nearby entrance; use E16 for PreCheck if that is the published eligible lane.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal E alternatives",
+        "match": "\\be(?:8|16|20|33)\\b",
+        "gateLabel": "Terminal E \u00b7 E gates",
+        "airlines": [
+          "F9",
+          "AC",
+          "AS",
+          "B6",
+          "DL",
+          "UA"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Other terminals",
+        "match": "\\b[a-d]\\d+\\b",
+        "gateLabel": "Terminals A\u2013D \u00b7 Skylink to Terminal E",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Drop bags at Frontier\u2019s counter first; allow time for the post-security Skylink.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "DTW": {
+    "sourceUrls": [
+      "https://metroairport.com/at-dtw/maps"
+    ],
+    "note": "Frontier uses the Evans Terminal, formerly North Terminal. McNamara is a separate terminal.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Evans Terminal Security",
+        "match": "evans|north terminal",
+        "gateLabel": "Evans Terminal \u00b7 D gates",
+        "airlines": [
+          "F9",
+          "AC",
+          "AS",
+          "AA",
+          "XP",
+          "B6",
+          "LH",
+          "RJ",
+          "WN",
+          "SY",
+          "TK",
+          "Y4",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "The Worker publishes a terminal estimate; follow local signs for the North/South entrance.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "McNamara Terminal Security",
+        "match": "mcnamara",
+        "gateLabel": "McNamara Terminal \u00b7 A, B & C gates",
+        "airlines": [
+          "AM",
+          "AF",
+          "DL",
+          "WS"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "EWR": {
+    "sourceUrls": [
+      "https://www.newarkairport.com/explore-ewr/terminals/terminal-b/airlines-in-terminal-b"
+    ],
+    "note": "Frontier uses Terminal B. Its gate piers have separate checkpoints: use the entrance for the gate on your boarding pass.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal B Security",
+        "match": "terminal b\\b",
+        "gateLabel": "Terminal B \u00b7 match your assigned B gate",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "B40\u201349, B51\u201357 and B60\u201368 are gate-specific entrances, not interchangeable shortcuts.",
+        "conditional": true,
+        "badge": "Recommended for your assigned B gate"
+      },
+      {
+        "name": "Terminal A Security",
+        "match": "terminal a\\b",
+        "gateLabel": "Terminal A",
+        "airlines": [
+          "AC",
+          "AA",
+          "DL",
+          "B6",
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal C Security",
+        "match": "terminal c\\b",
+        "gateLabel": "Terminal C",
+        "airlines": [
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "HOU": {
+    "sourceUrls": [
+      "https://www.fly2houston.com/hou/security/",
+      "https://www.fly2houston.com/airport-business/newsroom/press-releases/item/houston-city-council-approves-expansion-plans-for-more-gates-modernized-baggage-experience-at-hobby-airport/"
+    ],
+    "note": "Use Hobby\u2019s main departures checkpoint after Frontier check-in.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main|hou|central",
+        "gateLabel": "Main Terminal \u00b7 departing gates",
+        "airlines": [
+          "F9",
+          "G4",
+          "AA",
+          "DL",
+          "WN"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "IAD": {
+    "sourceUrls": [
+      "https://www.flydulles.com/travel-information/security-information",
+      "https://www.flydulles.com/flight-information/airlines-serving-dulles-international"
+    ],
+    "note": "Frontier check-in is Zone 3. Follow the main terminal\u2019s signs to your eligible security lane and assigned concourse.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "East Security",
+        "match": "east",
+        "gateLabel": "Main Terminal \u00b7 concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "CLEAR is published at the East checkpoint; use live lane information.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "West Security",
+        "match": "west",
+        "gateLabel": "Main Terminal \u00b7 concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "TSA PreCheck Security",
+        "match": "precheck|pre.?\u2713|tsa pre",
+        "gateLabel": "Main Terminal \u00b7 between East & West",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Requires PreCheck eligibility except when TSA directs after-hours screening here.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "IAH": {
+    "sourceUrls": [
+      "https://www.fly2houston.com/iah/security/",
+      "https://cdn.fly2houston.com/cdn/ff/m-HPR4m373CEWAL-PYP1_1QB48N1exMlJet4TxRcxts/1638993166/public/2021-12/IAH%20A%20L2%20Terminal%20Map.pdf"
+    ],
+    "note": "Frontier uses Terminal A. Select the A checkpoint for your gate; follow airport directions for Skyway connections.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal A Security",
+        "match": "terminal a\\b",
+        "gateLabel": "Terminal A \u00b7 match your assigned A gate",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "North and South are different entrances. Check your gate and local signs before choosing.",
+        "conditional": true,
+        "badge": "Recommended for your assigned A gate"
+      },
+      {
+        "name": "Other terminal checkpoints",
+        "match": "terminal [bcde]\\b",
+        "gateLabel": "Terminals B\u2013E",
+        "airlines": [],
+        "priority": "other",
+        "note": "Confirm access and transfer time to your Frontier gate before using.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "JAX": {
+    "sourceUrls": [
+      "https://www.flyjacksonville.com/Content.aspx?id=432"
+    ],
+    "note": "The courtyard checkpoint serves the terminal\u2019s concourses.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Main Terminal \u00b7 courtyard checkpoint",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "JFK": {
+    "sourceUrls": [
+      "https://www.jfkairport.com/explore-jfk/terminals"
+    ],
+    "note": "The airport lists Frontier in Terminal 7. Confirm your terminal on the boarding pass during JFK redevelopment.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal 7 Security",
+        "match": "terminal 7\\b",
+        "gateLabel": "Terminal 7 \u00b7 departing gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "Other terminals are not routine alternatives for a Terminal 7 departure.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Other terminal checkpoints",
+        "match": "terminal (?:1|4|5|8)\\b",
+        "gateLabel": "Other JFK terminals",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "LAX": {
+    "sourceUrls": [
+      "https://www.flylax.com/node/271"
+    ],
+    "note": "Frontier check-in is at Terminal 1; the airport directs Frontier passengers to an airside bus to Terminal B.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal 1 Security",
+        "match": "terminal 1\\b|^t1\\b",
+        "gateLabel": "Terminal 1 check-in \u00b7 bus to Terminal B",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "Allow time for the bus and walk to your assigned gate.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal B Security",
+        "match": "terminal b\\b|tbit|tom bradley",
+        "gateLabel": "Terminal B \u00b7 assigned departing gate",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Complete Frontier check-in/bag drop at Terminal 1 first. Confirm direct entry with airport staff.",
+        "conditional": true,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "MCO": {
+    "sourceUrls": [
+      "https://flymco.com/airlines/",
+      "https://flymco.com/faq/"
+    ],
+    "note": "Frontier is listed at gates 1\u201329 and 70\u201399. Use the checkpoint matching your boarding-pass gate; the two sides are not interchangeable.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Gates 1\u201359",
+        "match": "gates 1\\s*[-\u2013]\\s*59",
+        "gateLabel": "Terminals A/B, west \u00b7 gates 1\u201359",
+        "airlines": [
+          "F9",
+          "MX"
+        ],
+        "priority": "recommended",
+        "note": "Use for Frontier gates 1\u201329.",
+        "conditional": true,
+        "badge": "Recommended for Frontier gates 1\u201329"
+      },
+      {
+        "name": "Gates 70\u2013129",
+        "match": "gates 70\\s*[-\u2013]\\s*129",
+        "gateLabel": "Terminals A/B, east \u00b7 gates 70\u2013129",
+        "airlines": [
+          "F9",
+          "DL",
+          "F8",
+          "LA"
+        ],
+        "priority": "alternate",
+        "note": "Use only when your Frontier gate is 70\u201399.",
+        "conditional": true,
+        "badge": "For Frontier gates 70\u201399"
+      },
+      {
+        "name": "Terminal C Security",
+        "match": "c230|terminal c",
+        "gateLabel": "Terminal C \u00b7 C gates",
+        "airlines": [
+          "B6",
+          "BA",
+          "BW",
+          "CM",
+          "EK"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "MIA": {
+    "sourceUrls": [
+      "https://www.miami-airport.com/airline-information.asp",
+      "https://www.miami-airport.com/airport-security.asp",
+      "https://www.miami-airport.com/images/maps/Directory-terminal-map-with-checkpoints.jpg",
+      "https://www.miami-airport.com/CIP_terminal_projects.asp"
+    ],
+    "note": "Frontier is listed in Concourse F. Use the Concourse F entrance; other concourse checkpoints are not routine Frontier alternatives.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Checkpoint 6",
+        "match": "^(?:checkpoint\\s*)?6$",
+        "gateLabel": "Central Terminal \u00b7 Concourse F, gates F1\u2013F23",
+        "airlines": [
+          "F9",
+          "SY"
+        ],
+        "priority": "recommended",
+        "note": "Follow current signs for F gates after Frontier check-in; the airport has a checkpoint relocation project.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 1",
+        "match": "^(?:checkpoint\\s*)?1$",
+        "gateLabel": "North Terminal \u00b7 D",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 2",
+        "match": "^(?:checkpoint\\s*)?2$",
+        "gateLabel": "North Terminal \u00b7 D",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 3",
+        "match": "^(?:checkpoint\\s*)?3$",
+        "gateLabel": "North Terminal \u00b7 D",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 4",
+        "match": "^(?:checkpoint\\s*)?4$",
+        "gateLabel": "North Terminal \u00b7 D",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 5",
+        "match": "^(?:checkpoint\\s*)?5$",
+        "gateLabel": "Central Terminal \u00b7 E",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 7",
+        "match": "^(?:checkpoint\\s*)?7$",
+        "gateLabel": "Central Terminal \u00b7 G",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 8",
+        "match": "^(?:checkpoint\\s*)?8$",
+        "gateLabel": "South Terminal",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 9",
+        "match": "^(?:checkpoint\\s*)?9$",
+        "gateLabel": "South Terminal",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Checkpoint 10",
+        "match": "^(?:checkpoint\\s*)?10$",
+        "gateLabel": "South Terminal",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "MSP": {
+    "sourceUrls": [
+      "https://www.mspairport.com/airport/terminal-information",
+      "https://www.mspairport.com/airport/security-screening"
+    ],
+    "note": "Frontier uses Terminal 2. Terminal 1 checkpoints do not serve the same gate area.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "T2 Checkpoint 1",
+        "match": "t2 checkpoint 1|terminal 2.*checkpoint 1",
+        "gateLabel": "Terminal 2, Level 2 \u00b7 H gates",
+        "airlines": [
+          "F9",
+          "FI",
+          "WN",
+          "SY"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "T2 Checkpoint 2",
+        "match": "t2 checkpoint 2|terminal 2.*checkpoint 2",
+        "gateLabel": "Terminal 2, Level 2 \u00b7 H gates",
+        "airlines": [
+          "F9",
+          "FI",
+          "WN",
+          "SY"
+        ],
+        "priority": "alternate",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal 1 checkpoints",
+        "match": "t1|terminal 1",
+        "gateLabel": "Terminal 1",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "OMA": {
+    "sourceUrls": [
+      "https://www.flyoma.com/find-your-way-at-oma/",
+      "https://www.flyoma.com/flight-information/airline-information/"
+    ],
+    "note": "During terminal construction, Frontier uses the South Terminal / Concourse A.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Concourse A Security",
+        "match": "concourse a|south",
+        "gateLabel": "South Terminal, Level 2 \u00b7 gates A1\u2013A10",
+        "airlines": [
+          "F9",
+          "AS",
+          "G4",
+          "AA",
+          "DL"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Concourse B Security",
+        "match": "concourse b|north",
+        "gateLabel": "North Terminal \u00b7 gates B11\u2013B20",
+        "airlines": [
+          "WN",
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "PDX": {
+    "sourceUrls": [
+      "https://www.flypdx.com/TravelTips",
+      "https://flypdx.com/construction"
+    ],
+    "note": "Use the checkpoint matching your boarding-pass concourse. The concourse connector is open, but using the entrance for your gate saves walking.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "North Security",
+        "match": "north|d/e|d e",
+        "gateLabel": "D/E checkpoint \u00b7 concourses D & E",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": true,
+        "badge": "Recommended for a D or E gate"
+      },
+      {
+        "name": "South Security",
+        "match": "south|b/c|b c",
+        "gateLabel": "B/C checkpoint \u00b7 concourses B & C",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Use for a B/C gate, or allow extra walking via the post-security connector.",
+        "conditional": true,
+        "badge": "For a B or C gate"
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "PHL": {
+    "sourceUrls": [
+      "https://www.phl.org/about/airlines",
+      "https://www.phl.org/flights/security-information/checkpoint-hours"
+    ],
+    "note": "Frontier uses Terminal E. D/E is the nearby security entrance; verify your gate and allow transfer time if using another terminal.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal D/E Security",
+        "match": "terminal d\\s*[/ &-]\\s*e",
+        "gateLabel": "Terminals D/E \u00b7 Frontier: E gates",
+        "airlines": [
+          "F9",
+          "WN",
+          "DL",
+          "UA",
+          "B6",
+          "SY"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Other terminal checkpoints",
+        "match": "terminal (?:a|b|c|f)\\b",
+        "gateLabel": "Other PHL terminals",
+        "airlines": [],
+        "priority": "other",
+        "note": "Confirm the post-security route and walking/shuttle time to E before using.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "PHX": {
+    "sourceUrls": [
+      "https://www.skyharbor.com/flights/passenger-airlines",
+      "https://www.skyharbor.com/about-phx/news-media/phx-check-in/2024/may-2024/new-service-with-frontier-airlines/"
+    ],
+    "note": "Frontier normally uses Terminal 3. Airport guidance also lists a Terminal 4 international exception: follow your boarding-pass terminal.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal 3 Security",
+        "match": "\\bt3\\b|terminal 3",
+        "gateLabel": "Terminal 3 \u00b7 E & F gates",
+        "airlines": [
+          "F9",
+          "AC",
+          "AS",
+          "G4",
+          "DL",
+          "B6",
+          "PD",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "Use for a Terminal 3 departure.",
+        "conditional": true,
+        "badge": "Recommended for Frontier in Terminal 3"
+      },
+      {
+        "name": "Terminal 4 checkpoints",
+        "match": "\\bt4\\b|terminal 4",
+        "gateLabel": "Terminal 4 \u00b7 A, B, C & D gates",
+        "airlines": [
+          "F9",
+          "AA",
+          "WN"
+        ],
+        "priority": "alternate",
+        "note": "Use only for a Frontier departure assigned to Terminal 4; T4 does not connect airside to T3.",
+        "conditional": true,
+        "badge": "For a Terminal 4 departure"
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "PIT": {
+    "sourceUrls": [
+      "https://flypittsburgh.com/pittsburgh-international-airport/terminal-info/transformed-pit/"
+    ],
+    "note": "Use the new terminal\u2019s main departures security checkpoint. Follow the Skybridge to your assigned concourse.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "New Terminal \u00b7 departing concourses",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "SAT": {
+    "sourceUrls": [
+      "https://flysanantonio.com/home/flights/airlines/",
+      "https://flysanantonio.com/business/about-saas/terminal-development/terminal-a-b-reconfiguration-renovation-tabrr/"
+    ],
+    "note": "Frontier uses Terminal A. The proposed post-security A/B connector is a construction project, so do not treat B as a routine alternative.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal A Security",
+        "match": "terminal a",
+        "gateLabel": "Terminal A \u00b7 A gates",
+        "airlines": [
+          "F9",
+          "AM",
+          "AC",
+          "AS",
+          "MX",
+          "DL",
+          "WN",
+          "SY",
+          "VB",
+          "Y4"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal B Security",
+        "match": "terminal b",
+        "gateLabel": "Terminal B \u00b7 B gates",
+        "airlines": [
+          "AA",
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "SLC": {
+    "sourceUrls": [
+      "https://slcairport.com/airlines-flights/security/",
+      "https://slcairport.com/assets/news/Media-Advisory-Concourse-B-Grand-Opening.pdf"
+    ],
+    "note": "Use Main Security on Level 2. The ground-level checkpoint in International Arrivals also accepts departing passengers when operating. Follow tunnel signs to your Frontier gate in Concourse B.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Terminal Level 2 \u00b7 concourses A & B",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "International Arrivals checkpoint",
+        "match": "international arrivals",
+        "gateLabel": "Terminal ground level \u00b7 departing and connecting passengers",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "This is a TSA screening entrance that also accepts departures, not the customs inspection queue.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "STL": {
+    "sourceUrls": [
+      "https://www.flystl.com/tsa-security/",
+      "https://www.flystl.com/flights-airlines/"
+    ],
+    "note": "Frontier departs from Terminal 1, Concourse C. The airport-wide estimate is shown separately from checkpoint guidance.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Concourse C Security",
+        "match": "concourse c|t1.*c gates",
+        "gateLabel": "Terminal 1 \u00b7 Frontier listed at C19/C23",
+        "airlines": [
+          "F9",
+          "AS",
+          "AA"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Concourse A Security",
+        "match": "concourse a|t1.*a gates",
+        "gateLabel": "Terminal 1 \u00b7 A gates",
+        "airlines": [
+          "AC",
+          "DL",
+          "UA"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal 2 Security",
+        "match": "terminal 2|t2|concourse e",
+        "gateLabel": "Terminal 2 \u00b7 E/F gates",
+        "airlines": [
+          "WN"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "LGA": {
+    "sourceUrls": [
+      "https://www.laguardiaairport.com/explore-lga/terminals"
+    ],
+    "note": "Frontier uses Terminal B. Terminal A has no commercial flights; Terminal C serves Delta.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal B Security",
+        "match": "terminal b",
+        "gateLabel": "Terminal B \u00b7 departing gates",
+        "airlines": [
+          "F9",
+          "AC",
+          "AA",
+          "B6",
+          "PD",
+          "WN",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Terminal C Security",
+        "match": "terminal c",
+        "gateLabel": "Terminal C",
+        "airlines": [
+          "DL"
+        ],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "BOS": {
+    "sourceUrls": [
+      "https://www.massport.com/logan-airport/at-the-airport/security-wait-times",
+      "https://www.massport.com/sites/default/files/2023-10/2022a-os.pdf"
+    ],
+    "note": "Frontier is listed in Terminal E. Confirm your boarding-pass terminal and use an E-gates checkpoint.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal E Security",
+        "match": "all e gates|terminal e",
+        "gateLabel": "Terminal E \u00b7 E gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "The feed may list more than one E checkpoint; follow the published lane type.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "LAS": {
+    "sourceUrls": [
+      "https://www.harryreidairport.com/security-at-las",
+      "https://www.harryreidairport.com/Terminals/T3"
+    ],
+    "note": "Frontier checks in at Terminal 3 and can depart from D or E gates. Follow the tram signs for a D departure.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "T3 - D/E Gates",
+        "match": "t3.*d/e|terminal 3.*(?:level 2|d.?e)",
+        "gateLabel": "Terminal 3, Level 2 \u00b7 D & E gates",
+        "airlines": [
+          "F9",
+          "AS",
+          "MX",
+          "B6",
+          "SY",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "Check your boarding-pass gate before heading to the concourse.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "T3 Innovation Checkpoint",
+        "match": "innovation|level (?:zero|0)",
+        "gateLabel": "Terminal 3, Level Zero \u00b7 D-gate access",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Use only if the checkpoint serves your assigned gate and eligible lane.",
+        "conditional": true,
+        "badge": null
+      },
+      {
+        "name": "Terminal 1 checkpoints",
+        "match": "t1|terminal 1",
+        "gateLabel": "Terminal 1",
+        "airlines": [],
+        "priority": "other",
+        "note": "Confirm the route to your D/E gate; Frontier check-in is in T3.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "SEA": {
+    "sourceUrls": [
+      "https://www.portseattle.org/Security",
+      "https://www.portseattle.org/airlines/frontier-airlines"
+    ],
+    "note": "Frontier is listed in Concourse B. All six checkpoints reach all gates; choose an eligible lane.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Checkpoint 4",
+        "match": "checkpoint 4\\b",
+        "gateLabel": "Closest to central terminal \u00b7 B & C gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "Convenient for Frontier\u2019s published B concourse.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Other SEA checkpoints",
+        "match": "checkpoint [12356]\\b",
+        "gateLabel": "Main Terminal \u00b7 all gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Different screening types operate at each entrance; use the published lane information.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "SFO": {
+    "sourceUrls": [
+      "https://www.flysfo.com/passengers/flight-info/airlines-sfo/frontier",
+      "https://www.flysfo.com/flight-info/security",
+      "https://www.flysfo.com/fil/passengers/flight-info/airlines-sfo/frontier"
+    ],
+    "note": "The English Frontier directory lists Harvey Milk Terminal 1; other airport directory versions list International A. Confirm check-in and gate on your boarding pass. All checkpoints reach all gates.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Checkpoint B",
+        "match": "checkpoint b\\b",
+        "gateLabel": "Harvey Milk Terminal 1 \u00b7 B gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "recommended",
+        "note": "Use for a B-gate departure; departure and mezzanine entrances have different lanes.",
+        "conditional": true,
+        "badge": "Recommended for a B-gate departure"
+      },
+      {
+        "name": "Checkpoint A",
+        "match": "checkpoint a\\b",
+        "gateLabel": "International Terminal A \u00b7 A gates",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Use for an A-gate departure; complete check-in at the terminal directed by Frontier first.",
+        "conditional": true,
+        "badge": "For an A-gate departure"
+      },
+      {
+        "name": "Other SFO checkpoints",
+        "match": "checkpoint [dfg]\\b",
+        "gateLabel": "Other boarding areas \u00b7 all gates accessible",
+        "airlines": [
+          "F9"
+        ],
+        "priority": "alternate",
+        "note": "Allow additional walking to your assigned A/B gate.",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "ORD": {
+    "sourceUrls": [
+      "https://www.flychicago.com/SiteCollectionDocuments/O%27Hare/ArchivedPDFs/Map/T5.pdf"
+    ],
+    "note": "Frontier uses Terminal 5 / M gates. Complete bag drop there; other terminals require extra transfer planning.",
+    "single": false,
+    "checkpoints": [
+      {
+        "name": "Terminal 5 Security",
+        "match": "terminal 5\\b|t5\\b",
+        "gateLabel": "Terminal 5 \u00b7 M gates",
+        "airlines": [
+          "F9",
+          "DL",
+          "WN",
+          "SY"
+        ],
+        "priority": "recommended",
+        "note": "Use the eligible Terminal 5 entrance shown in the live feed.",
+        "conditional": false,
+        "badge": null
+      },
+      {
+        "name": "Other terminal checkpoints",
+        "match": "terminal [123]\\b",
+        "gateLabel": "Terminals 1\u20133",
+        "airlines": [],
+        "priority": "other",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "GRR": {
+    "sourceUrls": [
+      "https://www.grr.org/hubfs/Maps/GFIA_TerminalMap_FINAL_Sep2023.pdf"
+    ],
+    "note": "The consolidated checkpoint serves both concourses.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Main Terminal \u00b7 concourses A & B",
+        "airlines": [
+          "F9",
+          "WN",
+          "G4",
+          "UA",
+          "DL",
+          "AA"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "XNA": {
+    "sourceUrls": [
+      "https://www.flyxna.com/security",
+      "https://www.flyxna.com/contact-us"
+    ],
+    "note": "One security checkpoint serves all airline gates.",
+    "single": true,
+    "checkpoints": [
+      {
+        "name": "Main Security",
+        "match": "main",
+        "gateLabel": "Main Terminal \u00b7 all departing gates",
+        "airlines": [
+          "F9",
+          "G4",
+          "AA",
+          "MX",
+          "DL",
+          "UA"
+        ],
+        "priority": "recommended",
+        "note": "",
+        "conditional": false,
+        "badge": null
+      }
+    ],
+    "reviewed": "2026-10-07"
+  }
+};
+
+// Curated guidance never supplies live waits, lane availability, hours or closure state.
+function securityModels(data) {
+  const guidance=securityAirportGuidance[data.airport];
+  const rules=guidance?.checkpoints||[], matched=new Set();
+  const live=data.available&&Array.isArray(data.checkpoints)?data.checkpoints:[];
+  const models=live.map(cp=>{
+    const aggregate=/airport[ -]wide|\bfis\b/i.test(cp.name||'');
+    const rule=aggregate?null:rules.find(r=>new RegExp(r.match,'i').test(cp.name||''));
+    if(rule)matched.add(rule);
+    return {...cp,lanes:Array.isArray(cp.lanes)?cp.lanes:[],guidance:rule,
+      priority:aggregate?'estimate':rule?.priority||'other',aggregate,live:true};
+  });
+  for(const rule of rules)if(!matched.has(rule))models.push({id:'guide:'+rule.name,name:rule.name,lanes:[],guidance:rule,priority:rule.priority,live:false});
+  return models;
+}
+function securityCheckpointState(cp,data) {
+  if(!cp.live)return 'unknown';
+  const selected=cp.lanes.filter(l=>l.type===securityLane);
+  const lanes=selected.length?selected:cp.lanes.filter(l=>l.type==='combined');
+  if(lanes.some(l=>l.status==='open'))return 'open';
+  if(lanes.length&&lanes.every(l=>l.status==='closed'))return 'closed';
+  const schedule=securitySchedule(cp.hours,data.timezone||securityAirport?.timezone);
+  if(schedule?.status==='closed')return 'closed';
+  // An open checkpoint does not prove that a missing selected lane is operating.
+  return 'unknown';
+}
+function securitySortModels(models,data) {
+  const group=cp=>cp.priority==='other'?2:cp.aggregate?1:0;
+  const stateRank={open:0,unknown:1,closed:2},priorityRank={recommended:0,alternate:1,estimate:2,other:3};
+  return [...models].sort((a,b)=>group(a)-group(b)||
+    stateRank[securityCheckpointState(a,data)]-stateRank[securityCheckpointState(b,data)]||priorityRank[a.priority]-priorityRank[b.priority]);
+}
+function securityLink(label,url,className='security-source') {
+  try{const u=new URL(url);if(u.protocol!=='https:')return null;
+    const a=securityText('a',className,label);a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';return a;
+  }catch{return null;}
+}
+const securityAirlineNames={F9:'Frontier',AA:'American',AC:'Air Canada',AS:'Alaska',B6:'JetBlue',DL:'Delta',WN:'Southwest',UA:'United',NK:'Spirit',G4:'Allegiant',MX:'Breeze',SY:'Sun Country',FI:'Icelandair',PD:'Porter',AM:'Aeromexico',AF:'Air France',BA:'British Airways',BW:'Caribbean',CM:'Copa',EK:'Emirates',F8:'Flair',LA:'LATAM',LH:'Lufthansa',RJ:'Royal Jordanian',TK:'Turkish',VB:'Viva',WS:'WestJet',XP:'Avelo',Y4:'Volaris'};
+function securityAirlineChip(code) {
+  const chip=securityText('span','security-airline','');
+  const logo=document.createElement('img');logo.src=`/images/airlines/${code.toUpperCase()}.svg`;logo.alt='';logo.width=38;logo.height=26;logo.loading='lazy';
+  logo.addEventListener('error',()=>{logo.hidden=true;},{once:true});
+  chip.append(logo,securityText('span','',`${securityAirlineNames[code]||code} (${code})`));return chip;
+}
+function securityAirlines(codes,key) {
+  codes=[...new Set(codes||[])].filter(c=>/^[A-Z0-9]{2}$/.test(c));
+  if(!codes.length)return null;
+  const first=codes.includes('F9')?'F9':codes[0],others=codes.filter(c=>c!==first);
+  const wrap=securityText('div','security-airlines','');
+  wrap.append(securityText('p','security-airline-caption','Known airlines with access'));
+  if(!others.length){wrap.append(securityAirlineChip(first));return wrap;}
+  const details=securityText('details','security-airline-details','');details.dataset.securityKey='airlines:'+key;
+  const summary=securityText('summary','','');summary.append(securityAirlineChip(first),securityText('span','',`+ ${others.length} ${others.length===1?'other':'others'}`));
+  const list=securityText('div','security-airline-list','');others.forEach(code=>list.append(securityAirlineChip(code)));
+  details.append(summary,list);wrap.append(details);return wrap;
+}
+function securityLaneRows(box,cp,data) {
+  if(cp.hours?.display)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} · airport local time`));
+  const lanes=cp.lanes.filter(l=>l.type===securityLane||l.type==='combined');
+  if(!lanes.length)box.append(securityText('p','security-note',cp.live?`${securityLabels[securityLane]||'Selected lane'} information not published for this checkpoint.`:'Live lane information unavailable.'));
+  for(const l of lanes){
+    const line=securityText('div','security-lane-row',''),current=securityWaitCurrent(l);
+    const value=l.status==='closed'?'Closed':current?securityWaitDisplay(l):l.stale?'Wait temporarily unavailable':l.status==='open'?'Open · wait not published':'Wait not published';
+    line.append(securityText('span','security-lane-name',l.label||securityLabels[l.type]),securityText('strong','security-wait'+(l.status==='closed'?' is-closed':''),value));box.append(line);
+    if(l.hours?.display)box.append(securityText('p','security-hours',`${l.hours.display} · airport local time`));
+    if(l.status==='closed'&&l.statusMessage)box.append(securityText('p','security-hours',l.statusMessage));
+    if(Number.isFinite(l.closingInMinutes)&&l.closingInMinutes<=45&&l.status==='open')box.append(securityText('p','security-closing',`Closes in ${l.closingInMinutes} min`));
+    if(current&&l.timestampKind==='source')box.append(securityText('p','security-lane-updated',`Updated ${securityAge(l.updatedAt)}`));
+    if(current&&l.timestampKind!=='source'&&l.sourceUpdatedText)box.append(securityText('p','security-lane-updated',l.sourceUpdatedText));
+    if(l.notes)box.append(securityText('p','security-note',l.notes));
+  }
+}
 function renderSecurity(data) {
   const card=document.getElementById('airportSecurity');
   if(!card||data.airport!==securityAirport?.code)return;
-  // Reevaluate hours locally between refreshes, including a closing during the 5-minute cache.
-  if(Array.isArray(data.checkpoints))data={...data,checkpoints:data.checkpoints.map(c=>({...c,lanes:c.lanes.map(l=>{const state=securitySchedule(l.hours||c.hours,data.timezone);return state?{...l,status:state.status==='closed'?'closed':l.status==='unknown'?'open':l.status,closingInMinutes:state.closingInMinutes}:l;})}))};
-  if(!data.available||!Array.isArray(data.checkpoints)||!data.checkpoints.some(c=>c.hours||c.lanes.some(l=>securityWaitCurrent(l)||l.hours||l.status==='closed'))){securityHide();return;}
+  const guidance=securityAirportGuidance[data.airport];
+  // Reevaluate published hours between refreshes without changing the cached response.
+  if(Array.isArray(data.checkpoints))data={...data,checkpoints:data.checkpoints.map(c=>({...c,lanes:(Array.isArray(c.lanes)?c.lanes:[]).map(l=>{
+    const state=securitySchedule(l.hours||c.hours,data.timezone||securityAirport?.timezone);
+    return state?{...l,status:state.status==='closed'?'closed':l.status==='unknown'?'open':l.status,closingInMinutes:state.closingInMinutes}:l;
+  })}))};
+  let models=securityModels(data);
+  if(!guidance&&!models.some(c=>c.hours||c.lanes.some(l=>securityWaitCurrent(l)||l.hours||l.status==='closed'))){securityHide();return;}
+  const open=new Set([...card.querySelectorAll('details[open][data-security-key]')].map(el=>el.dataset.securityKey));
   card.replaceChildren();card.hidden=false;
-  const heading=securityText('div','security-heading','');
-  const copy=securityText('div','security-heading-copy','');
-  copy.append(securityText('div','dashboard-booking-kicker','AIRPORT SECURITY'),securityText('h3','',`${data.airport} security checkpoints`));
-  const source=securityText('a','security-source','Airport source ↗');
-  try{const url=new URL(data.source?.url);if(url.protocol==='https:')source.href=url.href;}catch{}
-  source.target='_blank';source.rel='noopener';heading.append(copy,source);card.append(heading);
-  const types=[...new Set(data.checkpoints.flatMap(c=>c.lanes.map(l=>l.type)))].filter(t=>securityLabels[t]);
-  if(!types.includes(securityLane))securityLane=types.includes('standard')?'standard':types[0];
+  const heading=securityText('div','security-heading',''),copy=securityText('div','security-heading-copy','');
+  copy.append(securityText('div','dashboard-booking-kicker','AIRPORT SECURITY'),securityText('h3','',`${data.airport} security checkpoints`));heading.append(copy);
+  const links=securityText('div','security-source-links','');
+  const source=securityLink('Live airport source ↗',data.source?.url);if(source)links.append(source);
+  const guideLink=securityLink('Airport guidance ↗',guidance?.sourceUrls[0]);if(guideLink)links.append(guideLink);
+  heading.append(links);card.append(heading);
+  if(guidance?.note)card.append(securityText('p','security-guidance-note',guidance.note));
+  const hasWait=models.some(c=>c.lanes.some(securityWaitCurrent));
+  if(!hasWait){
+    const message=data.reason==='loading'?'Checking live waits…':data.reason==='no_public_source'?'No public live wait times':data.available?'Live waits not currently published':'Live waits temporarily unavailable';
+    const status=securityText('div','security-unavailable','');status.setAttribute('role','status');
+    status.append(securityText('strong','',message),securityText('p','',guidance?'Checkpoint guidance is shown below. Confirm your gate and follow airport signs.':'Published checkpoint information is shown below.'));card.append(status);
+  }
+  const types=[...new Set(models.flatMap(c=>c.lanes.map(l=>l.type)))].filter(t=>securityLabels[t]);
+  // Preserve the user's lane preference through outages. Only reset when live types exist.
+  if(types.length&&!types.includes(securityLane))securityLane=types.includes('standard')?'standard':types[0];
+  models=securitySortModels(models,data);
   const options=securityText('div','security-lane-options','');options.setAttribute('role','group');options.setAttribute('aria-label','Security lane');
   for(const type of ['standard','precheck','clear','clear_precheck','combined','priority'].filter(t=>types.includes(t))){
-    const button=securityText('button','security-lane-button',securityLabels[type]);button.type='button';button.setAttribute('aria-pressed',String(type===securityLane));
+    const button=securityText('button','security-lane-button',securityLabels[type]);button.type='button';button.dataset.securityLane=type;button.setAttribute('aria-pressed',String(type===securityLane));
     const logos=type==='precheck'?['precheck']:type==='clear'?['clear']:type==='clear_precheck'?['clear','precheck']:[];
     for(const brand of logos.reverse()){const logo=document.createElement('img');logo.className='security-lane-logo security-logo-'+brand;logo.src='images/'+brand+'.jpg';logo.alt='';logo.width=brand==='precheck'?72:50;logo.height=18;logo.addEventListener('error',()=>{logo.hidden=true;});button.prepend(logo);}
-    button.addEventListener('click',()=>{securityLane=type;renderSecurity(data);});options.append(button);
-  }card.append(options);
+    button.addEventListener('click',()=>{securityLane=type;renderSecurity(data);card.querySelector(`[data-security-lane="${type}"]`)?.focus();});options.append(button);
+  }
+  if(types.length)card.append(options);
   const recommendation=data.recommendations?.find(r=>r.lane===securityLane);
-  if(recommendation){const cp=data.checkpoints.find(c=>c.name===recommendation.checkpoint);
-    if(cp?.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))card.append(securityText('p','security-recommendation',`${recommendation.label}: ${recommendation.checkpoint} · ${recommendation.displayWait}. ${recommendation.note||''}`));}
-  const selected=data.checkpoints.filter(c=>c.lanes.some(l=>l.type===securityLane||l.type==='combined'));
-  const grid=securityText('div','security-checkpoints','');
-  const remaining=securityText('details','security-more','');remaining.append(securityText('summary','',`See all ${selected.length} checkpoints`));
-  const rest=securityText('div','security-checkpoints','');remaining.append(rest);
-  selected.forEach((cp,index)=>{
-    const box=securityText('section','security-checkpoint','');box.append(securityText('h4','',cp.name));
-    if(cp.hours)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} · airport local time`));
-    for(const l of cp.lanes.filter(l=>l.type===securityLane||l.type==='combined')){
-      const line=securityText('div','security-lane-row','');const current=securityWaitCurrent(l);
-      const value=l.status==='closed'?'Closed':current?securityWaitDisplay(l):l.stale?'Wait temporarily unavailable':l.status==='open'?'Open · wait not published':'Wait not published';
-      line.append(securityText('span','security-lane-name',l.label||securityLabels[l.type]),securityText('strong','security-wait'+(l.status==='closed'?' is-closed':''),value));box.append(line);
-      if(l.hours)box.append(securityText('p','security-hours',`${l.hours.display} · airport local time`));
-      if(l.status==='closed'&&l.statusMessage)box.append(securityText('p','security-hours',l.statusMessage));
-      if(l.closingInMinutes!==null&&l.closingInMinutes<=45&&l.status==='open')box.append(securityText('p','security-closing',`Closes in ${l.closingInMinutes} min`));
-      if(current&&l.timestampKind==='source')box.append(securityText('p','security-lane-updated',`Updated ${securityAge(l.updatedAt)}`));
-      if(current&&l.timestampKind!=='source'&&l.sourceUpdatedText)box.append(securityText('p','security-lane-updated',l.sourceUpdatedText));
-      if(l.notes)box.append(securityText('p','security-note',l.notes));
+  if(recommendation){const cp=models.find(c=>c.live&&c.name===recommendation.checkpoint);
+    // Keep the Worker's wait comparison, but never suggest a wrong or gate-dependent entrance.
+    if(cp&&(!guidance||(cp.guidance&&cp.priority!=='other'&&!cp.guidance.conditional))&&cp.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))
+      card.append(securityText('p','security-recommendation',`${recommendation.label}: ${cp.name} · ${recommendation.displayWait}. ${recommendation.note||''}`));
+  }
+  const grid=securityText('div','security-checkpoints',''),estimates=securityText('div','security-checkpoints security-estimates',''),rest=securityText('div','security-checkpoints','');
+  for(const cp of models){
+    const key=(cp.live?'live:':'guide:')+(cp.id||cp.name),box=securityText('section','security-checkpoint security-priority-'+cp.priority,'');
+    const g=cp.guidance,state=securityCheckpointState(cp,data);
+    box.classList.toggle('security-checkpoint-closed',state==='closed');
+    if(g&&!guidance.single&&g.priority!=='other'){
+      const badge=state==='closed'?'Selected lane closed · '+(g.priority==='recommended'?'normally recommended':'alternate'):
+        state==='open'&&g.priority==='alternate'&&!g.conditional?'Open alternate for Frontier':g.badge||(g.priority==='recommended'?'★ Recommended for Frontier':'Alternate for Frontier');
+      box.append(securityText('span','security-priority',badge));
     }
-    (index<4?grid:rest).append(box);
-  });card.append(grid);if(selected.length>4)card.append(remaining);
-  card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'} · Checked ${securityAge(data.fetchedAt)} · Times can change. Confirm the checkpoint serves your gate.`));
+    if(state==='closed')box.append(securityText('p','security-closing',`${securityLabels[securityLane]||'Selected lane'} closed`));
+    box.append(securityText('h4','',g&&(!cp.live||g.name===cp.name)?g.name:cp.name));
+    if(g?.gateLabel)box.append(securityText('p','security-gate-label',g.gateLabel));
+    if(g?.note)box.append(securityText('p','security-note',g.note));
+    if(g){const airlines=securityAirlines(g.airlines,key);if(airlines)box.append(airlines);}
+    if(cp.aggregate)box.append(securityText('p','security-note','Airport-wide or arrival-area information; this is not a wait for the recommended departure checkpoint.'));
+    if(!g&&cp.priority==='other')box.append(securityText('p','security-note','Frontier access has not been confirmed for this checkpoint. Check your gate and airport signs.'));
+    securityLaneRows(box,cp,data);
+    (cp.priority==='other'?rest:cp.aggregate?estimates:grid).append(box);
+  }
+  card.append(grid);
+  if(estimates.childElementCount){card.append(securityText('h4','security-section-label','Airport-published estimates / arrival information'),estimates);}
+  if(rest.childElementCount){const more=securityText('details','security-more','');more.dataset.securityKey='other:'+data.airport;
+    more.append(securityText('summary','',`Other airport checkpoints (${rest.childElementCount})`),rest);card.append(more);}
+  const fetched=securityAge(data.fetchedAt);
+  card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' · Checked '+fetched:''}${guidance?' · Guidance reviewed '+guidance.reviewed:''} · Times and gates can change. Confirm your boarding pass.`));
+  for(const el of card.querySelectorAll('details[data-security-key]'))el.open=open.has(el.dataset.securityKey);
 }
 
 function selectSecurityAirport(airport) {
@@ -4883,9 +6602,10 @@ async function refreshSecurity() {
   if(!securityAirport||!securityActive()||securityController)return;
   const airport=securityAirport,sequence=securitySequence,cached=securityResults.get(airport.code);
   if(cached&&cached.expires>Date.now()){renderSecurity(cached.data);return;}
-  securityHide();
+  renderSecurity({airport:airport.code,available:false,reason:'loading'});
   const controller=new AbortController();securityController=controller;
-  const timeout=setTimeout(()=>controller.abort(),28000);
+  let timedOut=false;
+  const timeout=setTimeout(()=>{timedOut=true;controller.abort();},28000);
   try{
     const url=new URL(securityEndpoint);url.searchParams.set('airport',airport.code);
     const response=await fetch(url,{signal:controller.signal,cache:'no-store'});if(!response.ok)throw new Error('Security source unavailable');
@@ -4895,8 +6615,9 @@ async function refreshSecurity() {
     if(data.available && (!Number.isFinite(expires)||expires<=Date.now()||expires>Date.now()+301000))throw new Error('Expired security response');
     securityResults.set(airport.code,{data,expires:Number.isFinite(expires)?expires:Date.now()+300000});renderSecurity(data);
   }catch(error){
-    if(sequence===securitySequence && error.name!=='AbortError'){
-      securityResults.set(airport.code,{data:{airport:airport.code,available:false},expires:Date.now()+300000});securityHide();
+    if(sequence===securitySequence && securityAirport?.code===airport.code && securityActive() && (error.name!=='AbortError'||timedOut)){
+      const fallback={airport:airport.code,available:false,reason:'source_unavailable'};
+      securityResults.set(airport.code,{data:fallback,expires:Date.now()+300000});renderSecurity(fallback);
     }
   }finally{clearTimeout(timeout);if(securityController===controller)securityController=null;}
 }
