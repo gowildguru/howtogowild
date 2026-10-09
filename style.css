@@ -465,7 +465,7 @@ h3 {
   }
 }
 /* =========================================
-   HOMEPAGE REDESIGN — HERO V2
+   HOMEPAGE REDESIGN â€” HERO V2
    ========================================= */
 
 .hero {
@@ -728,7 +728,7 @@ z-index: 2;
   }
 
 }
-/* Helpful Tools — pill-only treatment */
+/* Helpful Tools â€” pill-only treatment */
 
 .simple-tool-title {
   padding: 9px 18px;
@@ -1441,7 +1441,7 @@ z-index: 2;
   isolation: isolate !important;
 }
 /* =========================================
-   DASHBOARD STAGE 2 — WEATHER
+   DASHBOARD STAGE 2 â€” WEATHER
    GLASS VERSION
    ========================================= */
 
@@ -1893,7 +1893,7 @@ z-index: 2;
 }
 
 /* =========================================
-   DASHBOARD STAGE 3 — GOWILD BOOKING
+   DASHBOARD STAGE 3 â€” GOWILD BOOKING
    ========================================= */
 
 .dashboard-booking {
@@ -2285,7 +2285,7 @@ z-index: 2;
   will-change: transform;
 }
 
-/* Plane 1 — large upper pass */
+/* Plane 1 â€” large upper pass */
 .plane-1 {
   width: 230px;
   top: 10%;
@@ -2296,7 +2296,7 @@ z-index: 2;
     dashboard-plane-right-1 30s linear infinite;
 }
 
-/* Plane 2 — medium, opposite direction */
+/* Plane 2 â€” medium, opposite direction */
 .plane-2 {
   width: 165px;
   top: 38%;
@@ -2307,7 +2307,7 @@ z-index: 2;
     dashboard-plane-left-2 37s linear 7s infinite;
 }
 
-/* Plane 3 — smaller distant climb */
+/* Plane 3 â€” smaller distant climb */
 .plane-3 {
   width: 105px;
   top: 64%;
@@ -2318,7 +2318,7 @@ z-index: 2;
     dashboard-plane-climb 43s linear 14s infinite;
 }
 
-/* Plane 4 — large lower pass */
+/* Plane 4 â€” large lower pass */
 .plane-4 {
   width: 205px;
   top: 82%;
@@ -2465,7 +2465,7 @@ z-index: 2;
     opacity: 0.30;
   }
 }
-/* Digital boarding passes — scoped to the homepage FAQ. */
+/* Digital boarding passes â€” scoped to the homepage FAQ. */
 #faq.gw-faq {
   --ticket-ink: #172c22;
   --ticket-sage: #aac6b4;
@@ -2641,7 +2641,7 @@ z-index: 2;
   background:#66766c;
 }
 #faq .gw-booking-widget .check-toggle input:checked + .toggle-box::after {
-  content:"✓";
+  content:"âœ“";
   position:absolute;
   left:2px;
   top:-3px;
@@ -2830,7 +2830,7 @@ z-index: 2;
 #faq .gw-booking-widget .check-toggle input { position: static; opacity: 1; margin: 0; flex: 0 0 18px; accent-color: #66766c; }
 #faq .gw-booking-widget .toggle-box { display: none; }
 /* =========================================
-   MOBILE HELPFUL TOOLS — EQUAL CARD SIZES
+   MOBILE HELPFUL TOOLS â€” EQUAL CARD SIZES
    ========================================= */
 
 @media (max-width: 600px) {
@@ -3317,7 +3317,7 @@ body.tool-modal-open {
 
 
 /* =========================================
-   FRONTIER CARD ANALYZER — MOBILE
+   FRONTIER CARD ANALYZER â€” MOBILE
    ========================================= */
 
 @media (max-width: 600px) {
@@ -3371,7 +3371,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   MODAL HELPFUL TOOLS — CONSOLIDATED WIDGET STYLES
+   MODAL HELPFUL TOOLS â€” CONSOLIDATED WIDGET STYLES
    Added for tools.js v3
    ========================================= */
 
@@ -3433,7 +3433,7 @@ body.tool-modal-open {
   position:relative;
   flex-shrink:0;}
 .tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box {background:#66766c;}
-.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"✓";
+.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"âœ“";
   position:absolute;
   left:2px;
   top:-3px;
@@ -4067,7 +4067,7 @@ body.tool-modal-open {
 
 
 /* =========================================
-   HELPFUL TOOLS — FOUR-TOOL FINAL LAYOUT
+   HELPFUL TOOLS â€” FOUR-TOOL FINAL LAYOUT
    ========================================= */
 
 .tools-simple-grid {
@@ -4119,7 +4119,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   TOOL MODAL — SHARED POLISH
+   TOOL MODAL â€” SHARED POLISH
    ========================================= */
 
 .tool-modal-content {
@@ -4152,7 +4152,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   BOOKING TIMELINE — MODAL OVERRIDES
+   BOOKING TIMELINE â€” MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .tool-booking-timeline {
@@ -4194,7 +4194,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   ELITE STATUS CALCULATOR — MODAL OVERRIDES
+   ELITE STATUS CALCULATOR â€” MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .f9-status-tool {
@@ -4245,7 +4245,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   AWARD BOOKING CALCULATOR — MODAL OVERRIDES
+   AWARD BOOKING CALCULATOR â€” MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .award-booking-tool {
@@ -4511,7 +4511,7 @@ body.tool-modal-open {
 
 }
 /* =========================================
-   CREDIT CARDS — CAROUSEL
+   CREDIT CARDS â€” CAROUSEL
 ========================================= */
 
 .credit-cards-section {
@@ -5389,7 +5389,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   AIRPORT SCORE — ROUTE SUMMARY
+   AIRPORT SCORE â€” ROUTE SUMMARY
    ===================================================== */
 
 .dashboard-score-value {
@@ -6324,7 +6324,7 @@ body.tool-modal-open {
    WEATHER + BOOKING CALENDAR
    ===================================================== */
 
-.dashboard-middle-grid {
+.dashboard-cards-stack {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
@@ -6340,8 +6340,8 @@ body.tool-modal-open {
    REMOVE OLD TOP MARGINS INSIDE THE NEW GRID
    ===================================================== */
 
-.dashboard-middle-grid .dashboard-weather,
-.dashboard-middle-grid .dashboard-booking-calendar {
+.dashboard-cards-stack .dashboard-weather,
+.dashboard-cards-stack .dashboard-booking-calendar {
   width: 100%;
   max-width: none;
 
@@ -6355,7 +6355,7 @@ body.tool-modal-open {
    FROSTED BOOKING CARD
    ===================================================== */
 
-.dashboard-middle-grid .dashboard-booking-calendar {
+.dashboard-cards-stack .dashboard-booking-calendar {
   display: flex;
   flex-direction: column;
 
@@ -6384,21 +6384,21 @@ body.tool-modal-open {
    BOOKING HEADER ON GLASS
    ===================================================== */
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .dashboard-booking-calendar
 .dashboard-booking-kicker {
   color: rgba(255, 255, 255, 0.80);
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .dashboard-booking-calendar
 .dashboard-booking-heading h3 {
   color: #ffffff;
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .dashboard-booking-calendar
 .dashboard-booking-heading p {
   color: rgba(255, 255, 255, 0.76);
@@ -6409,7 +6409,7 @@ body.tool-modal-open {
    BOOK NOW BUTTON
    ===================================================== */
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .dashboard-booking-calendar
 .dashboard-booking-button {
   border:
@@ -6425,7 +6425,7 @@ body.tool-modal-open {
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .dashboard-booking-calendar
 .dashboard-booking-button:hover {
   background:
@@ -6437,7 +6437,7 @@ body.tool-modal-open {
    BOOKING STATUS BOXES
    ===================================================== */
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-summary-item {
   padding: 10px 11px;
 
@@ -6452,25 +6452,25 @@ body.tool-modal-open {
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-summary-label {
   color: rgba(255, 255, 255, 0.72);
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-summary-item strong {
   color: #ffffff;
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-summary-item > span:last-child {
   color: rgba(255, 255, 255, 0.80);
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-summary-countdown
 .booking-timer {
   color: #ffffff;
@@ -6481,7 +6481,7 @@ body.tool-modal-open {
    SOLID CALENDAR PANEL
    ===================================================== */
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-calendar {
   width: 100%;
   max-width: none;
@@ -6504,47 +6504,47 @@ body.tool-modal-open {
    CALENDAR LEGEND + NOTE ON GLASS
    ===================================================== */
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-calendar-legend > span {
   color: rgba(255, 255, 255, 0.78);
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .booking-legend-x {
   color: #ffffff;
 }
 
 
-.dashboard-middle-grid
+.dashboard-cards-stack
 .dashboard-booking-note {
   color: rgba(255, 255, 255, 0.68);
 }
 
 
 /* =====================================================
-   DESKTOP — MATCH WEATHER + CALENDAR HEIGHTS
+   DESKTOP â€” MATCH WEATHER + CALENDAR HEIGHTS
    ===================================================== */
 
 @media (min-width: 701px) {
 
-  .dashboard-middle-grid {
+  .dashboard-cards-stack {
     grid-template-columns:
       minmax(0, 1fr)
       minmax(0, 1fr);
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-weather,
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-booking-calendar {
     min-height: 430px;
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-weather-content {
     min-height: 430px;
 
@@ -6552,19 +6552,19 @@ body.tool-modal-open {
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-booking-calendar {
     justify-content: flex-start;
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-booking-heading {
     margin-bottom: 12px;
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-booking-summary {
     gap: 7px;
 
@@ -6572,7 +6572,7 @@ body.tool-modal-open {
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .booking-calendar {
     flex: 0 0 auto;
   }
@@ -6586,23 +6586,23 @@ body.tool-modal-open {
 
 @media (max-width: 700px) {
 
-  .dashboard-middle-grid {
+  .dashboard-cards-stack {
     grid-template-columns: 1fr;
 
     gap: 12px;
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-weather,
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-booking-calendar {
     min-height: unset;
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-booking-calendar {
     width: auto;
     max-width: none;
@@ -6723,7 +6723,7 @@ body.tool-modal-open {
   color: #526158;
 }
 /* =====================================================
-   AIRPORT COMMAND CENTER — RADAR + LIVE CAMERA
+   AIRPORT COMMAND CENTER â€” RADAR + LIVE CAMERA
    ===================================================== */
 
 /*
@@ -6804,7 +6804,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   WEATHER RADAR — LEAFLET
+   WEATHER RADAR â€” LEAFLET
    ===================================================== */
 
 .dashboard-radar-map {
@@ -6866,7 +6866,7 @@ body.tool-modal-open {
 }
 
 
-/* Hide zoom buttons — this is a status panel, not a map app. */
+/* Hide zoom buttons â€” this is a status panel, not a map app. */
 
 .dashboard-radar-map
 .leaflet-control-zoom {
@@ -7069,7 +7069,7 @@ body.tool-modal-open {
 
 @media (min-width: 701px) {
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-weather-content {
     display: flex;
 
@@ -7077,9 +7077,9 @@ body.tool-modal-open {
   }
 
 
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-radar,
-  .dashboard-middle-grid
+  .dashboard-cards-stack
   .dashboard-live-cam {
     flex: 0 0 auto;
   }
@@ -7138,7 +7138,7 @@ body.tool-modal-open {
 
 @media (min-width: 701px) {
 
-  .dashboard-middle-grid {
+  .dashboard-cards-stack {
     display: grid !important;
 
     grid-template-columns:
@@ -7151,7 +7151,7 @@ body.tool-modal-open {
   }
 
 
-  .dashboard-middle-grid > .dashboard-weather {
+  .dashboard-cards-stack > .dashboard-weather {
     grid-column: 1;
     grid-row: 1;
 
@@ -7161,7 +7161,7 @@ body.tool-modal-open {
   }
 
 
-  .dashboard-middle-grid > .dashboard-booking-calendar {
+  .dashboard-cards-stack > .dashboard-booking-calendar {
     grid-column: 2;
     grid-row: 1;
 
@@ -7176,7 +7176,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   HELPFUL TOOLS — FLOATING FROSTED TRANSITION
+   HELPFUL TOOLS â€” FLOATING FROSTED TRANSITION
    Original four-tool grid and responsive sizing preserved.
    ===================================================== */
 .tools-section {
@@ -7380,7 +7380,7 @@ body.tool-modal-open {
   min-width: 0;
 }
 /* Compact ID90Travel sponsor pill below the airport command center. */
-.dashboard-middle-grid > .dashboard-ad-slot {
+.dashboard-cards-stack > .dashboard-ad-slot {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -7397,7 +7397,7 @@ body.tool-modal-open {
   transition: border-color .18s ease, box-shadow .18s ease;
 }
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .dashboard-middle-grid > .dashboard-ad-slot {
+  .dashboard-cards-stack > .dashboard-ad-slot {
     background: linear-gradient(115deg, rgba(82, 51, 239, .55), rgba(49, 111, 222, .48) 65%, rgba(48, 173, 207, .42));
     backdrop-filter: blur(14px) saturate(120%);
     -webkit-backdrop-filter: blur(14px) saturate(120%);
@@ -7408,22 +7408,22 @@ body.tool-modal-open {
 .dashboard-ad-label { display: block; margin-bottom: 2px; font-size: 9px; font-weight: 600; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; }
 .dashboard-ad-copy { display: block; font-size: 13px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
 .dashboard-ad-arrow { flex: 0 0 auto; font-size: 20px; line-height: 1; }
-.dashboard-middle-grid > .dashboard-ad-slot:hover { color: #fff; border-color: rgba(230, 237, 255, .7); box-shadow: 0 6px 20px rgba(26, 22, 70, .24), inset 0 1px 0 rgba(255, 255, 255, .22); }
-.dashboard-middle-grid > .dashboard-ad-slot:focus-visible { outline: 3px solid #d8e3ff; outline-offset: 3px; }
+.dashboard-cards-stack > .dashboard-ad-slot:hover { color: #fff; border-color: rgba(230, 237, 255, .7); box-shadow: 0 6px 20px rgba(26, 22, 70, .24), inset 0 1px 0 rgba(255, 255, 255, .22); }
+.dashboard-cards-stack > .dashboard-ad-slot:focus-visible { outline: 3px solid #d8e3ff; outline-offset: 3px; }
 @media (min-width: 701px) {
-  .dashboard-middle-grid > .dashboard-ad-slot { grid-column: 1; grid-row: 2; align-self: end; }
-  .dashboard-middle-grid > .dashboard-booking-calendar { grid-column: 2; grid-row: 1 / span 2; }
+  .dashboard-cards-stack > .dashboard-ad-slot { grid-column: 1; grid-row: 2; align-self: end; }
+  .dashboard-cards-stack > .dashboard-booking-calendar { grid-column: 2; grid-row: 1 / span 2; }
 }
 @media (max-width: 390px) {
-  .dashboard-middle-grid > .dashboard-ad-slot { padding-inline: 12px; gap: 9px; }
+  .dashboard-cards-stack > .dashboard-ad-slot { padding-inline: 12px; gap: 9px; }
   .dashboard-ad-logo { flex-basis: 54px; width: 54px; height: 26px; }
   .dashboard-ad-copy { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dashboard-middle-grid > .dashboard-ad-slot { transition: none; }
+  .dashboard-cards-stack > .dashboard-ad-slot { transition: none; }
 }
 /* Compact ID90Travel sponsor pill below the airport command center. */
-.dashboard-middle-grid > .dashboard-ad-slot {
+.dashboard-cards-stack > .dashboard-ad-slot {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -7440,7 +7440,7 @@ body.tool-modal-open {
   transition: border-color .18s ease, box-shadow .18s ease;
 }
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .dashboard-middle-grid > .dashboard-ad-slot {
+  .dashboard-cards-stack > .dashboard-ad-slot {
     background: linear-gradient(115deg, rgba(82, 51, 239, .55), rgba(49, 111, 222, .48) 65%, rgba(48, 173, 207, .42));
     backdrop-filter: blur(14px) saturate(120%);
     -webkit-backdrop-filter: blur(14px) saturate(120%);
@@ -7451,19 +7451,19 @@ body.tool-modal-open {
 .dashboard-ad-label { display: block; margin-bottom: 2px; font-size: 9px; font-weight: 600; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; }
 .dashboard-ad-copy { display: block; font-size: 13px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
 .dashboard-ad-arrow { flex: 0 0 auto; font-size: 20px; line-height: 1; }
-.dashboard-middle-grid > .dashboard-ad-slot:hover { color: #fff; border-color: rgba(230, 237, 255, .7); box-shadow: 0 6px 20px rgba(26, 22, 70, .24), inset 0 1px 0 rgba(255, 255, 255, .22); }
-.dashboard-middle-grid > .dashboard-ad-slot:focus-visible { outline: 3px solid #d8e3ff; outline-offset: 3px; }
+.dashboard-cards-stack > .dashboard-ad-slot:hover { color: #fff; border-color: rgba(230, 237, 255, .7); box-shadow: 0 6px 20px rgba(26, 22, 70, .24), inset 0 1px 0 rgba(255, 255, 255, .22); }
+.dashboard-cards-stack > .dashboard-ad-slot:focus-visible { outline: 3px solid #d8e3ff; outline-offset: 3px; }
 @media (min-width: 701px) {
-  .dashboard-middle-grid > .dashboard-ad-slot { grid-column: 1; grid-row: 2; align-self: end; }
-  .dashboard-middle-grid > .dashboard-booking-calendar { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; }
+  .dashboard-cards-stack > .dashboard-ad-slot { grid-column: 1; grid-row: 2; align-self: end; }
+  .dashboard-cards-stack > .dashboard-booking-calendar { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; }
 }
 @media (max-width: 390px) {
-  .dashboard-middle-grid > .dashboard-ad-slot { padding-inline: 12px; gap: 9px; }
+  .dashboard-cards-stack > .dashboard-ad-slot { padding-inline: 12px; gap: 9px; }
   .dashboard-ad-logo { flex-basis: 54px; width: 54px; height: 26px; }
   .dashboard-ad-copy { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dashboard-middle-grid > .dashboard-ad-slot { transition: none; }
+  .dashboard-cards-stack > .dashboard-ad-slot { transition: none; }
 }
 /* Faster, more visible star drift behind the credit cards. */
 .credit-cards-section::before {
@@ -7476,7 +7476,7 @@ body.tool-modal-open {
 }
 
 
-/* Airport Command Center — frosted security card beneath the radar. */
+/* Airport Command Center â€” frosted security card beneath the radar. */
 .dashboard-security[hidden]{display:none!important}
 .dashboard-security{width:100%;box-sizing:border-box;margin:12px 0 0;padding:16px;background:rgba(20,34,25,.22);border:1px solid rgba(255,255,255,.20);border-radius:16px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 7px 20px rgba(20,34,25,.10);color:rgba(255,255,255,.95)}
 .security-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
@@ -7582,10 +7582,10 @@ body.tool-modal-open {
 @media(max-width:420px){#airportSecurity .security-heading{flex-wrap:wrap}#airportSecurity .security-source-links{align-items:flex-start;flex-direction:row;flex-wrap:wrap;margin-bottom:12px}#airportSecurity .security-lane-row{flex-wrap:wrap}#airportSecurity .security-wait{text-align:left}}
 
 
-/* BOOKING CALENDAR — SAGE FROSTED GLASS
+/* BOOKING CALENDAR â€” SAGE FROSTED GLASS
    Append at the end of style.css. Date-state rules and layout stay intact. */
 
-.dashboard-middle-grid .dashboard-booking-calendar {
+.dashboard-cards-stack .dashboard-booking-calendar {
   background: #465e4f;
   border-color: rgba(230, 244, 233, .28);
   box-shadow: 0 8px 24px rgba(20, 34, 25, .14),
@@ -7601,7 +7601,7 @@ body.tool-modal-open {
 }
 
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .dashboard-middle-grid .dashboard-booking-calendar {
+  .dashboard-cards-stack .dashboard-booking-calendar {
     background:
       linear-gradient(120deg, rgba(230, 244, 233, .12), rgba(230, 244, 233, .02)),
       rgba(16, 31, 22, .38);
@@ -7644,12 +7644,12 @@ body.tool-modal-open {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
 }
 
-.dashboard-middle-grid .dashboard-booking-calendar .booking-calendar-legend > span,
-.dashboard-middle-grid .dashboard-booking-calendar .dashboard-booking-note {
+.dashboard-cards-stack .dashboard-booking-calendar .booking-calendar-legend > span,
+.dashboard-cards-stack .dashboard-booking-calendar .dashboard-booking-note {
   color: rgba(255, 255, 255, .90);
 }
 /* =========================================
-   BOOKING TIMELINE — CHECKBOX FIX
+   BOOKING TIMELINE â€” CHECKBOX FIX
    Modal + FAQ | Desktop + Mobile
    ========================================= */
 
@@ -7757,13 +7757,13 @@ body.tool-modal-open {
 /* Calendar and collapsible map share the right desktop column. */
 .dashboard-calendar-column { display:flex; flex-direction:column; gap:12px; min-width:0; }
 .dashboard-calendar-column .departure-route-section { margin:0; flex:0 0 auto; background:rgba(53,77,61,.25); box-shadow:0 8px 24px rgba(20,34,25,.10),inset 0 1px 0 rgba(255,255,255,.10); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
-.dashboard-middle-grid .dashboard-calendar-column .dashboard-booking-calendar { min-height:0; height:auto; margin:0; flex:0 0 auto; }
-@media(min-width:701px) { .dashboard-middle-grid > .dashboard-calendar-column { grid-column:2; grid-row:1 / span 2; align-self:start; } }
+.dashboard-cards-stack .dashboard-calendar-column .dashboard-booking-calendar { min-height:0; height:auto; margin:0; flex:0 0 auto; }
+@media(min-width:701px) { .dashboard-cards-stack > .dashboard-calendar-column { grid-column:2; grid-row:1 / span 2; align-self:start; } }
 .route-plane.is-muted { opacity:.16; pointer-events:none; }
 
 /* Align both desktop columns while Departures Map is expanded. */
 @media (min-width: 701px) {
-  .dashboard-middle-grid > .dashboard-calendar-column:has(> #departureRouteCard[open]) {
+  .dashboard-cards-stack > .dashboard-calendar-column:has(> #departureRouteCard[open]) {
     align-self: stretch;
     justify-content: space-between;
   }
@@ -7873,8 +7873,8 @@ body.tool-modal-open {
 #dashboard #airportConditionsCard[open] .dashboard-radar:not([hidden]),
 #dashboard #airportConditionsCard[open] .dashboard-live-cam:not([hidden]) { display:block; }
 @media(min-width:701px) {
-  .dashboard-middle-grid > .dashboard-conditions-column { grid-column:1; grid-row:1; }
-  .dashboard-middle-grid > .dashboard-calendar-column { grid-column:2; grid-row:1 / span 2; }
+  .dashboard-cards-stack > .dashboard-conditions-column { grid-column:1; grid-row:1; }
+  .dashboard-cards-stack > .dashboard-calendar-column { grid-column:2; grid-row:1 / span 2; }
 }
 @media(max-width:650px) {
   #dashboard #airportConditionsCard .dashboard-weather-content { padding:0 14px 14px; }
@@ -7887,23 +7887,23 @@ body.tool-modal-open {
 
 /* One full-width dashboard column on desktop. */
 @media (min-width: 701px) {
-  #dashboard .dashboard-middle-grid {
+  #dashboard .dashboard-cards-stack {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
-  #dashboard .dashboard-middle-grid > .dashboard-conditions-column,
-  #dashboard .dashboard-middle-grid > .dashboard-calendar-column {
+  #dashboard .dashboard-cards-stack > .dashboard-conditions-column,
+  #dashboard .dashboard-cards-stack > .dashboard-calendar-column {
     display: contents;
   }
-  #dashboard .dashboard-middle-grid > .dashboard-ad-slot {
+  #dashboard .dashboard-cards-stack > .dashboard-ad-slot {
     align-self: stretch;
     width: 100%;
     box-sizing: border-box;
   }
-  #dashboard .dashboard-middle-grid .dashboard-weather,
-  #dashboard .dashboard-middle-grid .dashboard-expander {
+  #dashboard .dashboard-cards-stack .dashboard-weather,
+  #dashboard .dashboard-cards-stack .dashboard-expander {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -7993,4 +7993,29 @@ body.tool-modal-open {
   #dashboard .security-conveyor-bag:nth-child(2) { left:38%; }
   #dashboard .security-conveyor-bag:nth-child(3) { left:60%; }
   #dashboard .security-conveyor-bag:nth-child(4) { left:82%; }
+}
+
+/* Dashboard dropdown cards always share one vertical column at every width. */
+#dashboard #dashboardMain #dashboardCardStack {
+  display:flex !important;
+  flex-direction:column !important;
+  flex-wrap:nowrap !important;
+  align-items:stretch !important;
+  grid-template-columns:none !important;
+  columns:auto !important;
+  width:100%;
+  min-width:0;
+}
+#dashboard #dashboardMain #dashboardCardStack > .dashboard-weather,
+#dashboard #dashboardMain #dashboardCardStack > .dashboard-expander,
+#dashboard #dashboardMain #dashboardCardStack > .dashboard-ad-slot {
+  width:100% !important;
+  max-width:none !important;
+  min-width:0;
+  float:none !important;
+  flex:0 0 auto !important;
+  grid-column:auto !important;
+  grid-row:auto !important;
+  box-sizing:border-box;
+  margin-inline:0 !important;
 }
