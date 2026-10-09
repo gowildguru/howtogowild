@@ -4598,6 +4598,92 @@ let departureRouteDestination = '';
 let departureRouteSignature = '';
 let departureRoutePlanes = [];
 
+// Native booking/tracking links and a persistent SVG viewport for each airport/day.
+const departureRouteViews = new Map();
+function departureFlightAwareURL(flight) {
+  const number = String(flight.flightNumber).replace(/^F9\s*/i,'');
+  return /^\d+$/.test(number) ? 'https://www.flightaware.com/live/flight/FFT' + Number(number) : null;
+}
+function departureRouteLink(href, label, className) {
+  return departureRouteSVG('a', {href, target:'_blank', rel:'noopener noreferrer',
+    'aria-label':label, class:className||'route-booking-link'});
+}
+function installDepartureRouteNavigation(svg, host, key) {
+  let view = {...(departureRouteViews.get(key)||{x:0,y:0,width:1000,height:520})};
+  const toolbar = departureText('div','departure-route-map-controls','');
+  toolbar.setAttribute('role','group');toolbar.setAttribute('aria-label','Route map zoom controls');
+  const level = departureText('span','departure-route-zoom-level','');
+  const clamp = () => {
+    view.width = Math.max(1000/6,Math.min(1000,view.width));view.height=view.width*.52;
+    view.x=Math.max(0,Math.min(1000-view.width,view.x));view.y=Math.max(0,Math.min(520-view.height,view.y));
+  };
+  const apply = () => {
+    clamp();svg.setAttribute('viewBox',`${view.x} ${view.y} ${view.width} ${view.height}`);
+    departureRouteViews.set(key,{...view});
+    if(departureRouteViews.size>12)departureRouteViews.delete(departureRouteViews.keys().next().value);
+    level.textContent=Math.round(1000/view.width*100)+'%';
+    minus.disabled=view.width>=1000;plus.disabled=view.width<=1000/6;
+  };
+  const point = (x,y,base=view) => {
+    const rect=svg.getBoundingClientRect();
+    return {x:base.x+(x-rect.left)/rect.width*base.width,y:base.y+(y-rect.top)/rect.height*base.height};
+  };
+  const zoom = (factor,clientX,clientY) => {
+    const rect=svg.getBoundingClientRect();
+    const x=clientX??rect.left+rect.width/2,y=clientY??rect.top+rect.height/2;
+    const anchor=point(x,y),next=Math.max(1000/6,Math.min(1000,view.width/factor));
+    view={x:anchor.x-(x-rect.left)/rect.width*next,y:anchor.y-(y-rect.top)/rect.height*next*.52,width:next,height:next*.52};apply();
+  };
+  const control = (text,label,action) => {const button=departureText('button','departure-route-map-control',text);button.type='button';button.setAttribute('aria-label',label);button.onclick=action;toolbar.append(button);return button;};
+  const minus=control('-','Zoom out',()=>zoom(1/1.35));
+  const plus=control('+','Zoom in',()=>zoom(1.35));
+  control('Reset','Reset map to show all routes',()=>{view={x:0,y:0,width:1000,height:520};apply();});toolbar.append(level);host.append(toolbar);
+  svg.classList.add('route-map-interactive');svg.setAttribute('tabindex','0');svg.setAttribute('role','group');
+  svg.setAttribute('aria-label','Interactive departure routes. Drag to pan, scroll or pinch to zoom. Use arrow keys to pan, plus or minus to zoom, and zero to reset. Destination links open booking; airplane links open FlightAware.');
+  svg.addEventListener('wheel',event=>{event.preventDefault();zoom(Math.exp(-Math.max(-200,Math.min(200,event.deltaY))*.002),event.clientX,event.clientY);},{passive:false});
+  svg.addEventListener('keydown',event=>{
+    if(event.target!==svg)return;
+    if(['+','=','-','0','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))event.preventDefault();else return;
+    if(event.key==='+'||event.key==='=')zoom(1.35);else if(event.key==='-')zoom(1/1.35);
+    else if(event.key==='0'){view={x:0,y:0,width:1000,height:520};apply();}
+    else {view.x+=(event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:0)*view.width*.1;view.y+=(event.key==='ArrowUp'?-1:event.key==='ArrowDown'?1:0)*view.height*.1;apply();}
+  });
+  const pointers=new Map();let gesture=null,suppressClickUntil=0;
+  const begin = () => {
+    const values=[...pointers.values()];
+    gesture=values.length?{view:{...view},points:values.map(p=>({...p})),moved:false}:null;
+  };
+  svg.addEventListener('pointerdown',event=>{if(event.button!==0)return;pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});begin();});
+  svg.addEventListener('pointermove',event=>{
+    if(!pointers.has(event.pointerId)||!gesture)return;
+    pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});const values=[...pointers.values()],start=gesture.points;
+    if(values.length!==start.length){begin();return;}
+    const dx=values[0].x-start[0].x,dy=values[0].y-start[0].y;
+    if(!gesture.moved&&values.length===1&&Math.hypot(dx,dy)<5)return;
+    gesture.moved=true;suppressClickUntil=Date.now()+500;svg.classList.add('is-dragging');
+    try{svg.setPointerCapture(event.pointerId);}catch(_){}
+    event.preventDefault();const rect=svg.getBoundingClientRect(),base=gesture.view;
+    if(values.length>1) {
+      const distance=Math.hypot(values[1].x-values[0].x,values[1].y-values[0].y);
+      const initial=Math.max(1,Math.hypot(start[1].x-start[0].x,start[1].y-start[0].y));
+      const center={x:(values[0].x+values[1].x)/2,y:(values[0].y+values[1].y)/2};
+      const anchor=point((start[0].x+start[1].x)/2,(start[0].y+start[1].y)/2,base);
+      const width=Math.max(1000/6,Math.min(1000,base.width*initial/Math.max(1,distance)));
+      view={x:anchor.x-(center.x-rect.left)/rect.width*width,y:anchor.y-(center.y-rect.top)/rect.height*width*.52,width,height:width*.52};
+    } else view={...base,x:base.x-dx/rect.width*base.width,y:base.y-dy/rect.height*base.height};
+    apply();
+  });
+  const finish = event => {
+    if(!pointers.has(event.pointerId))return;
+    if(gesture?.moved)suppressClickUntil=Date.now()+500;
+    pointers.delete(event.pointerId);try{svg.releasePointerCapture(event.pointerId);}catch(_){}svg.classList.remove('is-dragging');begin();
+  };
+  svg.addEventListener('pointerup',finish);svg.addEventListener('pointercancel',finish);
+  svg.addEventListener('lostpointercapture',event=>{if(pointers.has(event.pointerId))finish(event);});
+  svg.addEventListener('click',event=>{if(Date.now()<suppressClickUntil){event.preventDefault();event.stopImmediatePropagation();}},{capture:true});
+  svg.addEventListener('dragstart',event=>event.preventDefault());apply();
+}
+
 function departureRouteSVG(tag, attributes = {}, text) {
   const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
   for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, String(value));
@@ -4705,6 +4791,7 @@ function renderDepartureRouteMap() {
     button.setAttribute('aria-label', `${label}, ${bookingKey(day)} departures`);
   }
   const focusedDestination = details.contains(document.activeElement) ? document.activeElement.dataset.routeDestination : undefined;
+  const focusedRouteTag = document.activeElement?.tagName;
   host.replaceChildren(); details.replaceChildren(); departureRoutePlanes = [];
   const groups = new Map();
   for (const flight of flights) {
@@ -4723,7 +4810,7 @@ function renderDepartureRouteMap() {
     host.append(departureText('p', 'departure-route-empty', state.missingKeys.has(key) ? 'This day\u2019s schedule is unavailable. Choose another day.'
       : !state.loadedKeys.has(key) && state.loading ? 'Loading this day\u2019s routes\u2026' : flights.length ? 'Coordinates are unavailable for these destinations.' : 'No nonstop departures are listed for this day.'));
   } else {
-    const svg = departureRouteSVG('svg', {viewBox: '0 0 1000 520', role: 'img', 'aria-label': `Scheduled routes from ${airport.code} on ${key}. Choose a destination below to see its flights.`});
+    const svg = departureRouteSVG('svg', {viewBox: '0 0 1000 520', role: 'group', 'aria-label': `Scheduled routes from ${airport.code} on ${key}. Choose a destination below to see its flights.`});
     svg.append(departureRouteSVG('title', {}, `Frontier routes from ${airport.city}`));
     // Mercator projection, fitted to this day's great-circle routes with a minimum context area.
     const mercator = lat => Math.log(Math.tan(Math.PI / 4 + Math.max(-75, Math.min(75, lat)) * Math.PI / 360)) * 180 / Math.PI;
@@ -4763,13 +4850,14 @@ function renderDepartureRouteMap() {
       layers.append(route);
       const hit=departureRouteSVG('path',{d,class:'route-hit'});
       hit.append(departureRouteSVG('title',{},`${target.code} \u00b7 ${target.city} \u00b7 ${groups.get(target.code).length} flights`));
-      hit.onclick=()=>{departureRouteDestination=target.code;renderDepartureRouteMap();}; layers.append(hit);
+      const booking=departureRouteLink(departureBookingURL(airport,{destination:target.code,date}),`Book ${airport.code} to ${target.code} on ${key}, opens in a new tab`);booking.append(hit);layers.append(booking);
     }
     const occupied = [];
     // Place origin first; avoid overlapping airport labels in dense metros.
     for (const target of [airport,...targets]) {
       const [x,y]=project([target.lon,target.lat]), origin=target.code===airport.code;
-      layers.append(departureRouteSVG('circle',{cx:x,cy:y,r:origin?8:4,class:origin?'route-origin':'route-airport'}));
+      const marker=origin?departureRouteSVG('g'):departureRouteLink(departureBookingURL(airport,{destination:target.code,date}),`Book ${airport.code} to ${target.code} on ${key}, opens in a new tab`);
+      layers.append(marker);marker.append(departureRouteSVG('circle',{cx:x,cy:y,r:origin?8:6,class:origin?'route-origin':'route-airport'}));
       let box;
       const options = [[12,-24],[12,8],[-55,-24],[-55,8],[12,-48],[-55,32],[12,32],[-55,-48],[30,-10],[-73,-10]];
       for (const [dx,dy] of options) {
@@ -4779,20 +4867,19 @@ function renderDepartureRouteMap() {
       }
       if (!box) continue; // All destinations remain available as native buttons below.
       occupied.push(box);
-      layers.append(departureRouteSVG('path',{d:`M${x},${y}L${box.x+21.5},${box.y+11}`,class:'route-leader'}));
-      layers.append(departureRouteSVG('rect',{x:box.x,y:box.y,width:43,height:22,rx:6,class:origin?'route-label-box is-origin':'route-label-box'}));
-      layers.append(departureRouteSVG('text',{x:box.x+21.5,y:box.y+15.5,'text-anchor':'middle',class:origin?'route-label is-origin':'route-label'},target.code));
+      marker.append(departureRouteSVG('path',{d:`M${x},${y}L${box.x+21.5},${box.y+11}`,class:'route-leader'}));
+      marker.append(departureRouteSVG('rect',{x:box.x,y:box.y,width:43,height:22,rx:6,class:origin?'route-label-box is-origin':'route-label-box'}));
+      marker.append(departureRouteSVG('text',{x:box.x+21.5,y:box.y+15.5,'text-anchor':'middle',class:origin?'route-label is-origin':'route-label'},target.code));
     }
     if (departureRouteDay === 0) for (const flight of flights) {
       const destination=airportByCode(flight.destination); if(!destination)continue;
-      const node=departureRouteSVG('g',{class:'route-plane'+(departureRouteDestination&&destination.code!==departureRouteDestination?' is-muted':'')}), title=departureRouteSVG('title'); node.append(title);
+      const node=departureRouteSVG('a',{href:departureFlightAwareURL(flight),target:'_blank',rel:'noopener noreferrer','aria-label':`Track Frontier flight ${flight.flightNumber} on FlightAware, opens in a new tab`,class:'route-plane'+(departureRouteDestination&&destination.code!==departureRouteDestination?' is-muted':'')}), title=departureRouteSVG('title'); node.append(title);
       node.append(departureRouteSVG('circle',{r:14,class:'route-plane-halo'}));
       // Plane silhouette points east; rotation follows the route tangent.
       node.append(departureRouteSVG('path',{d:'M12 0 L2 -3 L-4 -11 L-7 -11 L-4 -3 L-10 -3 L-13 -6 L-15 -6 L-13 0 L-15 6 L-13 6 L-10 3 L-4 3 L-7 11 L-4 11 L2 3 Z',class:'route-plane-icon'}));
-      node.onclick=()=>{departureRouteDestination=destination.code;renderDepartureRouteMap();};
       layers.append(node); departureRoutePlanes.push({node,title,flight,destination,project});
     }
-    svg.append(layers); host.append(svg); updateDepartureRoutePlanes(now);
+    svg.append(layers); host.append(svg); installDepartureRouteNavigation(svg,host,airport.code+":"+key); updateDepartureRoutePlanes(now);
   }
   const choices=departureText('div','departure-route-destinations','');
   const all=departureText('button','departure-route-chip','All destinations'); all.type='button';
@@ -4800,10 +4887,10 @@ function renderDepartureRouteMap() {
   all.setAttribute('aria-pressed',String(!departureRouteDestination));
   all.onclick=()=>{departureRouteDestination='';renderDepartureRouteMap();}; choices.append(all);
   for(const code of [...groups.keys()].sort()) {
-    const button=departureText('button','departure-route-chip',`${code} \u00b7 ${groups.get(code).length}`); button.type='button';
+    const button=departureText('a','departure-route-chip',`${code} \u00b7 ${groups.get(code).length}`);button.href=departureBookingURL(airport,{destination:code,date});button.target='_blank';button.rel='noopener noreferrer';
     button.dataset.routeDestination=code;
-    button.setAttribute('aria-pressed',String(code===departureRouteDestination)); button.title=airportByCode(code)?.city||code;
-    button.onclick=()=>{departureRouteDestination=code;renderDepartureRouteMap();}; choices.append(button);
+    button.setAttribute('aria-label',`Book ${airport.code} to ${code} on ${key}, opens in a new tab`);button.title=airportByCode(code)?.city||code;
+    const group=departureText('span','departure-route-destination-choice','');const flightsButton=departureText('button','departure-route-chip departure-route-show-flights','Flights');flightsButton.type='button';flightsButton.setAttribute('aria-label',`Show flights to ${code}`);flightsButton.setAttribute('aria-pressed',String(code===departureRouteDestination));flightsButton.dataset.routeDestination=code;flightsButton.onclick=()=>{departureRouteDestination=code;renderDepartureRouteMap();};group.append(button,flightsButton);choices.append(group);
   }
   if (groups.size) details.append(choices);
   if (departureRouteDestination) {
@@ -4811,15 +4898,15 @@ function renderDepartureRouteMap() {
     details.append(departureText('h5','departure-route-detail-title',`${airport.code} \u2192 ${departureRouteDestination} \u00b7 ${destination?.city || departureRouteDestination}`));
     const list=departureText('div','departure-route-flight-list','');
     for(const flight of groups.get(departureRouteDestination)||[]) {
-      const link=departureText('a','departure-route-flight',''); link.href=departureBookingURL(airport,flight);link.target='_blank';link.rel='noopener noreferrer';
+      const link=departureText('a','departure-route-flight',''); const inAir=departureRouteDay===0&&departureRouteTiming(airport,flight,now).airborne;link.href=inAir?departureFlightAwareURL(flight):departureBookingURL(airport,flight);link.target='_blank';link.rel='noopener noreferrer';
       link.append(departureText('strong','',`F9${flight.flightNumber}`),departureText('span','',`${flight.departureTime} ${airport.code} \u2192 ${flight.arrivalTime || 'Time unavailable'} ${flight.destination}`));
       if(departureRouteDay===0)link.append(departureText('span','departure-route-flight-status',departureRouteTiming(airport,flight,now).label));
-      link.setAttribute('aria-label',`Book F9${flight.flightNumber} to ${flight.destination}, departing ${flight.departureTime}, in a new tab`);list.append(link);
+      link.setAttribute('aria-label',`${inAir?'Track on FlightAware':'Book'} F9${flight.flightNumber} to ${flight.destination}, departing ${flight.departureTime}, in a new tab`);list.append(link);
     }
-    details.append(list,departureText('p','departure-route-local-note','Departure and arrival clocks are local to their respective airports. Select a flight to view booking.'));
+    details.append(list,departureText('p','departure-route-local-note','Departure and arrival clocks are local to their respective airports. Select a flight to book, or track it on FlightAware when it is in the air.'));
   }
   if(focusedDestination !== undefined) {
-    const control=[...details.querySelectorAll('[data-route-destination]')].find(button=>button.dataset.routeDestination===focusedDestination);
+    const control=[...details.querySelectorAll('[data-route-destination]')].find(button=>button.dataset.routeDestination===focusedDestination&&button.tagName===focusedRouteTag);
     control?.focus({preventScroll:true});
   }
 }
