@@ -1,6 +1,6 @@
 /* =====================================================
-   HOW TO GOWILD — DASHBOARD
-   STAGES 1–4
+   HOW TO GOWILD â€” DASHBOARD
+   STAGES 1â€“4
    Airport + Network + City Photo + Weather + GoWild Booking
    ===================================================== */
 
@@ -259,7 +259,7 @@ const cityOverrides = {
   AUS:"Austin",
   BDL:"Hartford",
   BNA:"Nashville",
-  BOG:"Bogotá",
+  BOG:"BogotÃ¡",
   BOI:"Boise",
   BOS:"Boston",
   BQN:"Aguadilla",
@@ -270,7 +270,7 @@ const cityOverrides = {
   CLT:"Charlotte",
   CMH:"Columbus",
   CTG:"Cartagena",
-  CUN:"Cancún",
+  CUN:"CancÃºn",
   CVG:"Cincinnati",
   DCA:"Washington, D.C.",
   DEN:"Denver",
@@ -296,7 +296,7 @@ const cityOverrides = {
   MBJ:"Montego Bay",
   MCI:"Kansas City",
   MCO:"Orlando",
-  MDE:"Medellín",
+  MDE:"MedellÃ­n",
   MDW:"Chicago",
   MEM:"Memphis",
   MIA:"Miami",
@@ -331,7 +331,7 @@ const cityOverrides = {
   SEA:"Seattle",
   SFO:"San Francisco",
   SJC:"San Jose",
-  SJO:"San José",
+  SJO:"San JosÃ©",
   SJU:"San Juan",
   SLC:"Salt Lake City",
   SMF:"Sacramento",
@@ -758,7 +758,7 @@ const wikipediaCityPages = {
 
   AUS:"Austin, Texas",
 
-  BOG:"Bogotá",
+  BOG:"BogotÃ¡",
 
   BQN:"Aguadilla, Puerto Rico",
 
@@ -772,7 +772,7 @@ const wikipediaCityPages = {
 
   CTG:"Cartagena, Colombia",
 
-  CUN:"Cancún",
+  CUN:"CancÃºn",
 
   DCA:"Washington, D.C.",
 
@@ -792,7 +792,7 @@ const wikipediaCityPages = {
 
   MCO:"Orlando, Florida",
 
-  MDE:"Medellín",
+  MDE:"MedellÃ­n",
 
   MDW:"Chicago",
 
@@ -822,7 +822,7 @@ const wikipediaCityPages = {
 
   SJC:"San Jose, California",
 
-  SJO:"San José, Costa Rica",
+  SJO:"San JosÃ©, Costa Rica",
 
   SJU:"San Juan, Puerto Rico",
 
@@ -1081,7 +1081,7 @@ function wikipediaCityPhoto(
           info.url,
 
         credit:
-          `Photo: ${author} · ${license}`,
+          `Photo: ${author} Â· ${license}`,
 
         source:
           info.descriptionurl
@@ -1294,7 +1294,7 @@ function renderAirportSearch() {
     if(airport.code===dashboardSelectedAirport){const badge=document.createElement('span');badge.className='airport-picker-selected';badge.textContent='Selected';button.append(badge);}
     button.onclick=()=>chooseSearchedAirport(airport);results.append(button);
   }
-  document.getElementById('airportSearchStatus').textContent=airportSearchMatches.length?`${airportSearchMatches.length} airport${airportSearchMatches.length===1?'':'s'} · Select one to update your dashboard`:'No matching airports. Try a code or city name.';
+  document.getElementById('airportSearchStatus').textContent=airportSearchMatches.length?`${airportSearchMatches.length} airport${airportSearchMatches.length===1?'':'s'} Â· Select one to update your dashboard`:'No matching airports. Try a code or city name.';
   panel.hidden=false;input.setAttribute('aria-expanded','true');
 }
 function initializeDashboardRefinements() {
@@ -1326,7 +1326,7 @@ function showAirport(
 ) {
   dashboardSelectedAirport = airport.code;
   const searchInput=document.getElementById('airportSearch');
-  if(searchInput)searchInput.placeholder=`Search airports · showing ${airport.code}`;
+  if(searchInput)searchInput.placeholder=`Search airports Â· showing ${airport.code}`;
 
 
   document.getElementById(
@@ -1378,7 +1378,7 @@ function showAirport(
       `${airport.routes === 1
         ? "nonstop destination"
         : "nonstop destinations"
-      } · ` +
+      } Â· ` +
 
       `${connections.size} possible one-stop`;
 
@@ -1501,10 +1501,10 @@ document
   );
 
 /* =====================================================
-   STAGE 2 — WEATHER
+   STAGE 2 â€” WEATHER
    ===================================================== */
 /* =====================================================
-   AIRPORT COMMAND CENTER — LIVE CAMERAS
+   AIRPORT COMMAND CENTER â€” LIVE CAMERAS
    ===================================================== */
 
 const airportLiveCams = {
@@ -1753,7 +1753,7 @@ function updateLiveCam(
 
 
     source.textContent =
-      `${liveCamDefinition.provider} ↗`;
+      `${liveCamDefinition.provider} â†—`;
 
 
     source.hidden =
@@ -1840,7 +1840,7 @@ window
 
 
 /* =====================================================
-   AIRPORT WEATHER RADAR — STATIC MAP + RAINVIEWER
+   AIRPORT WEATHER RADAR â€” STATIC MAP + RAINVIEWER
    Existing HTML IDs and weather activity hooks are retained.
    No Leaflet, basemap tiles, API key, or external CSS required.
    ===================================================== */
@@ -1987,7 +1987,7 @@ function prepareRadarView(airport) {
   map.setAttribute("aria-label", `Weather radar map centered on ${airport.code}`);
   const message = document.createElement("div");
   message.className = "dashboard-radar-static-message";
-  message.textContent = "Loading airport map…";
+  message.textContent = "Loading airport mapâ€¦";
   const marker = document.createElement("div");
   marker.className = "dashboard-radar-airport-marker dashboard-radar-static-marker";
   marker.title = `${airport.code} airport`;
@@ -1996,14 +1996,14 @@ function prepareRadarView(airport) {
   credit.className = "dashboard-radar-static-credit";
   credit.append(
     radarLink("Map: Esri & contributors", "https://goto.arcgisonline.com/maps/World_Street_Map"),
-    document.createTextNode(" · "),
+    document.createTextNode(" Â· "),
     radarLink("Radar: RainViewer", "https://www.rainviewer.com/")
   );
   map.append(message, marker, credit);
   const source = document.getElementById("weatherRadarSource");
   if (source?.tagName === "A") {
     source.href = "https://www.rainviewer.com/";
-    source.textContent = "RainViewer ↗";
+    source.textContent = "RainViewer â†—";
     source.hidden = false;
   }
   radarView = {key, map, message, marker, credit, base: null, overlay: null, framePath: ""};
@@ -2153,7 +2153,7 @@ async function refreshRadar() {
       view.base = image;
       view.message.remove();
       view.credit.firstChild.href = `https://goto.arcgisonline.com/maps/${image.dataset.mapService}`;
-      radarStatus("Map ready · Loading radar…");
+      radarStatus("Map ready Â· Loading radarâ€¦");
     }
     const manifest = await getRadarManifest(controller.signal);
     if (!current()) return;
@@ -2173,14 +2173,14 @@ async function refreshRadar() {
       view.overlay = overlay;
       view.framePath = frame.path;
     }
-    radarStatus(`Latest radar · ${radarTimeLabel(frame, airport)}`);
+    radarStatus(`Latest radar Â· ${radarTimeLabel(frame, airport)}`);
   } catch (error) {
     if (!current()) return;
     controller.abort();
     view.overlay?.remove();
     view.overlay = null;
     view.framePath = "";
-    if (view.base) radarStatus("Radar unavailable · Static map");
+    if (view.base) radarStatus("Radar unavailable Â· Static map");
     else {
       view.message.textContent = "Airport map temporarily unavailable. It will retry automatically.";
       radarStatus("Map unavailable");
@@ -2229,10 +2229,10 @@ function updateRadar(airport) {
   const container = document.getElementById("weatherRadar");
   if (!container) return;
   const label = document.getElementById("weatherRadarLabel");
-  if (label) label.textContent = `RADAR · ${airport.code}`;
+  if (label) label.textContent = `RADAR Â· ${airport.code}`;
   // Clear old airport imagery even if its replacement is currently inactive.
   radarView = prepareRadarView(airport);
-  if (radarView && !radarView.base) radarStatus("Loading airport map…");
+  if (radarView && !radarView.base) radarStatus("Loading airport mapâ€¦");
   syncRadarActivity();
 }
 
@@ -2472,12 +2472,12 @@ function renderFAA(data, airport) {
   hideFAA();
   if (!Array.isArray(data.events) || !data.events.length) return;
   const warning = document.getElementById("airportConditionsWarning");
-  if (warning) { warning.hidden = false; warning.title = data.events.map(event => event.title).join(" · "); }
+  if (warning) { warning.hidden = false; warning.title = data.events.map(event => event.title).join(" Â· "); }
   for (const event of data.events) {
     const item = document.createElement("div");
     item.className = "dashboard-faa-event";
     const heading = document.createElement("strong");
-    heading.textContent = `FAA ${event.title} · ${airport.code}`;
+    heading.textContent = `FAA ${event.title} Â· ${airport.code}`;
     item.append(heading);
     const reason = document.createElement("span");
     reason.textContent = event.reason || "Reason not provided by FAA.";
@@ -2492,12 +2492,12 @@ function renderFAA(data, airport) {
     if (event.trend) details.push(`Trend: ${event.trend}`);
     if (details.length) {
       const detail = document.createElement("span");
-      detail.textContent = details.join(" · ");
+      detail.textContent = details.join(" Â· ");
       item.append(detail);
     }
     if (event.type === "ground_stop" || event.type === "ground_delay") {
       const scope = document.createElement("span");
-      scope.textContent = "Affects covered flights headed to this airport; check your airline for your flight’s status.";
+      scope.textContent = "Affects covered flights headed to this airport; check your airline for your flightâ€™s status.";
       item.append(scope);
     }
     panel.append(item);
@@ -2511,7 +2511,7 @@ function renderFAA(data, airport) {
   link.textContent = "FAA airport status";
   const updated = new Intl.DateTimeFormat("en-US", {timeZone: airport.timezone,
     hour: "numeric", minute: "2-digit", timeZoneName: "short"}).format(new Date(data.updatedAt));
-  foot.append(link, document.createTextNode(` · Updated ${updated}`));
+  foot.append(link, document.createTextNode(` Â· Updated ${updated}`));
   panel.append(foot);
   panel.hidden = false;
   // The active FAA notice takes precedence over the separate forecast assessment.
@@ -2848,8 +2848,43 @@ function analyzeWeather(weather, airport) {
 }
 
 
+/* Weather-dependent line icon in the collapsed conditions header. */
+function setConditionsHeaderIcon(code, isDay) {
+  const icon = document.getElementById('airportConditionsHeaderIcon');
+  if (!icon) return;
+  const cloud = '<path d="M6 17a4 4 0 1 1 1-8 5 5 0 0 1 9 2h1a3 3 0 0 1 0 6H6Z"/>';
+  const sun = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/>';
+  const moon = '<path d="M20 14a8 8 0 0 1-10-10 8.5 8.5 0 1 0 10 10Z"/>';
+  let body = '<circle cx="12" cy="12" r="8"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16h.01"/>';
+  let kind = 'unavailable';
+  const value = code == null ? NaN : Number(code);
+  if ([0,1].includes(value)) { body = isDay ? sun : moon; kind = isDay ? 'sun' : 'moon'; }
+  else if (value === 2) { body = '<path d="M5 2v2M1 7h2M2 3l1.5 1.5"/><circle cx="5" cy="7" r="3"/>' + cloud; kind = 'partly-cloudy'; }
+  else if (value === 3) { body = cloud; kind = 'cloud'; }
+  else if ([45,48].includes(value)) { body = '<path d="M4 6h16M2 10h18M4 14h18M2 18h18"/>'; kind = 'fog'; }
+  else if ([71,73,75,77,85,86].includes(value)) { body = cloud + '<path d="M7 20v3M5.7 20.7l2.6 1.6M8.3 20.7l-2.6 1.6M16 20v3M14.7 20.7l2.6 1.6M17.3 20.7l-2.6 1.6"/>'; kind = 'snow'; }
+  else if ([95,96,99].includes(value)) { body = cloud + '<path d="m12 17-3 3h4l-2 3"/>'; kind = 'storm'; }
+  else if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(value)) { body = cloud + '<path d="m7 20-1 2M12 20l-1 2M17 20l-1 2"/>'; kind = 'rain'; }
+  icon.dataset.weather = kind;
+  icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">' + body + '</svg>';
+}
+
+function initializeSecurityConveyor() {
+  const card = document.getElementById('airportSecurityCard');
+  if (!card) return;
+  let visible = !('IntersectionObserver' in window);
+  const sync = () => card.classList.toggle('is-belt-active', visible && !document.hidden && !card.hidden);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }, {threshold:0});
+    observer.observe(card);
+  }
+  document.addEventListener('visibilitychange', sync);
+  sync();
+}
+
 async function updateWeather(airport) {
   const requestSequence = ++weatherRequestSequence;
+  setConditionsHeaderIcon(null, true);
   clearWeatherVideo();
   weatherVideoFile = null;
   const weatherPhoto = document.getElementById("weatherBackground");
@@ -2890,7 +2925,7 @@ async function updateWeather(airport) {
     ).textContent =
       `${Math.round(
         current.temperature_2m
-      )}°`;
+      )}Â°`;
 
 
     condition.textContent =
@@ -2908,6 +2943,7 @@ async function updateWeather(airport) {
 
 
     setWeatherBackground(current.weather_code, isDay);
+    setConditionsHeaderIcon(current.weather_code, isDay);
 
 
     const analysis =
@@ -3009,7 +3045,7 @@ async function updateWeather(airport) {
     ).textContent =
       message.concern
         ? "!"
-        : "✓";
+        : "âœ“";
 
 
     document.getElementById(
@@ -3060,7 +3096,7 @@ async function updateWeather(airport) {
       document.getElementById(
         "tomorrowSummary"
       ).textContent =
-        `${low}°–${high}° · ${rain}% precip.`;
+        `${low}Â°â€“${high}Â° Â· ${rain}% precip.`;
 
     }
   } catch (error) {
@@ -3083,7 +3119,7 @@ async function updateWeather(airport) {
     document.getElementById(
       "weatherIcon"
     ).textContent =
-      "–";
+      "â€“";
 
     document.getElementById(
       "weatherConcerns"
@@ -3097,7 +3133,7 @@ async function updateWeather(airport) {
    INITIALIZE
    ===================================================== */
 /* =====================================================
-   STAGE 3 — GOWILD BOOKING CALENDAR
+   STAGE 3 â€” GOWILD BOOKING CALENDAR
    ===================================================== */
 const goWildAdvancedBookingEnd = {
   year: 2027,
@@ -3915,7 +3951,7 @@ if (
 
 
       x.textContent =
-        "×";
+        "Ã—";
 
 
       x.setAttribute(
@@ -4120,7 +4156,7 @@ function updateBookingDashboard() {
       standardDate.textContent =
         bookingBlackout(tomorrow)
 
-          ? `${bookingShortLabel(tomorrow)} · Peak Day Charge may apply`
+          ? `${bookingShortLabel(tomorrow)} Â· Peak Day Charge may apply`
 
           : `Departing ${bookingShortLabel(tomorrow)}`;
 
@@ -4481,16 +4517,16 @@ function boardStatusInfo(airport, flight, now = Date.now()) {
   const data = entry?.data;
   const fresh = data && (now - Date.parse(data.fetchedAt) < 180000 || ['departed','arrived','cancelled'].includes(data.statusCode) || data.departure.actual);
   const near = flight.instant <= now + 2 * 3600000;
-  if (!fresh) return near ? {label: entry?.error ? 'Status unavailable' : 'Checking status…', kind: 'live', visible: flight.instant > now - 4 * 3600000 || boardStatusDelayed(entry, flight, airport)} : null;
+  if (!fresh) return near ? {label: entry?.error ? 'Status unavailable' : 'Checking statusâ€¦', kind: 'live', visible: flight.instant > now - 4 * 3600000 || boardStatusDelayed(entry, flight, airport)} : null;
   const actual = boardStatusTime(data.departure.actual, flight, airport);
   const estimate = boardStatusTime(data.departure.estimated, flight, airport);
   const terminal = ['departed', 'arrived'].includes(data.statusCode) || actual !== null;
-  if (terminal) return {label: 'Departed' + (data.departure.actual ? ` · ${data.departure.actual}` : ''), kind: 'departed',
+  if (terminal) return {label: 'Departed' + (data.departure.actual ? ` Â· ${data.departure.actual}` : ''), kind: 'departed',
     visible: now < (actual ?? flight.instant) + 3600000};
   if (data.statusCode === 'cancelled') return {label: 'Cancelled', kind: 'cancelled', visible: flight.instant > now - 3600000};
   if (!near) return null;
   if (data.statusCode === 'delayed' || (estimate !== null && estimate > flight.instant + 60000)) {
-    return {label: data.departure.estimated ? `Delayed · ${data.departure.estimated}` : 'Delayed', kind: 'delayed', visible: true};
+    return {label: data.departure.estimated ? `Delayed Â· ${data.departure.estimated}` : 'Delayed', kind: 'delayed', visible: true};
   }
   const departure = estimate ?? flight.instant;
   if (now >= flight.instant - 20 * 60000) return {label: 'Gate closed', kind: 'gate-closed', visible: true};
@@ -4591,7 +4627,7 @@ function departureRouteTiming(airport, flight, now) {
   if (code === 'cancelled' || code === 'arrived' || data?.arrival?.actual) return {airborne: false, label: code === 'cancelled' ? 'Cancelled' : 'Arrived'};
   const confirmed = !!data?.departure?.actual || ['departed','in_air','in-air','airborne'].includes(code);
   const delayed = boardStatusDelayed(entry, flight, airport);
-  if (delayed && !confirmed) return {airborne: false, label: 'Delayed · awaiting departure'};
+  if (delayed && !confirmed) return {airborne: false, label: 'Delayed Â· awaiting departure'};
   const scheduledArrival = departureRouteArrival(flight.arrivalTime || data?.arrival?.scheduled, flight, destination);
   let start = flight.instant;
   const departureTime = data?.departure?.actual || data?.departure?.estimated;
@@ -4604,7 +4640,7 @@ function departureRouteTiming(airport, flight, now) {
   if (end === null && scheduledArrival !== null) end = scheduledArrival + Math.max(0, start - flight.instant);
   const airborne = end !== null && now >= start && now < end;
   return {start, end, confirmed, airborne, progress: airborne ? (now - start) / (end - start) : 0,
-    label: airborne ? (confirmed ? 'In air · estimated position' : 'Estimated in air · schedule timing')
+    label: airborne ? (confirmed ? 'In air Â· estimated position' : 'Estimated in air Â· schedule timing')
       : now < start ? 'Scheduled' : end === null ? 'Arrival time unavailable' : 'Estimated flight complete'};
 }
 
@@ -4630,7 +4666,7 @@ function updateDepartureRoutePlanes(now = Date.now()) {
     const next = plane.project(departureRoutePoint(departureState.airport, plane.destination, Math.min(1, timing.progress + .001)));
     const rotation = Math.atan2(next[1] - point[1], next[0] - point[0]) * 180 / Math.PI;
     plane.node.setAttribute('transform', `translate(${point[0]} ${point[1]}) rotate(${rotation})`);
-    plane.title.textContent = `F9${plane.flight.flightNumber} to ${plane.destination.code} · ${timing.label} · ${Math.round(timing.progress * 100)}% of estimated flight time`;
+    plane.title.textContent = `F9${plane.flight.flightNumber} to ${plane.destination.code} Â· ${timing.label} Â· ${Math.round(timing.progress * 100)}% of estimated flight time`;
   }
 }
 
@@ -4642,8 +4678,8 @@ function renderDepartureRouteMap() {
   if (!host || !summary || !details || !tabs) return;
   if (!departureState) {
     departureRouteSignature = ''; departureRoutePlanes = [];
-    host.replaceChildren(departureText('p', 'departure-route-empty', 'Loading departure routes…'));
-    details.replaceChildren(); summary.textContent = 'Loading your airport schedule…';
+    host.replaceChildren(departureText('p', 'departure-route-empty', 'Loading departure routesâ€¦'));
+    details.replaceChildren(); summary.textContent = 'Loading your airport scheduleâ€¦';
     return;
   }
   const state = departureState, airport = state.airport, now = Date.now();
@@ -4680,12 +4716,12 @@ function renderDepartureRouteMap() {
   if (departureRouteDestination && !groups.has(departureRouteDestination)) departureRouteDestination = '';
   const label = departureRouteDay < 2 ? ['Today','Tomorrow'][departureRouteDay] : departureRouteWeekdays[date.weekday];
   const airborne = departureRouteDay === 0 ? flights.filter(f => departureRouteTiming(airport,f,now).airborne).length : 0;
-  summary.textContent = `${label} · ${airport.code} · ${flights.length} departure${flights.length === 1 ? '' : 's'} · ${groups.size} destination${groups.size === 1 ? '' : 's'}` +
-    (airborne ? ` · ${airborne} estimated in air` : '') + (state.loading && !state.loadedKeys.has(key) ? ' · Loading…' : state.missingKeys.has(key) ? ' · Schedule unavailable' : '') +
-    (unknown.length ? ` · Map coordinates unavailable for ${unknown.join(', ')}` : '');
+  summary.textContent = `${label} Â· ${airport.code} Â· ${flights.length} departure${flights.length === 1 ? '' : 's'} Â· ${groups.size} destination${groups.size === 1 ? '' : 's'}` +
+    (airborne ? ` Â· ${airborne} estimated in air` : '') + (state.loading && !state.loadedKeys.has(key) ? ' Â· Loadingâ€¦' : state.missingKeys.has(key) ? ' Â· Schedule unavailable' : '') +
+    (unknown.length ? ` Â· Map coordinates unavailable for ${unknown.join(', ')}` : '');
   if (!targets.length) {
-    host.append(departureText('p', 'departure-route-empty', state.missingKeys.has(key) ? 'This day’s schedule is unavailable. Choose another day.'
-      : !state.loadedKeys.has(key) && state.loading ? 'Loading this day’s routes…' : flights.length ? 'Coordinates are unavailable for these destinations.' : 'No nonstop departures are listed for this day.'));
+    host.append(departureText('p', 'departure-route-empty', state.missingKeys.has(key) ? 'This dayâ€™s schedule is unavailable. Choose another day.'
+      : !state.loadedKeys.has(key) && state.loading ? 'Loading this dayâ€™s routesâ€¦' : flights.length ? 'Coordinates are unavailable for these destinations.' : 'No nonstop departures are listed for this day.'));
   } else {
     const svg = departureRouteSVG('svg', {viewBox: '0 0 1000 520', role: 'img', 'aria-label': `Scheduled routes from ${airport.code} on ${key}. Choose a destination below to see its flights.`});
     svg.append(departureRouteSVG('title', {}, `Frontier routes from ${airport.city}`));
@@ -4726,7 +4762,7 @@ function renderDepartureRouteMap() {
       const route=departureRouteSVG('path',{d,class:'route-line'+(selected?' is-selected':'')+(departureRouteDestination&&!selected?' is-muted':'')});
       layers.append(route);
       const hit=departureRouteSVG('path',{d,class:'route-hit'});
-      hit.append(departureRouteSVG('title',{},`${target.code} · ${target.city} · ${groups.get(target.code).length} flights`));
+      hit.append(departureRouteSVG('title',{},`${target.code} Â· ${target.city} Â· ${groups.get(target.code).length} flights`));
       hit.onclick=()=>{departureRouteDestination=target.code;renderDepartureRouteMap();}; layers.append(hit);
     }
     const occupied = [];
@@ -4764,7 +4800,7 @@ function renderDepartureRouteMap() {
   all.setAttribute('aria-pressed',String(!departureRouteDestination));
   all.onclick=()=>{departureRouteDestination='';renderDepartureRouteMap();}; choices.append(all);
   for(const code of [...groups.keys()].sort()) {
-    const button=departureText('button','departure-route-chip',`${code} · ${groups.get(code).length}`); button.type='button';
+    const button=departureText('button','departure-route-chip',`${code} Â· ${groups.get(code).length}`); button.type='button';
     button.dataset.routeDestination=code;
     button.setAttribute('aria-pressed',String(code===departureRouteDestination)); button.title=airportByCode(code)?.city||code;
     button.onclick=()=>{departureRouteDestination=code;renderDepartureRouteMap();}; choices.append(button);
@@ -4772,11 +4808,11 @@ function renderDepartureRouteMap() {
   if (groups.size) details.append(choices);
   if (departureRouteDestination) {
     const destination=airportByCode(departureRouteDestination);
-    details.append(departureText('h5','departure-route-detail-title',`${airport.code} → ${departureRouteDestination} · ${destination?.city || departureRouteDestination}`));
+    details.append(departureText('h5','departure-route-detail-title',`${airport.code} â†’ ${departureRouteDestination} Â· ${destination?.city || departureRouteDestination}`));
     const list=departureText('div','departure-route-flight-list','');
     for(const flight of groups.get(departureRouteDestination)||[]) {
       const link=departureText('a','departure-route-flight',''); link.href=departureBookingURL(airport,flight);link.target='_blank';link.rel='noopener noreferrer';
-      link.append(departureText('strong','',`F9${flight.flightNumber}`),departureText('span','',`${flight.departureTime} ${airport.code} → ${flight.arrivalTime || 'Time unavailable'} ${flight.destination}`));
+      link.append(departureText('strong','',`F9${flight.flightNumber}`),departureText('span','',`${flight.departureTime} ${airport.code} â†’ ${flight.arrivalTime || 'Time unavailable'} ${flight.destination}`));
       if(departureRouteDay===0)link.append(departureText('span','departure-route-flight-status',departureRouteTiming(airport,flight,now).label));
       link.setAttribute('aria-label',`Book F9${flight.flightNumber} to ${flight.destination}, departing ${flight.departureTime}, in a new tab`);list.append(link);
     }
@@ -4834,8 +4870,8 @@ function renderDepartureBoard() {
     destination.append(departureText('strong', '', flight.destination));
     destination.append(departureText('span', '', `- ${airportName}`));
     const departureGate = boardStatuses.get(boardStatusKey(airport, flight))?.data?.departure?.gate;
-    const flightCell = departureText('div', 'departure-flight', `F9${flight.flightNumber}${departureGate ? '·' + departureGate : ''}`);
-    flightCell.title = `Flight F9${flight.flightNumber}${departureGate ? ' · Departure gate ' + departureGate : ''}`;
+    const flightCell = departureText('div', 'departure-flight', `F9${flight.flightNumber}${departureGate ? 'Â·' + departureGate : ''}`);
+    flightCell.title = `Flight F9${flight.flightNumber}${departureGate ? ' Â· Departure gate ' + departureGate : ''}`;
     row.append(destination, flightCell);
     const booking = departureText('div', 'departure-booking', '');
     const live = boardStatusInfo(airport, flight, now);
@@ -4843,12 +4879,12 @@ function renderDepartureBoard() {
     const blackout = bookingBlackout(flight.date);
     const standard = international || now >= bookingMidnight(bookingDate(flight.date, -1), airport.timezone);
     if (live) {
-      const prefix = live.booking ? (blackout ? 'Blackout' : standard ? 'Standard Window' : 'Advanced Booking') + ' · ' : '';
+      const prefix = live.booking ? (blackout ? 'Blackout' : standard ? 'Standard Window' : 'Advanced Booking') + ' Â· ' : '';
       booking.append(departureText('span', 'departure-booking-status ' + live.kind, prefix + live.label));
       if (live.kind === 'boarding' || live.kind === 'gate-closed') booking.title = 'Estimated timing: boarding begins 45 minutes before scheduled departure; gate closes 20 minutes before scheduled departure.';
     } else {
     booking.append(departureText('span', `departure-booking-status ${blackout ? 'blackout' : standard ? 'standard' : 'advance'}`,
-      blackout ? 'Blackout · peak day charge may apply' : standard ? 'Standard Window' : 'Advanced Booking'));
+      blackout ? 'Blackout Â· peak day charge may apply' : standard ? 'Standard Window' : 'Advanced Booking'));
     if (!standard && !blackout) {
       const countdown = departureText('span', 'departure-booking-countdown', '');
       countdown.dataset.opensAt = String(bookingMidnight(bookingDate(flight.date, -1), airport.timezone));
@@ -5070,7 +5106,7 @@ function renderFrontierGateMap() {
       : boarding ? 'Estimated boarding'
       : fresh ? (data.status || 'Scheduled')
       : data ? 'Status stale / unavailable'
-      : 'Scheduled · status unavailable';
+      : 'Scheduled Â· status unavailable';
     models.push({id: `${origin}:${flight.destination}:${bookingKey(flight.date)}:${flight.flightNumber}:${kind}`,
       flight: `F9 ${flight.flightNumber}`, kind, route: kind === 'arrival' ? origin : flight.destination,
       gate: endpoint?.gate || (kind === 'departure' ? flight.gate : flight.arrivalGate), instant,
@@ -6868,14 +6904,14 @@ function securityAirlines(codes,key) {
   summary.append(stack,pill);details.append(summary);wrap.append(details);return wrap;
 }
 function securityLaneRows(box,cp,data) {
-  if(cp.hours?.display)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} · airport local time`));
+  if(cp.hours?.display)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} Â· airport local time`));
   const lanes=cp.lanes.filter(l=>l.type===securityLane||l.type==='combined');
   if(!lanes.length)box.append(securityText('p','security-note',cp.live?`${securityLabels[securityLane]||'Selected lane'} information not published for this checkpoint.`:'Live lane information unavailable.'));
   for(const l of lanes){
     const line=securityText('div','security-lane-row',''),current=securityWaitCurrent(l);
-    const value=l.status==='closed'?'Closed':current?securityWaitDisplay(l):l.stale?'Wait temporarily unavailable':l.status==='open'?'Open · wait not published':'Wait not published';
+    const value=l.status==='closed'?'Closed':current?securityWaitDisplay(l):l.stale?'Wait temporarily unavailable':l.status==='open'?'Open Â· wait not published':'Wait not published';
     line.append(securityText('span','security-lane-name',l.label||securityLabels[l.type]),securityText('strong','security-wait'+(l.status==='closed'?' is-closed':''),value));box.append(line);
-    if(l.hours?.display)box.append(securityText('p','security-hours',`${l.hours.display} · airport local time`));
+    if(l.hours?.display)box.append(securityText('p','security-hours',`${l.hours.display} Â· airport local time`));
     if(l.status==='closed'&&l.statusMessage)box.append(securityText('p','security-hours',l.statusMessage));
     if(Number.isFinite(l.closingInMinutes)&&l.closingInMinutes<=45&&l.status==='open')box.append(securityText('p','security-closing',`Closes in ${l.closingInMinutes} min`));
     if(current&&l.timestampKind==='source')box.append(securityText('p','security-lane-updated',`Updated ${securityAge(l.updatedAt)}`));
@@ -6893,7 +6929,7 @@ function renderSecurityCompactPreview(featured,data) {
     if(!lanes.length) {
       const selected=cp.lanes.filter(l=>l.type===securityLane||l.type==='combined');lanes.push(...selected);
     }
-    if(!lanes.length)row.append(securityText('span','security-compact-wait',data.reason==='loading'?'Checking live waits…':'Live waits unavailable'));
+    if(!lanes.length)row.append(securityText('span','security-compact-wait',data.reason==='loading'?'Checking live waitsâ€¦':'Live waits unavailable'));
     for(const lane of lanes) {
       const schedule=securitySchedule(lane.hours||cp.hours,data.timezone||securityAirport?.timezone);
       const closed=lane.status==='closed'||schedule?.status==='closed';
@@ -6935,13 +6971,13 @@ function renderSecurity(data) {
   const heading=securityText('div','security-heading',''),copy=securityText('div','security-heading-copy','');
   copy.append(securityText('div','dashboard-booking-kicker','AIRPORT SECURITY'),securityText('h3','',`${data.airport} security checkpoints`));heading.append(copy);
   const links=securityText('div','security-source-links','');
-  const source=securityLink('Live airport source ↗',data.source?.url);if(source)links.append(source);
-  const guideLink=securityLink('Airport guidance ↗',guidance?.sourceUrls[0]);if(guideLink)links.append(guideLink);
+  const source=securityLink('Live airport source â†—',data.source?.url);if(source)links.append(source);
+  const guideLink=securityLink('Airport guidance â†—',guidance?.sourceUrls[0]);if(guideLink)links.append(guideLink);
   heading.append(links);card.append(heading);
   if(guidance?.note)card.append(securityText('p','security-guidance-note',guidance.note));
   const hasWait=models.some(c=>c.lanes.some(securityWaitCurrent));
   if(!hasWait){
-    const message=data.reason==='loading'?'Checking live waits…':data.reason==='no_public_source'?'No public live wait times':data.available?'Live waits not currently published':'Live waits temporarily unavailable';
+    const message=data.reason==='loading'?'Checking live waitsâ€¦':data.reason==='no_public_source'?'No public live wait times':data.available?'Live waits not currently published':'Live waits temporarily unavailable';
     const status=securityText('div','security-unavailable','');status.setAttribute('role','status');
     status.append(securityText('strong','',message),securityText('p','',data.failureMessage || (guidance?'Checkpoint guidance is shown below. Confirm your gate and follow airport signs.':'Published checkpoint information is shown below.')));
     if(data.reason==='source_unavailable') {
@@ -6968,7 +7004,7 @@ function renderSecurity(data) {
   if(recommendation){const cp=models.find(c=>c.live&&c.name===recommendation.checkpoint);
     // Keep the Worker's wait comparison, but never suggest a wrong or gate-dependent entrance.
     if(cp&&featured.has(cp)&&(!guidance||(cp.guidance&&cp.priority!=='other'&&!cp.guidance.conditional))&&cp.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))
-      card.append(securityText('p','security-recommendation',`${recommendation.label}: ${cp.name} · ${recommendation.displayWait}. ${recommendation.note||''}`));
+      card.append(securityText('p','security-recommendation',`${recommendation.label}: ${cp.name} Â· ${recommendation.displayWait}. ${recommendation.note||''}`));
   }
   const grid=securityText('div','security-checkpoints',''),estimates=securityText('div','security-checkpoints security-estimates',''),rest=securityText('div','security-checkpoints','');
   for(const cp of models){
@@ -6976,8 +7012,8 @@ function renderSecurity(data) {
     const g=cp.guidance,state=securityCheckpointState(cp,data);
     box.classList.toggle('security-checkpoint-closed',state==='closed');
     if(g&&!guidance.single&&g.priority!=='other'){
-      const badge=state==='closed'?'Selected lane closed · '+(g.priority==='recommended'?'normally recommended':'alternate'):
-        state==='open'&&g.priority==='alternate'&&!g.conditional?'Open alternate for Frontier':g.badge||(g.priority==='recommended'?'★ Recommended for Frontier':'Alternate for Frontier');
+      const badge=state==='closed'?'Selected lane closed Â· '+(g.priority==='recommended'?'normally recommended':'alternate'):
+        state==='open'&&g.priority==='alternate'&&!g.conditional?'Open alternate for Frontier':g.badge||(g.priority==='recommended'?'â˜… Recommended for Frontier':'Alternate for Frontier');
       box.append(securityText('span','security-priority',badge));
     }
     if(state==='closed')box.append(securityText('p','security-closing',`${securityLabels[securityLane]||'Selected lane'} closed`));
@@ -7001,7 +7037,7 @@ function renderSecurity(data) {
     }
   }
   const fetched=securityAge(data.fetchedAt);
-  card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' · Checked '+fetched:''}${guidance?' · Guidance reviewed '+guidance.reviewed:''} · Times and gates can change. Confirm your boarding pass.`));
+  card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' Â· Checked '+fetched:''}${guidance?' Â· Guidance reviewed '+guidance.reviewed:''} Â· Times and gates can change. Confirm your boarding pass.`));
   for(const el of card.querySelectorAll('details[data-security-key]'))el.open=open.has(el.dataset.securityKey);
 }
 
@@ -7045,4 +7081,5 @@ setInterval(()=>{if(securityActive())refreshSecurity();},60000);
 
 initializeDashboardRefinements();
 initializeWeatherEnhancements();
+initializeSecurityConveyor();
 initializeDashboard();
