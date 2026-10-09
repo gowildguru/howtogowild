@@ -3189,6 +3189,9 @@ let bookingTarget = null;
 let bookingDayKey = "";
 let bookingCalendarOffset = 0;
 let bookingCalendarSignature = "";
+let bookingSelectedDate = null;
+let bookingCalendarDepartureSignature = "";
+const bookingDateDepartures = new Map();
 
 
 const bookingPad =
@@ -3617,6 +3620,94 @@ function bookingDepartureDayStatus(
    RENDER BOOKING CALENDAR
    ===================================================== */
 
+// Date selection shows the day's full departure schedule, including departed flights.
+function selectBookingCalendarDate(date) {
+  bookingSelectedDate = {...date};bookingCalendarSignature='';bookingCalendarDepartureSignature='';
+  renderBookingCalendar();renderBookingCalendarDepartures();
+  void loadBookingCalendarDepartures();pollBoardStatuses();
+}
+async function loadBookingCalendarDepartures(retry=false) {
+  if(!bookingAirport||!bookingSelectedDate)return;
+  const airport=bookingAirport,date={...bookingSelectedDate},key=bookingKey(date),cacheKey=airport.code+':'+key;
+  if(departureState?.airport.code===airport.code&&departureState.loadedKeys.has(key)){renderBookingCalendarDepartures();return;}
+  if(retry)bookingDateDepartures.delete(cacheKey);
+  const existing=bookingDateDepartures.get(cacheKey);
+  if(existing?.status==='loading')return;
+  if(existing?.status==='ready'&&existing.expires>Date.now()){renderBookingCalendarDepartures();return;}
+  bookingDateDepartures.set(cacheKey,{status:'loading',flights:existing?.flights||[]});renderBookingCalendarDepartures();
+  const stillSelected=()=>bookingAirport?.code===airport.code&&bookingSelectedDate&&bookingKey(bookingSelectedDate)===key&&!document.hidden;
+  try {
+    // Prefer a published daily file, then progressively fill the shared future-date cache.
+    let data;
+    try {data=await departureAirportSnapshot(airport,date);}
+    catch(_) {data=await lookupAirportDateSchedule(airport,key,result=>{
+      bookingDateDepartures.set(cacheKey,{status:'loading',flights:calendarNormalizeFlights(result.flights,airport,date),progress:result});
+      if(stillSelected())renderBookingCalendarDepartures();
+    },stillSelected);}
+    const flights=calendarNormalizeFlights(data.airports[airport.code]||[],airport,date);
+    const partial=!!data.partial;
+    bookingDateDepartures.set(cacheKey,{status:partial?'partial':'ready',flights,progress:data.progress,
+      fetchedAt:data.fetchedAt,expires:Date.now()+airportScheduleTTL(airport,key),paused:!stillSelected()});
+  } catch(error) {const previous=bookingDateDepartures.get(cacheKey);bookingDateDepartures.set(cacheKey,{status:previous?.flights?.length?'partial':'unavailable',flights:previous?.flights||existing?.flights||[],progress:previous?.progress,error:error.message});}
+  if(bookingDateDepartures.size>32)bookingDateDepartures.delete(bookingDateDepartures.keys().next().value);
+  if(stillSelected())renderBookingCalendarDepartures();
+}
+function calendarNormalizeFlights(source,airport,date) {
+  const seen=new Set(),flights=[];
+  for(const item of source) {
+    const minutes=departureMinutes(item.departureTime);
+    if(minutes===null||!/^[A-Z]{3}$/.test(item.destination)||!/^\d+$/.test(String(item.flightNumber)))continue;
+    const identity=item.destination+':'+item.flightNumber+':'+minutes;if(seen.has(identity))continue;seen.add(identity);
+    flights.push({...item,date,minutes,instant:departureInstant(date,minutes,airport.timezone)});
+  }
+  return flights.sort((a,b)=>a.instant-b.instant||a.destination.localeCompare(b.destination));
+}
+
+function renderBookingCalendarDepartures() {
+  const panel=document.getElementById('bookingCalendarDepartures');if(!panel)return;
+  if(!bookingSelectedDate||!bookingAirport){panel.hidden=true;panel.replaceChildren();bookingCalendarDepartureSignature='';return;}
+  const airport=bookingAirport,date=bookingSelectedDate,key=bookingKey(date),now=Date.now();
+  const board=departureState?.airport.code===airport.code?departureState:null;
+  const cached=bookingDateDepartures.get(airport.code+':'+key);
+  const data=board?.loadedKeys.has(key)?{status:'ready',flights:board.flights.filter(f=>bookingKey(f.date)===key)}:cached||{status:'loading'};
+  const flights=data.flights||[];
+  const signature=JSON.stringify([airport.code,key,data.status,flights.map(f=>[f.destination,f.flightNumber,f.departureTime,f.arrivalTime,boardStatusInfo(airport,f,now)?.label]),data.progress?.checkedRoutes,data.progress?.totalRoutes,data.error]);
+  if(signature===bookingCalendarDepartureSignature)return;bookingCalendarDepartureSignature=signature;
+  const focused=panel.contains(document.activeElement)?document.activeElement.dataset.calendarFlight:undefined;
+  panel.hidden=false;panel.replaceChildren();
+  panel.append(departureText('h4','calendar-departures-title',`${bookingLabel(date)} departures from ${airport.code}`));
+  const message=departureText('p','calendar-departures-summary','');message.setAttribute('role','status');panel.append(message);
+  if(data.status==='loading'){message.textContent=data.progress?`Checking ${data.progress.checkedRoutes} of ${data.progress.totalRoutes} routes. ${flights.length} departures found so far...`:'Loading this day\u2019s departure schedule...';if(!flights.length)return;}
+  if(data.status==='unavailable') {
+    message.textContent='The departure schedule could not be loaded for this date. This does not mean there are no flights. Try again.';
+    if(data.error)message.append(document.createTextNode(' '+data.error));
+    const retry=departureText('button','departure-route-chip','Retry schedule');retry.type='button';retry.dataset.calendarFlight='retry';retry.onclick=()=>{bookingCalendarDepartureSignature='';void loadBookingCalendarDepartures(true);};panel.append(retry);return;
+  }
+  if(data.status==='partial') {
+    message.textContent=`Partial schedule: ${flights.length} departures found. ${data.progress?.checkedRoutes||0} of ${data.progress?.totalRoutes||0} routes checked. ${data.paused?'Select the date again to continue.':'Some route lookups are unavailable; the last cached results may be shown.'}`;
+    if(data.error)message.append(document.createTextNode(' '+data.error));
+    const retry=departureText('button','departure-route-chip','Continue / retry schedule');retry.type='button';retry.onclick=()=>{bookingCalendarDepartureSignature='';void loadBookingCalendarDepartures(true);};panel.append(retry);
+  }
+  if(data.status==='ready')message.textContent=flights.length?`${flights.length} scheduled nonstop departure${flights.length===1?'':'s'}. Times are local to ${airport.code}.`:'No nonstop Frontier departures are listed for this airport in this day\u2019s published schedule.';
+  const list=departureText('div','calendar-departures-list','');
+  for(const flight of flights) {
+    const row=departureText('div','calendar-departure-row','');
+    const destination=airportByCode(flight.destination),live=boardStatusInfo(airport,flight,now);
+    row.append(departureText('strong','calendar-departure-time',flight.departureTime),departureText('span','calendar-departure-destination',`${flight.destination}${destination?.city?' \u00b7 '+destination.city:''}`),departureText('span','calendar-departure-number',`F9${flight.flightNumber}`));
+    if(live?.label)row.append(departureText('span','calendar-departure-status',live.label));
+    const airborne=departureRouteTiming(airport,flight,now).airborne;
+    const link=departureText('a','departure-route-chip calendar-departure-link',airborne?'Track':'Book');
+    link.href=airborne?departureFlightAwareURL(flight):departureBookingURL(airport,flight);link.target='_blank';link.rel='noopener noreferrer';
+    link.dataset.calendarFlight=flight.destination+':'+flight.flightNumber+':'+flight.departureTime;
+    link.setAttribute('aria-label',`${airborne?'Track on FlightAware':'Book'} F9${flight.flightNumber} from ${airport.code} to ${flight.destination} on ${key}, opens in a new tab`);
+    // Completed flights remain in the schedule but cannot be booked retroactively.
+    if(flight.instant>now||airborne)row.append(link);
+    list.append(row);
+  }
+  panel.append(list,departureText('p','calendar-departures-note','Frontier flight-times results cover the routes in this guide and do not guarantee GoWild! availability. Arrival times from flight duration are estimates. Live data is available within two hours of departure.'));
+  if(focused) [...panel.querySelectorAll('[data-calendar-flight]')].find(el=>el.dataset.calendarFlight===focused)?.focus({preventScroll:true});
+}
+
 function renderBookingCalendar() {
 
   if (
@@ -3734,6 +3825,7 @@ function renderBookingCalendar() {
       airport: bookingAirport.code,
       month: `${year}-${month}`,
       today: bookingKey(today),
+      selected: bookingSelectedDate ? bookingKey(bookingSelectedDate) : "",
       loaded:
         departureState?.loadedKeys
           ? [...departureState.loadedKeys]
@@ -3749,6 +3841,7 @@ function renderBookingCalendar() {
   if (
     bookingCalendarSignature === signature
   ) {
+    renderBookingCalendarDepartures();
     return;
   }
 
@@ -3764,6 +3857,7 @@ function renderBookingCalendar() {
     );
 
 
+  const focusedCalendarDate = container.contains(document.activeElement) ? document.activeElement.dataset.calendarDate : undefined;
   container.replaceChildren();
 
 
@@ -3816,12 +3910,16 @@ function renderBookingCalendar() {
 
     const cell =
       document.createElement(
-        "div"
+        "button"
       );
 
 
     cell.className =
       "booking-calendar-day";
+    cell.type="button";cell.dataset.calendarDate=key;
+    cell.setAttribute("aria-pressed",String(!!bookingSelectedDate&&bookingKey(bookingSelectedDate)===key));
+    if(bookingSelectedDate&&bookingKey(bookingSelectedDate)===key)cell.classList.add("is-selected");
+    cell.addEventListener("click",()=>selectBookingCalendarDate(date));
 
 
     const number =
@@ -4043,7 +4141,7 @@ if (
 
     cell.setAttribute(
       "aria-label",
-      `${bookingLabel(date)}${
+      `${bookingLabel(date)}. Show departures${
         descriptions.length
           ? `: ${descriptions.join(", ")}`
           : ""
@@ -4056,6 +4154,9 @@ if (
     );
 
   }
+
+  renderBookingCalendarDepartures();
+  if(focusedCalendarDate)container.querySelector(`[data-calendar-date="${focusedCalendarDate}"]`)?.focus({preventScroll:true});
 
 }
 
@@ -4320,6 +4421,7 @@ function setBookingAirport(
 
   bookingAirport =
     airport;
+  bookingSelectedDate=null;bookingCalendarDepartureSignature="";renderBookingCalendarDepartures();
 
 
   bookingDayKey =
@@ -4442,6 +4544,60 @@ function departureInstant(date, minutes, timezone) {
   return instant;
 }
 
+// Shared D1 schedule data can supplement the dated GitHub schedule files.
+const airportDateScheduleCache = new Map();
+function airportScheduleTTL(airport,key) {
+  const today=bookingKey(bookingDate(bookingParts(new Date(),airport.timezone),0));
+  const days=(Date.parse(key)-Date.parse(today))/86400000;return days<=70?Infinity:21600000;
+}
+async function airportScheduleRequest(airport,key,readOnly=false) {
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),35000);
+  try {
+    const response=await fetch(boardStatusURL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:readOnly?'airport-schedule-cache':'airport-schedule',origin:airport.code,departDate:key}),signal:controller.signal,cache:'no-store'});
+    const data=await response.json();if(!response.ok)throw new Error(data.error||'Airport schedule lookup unavailable.');
+    if(data.schemaVersion!==1||data.airport!==airport.code||data.date!==key||!Array.isArray(data.flights)||typeof data.complete!=='boolean')throw new Error('Invalid airport/date schedule response.');
+    return data;
+  } finally {clearTimeout(timer);}
+}
+function airportScheduleSnapshot(airport,key,data) {
+  return {date:key,airports:{[airport.code]:data.flights},fetchedAt:data.fetchedAt,
+    partial:!data.complete||data.partial,progress:data,source:'shared-airport-date-cache'};
+}
+async function departureAirportSnapshot(airport,date) {
+  const key=bookingKey(date),cacheKey=airport.code+':'+key,local=airportDateScheduleCache.get(cacheKey);
+  const today=bookingKey(bookingDate(bookingParts(new Date(),airport.timezone),0));
+  const days=(Date.parse(key)-Date.parse(today))/86400000;
+  if(local&&!local.partial&&Date.now()-Date.parse(local.fetchedAt)<airportScheduleTTL(airport,key)&&(days>2||(local.airports[airport.code]||[]).every(f=>f.arrivalTime)))return local;
+  const results=await Promise.allSettled([departureSnapshot(key),airportScheduleRequest(airport,key,true)]);
+  const published=results[0].status==='fulfilled'?results[0].value:null;
+  const shared=results[1].status==='fulfilled'?results[1].value:null;
+  if(shared?.available&&shared.complete&&!shared.partial&&!shared.refreshNeeded) {
+    const snapshot=airportScheduleSnapshot(airport,key,shared);
+    const publishedFlights=new Map((published?.airports?.[airport.code]||[]).map(f=>[f.destination+':'+Number(f.flightNumber),f]));
+    snapshot.airports[airport.code]=snapshot.airports[airport.code].map(f=>{const extra=publishedFlights.get(f.destination+':'+Number(f.flightNumber));return extra?{...extra,...f,arrivalTime:f.arrivalTime||extra.arrivalTime||null,duration:f.duration||extra.duration||null}:f;});
+    airportDateScheduleCache.set(cacheKey,snapshot);return snapshot;
+  }
+  if(published)return published;
+  // A clicked date completes missing routes; a partial cache must not masquerade as a full day.
+  throw new Error('No complete published schedule for this airport/date.');
+}
+async function lookupAirportDateSchedule(airport,key,onProgress,shouldContinue=()=>true) {
+  let latest;
+  for(let step=0;step<32;step++) {
+    latest=await airportScheduleRequest(airport,key);
+    if(latest.reason==='past_schedule_unavailable')throw new Error('There is no saved departure schedule for this past date.');
+    onProgress?.(latest);
+    if(latest.complete||!shouldContinue()) {
+      const snapshot=airportScheduleSnapshot(airport,key,latest);
+      if(!snapshot.partial)airportDateScheduleCache.set(airport.code+':'+key,snapshot);
+      return snapshot;
+    }
+    await new Promise(resolve=>setTimeout(resolve,Math.min(2000,Math.max(300,latest.retryAfterMs||300))));
+  }
+  return airportScheduleSnapshot(airport,key,latest);
+}
+
 async function departureSnapshot(key) {
   if (!departureCache.has(key)) {
     const pending = (async () => {
@@ -4541,7 +4697,7 @@ function boardFlightVisible(airport, flight, now) {
 }
 
 function boardStatusLiveActive() {
-  return !document.hidden && ['departureBoardCard','denGateMap','departureRouteCard'].some(id=>{
+  return !document.hidden && ['departureBoardCard','denGateMap','departureRouteCard',...(bookingSelectedDate&&departureState?.airport&&bookingKey(bookingSelectedDate)===bookingKey(bookingDate(bookingParts(new Date(),departureState.airport.timezone),0))?['bookingCalendarCard']:[])].some(id=>{
     const card=document.getElementById(id);return card && card.open && !card.hidden;
   });
 }
@@ -4710,7 +4866,7 @@ function departureRouteTiming(airport, flight, now) {
   const entry = boardStatuses.get(boardStatusKey(airport, flight));
   const data = entry?.data;
   const code = String(data?.statusCode || '').toLowerCase();
-  if (code === 'cancelled' || code === 'arrived' || data?.arrival?.actual) return {airborne: false, label: code === 'cancelled' ? 'Cancelled' : 'Arrived'};
+  if (code === 'cancelled' || code === 'arrived' || data?.arrival?.actual) return {airborne: false, completed: true, label: code === 'cancelled' ? 'Cancelled' : 'Arrived'};
   const confirmed = !!data?.departure?.actual || ['departed','in_air','in-air','airborne'].includes(code);
   const delayed = boardStatusDelayed(entry, flight, airport);
   if (delayed && !confirmed) return {airborne: false, label: 'Delayed \u00b7 awaiting departure'};
@@ -4725,7 +4881,7 @@ function departureRouteTiming(airport, flight, now) {
   let end = departureRouteArrival(data?.arrival?.estimated, flight, destination, start);
   if (end === null && scheduledArrival !== null) end = scheduledArrival + Math.max(0, start - flight.instant);
   const airborne = end !== null && now >= start && now < end;
-  return {start, end, confirmed, airborne, progress: airborne ? (now - start) / (end - start) : 0,
+  return {start, end, confirmed, airborne, completed: end !== null && now >= end, progress: airborne ? (now - start) / (end - start) : 0,
     label: airborne ? (confirmed ? 'In air \u00b7 estimated position' : 'Estimated in air \u00b7 schedule timing')
       : now < start ? 'Scheduled' : end === null ? 'Arrival time unavailable' : 'Estimated flight complete'};
 }
@@ -4771,7 +4927,7 @@ function renderDepartureRouteMap() {
   const state = departureState, airport = state.airport, now = Date.now();
   const today = bookingDate(bookingParts(new Date(now), airport.timezone), 0);
   const date = bookingDate(today, departureRouteDay), key = bookingKey(date);
-  const flights = state.flights.filter(flight => bookingKey(flight.date) === key);
+  const flights = state.flights.filter(flight => bookingKey(flight.date) === key && !departureRouteTiming(airport, flight, now).completed);
   const signature = JSON.stringify([airport.code, key, state.loading, [...state.loadedKeys], [...state.missingKeys], departureRouteDestination,
     flights.map(f => [f.destination, f.flightNumber, f.instant, f.arrivalTime, boardStatuses.get(boardStatusKey(airport,f))?.data,
       departureRouteTiming(airport,f,now).label])]);
@@ -4808,7 +4964,7 @@ function renderDepartureRouteMap() {
     (unknown.length ? ` \u00b7 Map coordinates unavailable for ${unknown.join(', ')}` : '');
   if (!targets.length) {
     host.append(departureText('p', 'departure-route-empty', state.missingKeys.has(key) ? 'This day\u2019s schedule is unavailable. Choose another day.'
-      : !state.loadedKeys.has(key) && state.loading ? 'Loading this day\u2019s routes\u2026' : flights.length ? 'Coordinates are unavailable for these destinations.' : 'No nonstop departures are listed for this day.'));
+      : !state.loadedKeys.has(key) && state.loading ? 'Loading this day\u2019s routes\u2026' : flights.length ? 'Coordinates are unavailable for these destinations.' : 'No upcoming or in-flight nonstop departures are listed for this day.'));
   } else {
     const svg = departureRouteSVG('svg', {viewBox: '0 0 1000 520', role: 'group', 'aria-label': `Scheduled routes from ${airport.code} on ${key}. Choose a destination below to see its flights.`});
     svg.append(departureRouteSVG('title', {}, `Frontier routes from ${airport.city}`));
@@ -4887,10 +5043,10 @@ function renderDepartureRouteMap() {
   all.setAttribute('aria-pressed',String(!departureRouteDestination));
   all.onclick=()=>{departureRouteDestination='';renderDepartureRouteMap();}; choices.append(all);
   for(const code of [...groups.keys()].sort()) {
-    const button=departureText('a','departure-route-chip',`${code} \u00b7 ${groups.get(code).length}`);button.href=departureBookingURL(airport,{destination:code,date});button.target='_blank';button.rel='noopener noreferrer';
+    const button=departureText('button','departure-route-chip',`${airportByCode(code)?.city || code} (${code}) \u00b7 ${groups.get(code).length}`);button.type='button';
     button.dataset.routeDestination=code;
-    button.setAttribute('aria-label',`Book ${airport.code} to ${code} on ${key}, opens in a new tab`);button.title=airportByCode(code)?.city||code;
-    const group=departureText('span','departure-route-destination-choice','');const flightsButton=departureText('button','departure-route-chip departure-route-show-flights','Flights');flightsButton.type='button';flightsButton.setAttribute('aria-label',`Show flights to ${code}`);flightsButton.setAttribute('aria-pressed',String(code===departureRouteDestination));flightsButton.dataset.routeDestination=code;flightsButton.onclick=()=>{departureRouteDestination=code;renderDepartureRouteMap();};group.append(button,flightsButton);choices.append(group);
+    button.setAttribute('aria-label',`Show flights to ${code}`);button.setAttribute('aria-pressed',String(code===departureRouteDestination));button.title=airportByCode(code)?.city||code;
+    button.onclick=()=>{departureRouteDestination=code;renderDepartureRouteMap();};choices.append(button);
   }
   if (groups.size) details.append(choices);
   if (departureRouteDestination) {
@@ -4913,6 +5069,7 @@ function renderDepartureRouteMap() {
 
 
 function renderDepartureBoard() {
+  renderBookingCalendarDepartures();
   renderDepartureRouteMap();
   renderFrontierGateMap();
   if (!departureState) return;
@@ -5025,7 +5182,7 @@ async function loadDepartureBoard(airport) {
     departureState = state;
     await Promise.allSettled(days.map(async day => {
       try {
-        const data = await departureSnapshot(bookingKey(day.date));
+        const data = await departureAirportSnapshot(airport,day.date);
         loadedKeys.add(bookingKey(day.date));
         if (request !== departureRequest) return;
         state.snapshots.set(bookingKey(day.date), data);
@@ -7198,6 +7355,7 @@ if('IntersectionObserver' in window){const target=document.getElementById('dashb
 }}
 setInterval(()=>{if(securityActive())refreshSecurity();},60000);
 
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&bookingSelectedDate)void loadBookingCalendarDepartures();});
 initializeDashboardRefinements();
 initializeWeatherEnhancements();
 initializeSecurityConveyor();
