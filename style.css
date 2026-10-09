@@ -465,7 +465,7 @@ h3 {
   }
 }
 /* =========================================
-   HOMEPAGE REDESIGN â€” HERO V2
+   HOMEPAGE REDESIGN — HERO V2
    ========================================= */
 
 .hero {
@@ -728,7 +728,7 @@ z-index: 2;
   }
 
 }
-/* Helpful Tools â€” pill-only treatment */
+/* Helpful Tools — pill-only treatment */
 
 .simple-tool-title {
   padding: 9px 18px;
@@ -1441,7 +1441,7 @@ z-index: 2;
   isolation: isolate !important;
 }
 /* =========================================
-   DASHBOARD STAGE 2 â€” WEATHER
+   DASHBOARD STAGE 2 — WEATHER
    GLASS VERSION
    ========================================= */
 
@@ -1893,7 +1893,7 @@ z-index: 2;
 }
 
 /* =========================================
-   DASHBOARD STAGE 3 â€” GOWILD BOOKING
+   DASHBOARD STAGE 3 — GOWILD BOOKING
    ========================================= */
 
 .dashboard-booking {
@@ -2285,7 +2285,7 @@ z-index: 2;
   will-change: transform;
 }
 
-/* Plane 1 â€” large upper pass */
+/* Plane 1 — large upper pass */
 .plane-1 {
   width: 230px;
   top: 10%;
@@ -2296,7 +2296,7 @@ z-index: 2;
     dashboard-plane-right-1 30s linear infinite;
 }
 
-/* Plane 2 â€” medium, opposite direction */
+/* Plane 2 — medium, opposite direction */
 .plane-2 {
   width: 165px;
   top: 38%;
@@ -2307,7 +2307,7 @@ z-index: 2;
     dashboard-plane-left-2 37s linear 7s infinite;
 }
 
-/* Plane 3 â€” smaller distant climb */
+/* Plane 3 — smaller distant climb */
 .plane-3 {
   width: 105px;
   top: 64%;
@@ -2318,7 +2318,7 @@ z-index: 2;
     dashboard-plane-climb 43s linear 14s infinite;
 }
 
-/* Plane 4 â€” large lower pass */
+/* Plane 4 — large lower pass */
 .plane-4 {
   width: 205px;
   top: 82%;
@@ -2465,7 +2465,7 @@ z-index: 2;
     opacity: 0.30;
   }
 }
-/* Digital boarding passes â€” scoped to the homepage FAQ. */
+/* Digital boarding passes — scoped to the homepage FAQ. */
 #faq.gw-faq {
   --ticket-ink: #172c22;
   --ticket-sage: #aac6b4;
@@ -2641,7 +2641,7 @@ z-index: 2;
   background:#66766c;
 }
 #faq .gw-booking-widget .check-toggle input:checked + .toggle-box::after {
-  content:"âœ“";
+  content:"✓";
   position:absolute;
   left:2px;
   top:-3px;
@@ -2830,7 +2830,7 @@ z-index: 2;
 #faq .gw-booking-widget .check-toggle input { position: static; opacity: 1; margin: 0; flex: 0 0 18px; accent-color: #66766c; }
 #faq .gw-booking-widget .toggle-box { display: none; }
 /* =========================================
-   MOBILE HELPFUL TOOLS â€” EQUAL CARD SIZES
+   MOBILE HELPFUL TOOLS — EQUAL CARD SIZES
    ========================================= */
 
 @media (max-width: 600px) {
@@ -3317,7 +3317,7 @@ body.tool-modal-open {
 
 
 /* =========================================
-   FRONTIER CARD ANALYZER â€” MOBILE
+   FRONTIER CARD ANALYZER — MOBILE
    ========================================= */
 
 @media (max-width: 600px) {
@@ -3371,7 +3371,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   MODAL HELPFUL TOOLS â€” CONSOLIDATED WIDGET STYLES
+   MODAL HELPFUL TOOLS — CONSOLIDATED WIDGET STYLES
    Added for tools.js v3
    ========================================= */
 
@@ -3433,7 +3433,7 @@ body.tool-modal-open {
   position:relative;
   flex-shrink:0;}
 .tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box {background:#66766c;}
-.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"âœ“";
+.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"✓";
   position:absolute;
   left:2px;
   top:-3px;
@@ -4067,7 +4067,7 @@ body.tool-modal-open {
 
 
 /* =========================================
-   HELPFUL TOOLS â€” FOUR-TOOL FINAL LAYOUT
+   HELPFUL TOOLS — FOUR-TOOL FINAL LAYOUT
    ========================================= */
 
 .tools-simple-grid {
@@ -4119,7 +4119,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   TOOL MODAL â€” SHARED POLISH
+   TOOL MODAL — SHARED POLISH
    ========================================= */
 
 .tool-modal-content {
@@ -4152,7 +4152,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   BOOKING TIMELINE â€” MODAL OVERRIDES
+   BOOKING TIMELINE — MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .tool-booking-timeline {
@@ -4194,7 +4194,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   ELITE STATUS CALCULATOR â€” MODAL OVERRIDES
+   ELITE STATUS CALCULATOR — MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .f9-status-tool {
@@ -4245,7 +4245,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   AWARD BOOKING CALCULATOR â€” MODAL OVERRIDES
+   AWARD BOOKING CALCULATOR — MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .award-booking-tool {
@@ -4511,7 +4511,7 @@ body.tool-modal-open {
 
 }
 /* =========================================
-   CREDIT CARDS â€” CAROUSEL
+   CREDIT CARDS — CAROUSEL
 ========================================= */
 
 .credit-cards-section {
@@ -5389,7 +5389,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   AIRPORT SCORE â€” ROUTE SUMMARY
+   AIRPORT SCORE — ROUTE SUMMARY
    ===================================================== */
 
 .dashboard-score-value {
@@ -6523,7 +6523,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   DESKTOP â€” MATCH WEATHER + CALENDAR HEIGHTS
+   DESKTOP — MATCH WEATHER + CALENDAR HEIGHTS
    ===================================================== */
 
 @media (min-width: 701px) {
@@ -6723,7 +6723,7 @@ body.tool-modal-open {
   color: #526158;
 }
 /* =====================================================
-   AIRPORT COMMAND CENTER â€” RADAR + LIVE CAMERA
+   AIRPORT COMMAND CENTER — RADAR + LIVE CAMERA
    ===================================================== */
 
 /*
@@ -6804,7 +6804,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   WEATHER RADAR â€” LEAFLET
+   WEATHER RADAR — LEAFLET
    ===================================================== */
 
 .dashboard-radar-map {
@@ -6866,7 +6866,7 @@ body.tool-modal-open {
 }
 
 
-/* Hide zoom buttons â€” this is a status panel, not a map app. */
+/* Hide zoom buttons — this is a status panel, not a map app. */
 
 .dashboard-radar-map
 .leaflet-control-zoom {
@@ -7176,7 +7176,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   HELPFUL TOOLS â€” FLOATING FROSTED TRANSITION
+   HELPFUL TOOLS — FLOATING FROSTED TRANSITION
    Original four-tool grid and responsive sizing preserved.
    ===================================================== */
 .tools-section {
@@ -7476,7 +7476,7 @@ body.tool-modal-open {
 }
 
 
-/* Airport Command Center â€” frosted security card beneath the radar. */
+/* Airport Command Center — frosted security card beneath the radar. */
 .dashboard-security[hidden]{display:none!important}
 .dashboard-security{width:100%;box-sizing:border-box;margin:12px 0 0;padding:16px;background:rgba(20,34,25,.22);border:1px solid rgba(255,255,255,.20);border-radius:16px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 7px 20px rgba(20,34,25,.10);color:rgba(255,255,255,.95)}
 .security-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
@@ -7540,8 +7540,8 @@ body.tool-modal-open {
 #airportSecurity .security-airline img{display:block;width:38px;height:26px;object-fit:contain;flex:none}
 #airportSecurity .security-airline img[hidden]{display:none}
 #airportSecurity .security-airline-details summary{display:flex;align-items:center;gap:7px;width:fit-content;max-width:100%;cursor:pointer;font-size:11px;line-height:1.5;color:#fff;flex-wrap:wrap}
-#airportSecurity .security-airline-details summary::after{content:'â–¾';font-size:12px}
-#airportSecurity .security-airline-details[open] summary::after{content:'â–´'}
+#airportSecurity .security-airline-details summary::after{content:'\25be';font-size:12px}
+#airportSecurity .security-airline-details[open] summary::after{content:'\25b4'}
 #airportSecurity .security-airline-details summary::-webkit-details-marker{display:none}
 #airportSecurity .security-airline-details summary:focus-visible{outline:3px solid #fff;outline-offset:4px;border-radius:3px}
 #airportSecurity .security-airline-list{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px}
@@ -7574,15 +7574,15 @@ body.tool-modal-open {
 #airportSecurity .security-airline-list .security-airline{margin-left:-9px}
 #airportSecurity .security-airline-list .security-airline:hover{z-index:1}
 #airportSecurity .security-airline-pill{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:none;min-width:35px;padding:4px 8px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.12);font-size:11px;font-weight:700;line-height:1.4}
-#airportSecurity .security-airline-pill::after{content:'â–¾';font-size:10px}
-#airportSecurity .security-airline-details[open] .security-airline-pill::after{content:'â–´'}
+#airportSecurity .security-airline-pill::after{content:'\25be';font-size:10px}
+#airportSecurity .security-airline-details[open] .security-airline-pill::after{content:'\25b4'}
 #airportSecurity .security-airline-details summary:hover .security-airline-pill{background:rgba(255,255,255,.22)}
 #airportSecurity .security-section-label{margin:16px 0 9px;font-size:12px;line-height:1.5;color:rgba(255,255,255,.96)}
 #airportSecurity .security-more>summary{line-height:1.6}
 @media(max-width:420px){#airportSecurity .security-heading{flex-wrap:wrap}#airportSecurity .security-source-links{align-items:flex-start;flex-direction:row;flex-wrap:wrap;margin-bottom:12px}#airportSecurity .security-lane-row{flex-wrap:wrap}#airportSecurity .security-wait{text-align:left}}
 
 
-/* BOOKING CALENDAR â€” SAGE FROSTED GLASS
+/* BOOKING CALENDAR — SAGE FROSTED GLASS
    Append at the end of style.css. Date-state rules and layout stay intact. */
 
 .dashboard-middle-grid .dashboard-booking-calendar {
@@ -7649,7 +7649,7 @@ body.tool-modal-open {
   color: rgba(255, 255, 255, .90);
 }
 /* =========================================
-   BOOKING TIMELINE â€” CHECKBOX FIX
+   BOOKING TIMELINE — CHECKBOX FIX
    Modal + FAQ | Desktop + Mobile
    ========================================= */
 
