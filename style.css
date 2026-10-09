@@ -7858,3 +7858,35 @@ body.tool-modal-open {
   transform: translate(-50%, -50%);
   flex: none;
 }
+
+/* Compact conditions/security column and collapsible booking calendar. */
+.dashboard-conditions-column { display:flex; flex-direction:column; gap:12px; min-width:0; }
+#dashboard .dashboard-conditions-column .dashboard-weather { min-height:0; height:auto; border-radius:18px; }
+#dashboard #airportConditionsCard { position:relative; z-index:2; border:0; border-radius:inherit; background:transparent; box-shadow:none; -webkit-backdrop-filter:none; backdrop-filter:none; }
+#dashboard #airportConditionsCard .dashboard-weather-content { min-height:0; padding:0 18px 18px; gap:14px; }
+#dashboard #airportConditionsCard .dashboard-expander-header { align-items:flex-start; }
+#dashboard #airportConditionsCard .dashboard-expander-icon { align-self:flex-start; }
+#dashboard #airportConditionsCard .dashboard-expander-action { margin-top:9px; }
+#dashboard .airport-conditions-preview { display:flex; align-items:center; flex-wrap:wrap; gap:5px 12px; margin-top:12px; font-size:13px; line-height:1.5; color:#fff; }
+#dashboard .airport-conditions-temperature { font-size:24px; font-weight:700; line-height:1; }
+#dashboard .airport-conditions-wind { font-size:12px; }
+#dashboard .airport-conditions-warning { display:inline-flex; align-items:center; gap:6px; margin-top:8px; color:#ffe5a0; font-size:12px; font-weight:700; }
+#dashboard .airport-conditions-warning[hidden] { display:none; }
+#dashboard .airport-conditions-warning svg { width:18px; height:18px; flex:none; }
+#dashboard #airportSecurityCard[hidden] { display:none; }
+#dashboard #airportSecurityCard #airportSecurity { margin:0; padding:0; background:transparent; border:0; box-shadow:none; -webkit-backdrop-filter:none; backdrop-filter:none; }
+#dashboard .dashboard-calendar-column #bookingCalendarCard { display:block; padding:0; min-height:0; }
+#dashboard #airportConditionsCard[open] .dashboard-radar:not([hidden]),
+#dashboard #airportConditionsCard[open] .dashboard-live-cam:not([hidden]) { display:block; }
+@media(min-width:701px) {
+  .dashboard-middle-grid > .dashboard-conditions-column { grid-column:1; grid-row:1; }
+  .dashboard-middle-grid > .dashboard-calendar-column { grid-column:2; grid-row:1 / span 2; }
+}
+@media(max-width:650px) {
+  #dashboard #airportConditionsCard .dashboard-weather-content { padding:0 14px 14px; }
+  #dashboard .airport-conditions-preview { gap:5px 9px; font-size:12px; }
+}
+
+#dashboard .security-compact-row { display:flex; flex-wrap:wrap; gap:3px 12px; margin-top:6px; }
+#dashboard .security-compact-checkpoint { flex-basis:100%; font-size:12px; color:#fff; }
+#dashboard .security-compact-wait { font-size:12px; color:rgba(255,255,255,.9); }
