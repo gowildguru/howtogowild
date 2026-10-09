@@ -465,7 +465,7 @@ h3 {
   }
 }
 /* =========================================
-   HOMEPAGE REDESIGN â€” HERO V2
+   HOMEPAGE REDESIGN — HERO V2
    ========================================= */
 
 .hero {
@@ -728,7 +728,7 @@ z-index: 2;
   }
 
 }
-/* Helpful Tools â€” pill-only treatment */
+/* Helpful Tools — pill-only treatment */
 
 .simple-tool-title {
   padding: 9px 18px;
@@ -1441,7 +1441,7 @@ z-index: 2;
   isolation: isolate !important;
 }
 /* =========================================
-   DASHBOARD STAGE 2 â€” WEATHER
+   DASHBOARD STAGE 2 — WEATHER
    GLASS VERSION
    ========================================= */
 
@@ -1893,7 +1893,7 @@ z-index: 2;
 }
 
 /* =========================================
-   DASHBOARD STAGE 3 â€” GOWILD BOOKING
+   DASHBOARD STAGE 3 — GOWILD BOOKING
    ========================================= */
 
 .dashboard-booking {
@@ -2285,7 +2285,7 @@ z-index: 2;
   will-change: transform;
 }
 
-/* Plane 1 â€” large upper pass */
+/* Plane 1 — large upper pass */
 .plane-1 {
   width: 230px;
   top: 10%;
@@ -2296,7 +2296,7 @@ z-index: 2;
     dashboard-plane-right-1 30s linear infinite;
 }
 
-/* Plane 2 â€” medium, opposite direction */
+/* Plane 2 — medium, opposite direction */
 .plane-2 {
   width: 165px;
   top: 38%;
@@ -2307,7 +2307,7 @@ z-index: 2;
     dashboard-plane-left-2 37s linear 7s infinite;
 }
 
-/* Plane 3 â€” smaller distant climb */
+/* Plane 3 — smaller distant climb */
 .plane-3 {
   width: 105px;
   top: 64%;
@@ -2318,7 +2318,7 @@ z-index: 2;
     dashboard-plane-climb 43s linear 14s infinite;
 }
 
-/* Plane 4 â€” large lower pass */
+/* Plane 4 — large lower pass */
 .plane-4 {
   width: 205px;
   top: 82%;
@@ -2465,7 +2465,7 @@ z-index: 2;
     opacity: 0.30;
   }
 }
-/* Digital boarding passes â€” scoped to the homepage FAQ. */
+/* Digital boarding passes — scoped to the homepage FAQ. */
 #faq.gw-faq {
   --ticket-ink: #172c22;
   --ticket-sage: #aac6b4;
@@ -2641,7 +2641,7 @@ z-index: 2;
   background:#66766c;
 }
 #faq .gw-booking-widget .check-toggle input:checked + .toggle-box::after {
-  content:"âœ“";
+  content:"✓";
   position:absolute;
   left:2px;
   top:-3px;
@@ -2830,7 +2830,7 @@ z-index: 2;
 #faq .gw-booking-widget .check-toggle input { position: static; opacity: 1; margin: 0; flex: 0 0 18px; accent-color: #66766c; }
 #faq .gw-booking-widget .toggle-box { display: none; }
 /* =========================================
-   MOBILE HELPFUL TOOLS â€” EQUAL CARD SIZES
+   MOBILE HELPFUL TOOLS — EQUAL CARD SIZES
    ========================================= */
 
 @media (max-width: 600px) {
@@ -3317,7 +3317,7 @@ body.tool-modal-open {
 
 
 /* =========================================
-   FRONTIER CARD ANALYZER â€” MOBILE
+   FRONTIER CARD ANALYZER — MOBILE
    ========================================= */
 
 @media (max-width: 600px) {
@@ -3371,7 +3371,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   MODAL HELPFUL TOOLS â€” CONSOLIDATED WIDGET STYLES
+   MODAL HELPFUL TOOLS — CONSOLIDATED WIDGET STYLES
    Added for tools.js v3
    ========================================= */
 
@@ -3433,7 +3433,7 @@ body.tool-modal-open {
   position:relative;
   flex-shrink:0;}
 .tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box {background:#66766c;}
-.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"âœ“";
+.tool-modal-content .tool-booking-timeline .check-toggle input:checked + .toggle-box::after {content:"✓";
   position:absolute;
   left:2px;
   top:-3px;
@@ -4067,7 +4067,7 @@ body.tool-modal-open {
 
 
 /* =========================================
-   HELPFUL TOOLS â€” FOUR-TOOL FINAL LAYOUT
+   HELPFUL TOOLS — FOUR-TOOL FINAL LAYOUT
    ========================================= */
 
 .tools-simple-grid {
@@ -4119,7 +4119,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   TOOL MODAL â€” SHARED POLISH
+   TOOL MODAL — SHARED POLISH
    ========================================= */
 
 .tool-modal-content {
@@ -4152,7 +4152,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   BOOKING TIMELINE â€” MODAL OVERRIDES
+   BOOKING TIMELINE — MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .tool-booking-timeline {
@@ -4194,7 +4194,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   ELITE STATUS CALCULATOR â€” MODAL OVERRIDES
+   ELITE STATUS CALCULATOR — MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .f9-status-tool {
@@ -4245,7 +4245,7 @@ body.tool-modal-open {
 }
 
 /* =========================================
-   AWARD BOOKING CALCULATOR â€” MODAL OVERRIDES
+   AWARD BOOKING CALCULATOR — MODAL OVERRIDES
    ========================================= */
 
 .tool-modal-content .award-booking-tool {
@@ -4511,7 +4511,7 @@ body.tool-modal-open {
 
 }
 /* =========================================
-   CREDIT CARDS â€” CAROUSEL
+   CREDIT CARDS — CAROUSEL
 ========================================= */
 
 .credit-cards-section {
@@ -5389,7 +5389,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   AIRPORT SCORE â€” ROUTE SUMMARY
+   AIRPORT SCORE — ROUTE SUMMARY
    ===================================================== */
 
 .dashboard-score-value {
@@ -6523,7 +6523,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   DESKTOP â€” MATCH WEATHER + CALENDAR HEIGHTS
+   DESKTOP — MATCH WEATHER + CALENDAR HEIGHTS
    ===================================================== */
 
 @media (min-width: 701px) {
@@ -6723,7 +6723,7 @@ body.tool-modal-open {
   color: #526158;
 }
 /* =====================================================
-   AIRPORT COMMAND CENTER â€” RADAR + LIVE CAMERA
+   AIRPORT COMMAND CENTER — RADAR + LIVE CAMERA
    ===================================================== */
 
 /*
@@ -6804,7 +6804,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   WEATHER RADAR â€” LEAFLET
+   WEATHER RADAR — LEAFLET
    ===================================================== */
 
 .dashboard-radar-map {
@@ -6866,7 +6866,7 @@ body.tool-modal-open {
 }
 
 
-/* Hide zoom buttons â€” this is a status panel, not a map app. */
+/* Hide zoom buttons — this is a status panel, not a map app. */
 
 .dashboard-radar-map
 .leaflet-control-zoom {
@@ -7176,7 +7176,7 @@ body.tool-modal-open {
 
 
 /* =====================================================
-   HELPFUL TOOLS â€” FLOATING FROSTED TRANSITION
+   HELPFUL TOOLS — FLOATING FROSTED TRANSITION
    Original four-tool grid and responsive sizing preserved.
    ===================================================== */
 .tools-section {
@@ -7476,7 +7476,7 @@ body.tool-modal-open {
 }
 
 
-/* Airport Command Center â€” frosted security card beneath the radar. */
+/* Airport Command Center — frosted security card beneath the radar. */
 .dashboard-security[hidden]{display:none!important}
 .dashboard-security{width:100%;box-sizing:border-box;margin:12px 0 0;padding:16px;background:rgba(20,34,25,.22);border:1px solid rgba(255,255,255,.20);border-radius:16px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 7px 20px rgba(20,34,25,.10);color:rgba(255,255,255,.95)}
 .security-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
@@ -7582,7 +7582,7 @@ body.tool-modal-open {
 @media(max-width:420px){#airportSecurity .security-heading{flex-wrap:wrap}#airportSecurity .security-source-links{align-items:flex-start;flex-direction:row;flex-wrap:wrap;margin-bottom:12px}#airportSecurity .security-lane-row{flex-wrap:wrap}#airportSecurity .security-wait{text-align:left}}
 
 
-/* BOOKING CALENDAR â€” SAGE FROSTED GLASS
+/* BOOKING CALENDAR — SAGE FROSTED GLASS
    Append at the end of style.css. Date-state rules and layout stay intact. */
 
 .dashboard-cards-stack .dashboard-booking-calendar {
@@ -7649,7 +7649,7 @@ body.tool-modal-open {
   color: rgba(255, 255, 255, .90);
 }
 /* =========================================
-   BOOKING TIMELINE â€” CHECKBOX FIX
+   BOOKING TIMELINE — CHECKBOX FIX
    Modal + FAQ | Desktop + Mobile
    ========================================= */
 
@@ -8019,3 +8019,21 @@ body.tool-modal-open {
   box-sizing:border-box;
   margin-inline:0 !important;
 }
+
+/* Interactive route viewport and native destination/tracking links. */
+#dashboard .departure-route-canvas { position:relative; }
+#dashboard .departure-route-canvas .route-map-interactive { touch-action:none; cursor:grab; user-select:none; -webkit-user-select:none; aspect-ratio:1000 / 520; height:auto; min-height:0; }
+#dashboard .route-map-interactive.is-dragging { cursor:grabbing; }
+#dashboard .route-booking-link, #dashboard .route-plane { cursor:pointer; }
+#dashboard .route-booking-link:hover .route-label-box, #dashboard .route-booking-link:focus-visible .route-label-box { stroke:#31583e; stroke-width:2; }
+#dashboard .route-booking-link:focus-visible .route-airport, #dashboard .route-plane:focus-visible .route-plane-halo { stroke:#31583e; stroke-width:3; }
+#dashboard .route-map-interactive:focus-visible { outline:3px solid #31583e; outline-offset:-4px; }
+#dashboard .departure-route-map-controls { position:absolute; top:10px; right:10px; display:flex; align-items:center; gap:4px; padding:5px; border:1px solid #cbd8c8; border-radius:12px; background:rgba(255,255,255,.95); color:#31583e; box-shadow:0 2px 9px #172c2620; }
+#dashboard .departure-route-map-control { min-width:34px; min-height:34px; padding:5px 9px; border:1px solid #cbd8c8; border-radius:8px; background:#fff; color:#31583e; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+#dashboard .departure-route-map-control:disabled { opacity:.4; cursor:default; }
+#dashboard .departure-route-map-control:focus-visible { outline:2px solid #31583e; outline-offset:2px; }
+#dashboard .departure-route-zoom-level { font-size:11px; min-width:38px; text-align:center; }
+#dashboard .departure-route-map-help { margin:10px 0 4px; font-size:12px; line-height:1.5; color:rgba(255,255,255,.9); }
+#dashboard a.departure-route-chip { display:inline-flex; align-items:center; text-decoration:none; }
+#dashboard .departure-route-destination-choice { display:inline-flex; gap:3px; align-items:center; }
+#dashboard .departure-route-show-flights { font-size:10px; opacity:.85; }
