@@ -8035,5 +8035,19 @@ body.tool-modal-open {
 #dashboard .departure-route-zoom-level { font-size:11px; min-width:38px; text-align:center; }
 #dashboard .departure-route-map-help { margin:10px 0 4px; font-size:12px; line-height:1.5; color:rgba(255,255,255,.9); }
 #dashboard a.departure-route-chip { display:inline-flex; align-items:center; text-decoration:none; }
-#dashboard .departure-route-destination-choice { display:inline-flex; gap:3px; align-items:center; }
-#dashboard .departure-route-show-flights { font-size:10px; opacity:.85; }
+
+/* Calendar dates are native buttons; selected-day schedules stay inside the card. */
+#dashboard button.booking-calendar-day { font-family:inherit; padding:0; cursor:pointer; }
+#dashboard button.booking-calendar-day:focus-visible { outline:3px solid #d6ebc0; outline-offset:2px; z-index:1; }
+#dashboard button.booking-calendar-day.is-selected { outline:2px solid #31583e; outline-offset:1px; box-shadow:inset 0 0 0 2px #fff; }
+#dashboard .calendar-departures-hint { margin:12px 0 8px; font-size:12px; color:rgba(255,255,255,.85); }
+#dashboard .calendar-departures { margin:12px 0; padding:14px; border:1px solid rgba(255,255,255,.25); border-radius:14px; background:rgba(20,34,25,.18); color:#fff; }
+#dashboard .calendar-departures[hidden] { display:none; }
+#dashboard .calendar-departures-title { margin:0 0 7px; font-size:15px; color:#fff; }
+#dashboard .calendar-departures-summary,#dashboard .calendar-departures-note { margin:6px 0 10px; font-size:11px; line-height:1.5; color:rgba(255,255,255,.85); }
+#dashboard .calendar-departures-list { display:flex; flex-direction:column; gap:6px; max-height:420px; overflow-y:auto; overscroll-behavior:contain; }
+#dashboard .calendar-departure-row { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; padding:10px 0; border-top:1px solid rgba(255,255,255,.16); font-size:12px; }
+#dashboard .calendar-departure-time { min-width:75px; color:#fff; }
+#dashboard .calendar-departure-destination { flex:1 1 120px; }
+#dashboard .calendar-departure-number,#dashboard .calendar-departure-status { font-size:11px; color:rgba(255,255,255,.8); }
+#dashboard .calendar-departure-link { margin-left:auto; }
