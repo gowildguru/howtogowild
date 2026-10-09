@@ -14,7 +14,7 @@
     content="An independent guide to Frontier Airlines' GoWild! Pass, including booking tools, route information, pricing help, and practical travel resources."
   >
 
-  <link rel="stylesheet" href="style.css?v=compact-dashboard-1">
+  <link rel="stylesheet" href="style.css?v=dashboard-refined-1">
   <link rel="stylesheet" href="den-gate-map.css?v=2">
   <link rel="stylesheet" href="blog.css?v=2">
 
@@ -326,29 +326,18 @@
 
       <!-- AIRPORT SELECTOR -->
 
-      <div class="dashboard-change-row">
-
-        <button
-          id="changeAirport"
-          type="button">
-          Not your airport? Change it
-        </button>
-
+      <div class="dashboard-airport-picker" id="airportPicker">
+        <label class="airport-picker-label" for="airportSearch">Search for a different airport.</label>
+        <div class="airport-picker-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+          <input id="airportSearch" type="search" role="combobox" placeholder="Search airports by code or city" autocomplete="off" spellcheck="false" maxlength="100" aria-label="Choose departure airport" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="airportSearchResults">
+        </div>
+        <div id="airportSearchPanel" class="airport-picker-panel" hidden>
+          <p id="airportSearchStatus" class="airport-picker-status" role="status" aria-live="polite"></p>
+          <div id="airportSearchResults" class="airport-picker-results" role="listbox" aria-label="Matching airports"></div>
+        </div>
+        <select id="airportSelect" hidden aria-hidden="true" tabindex="-1"><option value="">Select Frontier airport...</option></select>
       </div>
-
-
-      <div
-        id="airportChooser"
-        class="dashboard-airport-chooser">
-
-        <select id="airportSelect">
-          <option value="">
-            Select Frontier airport...
-          </option>
-        </select>
-
-      </div>
-
 
       <!-- =========================================
            WEATHER + BOOKING GRID
@@ -385,7 +374,7 @@
   <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M7 16a4 4 0 1 1 1-8 5 5 0 0 1 9 3h1a3 3 0 1 1 0 6H7Z"/><path d="M3 4l1 1M10 2v2M17 4l-1 1M3 11H1"/></svg></span>
   <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="airportConditionsTitle">Airport Conditions</span><span class="dashboard-expander-description">Current weather, radar, and airport advisories.</span><span class="airport-conditions-preview"><span class="airport-conditions-temperature" id="temperature">--°</span><span id="condition">Loading…</span><span class="airport-conditions-wind"><strong id="wind">--</strong> mph wind</span></span>
 <span id="airportConditionsWarning" class="airport-conditions-warning" hidden role="status" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3 2 21h20L12 3Z"/><path d="M12 9v5M12 17v1"/></svg><span>FAA advisory</span></span></span>
-  <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span><span class="dashboard-expander-chevron" aria-hidden="true">⌄</span></span>
+  <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
 </summary>        <div class="dashboard-weather-content">
 
           <div
@@ -553,7 +542,7 @@
 <details id="airportSecurityCard" class="dashboard-expander" aria-labelledby="airportSecurityCardTitle" hidden><summary class="dashboard-expander-header">
   <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M3 21h4M17 21h4"/><circle cx="12" cy="9" r="2"/><path d="M9 18v-3a3 3 0 0 1 6 0v3M3 8h2M19 8h2"/></svg></span>
   <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="airportSecurityCardTitle">Live Security Information</span><span class="dashboard-expander-description" id="securityCompactPreview">Checking recommended Frontier checkpoints…</span></span>
-  <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span><span class="dashboard-expander-chevron" aria-hidden="true">⌄</span></span>
+  <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
 </summary><div class="dashboard-expander-body"><section id="airportSecurity" class="dashboard-security" aria-label="Airport security checkpoints" hidden></section></div></details>
       </div>
 
@@ -578,7 +567,7 @@
 <details id="bookingCalendarCard" class="dashboard-booking dashboard-booking-calendar dashboard-expander" aria-labelledby="bookingCalendarCardTitle"><summary class="dashboard-expander-header">
   <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M7 14h2M13 14h2M7 18h2M13 18h2"/></svg></span>
   <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="bookingCalendarCardTitle">Interactive Calendar</span><span class="dashboard-expander-description">Explore booking windows, blackout dates, and departures.</span></span>
-  <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span><span class="dashboard-expander-chevron" aria-hidden="true">⌄</span></span>
+  <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
 </summary><div class="dashboard-expander-body">
 
         <div class="dashboard-booking-heading">
@@ -801,7 +790,7 @@
         <summary class="departure-route-toggle dashboard-expander-header">
           <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="5" cy="17" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="19" cy="18" r="2"/><path d="M7 15 16 7M8 17h9M18 8l1 8M3 11V5h7"/></svg></span>
           <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="departureRouteTitle">Interactive Route Map</span><span class="dashboard-expander-description">Explore nonstop destinations and estimated flight progress.</span></span>
-          <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span><span class="dashboard-expander-chevron" aria-hidden="true">⌄</span></span>
+          <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
         </summary>
           <div class="departure-route-content">
           <div class="departure-route-heading">
@@ -835,7 +824,7 @@
         <summary class="den-map-heading dashboard-expander-header">
           <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 21h6l-1-10h-4L9 21Zm0-10L7 6h10l-2 5M10 3h4M12 3v3M7 21h10"/><path d="M4 4a12 12 0 0 0-1 9M20 4a12 12 0 0 1 1 9M5 7a8 8 0 0 0 0 4M19 7a8 8 0 0 1 0 4"/></svg></span>
           <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="gateActivityTitle">Live Gate Activity</span><span class="dashboard-expander-description">See Frontier arrivals, departures, and boarding by gate.</span></span>
-          <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span><span class="dashboard-expander-chevron" aria-hidden="true">⌄</span></span>
+          <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
         </summary>
         <div class="den-map-content">
         <h4 class="dashboard-expander-context" id="denMapTitle">Gate activity</h4>
@@ -864,8 +853,8 @@
       <details class="dashboard-departures dashboard-expander" id="departureBoardCard" aria-labelledby="departureBoardCardTitle">
         <summary class=" dashboard-expander-header">
           <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m4 20 16-6M8 14l-4-4 2-1 6 3 5-5c2-2 4-2 4-1s-1 3-3 4l-5 4-1 6-2 1-1-5-4 1Z"/></svg></span>
-          <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="departureBoardCardTitle">Live Departure Board</span><span class="dashboard-expander-description">Check upcoming Frontier flights, gates, and booking windows.</span></span>
-          <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span><span class="dashboard-expander-chevron" aria-hidden="true">⌄</span></span>
+          <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="departureBoardCardTitle">Live Departure Board</span><span class="dashboard-expander-description">Upcoming departures. Live data within 2 hours.</span></span>
+          <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
         </summary>
         <div class="dashboard-expander-body">
 
@@ -2656,7 +2645,7 @@
   </script>
 
   <script src="den-gate-map.js?v=7"></script>
-  <script src="dashboard.js?v=compact-dashboard-1"></script>
+  <script src="dashboard.js?v=dashboard-refined-1"></script>
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
   <script src="search.js?v=5" defer></script>
