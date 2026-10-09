@@ -6723,6 +6723,31 @@ function securitySortModels(models,data) {
   return [...models].sort((a,b)=>group(a)-group(b)||
     stateRank[securityCheckpointState(a,data)]-stateRank[securityCheckpointState(b,data)]||priorityRank[a.priority]-priorityRank[b.priority]);
 }
+// Keep the main security view compact; alternates stay in the user's dropdown.
+function securityFeaturedModels(models,data) {
+  const primary=models.filter(cp=>!cp.aggregate&&cp.priority==='recommended');
+  const featured=primary.slice(0,2);
+  const missingLane=cp=>cp.live&&!cp.lanes.some(l=>l.type===securityLane||l.type==='combined');
+  const needsAlternate=!featured.length||featured.every(cp=>securityCheckpointState(cp,data)==='closed'||missingLane(cp));
+  if(needsAlternate) {
+    let alternatives=models.filter(cp=>!cp.aggregate&&cp.priority==='alternate'&&!cp.guidance?.conditional&&securityCheckpointState(cp,data)==='open');
+    if(data.airport==='DFW') {
+      // Prefer a published open Terminal E entrance before a Skylink alternative.
+      const terminalE=alternatives.filter(cp=>/\be\d+\b/i.test(cp.name||'')||/^Terminal E alternatives$/i.test(cp.name||''));
+      const allKnownEClosed=models.filter(cp=>cp.priority==='recommended'||(cp.priority==='alternate'&&/\be\d+\b/i.test(cp.name||'')))
+        .every(cp=>securityCheckpointState(cp,data)==='closed');
+      alternatives=terminalE.length?terminalE:allKnownEClosed?alternatives:[];
+    }
+    if(alternatives.length) {
+      if(featured.length>=2)featured.pop();
+      featured.push(alternatives[0]);
+    }
+  }
+  // Airports without curated recommendations retain a small published-information view.
+  if(!featured.length&&!securityAirportGuidance[data.airport])featured.push(...models.filter(cp=>!cp.aggregate).slice(0,2));
+  return new Set(featured);
+}
+
 function securityLink(label,url,className='security-source') {
   try{const u=new URL(url);if(u.protocol!=='https:')return null;
     const a=securityText('a',className,label);a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';return a;
@@ -6792,7 +6817,12 @@ function renderSecurity(data) {
   if(!hasWait){
     const message=data.reason==='loading'?'Checking live waits…':data.reason==='no_public_source'?'No public live wait times':data.available?'Live waits not currently published':'Live waits temporarily unavailable';
     const status=securityText('div','security-unavailable','');status.setAttribute('role','status');
-    status.append(securityText('strong','',message),securityText('p','',guidance?'Checkpoint guidance is shown below. Confirm your gate and follow airport signs.':'Published checkpoint information is shown below.'));card.append(status);
+    status.append(securityText('strong','',message),securityText('p','',data.failureMessage || (guidance?'Checkpoint guidance is shown below. Confirm your gate and follow airport signs.':'Published checkpoint information is shown below.')));
+    if(data.reason==='source_unavailable') {
+      const retry=securityText('button','security-lane-button','Retry live waits');retry.type='button';
+      retry.onclick=()=>{securityResults.delete(data.airport);refreshSecurity();};status.append(retry);
+    }
+    card.append(status);
   }
   const types=[...new Set(models.flatMap(c=>c.lanes.map(l=>l.type)))].filter(t=>securityLabels[t]);
   // Preserve the user's lane preference through outages. Only reset when live types exist.
@@ -6806,10 +6836,11 @@ function renderSecurity(data) {
     button.addEventListener('click',()=>{securityLane=type;renderSecurity(data);card.querySelector(`[data-security-lane="${type}"]`)?.focus();});options.append(button);
   }
   if(types.length)card.append(options);
+  const featured=securityFeaturedModels(models,data);
   const recommendation=data.recommendations?.find(r=>r.lane===securityLane);
   if(recommendation){const cp=models.find(c=>c.live&&c.name===recommendation.checkpoint);
     // Keep the Worker's wait comparison, but never suggest a wrong or gate-dependent entrance.
-    if(cp&&(!guidance||(cp.guidance&&cp.priority!=='other'&&!cp.guidance.conditional))&&cp.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))
+    if(cp&&featured.has(cp)&&(!guidance||(cp.guidance&&cp.priority!=='other'&&!cp.guidance.conditional))&&cp.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))
       card.append(securityText('p','security-recommendation',`${recommendation.label}: ${cp.name} · ${recommendation.displayWait}. ${recommendation.note||''}`));
   }
   const grid=securityText('div','security-checkpoints',''),estimates=securityText('div','security-checkpoints security-estimates',''),rest=securityText('div','security-checkpoints','');
@@ -6830,12 +6861,12 @@ function renderSecurity(data) {
     if(cp.aggregate)box.append(securityText('p','security-note','Airport-wide or arrival-area information; this is not a wait for the recommended departure checkpoint.'));
     if(!g&&cp.priority==='other')box.append(securityText('p','security-note','Frontier access has not been confirmed for this checkpoint. Check your gate and airport signs.'));
     securityLaneRows(box,cp,data);
-    (cp.priority==='other'?rest:cp.aggregate?estimates:grid).append(box);
+    (cp.aggregate?estimates:featured.has(cp)?grid:rest).append(box);
   }
   card.append(grid);
   if(estimates.childElementCount){card.append(securityText('h4','security-section-label','Airport-published estimates / arrival information'),estimates);}
   if(rest.childElementCount){const more=securityText('details','security-more','');more.dataset.securityKey='other:'+data.airport;
-    more.append(securityText('summary','',`Other airport checkpoints (${rest.childElementCount})`),rest);card.append(more);}
+    more.append(securityText('summary','',`Alternate and other checkpoints (${rest.childElementCount})`),rest);card.append(more);}
   const fetched=securityAge(data.fetchedAt);
   card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' · Checked '+fetched:''}${guidance?' · Guidance reviewed '+guidance.reviewed:''} · Times and gates can change. Confirm your boarding pass.`));
   for(const el of card.querySelectorAll('details[data-security-key]'))el.open=open.has(el.dataset.securityKey);
@@ -6862,8 +6893,13 @@ async function refreshSecurity() {
     securityResults.set(airport.code,{data,expires:Number.isFinite(expires)?expires:Date.now()+300000});renderSecurity(data);
   }catch(error){
     if(sequence===securitySequence && securityAirport?.code===airport.code && securityActive() && (error.name!=='AbortError'||timedOut)){
-      const fallback={airport:airport.code,available:false,reason:'source_unavailable'};
-      securityResults.set(airport.code,{data:fallback,expires:Date.now()+300000});renderSecurity(fallback);
+      const failureMessage=timedOut?'The live security request timed out. Try again.':error.message==='Expired security response'?
+        'The feed returned expired data or its timestamps do not match this device. Try again.':error.message==='Invalid security response'?
+        'The live security response could not be validated. Try again.':error instanceof TypeError?
+        'This browser could not connect to the live security feed. Try again.':'The live security source could not be loaded. Try again.';
+      console.warn('Live security request failed:',airport.code,error);
+      const fallback={airport:airport.code,available:false,reason:'source_unavailable',failureMessage};
+      securityResults.set(airport.code,{data:fallback,expires:Date.now()+15000});renderSecurity(fallback);
     }
   }finally{clearTimeout(timeout);if(securityController===controller)securityController=null;}
 }
