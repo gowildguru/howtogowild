@@ -14,7 +14,7 @@
     content="An independent guide to Frontier Airlines' GoWild! Pass, including booking tools, route information, pricing help, and practical travel resources."
   >
 
-  <link rel="stylesheet" href="style.css?v=security-5">
+  <link rel="stylesheet" href="style.css?v=route-map-1">
   <link rel="stylesheet" href="den-gate-map.css?v=2">
   <link rel="stylesheet" href="blog.css?v=2">
 
@@ -596,6 +596,7 @@
            GOWILD! BOOKING CALENDAR
       ========================================== -->
 
+      <div class="dashboard-calendar-column">
       <section
         class="dashboard-booking dashboard-booking-calendar">
 
@@ -814,6 +815,35 @@
         </p>
 
       </section>
+
+        <details class="departure-route-section" id="departureRouteCard" aria-labelledby="departureRouteTitle">
+          <summary class="departure-route-toggle">
+            <span><span class="departure-route-title" id="departureRouteTitle">Departures Map</span><span class="departure-route-description">Explore nonstop routes and estimated flight progress.</span></span>
+            <span class="departure-route-toggle-action"><span class="departure-route-open-label">View map</span><span class="departure-route-close-label">Close map</span><span class="departure-route-chevron" aria-hidden="true">⌄</span></span>
+          </summary>
+          <div class="departure-route-content">
+          <div class="departure-route-heading">
+            <div>
+              <div class="dashboard-departures-kicker">WHERE WE’RE HEADED</div>
+
+              <p id="departureRouteSummary" aria-live="polite">Loading your airport schedule…</p>
+            </div>
+            <div id="departureRouteTabs" class="departure-route-tabs" role="group" aria-label="Departure day"></div>
+          </div>
+          <div id="departureRouteCanvas" class="departure-route-canvas">
+            <p class="departure-route-empty">Loading departure routes…</p>
+          </div>
+          <div class="departure-route-legend">
+            <span><i class="departure-route-legend-line" aria-hidden="true"></i>Scheduled nonstop route</span>
+            <span><i class="departure-route-legend-plane" aria-hidden="true">✈</i>Estimated position · Today only</span>
+          </div>
+          <p class="departure-route-note">Airplanes follow estimated flight progress between departure and arrival times. Positions are not live GPS. Known delays and cancellations use the board’s status checks. Day tabs use your departure airport’s local date. Map: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>.</p>
+          <div id="departureRouteDetails"></div>
+          </div>
+        </details>
+
+      </div>
+
 
 
       </div>
@@ -2640,7 +2670,7 @@
   </script>
 
   <script src="den-gate-map.js?v=7"></script>
-  <script src="dashboard.js?v=security-4"></script>
+  <script src="dashboard.js?v=route-map-1"></script>
   <script src="tools.js?v=4"></script>
   <script src="credit-cards.js?v=1"></script>
   <script src="search.js?v=5" defer></script>
