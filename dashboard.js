@@ -1249,9 +1249,85 @@ function networkCopy(
    DISPLAY SELECTED AIRPORT
    ===================================================== */
 
+let airportManualSelection = false;
+let airportSearchMatches = [];
+let airportSearchActive = -1;
+let dashboardSelectedAirport = '';
+
+function closeAirportSearch() {
+  const input=document.getElementById('airportSearch'),panel=document.getElementById('airportSearchPanel');
+  if(panel)panel.hidden=true;
+  if(input){input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');}
+  airportSearchActive=-1;
+}
+function highlightAirportSearch() {
+  const results=document.getElementById('airportSearchResults'),input=document.getElementById('airportSearch');
+  if(!results||!input)return;
+  for(const [index,button] of [...results.children].entries())button.setAttribute('aria-selected',String(index===airportSearchActive));
+  const active=results.children[airportSearchActive];
+  if(active){input.setAttribute('aria-activedescendant',active.id);active.scrollIntoView?.({block:'nearest'});}
+  else input.removeAttribute('aria-activedescendant');
+}
+function chooseSearchedAirport(airport) {
+  if(!airport)return;
+  airportManualSelection=true;
+  showAirport(airport);
+  const input=document.getElementById('airportSearch');
+  if(input){input.value='';input.focus({preventScroll:true});}
+  closeAirportSearch();
+}
+function renderAirportSearch() {
+  const input=document.getElementById('airportSearch'),panel=document.getElementById('airportSearchPanel'),results=document.getElementById('airportSearchResults');
+  if(!input||!panel||!results)return;
+  const normalize=text=>String(text).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  const query=normalize(input.value);
+  const rank=airport=>normalize(airport.code)===query?0:normalize(airport.code).startsWith(query)?1:normalize(airport.city).startsWith(query)?2:3;
+  airportSearchMatches=airports.filter(airport=>!query||normalize(`${airport.code} ${airport.city} ${airport.name}`).includes(query))
+    .sort((a,b)=>(query?rank(a)-rank(b):0)||a.city.localeCompare(b.city)||a.code.localeCompare(b.code));
+  airportSearchActive=-1;input.removeAttribute('aria-activedescendant');results.replaceChildren();
+  for(const [index,airport] of airportSearchMatches.entries()) {
+    const button=document.createElement('button');button.type='button';button.className='airport-picker-result';button.id=`airportSearchOption${index}`;
+    button.setAttribute('role','option');button.setAttribute('aria-selected','false');button.tabIndex=-1;
+    const code=document.createElement('strong');code.textContent=airport.code;
+    const copy=document.createElement('span'),city=document.createElement('strong'),name=document.createElement('span');
+    city.textContent=airport.city;name.textContent=airport.name;copy.append(city,name);button.append(code,copy);
+    if(airport.code===dashboardSelectedAirport){const badge=document.createElement('span');badge.className='airport-picker-selected';badge.textContent='Selected';button.append(badge);}
+    button.onclick=()=>chooseSearchedAirport(airport);results.append(button);
+  }
+  document.getElementById('airportSearchStatus').textContent=airportSearchMatches.length?`${airportSearchMatches.length} airport${airportSearchMatches.length===1?'':'s'} · Select one to update your dashboard`:'No matching airports. Try a code or city name.';
+  panel.hidden=false;input.setAttribute('aria-expanded','true');
+}
+function initializeDashboardRefinements() {
+  const input=document.getElementById('airportSearch'),picker=document.getElementById('airportPicker');
+  if(input) {
+    input.addEventListener('focus',renderAirportSearch);input.addEventListener('input',renderAirportSearch);
+    input.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){closeAirportSearch();return;}
+      if(event.key==='ArrowDown'||event.key==='ArrowUp') {
+        event.preventDefault();if(document.getElementById('airportSearchPanel').hidden)renderAirportSearch();
+        if(airportSearchMatches.length){airportSearchActive=airportSearchActive<0?(event.key==='ArrowDown'?0:airportSearchMatches.length-1):(airportSearchActive+(event.key==='ArrowDown'?1:-1)+airportSearchMatches.length)%airportSearchMatches.length;highlightAirportSearch();}
+      } else if(event.key==='Enter') {
+        event.preventDefault();if(document.getElementById('airportSearchPanel').hidden){renderAirportSearch();return;}
+        if(airportSearchActive<0&&!input.value.trim())return;
+        chooseSearchedAirport(airportSearchMatches[airportSearchActive<0?0:airportSearchActive]);
+      }
+    });
+    picker?.addEventListener('focusout',event=>{if(!picker.contains(event.relatedTarget))closeAirportSearch();});
+    document.addEventListener('pointerdown',event=>{if(picker&&!picker.contains(event.target))closeAirportSearch();});
+  }
+  for(const id of ['departureBoardCard','denGateMap','departureRouteCard'])document.getElementById(id)?.addEventListener('toggle',()=>{
+    if(boardStatusLiveActive())void pollBoardStatuses();
+  });
+  document.addEventListener('visibilitychange',()=>{if(boardStatusLiveActive())void pollBoardStatuses();});
+}
+
 function showAirport(
   airport
 ) {
+  dashboardSelectedAirport = airport.code;
+  const searchInput=document.getElementById('airportSearch');
+  if(searchInput)searchInput.placeholder=`Search airports · showing ${airport.code}`;
+
 
   document.getElementById(
     "airportCode"
@@ -4428,8 +4504,14 @@ function boardFlightVisible(airport, flight, now) {
   return info ? info.visible : flight.instant > now;
 }
 
+function boardStatusLiveActive() {
+  return !document.hidden && ['departureBoardCard','denGateMap','departureRouteCard'].some(id=>{
+    const card=document.getElementById(id);return card && card.open && !card.hidden;
+  });
+}
+
 async function pollBoardStatuses() {
-  if (boardStatusPolling || !departureState || document.hidden) return;
+  if (boardStatusPolling || !departureState || !boardStatusLiveActive()) return;
   boardStatusPolling = true;
   const state = departureState;
   const now = Date.now();
@@ -4445,7 +4527,7 @@ async function pollBoardStatuses() {
     await Promise.all(Array.from({length: Math.min(3, candidates.length)}, async () => {
       while (cursor < candidates.length) {
         const flight = candidates[cursor++];
-        if (departureState !== state) break;
+        if (departureState !== state || !boardStatusLiveActive()) break;
         const key = boardStatusKey(state.airport, flight);
         const previous = boardStatuses.get(key);
         const entry = {...previous, checkedAt: Date.now(), error: false};
@@ -4909,7 +4991,7 @@ async function initializeDashboard() {
       );
 
 
-    if (airport) {
+    if (airport && !airportManualSelection) {
 
       showAirport(
         airport
@@ -6816,11 +6898,24 @@ function renderSecurityCompactPreview(featured,data) {
       const schedule=securitySchedule(lane.hours||cp.hours,data.timezone||securityAirport?.timezone);
       const closed=lane.status==='closed'||schedule?.status==='closed';
       const wait=closed?'Closed':securityWaitCurrent(lane)?securityWaitDisplay(lane):'Wait unavailable';
-      row.append(securityText('span','security-compact-wait',`${securityLabels[lane.type]||lane.label}: ${wait}`));
+      const value=securityText('span','security-compact-wait','');
+      if(lane.type==='precheck') {
+        const logo=document.createElement('img');logo.src='images/precheck.jpg';logo.alt='TSA PreCheck';logo.width=72;logo.height=18;
+        logo.className='security-lane-logo security-logo-precheck';
+        logo.style.display='inline-block';logo.style.verticalAlign='middle';logo.style.marginRight='5px';
+        const fallback=securityText('span','','TSA PreCheck');fallback.hidden=true;
+        logo.addEventListener('error',()=>{logo.remove();fallback.hidden=false;},{once:true});
+        value.append(logo,fallback,document.createTextNode(`: ${wait}`));
+      } else value.textContent=`${securityLabels[lane.type]||lane.label}: ${wait}`;
+      row.append(value);
     }
     preview.append(row);
   }
   if(!preview.childElementCount)preview.textContent='Expand for published security information and checkpoint hours.';
+  if(data.available&&Number.isFinite(Date.parse(data.fetchedAt))) {
+    const updated=securityText('span','security-compact-age',`Updated ${securityAge(data.fetchedAt)}`);
+    updated.title='Last successful live security response';preview.append(updated);
+  }
 }
 
 function renderSecurity(data) {
@@ -6948,5 +7043,6 @@ if('IntersectionObserver' in window){const target=document.getElementById('dashb
 }}
 setInterval(()=>{if(securityActive())refreshSecurity();},60000);
 
+initializeDashboardRefinements();
 initializeWeatherEnhancements();
 initializeDashboard();
