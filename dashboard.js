@@ -5139,6 +5139,7 @@ function renderFrontierGateMap() {
 /* Airport security: one selected airport, demand-driven; no airport sweep. */
 const securityEndpoint = 'https://frontier-flight-times.jacob-brown-6700.workers.dev/security';
 const securityResults = new Map();
+const securityLastEstimates = new Map();
 let securityAirport = null;
 let securityController = null;
 let securitySequence = 0;
@@ -6903,19 +6904,43 @@ function securityAirlines(codes,key) {
   pill.title=`Show or hide ${others.length} other ${others.length===1?'airline':'airlines'}`;
   summary.append(stack,pill);details.append(summary);wrap.append(details);return wrap;
 }
+// Keep the last successful published waits visible during a refresh or outage.
+// Snapshot display values at receipt; never relabel them as current live waits.
+function securityRememberEstimate(data) {
+  if (!data.available || !data.checkpoints?.some(cp => cp.lanes?.some(securityWaitCurrent))) {
+    securityLastEstimates.delete(data.airport); return;
+  }
+  securityLastEstimates.set(data.airport, {...data, checkpoints:data.checkpoints.map(cp => ({...cp,
+    lanes:(cp.lanes||[]).map(lane => ({...lane, lastEstimateDisplay:securityWaitCurrent(lane)?securityWaitDisplay(lane):null}))
+  }))});
+}
+function securityEstimateFallback(airport, state, failureMessage) {
+  const previous = securityLastEstimates.get(airport);
+  return previous ? {...previous, lastEstimate:true, updateState:state, failureMessage} : null;
+}
+function securityVisibleWait(lane, data) {
+  if (lane.status === 'closed') return null;
+  if (data.lastEstimate) return lane.lastEstimateDisplay ? 'Last estimate: ' + lane.lastEstimateDisplay : null;
+  return securityWaitCurrent(lane) ? securityWaitDisplay(lane) : null;
+}
+function securityRetryButton(airport) {
+  const retry = securityText('button','security-lane-button','Retry live waits'); retry.type='button';
+  retry.onclick=()=>{securityResults.delete(airport);refreshSecurity();}; return retry;
+}
+
 function securityLaneRows(box,cp,data) {
   if(cp.hours?.display)box.append(securityText('p','security-hours',`Checkpoint hours: ${cp.hours.display} \u00b7 airport local time`));
   const lanes=cp.lanes.filter(l=>l.type===securityLane||l.type==='combined');
   if(!lanes.length)box.append(securityText('p','security-note',cp.live?`${securityLabels[securityLane]||'Selected lane'} information not published for this checkpoint.`:'Live lane information unavailable.'));
   for(const l of lanes){
     const line=securityText('div','security-lane-row',''),current=securityWaitCurrent(l);
-    const value=l.status==='closed'?'Closed':current?securityWaitDisplay(l):l.stale?'Wait temporarily unavailable':l.status==='open'?'Open \u00b7 wait not published':'Wait not published';
+    const value=l.status==='closed'?'Closed':securityVisibleWait(l,data)|| (l.stale?'Wait temporarily unavailable':l.status==='open'?'Open \u00b7 wait not published':'Wait not published');
     line.append(securityText('span','security-lane-name',l.label||securityLabels[l.type]),securityText('strong','security-wait'+(l.status==='closed'?' is-closed':''),value));box.append(line);
     if(l.hours?.display)box.append(securityText('p','security-hours',`${l.hours.display} \u00b7 airport local time`));
     if(l.status==='closed'&&l.statusMessage)box.append(securityText('p','security-hours',l.statusMessage));
     if(Number.isFinite(l.closingInMinutes)&&l.closingInMinutes<=45&&l.status==='open')box.append(securityText('p','security-closing',`Closes in ${l.closingInMinutes} min`));
-    if(current&&l.timestampKind==='source')box.append(securityText('p','security-lane-updated',`Updated ${securityAge(l.updatedAt)}`));
-    if(current&&l.timestampKind!=='source'&&l.sourceUpdatedText)box.append(securityText('p','security-lane-updated',l.sourceUpdatedText));
+    if(!data.lastEstimate&&current&&l.timestampKind==='source')box.append(securityText('p','security-lane-updated',`Updated ${securityAge(l.updatedAt)}`));
+    if(!data.lastEstimate&&current&&l.timestampKind!=='source'&&l.sourceUpdatedText)box.append(securityText('p','security-lane-updated',l.sourceUpdatedText));
     if(l.notes)box.append(securityText('p','security-note',l.notes));
   }
 }
@@ -6933,7 +6958,7 @@ function renderSecurityCompactPreview(featured,data) {
     for(const lane of lanes) {
       const schedule=securitySchedule(lane.hours||cp.hours,data.timezone||securityAirport?.timezone);
       const closed=lane.status==='closed'||schedule?.status==='closed';
-      const wait=closed?'Closed':securityWaitCurrent(lane)?securityWaitDisplay(lane):'Wait unavailable';
+      const wait=closed?'Closed':securityVisibleWait(lane,data)||'Wait unavailable';
       const value=securityText('span','security-compact-wait','');
       if(lane.type==='precheck') {
         const logo=document.createElement('img');logo.src='images/precheck.jpg';logo.alt='TSA PreCheck';logo.width=72;logo.height=18;
@@ -6949,7 +6974,7 @@ function renderSecurityCompactPreview(featured,data) {
   }
   if(!preview.childElementCount)preview.textContent='Expand for published security information and checkpoint hours.';
   if(data.available&&Number.isFinite(Date.parse(data.fetchedAt))) {
-    const updated=securityText('span','security-compact-age',`Updated ${securityAge(data.fetchedAt)}`);
+    const updated=securityText('span','security-compact-age',`${data.lastEstimate?'Last estimate checked':'Updated'} ${securityAge(data.fetchedAt)}${data.lastEstimate ? (data.updateState==='updating'?' \u00b7 Updating...':' \u00b7 Update unavailable') : ''}`);
     updated.title='Last successful live security response';preview.append(updated);
   }
 }
@@ -6964,7 +6989,7 @@ function renderSecurity(data) {
     return state?{...l,status:state.status==='closed'?'closed':l.status==='unknown'?'open':l.status,closingInMinutes:state.closingInMinutes}:l;
   })}))};
   let models=securityModels(data);
-  if(!guidance&&!models.some(c=>c.hours||c.lanes.some(l=>securityWaitCurrent(l)||l.hours||l.status==='closed'))){securityHide();return;}
+  if(!guidance&&!models.some(c=>c.hours||c.lanes.some(l=>securityVisibleWait(l,data)||l.hours||l.status==='closed'))){securityHide();return;}
   const open=new Set([...card.querySelectorAll('details[open][data-security-key]')].map(el=>el.dataset.securityKey));
   card.replaceChildren();card.hidden=false;
   const wrapper=document.getElementById('airportSecurityCard');if(wrapper)wrapper.hidden=false;
@@ -6975,7 +7000,13 @@ function renderSecurity(data) {
   const guideLink=securityLink('Airport guidance \u2197',guidance?.sourceUrls[0]);if(guideLink)links.append(guideLink);
   heading.append(links);card.append(heading);
   if(guidance?.note)card.append(securityText('p','security-guidance-note',guidance.note));
-  const hasWait=models.some(c=>c.lanes.some(securityWaitCurrent));
+  if(data.lastEstimate) {
+    const status=securityText('div','security-unavailable',''); status.setAttribute('role','status');
+    status.append(securityText('strong','',data.updateState==='updating'?'Updating live waits...':'Live update unavailable'),
+      securityText('p','',`Showing the last published estimates, checked ${securityAge(data.fetchedAt)}. ${data.updateState==='updating'?'New waits will appear when the update finishes.':data.failureMessage||'Try again for current waits.'}`));
+    if(data.updateState!=='updating')status.append(securityRetryButton(data.airport)); card.append(status);
+  }
+  const hasWait=models.some(c=>c.lanes.some(l=>securityVisibleWait(l,data)));
   if(!hasWait){
     const message=data.reason==='loading'?'Checking live waits\u2026':data.reason==='no_public_source'?'No public live wait times':data.available?'Live waits not currently published':'Live waits temporarily unavailable';
     const status=securityText('div','security-unavailable','');status.setAttribute('role','status');
@@ -7001,7 +7032,7 @@ function renderSecurity(data) {
   const featured=securityFeaturedModels(models,data);
   renderSecurityCompactPreview(featured,data);
   const recommendation=data.recommendations?.find(r=>r.lane===securityLane);
-  if(recommendation){const cp=models.find(c=>c.live&&c.name===recommendation.checkpoint);
+  if(recommendation&&!data.lastEstimate){const cp=models.find(c=>c.live&&c.name===recommendation.checkpoint);
     // Keep the Worker's wait comparison, but never suggest a wrong or gate-dependent entrance.
     if(cp&&featured.has(cp)&&(!guidance||(cp.guidance&&cp.priority!=='other'&&!cp.guidance.conditional))&&cp.lanes.some(l=>l.type===securityLane&&securityWaitCurrent(l)))
       card.append(securityText('p','security-recommendation',`${recommendation.label}: ${cp.name} \u00b7 ${recommendation.displayWait}. ${recommendation.note||''}`));
@@ -7037,7 +7068,7 @@ function renderSecurity(data) {
     }
   }
   const fetched=securityAge(data.fetchedAt);
-  card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' \u00b7 Checked '+fetched:''}${guidance?' \u00b7 Guidance reviewed '+guidance.reviewed:''} \u00b7 Times and gates can change. Confirm your boarding pass.`));
+  card.append(securityText('p','security-footer',`${data.lastEstimate?'Last published estimates':data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' \u00b7 Checked '+fetched:''}${guidance?' \u00b7 Guidance reviewed '+guidance.reviewed:''} \u00b7 Times and gates can change. Confirm your boarding pass.`));
   for(const el of card.querySelectorAll('details[data-security-key]'))el.open=open.has(el.dataset.securityKey);
 }
 
@@ -7048,7 +7079,7 @@ async function refreshSecurity() {
   if(!securityAirport||!securityActive()||securityController)return;
   const airport=securityAirport,sequence=securitySequence,cached=securityResults.get(airport.code);
   if(cached&&cached.expires>Date.now()){renderSecurity(cached.data);return;}
-  renderSecurity({airport:airport.code,available:false,reason:'loading'});
+  renderSecurity(securityEstimateFallback(airport.code,'updating') || {airport:airport.code,available:false,reason:'loading'});
   const controller=new AbortController();securityController=controller;
   let timedOut=false;
   const timeout=setTimeout(()=>{timedOut=true;controller.abort();},28000);
@@ -7059,6 +7090,7 @@ async function refreshSecurity() {
     if(sequence!==securitySequence||securityAirport?.code!==airport.code||!securityActive())return;
     const expires=Date.parse(data.expiresAt);
     if(data.available && (!Number.isFinite(expires)||expires<=Date.now()||expires>Date.now()+301000))throw new Error('Expired security response');
+    securityRememberEstimate(data);
     securityResults.set(airport.code,{data,expires:Number.isFinite(expires)?expires:Date.now()+300000});renderSecurity(data);
   }catch(error){
     if(sequence===securitySequence && securityAirport?.code===airport.code && securityActive() && (error.name!=='AbortError'||timedOut)){
@@ -7067,7 +7099,7 @@ async function refreshSecurity() {
         'The live security response could not be validated. Try again.':error instanceof TypeError?
         'This browser could not connect to the live security feed. Try again.':'The live security source could not be loaded. Try again.';
       console.warn('Live security request failed:',airport.code,error);
-      const fallback={airport:airport.code,available:false,reason:'source_unavailable',failureMessage};
+      const fallback=securityEstimateFallback(airport.code,'failed',failureMessage) || {airport:airport.code,available:false,reason:'source_unavailable',failureMessage};
       securityResults.set(airport.code,{data:fallback,expires:Date.now()+15000});renderSecurity(fallback);
     }
   }finally{clearTimeout(timeout);if(securityController===controller)securityController=null;}
