@@ -1,6 +1,6 @@
 /* =========================================================
    HOWTOGOWILD — FRONTIER GATE ACTIVITY MAP
-   Full replacement for gatemap.js
+   Full replacement for gatemap.js · refined gate neighborhoods
 
    No fetches or polling here: dashboard.js passes its existing
    cached schedule/status data into this read-only renderer.
@@ -25,9 +25,10 @@
   let gates = [];
   let centerPending = true;
   let mapWidthRatio = 1;
+  let geometryReservations = [];
   const originalSVGWidth = svg.style.width;
 
-  /* Keep SVG units at their original scale when DEN needs extra space.
+  /* Keep SVG units at their original scale when any airport needs extra space.
      Restore the stylesheet width first so responsive sizing still applies. */
   function resizeExpandedMap() {
     svg.style.width = originalSVGWidth;
@@ -82,53 +83,53 @@
       description:'Approximate footprint of DEN’s A-East Level 1. Gate positions are schematic.'
     },
     ATL: {
-      city:'Atlanta', timezone:'America/New_York', type:'atl', focus:'concourses T and A–F',
-      caption:'T · A · B · C · D · E · F · schematic positions, not to scale',
+      city:'Atlanta', timezone:'America/New_York', type:'atl', focus:'reported Frontier concourses',
+      caption:'Frontier gate neighborhoods · spacing expanded for readable flight cards',
       source:'https://www.atl.com/maps/', sourceName:'ATL’s official airport maps',
-      description:'Whole-airport concourse schematic. Only reported Frontier gate neighborhoods are labeled.'
+      description:'Only concourses with reported Frontier activity are expanded. Other concourses appear in a small Plane Train overview. Gate spacing is schematic and expanded for readability.'
     },
     LAS: {
       city:'Las Vegas', timezone:'America/Los_Angeles', type:'las', focus:'D and E gates',
-      caption:'D satellite + E gates · approximate footprint',
+      caption:'D satellite / Terminal 3 · Frontier gate neighborhoods',
       source:'https://www.harryreidairport.com/map', sourceName:'LAS’s official airport maps',
-      description:'D satellite and Terminal 3 E gates. Gate markers sit on approximate real gate positions on the concourse footprint.'
+      description:'D satellite and Terminal 3 are distinct gate areas connected by tram. Only reported Frontier wings and nearby gates are labeled.'
     },
     MCO: {
       city:'Orlando', timezone:'America/New_York', type:'linear', prefix:'', gateList:Array.from({length:29},(_,i)=>String(i+1)),
-      focus:'Airside 1 · gates 1–29', caption:'Airside 1 · gates 1–29 · schematic positions',
+      focus:'Airside 1 · gates 1–29', caption:'Airside 1 · three gate wings · approximate positions',
       source:'https://flymco.com/terminal-maps/', sourceName:'MCO’s official terminal maps',
-      description:'Airside 1 is shown as a simplified linear gate activity strip for readability.'
+      description:'Airside 1 three-wing footprint, with only reported Frontier gate neighborhoods labeled. Gate positions are approximate.'
     },
     PHX: {
       city:'Phoenix', timezone:'America/Phoenix', type:'linear', prefix:'F', gateList:range('F',1,15),
-      focus:'Terminal 3 · F1–F15', caption:'Terminal 3 · F gates · schematic positions',
+      focus:'Terminal 3 · F1–F15', caption:'Terminal 3 · south F concourse · Frontier gate neighborhoods',
       source:'https://www.skyharbor.com/maps-directions/', sourceName:'PHX’s official airport maps',
-      description:'Terminal 3 F-gate activity strip. Gate positions are schematic.'
+      description:'Terminal 3 south F concourse with its widened west end and gates on their approximate terminal edges.'
     },
     DFW: {
       city:'Dallas / Fort Worth', timezone:'America/Chicago', type:'linear', prefix:'E', gateList:range('E',2,38,[19]),
-      focus:'Terminal E · E2–E38', caption:'Terminal E · gate activity · schematic positions',
+      focus:'Terminal E · E2–E38', caption:'Terminal E · curved main concourse + separate satellite',
       source:'https://www.dfwairport.com/map/', sourceName:'DFW’s official interactive map',
-      description:'Terminal E gate activity. DFW publishes Terminal E gates E2–E38; this is a simplified strip, not a navigation map.'
+      description:'Terminal E is represented by a curved main concourse and a separate E22–E30 satellite. Gate neighborhoods follow reported Frontier assignments. Relative positions are approximate.'
     },
     TPA: {
       city:'Tampa', timezone:'America/New_York', type:'linear', prefix:'E', gateList:['E69','E70','E71','E72','E73','E74','E75'],
       focus:'Airside E · Frontier area', caption:'Airside E · Frontier gate area · schematic positions',
-      source:'https://www.tampaairport.com/maps', sourceName:'TPA’s official airport maps',
+      source:'https://www.tampaairport.com/airport-maps', sourceName:'TPA’s official airport maps',
       description:'Airside E Frontier area, centered on gates E71 and E73–E75 with adjacent gates for context.',
       preferredGates:['E71','E73','E74','E75'], contextRadius:1
     },
     SJU: {
       city:'San Juan', timezone:'America/Puerto_Rico', type:'linear', prefix:'C', gateList:range('C',1,10),
-      focus:'Terminal C · C gates', caption:'Terminal C · Frontier gate activity · schematic positions',
-      source:'https://www.aeropuertosju.com/en/maps/', sourceName:'SJU airport maps',
-      description:'Terminal C gate activity. Gate positions are schematic and live assignments can vary.'
+      focus:'Terminal C · C gates', caption:'Terminal C · widened gate pier · approximate positions',
+      source:'https://aeropuertosju.com/mapas/', sourceName:'SJU airport maps',
+      description:'Terminal C gate pier with a wider outer end. Known gate positions are approximate; unknown assignments remain in the flight list.'
     },
     ORD: {
       city:'Chicago O’Hare', timezone:'America/Chicago', type:'linear', prefix:'M', gateList:range('M',20,40),
-      focus:'Terminal 5 · M gates', caption:'Terminal 5 · M gates · schematic positions',
+      focus:'Terminal 5 · M gates', caption:'Terminal 5 · bent M concourse · approximate positions',
       source:'https://www.flychicago.com/ohare/map/Pages/default.aspx', sourceName:'O’Hare’s official maps',
-      description:'Terminal 5 M-gate activity. Frontier can occasionally use another terminal; those assignments remain listed below.'
+      description:'Terminal 5 has a bent west concourse and widened far end. Reported Frontier gates and nearby context gates are shown.'
     },
     STL: {
       city:'St. Louis', timezone:'America/Chicago', type:'stl', prefix:'C', gateList:['C1','C2','C3','C5','C6','C7','C8','C9','C10','C12','C15','C16','C17','C18','C19','C23','C24','C27','C28','C29','C30'],
@@ -140,21 +141,21 @@
     LAX: {
       city:'Los Angeles', timezone:'America/Los_Angeles', type:'lax', prefix:'',
       gateList:Array.from({length:30},(_,i)=>String(130+i)),
-      focus:'Tom Bradley International Terminal', caption:'Tom Bradley International Terminal · main gates 130–159',
+      focus:'Tom Bradley International Terminal', caption:'Terminal B · main / West Gates · approximate positions',
       source:'https://www.flylax.com/terminals/tom-bradley-international-terminal', sourceName:'LAX’s official TBIT information',
-      description:'Frontier checks in at Terminal 1 and passengers are bused to Terminal B. This view focuses on TBIT gate activity; West Gates are added when reported.'
+      description:'TBIT main and West Gates are separate buildings joined by a passenger tunnel. Only buildings with mapped Frontier activity are expanded.'
     },
     SFO: {
       city:'San Francisco', timezone:'America/Los_Angeles', type:'linear', prefix:'B', gateList:range('B',1,27),
-      focus:'Harvey Milk Terminal 1 · B gates', caption:'Harvey Milk Terminal 1 · Boarding Area B',
+      focus:'Harvey Milk Terminal 1 · B gates', caption:'Harvey Milk Terminal 1 · B gates · approximate positions',
       source:'https://www.flysfo.com/maps/static-maps', sourceName:'SFO’s official terminal maps',
-      description:'Harvey Milk Terminal 1 Boarding Area B, one of Frontier’s current SFO gate areas. Positions are schematic.'
+      description:'Boarding Area B has a diagonal approach and long gate pier. Only reported Frontier gates and their immediate neighbors are labeled.'
     },
     IAH: {
       city:'Houston', timezone:'America/Chicago', type:'linear', prefix:'A', gateList:range('A',1,30),
-      focus:'Terminal A', caption:'Terminal A · gate activity · schematic positions',
-      source:'https://www.fly2houston.com/iah/maps', sourceName:'IAH’s official terminal maps',
-      description:'Terminal A gate activity. Numeric live gate values are normalized to A-gates in this view.'
+      focus:'Terminal A', caption:'Terminal A · north / south piers · approximate positions',
+      source:'https://www.fly2houston.com/iah/map/', sourceName:'IAH’s official terminal maps',
+      description:'Terminal A north and south gate piers are separate. Only reported Frontier neighborhoods are labeled; unverified gate positions remain in the flight list.'
     }
   };
 
@@ -185,9 +186,12 @@
       return simple ? simple[1].replace(/^0+(?=\d)/,'') : raw.replace(/^GATE/,'');
     }
 
-    if (payload.airport === 'IAH') {
+    if (['IAH','DFW','TPA','PHX','SJU','ORD','SFO','STL'].includes(payload.airport)) {
       const numeric = raw.match(/^(?:GATE)?0*(\d{1,2})$/);
-      if (numeric) return `A${Number(numeric[1])}`;
+      if (numeric) {
+        const prefix = {IAH:'A',DFW:'E',TPA:'E',PHX:'F',SJU:'C',ORD:'M',SFO:'B',STL:'C'}[payload.airport];
+        return `${prefix}${Number(numeric[1])}`;
+      }
     }
 
     const match = raw.match(/^(?:GATE)?([A-Z])0*(\d{1,3})([A-Z]?)$/);
@@ -261,7 +265,7 @@
     if (!scroller || !root.open) return;
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-      if (!max) return;
+      if (!max) { centerPending = false; return; }
       scroller.scrollTo({left:max / 2, behavior:smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'});
       centerPending = false;
     }));
@@ -269,49 +273,6 @@
 
   function addGate(gate, x, y, ax, ay, side) {
     gates.push({gate, x, y, ax, ay, side: side || (y < ay ? 'top' : 'bottom')});
-  }
-
-  function ensureLiveGates(baseGates, flights) {
-    const map = new Map(baseGates.map(g => [g.gate, g]));
-    const missing = [...new Set(flights.map(f => normalizeGate(f.gate)).filter(Boolean))].filter(g => !map.has(g));
-    return {map, missing};
-  }
-
-  function focusedGateList(base, flights, preferred = [], radius = 1) {
-    const active = [...new Set(flights.map(f => normalizeGate(f.gate)).filter(Boolean))];
-    const seeds = [...new Set([...active.filter(g => base.includes(g)), ...preferred.filter(g => base.includes(g))])];
-    if (!seeds.length) return [...base];
-    const keep = new Set();
-    seeds.forEach(seed => {
-      const index = base.indexOf(seed);
-      if (index < 0) return;
-      for (let i = Math.max(0, index - radius); i <= Math.min(base.length - 1, index + radius); i++) keep.add(base[i]);
-    });
-    active.filter(g => !base.includes(g)).forEach(g => keep.add(g));
-    return [...keep].sort((a,b) => gateNumber(a)-gateNumber(b) || a.localeCompare(b));
-  }
-
-  function linearLayout(config, flights) {
-    gates = [];
-    const base = [...config.gateList];
-    const all = focusedGateList(base, flights, config.preferredGates || [], config.contextRadius ?? 1);
-
-    const width = 1260;
-    const left = 90, right = 1170, centerY = 300;
-    svg.setAttribute('viewBox', `0 0 ${width} 600`);
-    svg.append(el('rect',{x:65,y:centerY-34,width:1130,height:68,rx:18,class:'den-map-terminal-body'}));
-    svg.append(el('text',{x:630,y:centerY+5,'text-anchor':'middle',class:'den-map-concourse'}, config.focus.toUpperCase()));
-    svg.append(el('text',{x:630,y:566,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Schematic gate activity · not a navigation map'));
-
-    const span = right-left;
-    all.forEach((gate,i) => {
-      const x = all.length === 1 ? 630 : left + span*i/(all.length-1);
-      const top = i % 2 === 0;
-      const ay = top ? centerY-34 : centerY+34;
-      const y = top ? 210 : 390;
-      svg.append(el('circle',{cx:x,cy:ay,r:3,class:'den-map-door'}));
-      addGate(gate,x,y,x,ay,top?'top':'bottom');
-    });
   }
 
   function drawDEN() {
@@ -324,82 +285,6 @@
     svg.append(el('text',{x:720,y:225,'text-anchor':'middle',class:'den-map-subtext'},'A-East ground boarding · Level 1'));
     svg.append(el('text',{x:400,y:369,'text-anchor':'middle',class:'den-map-concourse'},'SOUTH CORRIDOR'));
     svg.append(el('text',{x:165,y:455,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'← Concourse core / train'));
-  }
-
-  function drawATL(flights) {
-    gates = [];
-    svg.setAttribute('viewBox','0 0 1200 620');
-    const concourses = [{name:'T',max:21,split:8},{name:'A',max:34,split:18},{name:'B',max:36,split:18},{name:'C',max:57,split:22},{name:'D',max:46,split:20},{name:'E',max:42,split:18},{name:'F',max:14,split:10}];
-    svg.append(el('path',{d:'M 68 300 H 1120',stroke:'rgba(186,201,190,.95)','stroke-width':18,fill:'none'}));
-    svg.append(el('text',{x:595,y:585,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'PLANE TRAIN · Domestic terminal ← T — A — B — C — D — E — F → International terminal'));
-    concourses.forEach((c,i) => {
-      const x = 100 + i*155;
-      svg.append(el('rect',{x:x-15,y:92,width:30,height:410,rx:10,class:'den-map-terminal-body'}));
-      svg.append(el('text',{x,y:68,'text-anchor':'middle',class:'den-map-concourse den-map-outside'},c.name));
-      const assigned = [...new Set(flights.map(f=>normalizeGate(f.gate)))].filter(g => g.startsWith(c.name));
-      const nums = new Set();
-      assigned.forEach(g => { const n=gateNumber(g); for(let d=-1;d<=1;d++) if(n+d>=1 && n+d<=c.max) nums.add(n+d); });
-      [...nums].sort((a,b)=>a-b).forEach((n,j,arr) => {
-        const top = n > c.split;
-        const ay = top ? 250 - 135*(n-c.split)/Math.max(1,c.max-c.split) : 330 + 150*(c.split-n)/Math.max(1,c.split-1);
-        const xOut = x + (j%2===0 ? 58 : -58);
-        addGate(`${c.name}${n}`,xOut,ay,x+(xOut>x?15:-15),ay,xOut>x?'right':'left');
-      });
-    });
-  }
-
-  function drawLAS(flights) {
-    gates = [];
-    svg.setAttribute('viewBox','0 0 1200 820');
-    svg.append(el('path',{d:'M 590 270 L 255 105 M 590 270 L 925 105 M 590 270 L 255 435 M 590 270 L 925 435',class:'den-map-terminal-line'}));
-    svg.append(el('path',{d:'M 590 270 L 255 105 M 590 270 L 925 105 M 590 270 L 255 435 M 590 270 L 925 435',class:'den-map-terminal-line-inner'}));
-    svg.append(el('circle',{cx:590,cy:270,r:62,class:'den-map-terminal-body'}));
-    svg.append(el('text',{x:590,y:266,'text-anchor':'middle',class:'den-map-concourse'},'D GATES'));
-    svg.append(el('text',{x:590,y:286,'text-anchor':'middle',class:'den-map-subtext'},'Satellite core'));
-    svg.append(el('path',{d:'M 590 332 V 565',class:'den-map-connector'}));
-    svg.append(el('rect',{x:160,y:605,width:880,height:54,rx:12,class:'den-map-terminal-body'}));
-    svg.append(el('text',{x:600,y:638,'text-anchor':'middle',class:'den-map-concourse'},'TERMINAL 3 · E GATES'));
-
-    const activeLAS = new Set(flights.map(f => normalizeGate(f.gate)).filter(Boolean));
-    const focusNumbers = (prefix, numbers) => {
-      const names = numbers.map(n => `${prefix}${n}`);
-      const active = names.filter(g => activeLAS.has(g));
-      if (!active.length) return numbers;
-      const keep = new Set();
-      active.forEach(g => {
-        const idx = names.indexOf(g);
-        for (let j=Math.max(0,idx-1); j<=Math.min(names.length-1,idx+1); j++) keep.add(numbers[j]);
-      });
-      return numbers.filter(n => keep.has(n));
-    };
-
-    const addArm = (numbers, x2, y2, startSide = 1) => {
-      numbers.forEach((n,i) => {
-        const t = .28 + .66 * i / Math.max(1, numbers.length - 1);
-        const cx = 590 + (x2 - 590) * t;
-        const cy = 270 + (y2 - 270) * t;
-        const dx = x2 - 590, dy = y2 - 270;
-        const len = Math.hypot(dx,dy) || 1;
-        const side = ((i + startSide) % 2 ? 1 : -1);
-        const nx = -dy / len, ny = dx / len;
-        const ax = cx + nx * 28 * side;
-        const ay = cy + ny * 28 * side;
-        addGate(`D${n}`, ax, ay, ax, ay, 'auto');
-      });
-    };
-    addArm(focusNumbers('D',[50,51,52,53,54,55,56,57,58,59]),255,105,0);
-    addArm(focusNumbers('D',[16,17,18,19,20,21,22,24,25,26]),925,105,1);
-    addArm(focusNumbers('D',[32,33,34,35,36,37,38,39,40,41,42,43]),255,435,1);
-    addArm(focusNumbers('D',[1,2,3,4,5,6,7,8,9,10,11,12,14]),925,435,0);
-
-    const eNumsBase=[15,14,12,11,10,9,8,7,6,5,4,3,2,1];
-    const eNums=focusNumbers('E',eNumsBase);
-    eNums.forEach((n)=>{
-      const baseIndex=eNumsBase.indexOf(n);
-      const x=190+baseIndex*(820/(eNumsBase.length-1));
-      const top=baseIndex%2===0;
-      addGate(`E${n}`,x,top?605:659,x,top?605:659,top?'top':'bottom');
-    });
   }
 
   function drawSTL() {
@@ -423,27 +308,279 @@
     svg.append(el('text',{x:410,y:395,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},'Frontier gates C19 and C23 · adjacent gates shown for context'));
   }
 
-  function drawLAX(flights) {
-    linearLayout(layout, flights);
-    svg.querySelector('.den-map-concourse').textContent='TOM BRADLEY INTERNATIONAL TERMINAL · MAIN GATES 130–159';
-    const west = [...new Set(flights.map(f=>normalizeGate(f.gate)).filter(g=>/^2\d\d[A-Z]?$/.test(g)))];
-    if (west.length) {
-      svg.append(el('text',{x:630,y:70,'text-anchor':'middle',class:'den-map-concourse den-map-outside'},'WEST GATES AT TOM BRADLEY · LIVE REPORTED ASSIGNMENTS'));
-      west.forEach((g,i)=>{
-        const x=250+i*(760/Math.max(1,west.length-1));
-        addGate(g,x,112,x,145,'top');
+  /* Fixed footprints. Coordinates are illustrative, not surveyed distances.
+     Gate hiding never redistributes the remaining gates along a line.
+     Each neighborhood includes at most two closest context gates on its pier.
+     Unknown gates are deliberately left in the existing unplaced-flight list. */
+  const footprint = {};
+  const point = (gate,x,y,side='top',pier='main') => ({gate,ax:x,ay:y,x,y,side,pier});
+  function edge(prefix,numbers,x1,y1,x2,y2,side,pier='main') {
+    return numbers.map((n,i) => {
+      const t = numbers.length === 1 ? .5 : i/(numbers.length-1);
+      return point(`${prefix}${n}`,x1+(x2-x1)*t,y1+(y2-y1)*t,side,pier);
+    });
+  }
+  function path(d,opacity=1) {
+    svg.append(el('path',{d,class:'den-map-terminal-body',opacity}));
+  }
+  function note(x,y,label) {
+    svg.append(el('text',{x,y,'text-anchor':'middle',class:'den-map-subtext den-map-outside'},label));
+  }
+  function neighborhood(all,flights,preferred=[]) {
+    const names=new Set([...flights.map(f=>normalizeGate(f.gate)).filter(Boolean),...preferred]);
+    const seeds=all.filter(g=>names.has(g.gate));
+    const keep=new Set(seeds.map(g=>g.gate));
+    seeds.forEach(seed=>{
+      all.filter(g=>g.gate!==seed.gate && g.pier===seed.pier)
+        .map(g=>({g,d:Math.hypot(g.ax-seed.ax,g.ay-seed.ay)}))
+        .sort((a,b)=>a.d-b.d).slice(0,2).forEach(({g})=>keep.add(g.gate));
+    });
+    return all.filter(g=>keep.has(g.gate)).map(g=>({...g}));
+  }
+
+  footprint.DFW = {
+    label:'TERMINAL E',
+    gates:[
+      ...[2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,20,21,31,32,33,34,35,36,37,38].map((n,i,arr)=>{
+        const a=(-90+180*i/(arr.length-1))*Math.PI/180;
+        return point(`E${n}`,300+480*Math.cos(a),570+420*Math.sin(a),a<-.6?'top':a>.6?'bottom':'right','main');
+      }),
+      ...edge('E',[22,23,24,25],980,1010,1130,830,'left','satellite'),
+      ...edge('E',[30,29,28,27,26],1030,1060,1210,845,'right','satellite')
+    ],
+    draw() {
+      path('M 300 150 A 480 420 0 0 1 300 990 L 300 918 A 395 348 0 0 0 300 222 Z');
+      if(gates.some(g=>g.pier==='satellite')) {
+        path('M 1000 1070 L 950 1015 L 1150 795 L 1215 850 Z');
+        svg.append(el('path',{d:'M 678 846 L 968 1020',class:'den-map-connector'}));
+      }
+    }
+  };
+  footprint.PHX = {
+    label:'TERMINAL 3 · F CONCOURSE',
+    gates:[point('F1',1150,310,'right'),point('F2',1150,366,'right'),
+      ...edge('F',[3,4,5,6,7,8,9,10],1060,398,160,398,'bottom'),
+      point('F11',100,310,'left'),...edge('F',[12,13,14,15],140,215,350,215,'top')],
+    draw(){path('M 100 270 L 120 270 L 120 215 L 400 215 L 400 288 L 940 288 L 940 255 L 1020 255 L 1020 288 L 1150 288 L 1150 398 L 100 398 Z');
+      svg.append(el('path',{d:'M 980 255 V 120',class:'den-map-connector'}));}
+  };
+  footprint.SFO = {
+    label:'TERMINAL 1 · BOARDING AREA B',
+    gates:[point('B1',340,700,'right','approach'),point('B2',340,600,'right','approach'),
+      point('B3',230,440,'top','approach'),point('B4',340,510,'right','approach'),point('B5',340,560,'right','approach'),
+      point('B6',340,330,'top'),point('B7',420,225,'top'),point('B8',470,225,'top'),
+      ...edge('B',[9,12,13,14,17,18,21,22],600,225,1440,225,'top'),
+      ...edge('B',[10,11,15,16,19,20,26,27],700,330,1440,330,'bottom'),
+      point('B23',1500,255,'right'),point('B24',1500,290,'right'),point('B25',1500,325,'right')],
+    draw(){path('M 270 730 L 270 510 L 180 460 L 400 225 L 1500 225 L 1500 330 L 440 330 L 270 495 L 340 545 L 340 730 Z');}
+  };
+  footprint.SJU = {
+    label:'TERMINAL C',
+    // The airport's older PDF repeats C3 at the C5 position; C5 is kept
+    // unplaced rather than silently correcting the published ambiguity.
+    gates:[point('C2',320,350,'bottom'),point('C3',590,260,'top'),point('C4',530,350,'bottom'),
+      point('C6',740,350,'bottom'),point('C7',900,205,'top'),point('C8',960,350,'bottom'),
+      point('C9',1090,250,'right'),point('C10',1090,320,'right')],
+    draw(){path('M 130 430 L 130 260 L 730 260 L 730 205 L 1090 205 L 1090 350 L 210 350 L 210 430 Z');}
+  };
+  footprint.TPA = {
+    label:'AIRSIDE E · FRONTIER AREA',
+    gates:[point('E62',710,180,'top'),point('E64',540,150,'top'),point('E65',390,120,'top'),
+      ...edge('E',[66,67,68,69,70,71,72],250,160,250,720,'left'),
+      ...edge('E',[73,74,75],410,740,720,680,'bottom')],
+    draw(){path('M 250 160 L 390 120 L 710 180 L 750 660 L 720 680 L 410 740 L 250 720 Z');
+      svg.append(el('path',{d:'M 750 420 H 940',class:'den-map-connector'}));}
+  };
+  footprint.ORD = {
+    label:'TERMINAL 5 · M CONCOURSE',
+    gates:[...edge('M',[1,2,3,4,5,6,7,8],1470,360,980,240,'top','east'),
+      ...edge('M',[9,10,11,13,14,15],960,225,850,95,'right','core'),
+      point('M16',760,95,'top','core'),point('M17',715,145,'left','core'),point('M18',630,200,'left','west'),
+      ...edge('M',[19,20,21,24,25,26,27,28,29,30],590,255,125,810,'left','west'),
+      ...edge('M',[32,33,34,35,36,37,38,39,40],100,865,260,1025,'bottom','west')],
+    draw(){path('M 1470 360 L 960 290 L 820 155 L 680 245 L 190 835 L 185 900 L 275 990 L 260 1025 L 175 1000 L 95 900 L 110 810 L 590 240 L 700 175 L 760 95 L 850 95 L 855 175 L 980 240 L 1470 335 Z');}
+  };
+  footprint.LAX = {
+    label:'TERMINAL B · TOM BRADLEY',
+    gates:[...edge('',[159,157,155,153,151],130,820,680,820,'bottom','main-south'),
+      ...edge('',[156,154,152,150],210,745,650,745,'top','main-south'),
+      ...edge('',[130,132,134],1030,745,1360,745,'top','main-north'),
+      ...edge('',[131,133,135],1030,820,1300,820,'bottom','main-north'),
+      point('148',850,710,'top','main-south'),point('141',1450,810,'right','main-north'),point('139',1450,890,'right','main-north'),
+      ...edge('',[202,204,206,208,210,212],650,200,1450,200,'top','west-north'),
+      ...edge('',[201,203,205,207,209,211],650,290,1450,290,'bottom','west-north'),
+      ...edge('',[225,221],190,310,430,310,'bottom','west-south'),
+      ...edge('',[224,222,220],100,200,390,200,'top','west-south'),
+      ...edge('',[231,233,235,237],100,310,390,310,'bottom','west-south')],
+    draw(){path('M 130 745 H 740 L 740 710 H 960 L 960 745 H 1450 V 900 H 1300 V 820 H 960 V 960 H 740 V 820 H 130 Z');
+      path('M 100 200 H 1450 V 290 H 560 V 310 H 100 Z');
+      svg.append(el('path',{d:'M 850 710 V 290',class:'den-map-connector'}));}
+  };
+  // Only named sub-gates confirmed in the TBIT directory are included.
+  ['201','209','210','211','221','225'].forEach(n=>{
+    const g=footprint.LAX.gates.find(g=>g.gate===n);
+    const suffixes={201:['B'],209:['A','B'],210:['A'],211:['A','B'],221:[],225:[]}[n];
+    if(g) suffixes.forEach((s,i)=>footprint.LAX.gates.push({...g,gate:n+s,ax:g.ax+(i?40:-40)}));
+  });
+  footprint.IAH = {
+    label:'TERMINAL A · NORTH / SOUTH PIERS',
+    gates:[...edge('A',[1,2,3],900,170,1100,170,'top','north'),
+      ...edge('A',[7,8,9,10,11,12,14,15],1100,270,280,270,'bottom','north'),
+      ...edge('A',[17,18,19,20],280,540,800,540,'top','south'),
+      ...edge('A',[24,25,26,27,29,30],1100,640,280,640,'bottom','south')],
+    draw(){path('M 200 170 H 1100 V 270 H 290 V 540 H 1100 V 640 H 200 Z');}
+  };
+  footprint.MCO = {
+    label:'AIRSIDE 1 · THREE GATE WINGS',
+    gates:[...edge('',[1,2,3,4,5],210,215,530,215,'top','1-9'),
+      ...edge('',[9,8,7,6],210,300,530,300,'bottom','1-9'),
+      ...edge('',[10,11,12,13,14],640,205,640,-115,'left','10-19'),
+      ...edge('',[19,18,17,16,15],740,205,740,-115,'right','10-19'),
+      ...edge('',[20,21,22,23,24],850,215,1200,215,'top','20-29'),
+      ...edge('',[29,28,27,26,25],850,300,1200,300,'bottom','20-29')],
+    draw(){path('M 210 215 H 600 V -115 H 780 V 215 H 1200 V 300 H 780 V 340 H 600 V 300 H 210 Z');
+      svg.append(el('path',{d:'M 690 340 V 470',class:'den-map-connector'}));}
+  };
+
+  function drawFootprint(code,flights) {
+    const data=footprint[code];
+    gates=neighborhood(data.gates,flights,layout.preferredGates||[]);
+    const all=gates.length?gates:data.gates;
+    const minX=Math.min(...all.map(g=>g.ax))-190,minY=Math.min(...all.map(g=>g.ay))-165;
+    const w=Math.max(820,Math.max(...all.map(g=>g.ax))-minX+210);
+    const h=Math.max(460,Math.max(...all.map(g=>g.ay))-minY+175);
+    svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+    const first=svg.children.length;
+    data.draw();
+    const body=el('g',{transform:`translate(${-minX} ${-minY})`});
+    while(svg.children.length>first) body.append(svg.children[first]);
+    svg.append(body);
+    gates.forEach(g=>{g.ax-=minX;g.ay-=minY;g.x=g.ax;g.y=g.ay;});
+    note(w/2,35,data.label);
+    geometryReservations.push({x:0,y:12,w,h:40});
+    if (!gates.length) {
+      body.setAttribute('opacity','.35');
+      note(w/2,h-26,'Waiting for mapped Frontier gate assignments · overview only');
+    }
+    // A tiny outline preserves DFW's recognizable curve when the activity
+    // view is cropped to a short gate neighborhood.
+    if(code==='DFW') {
+      const key=el('g',{transform:`translate(${w-132} 62) scale(.085)`,opacity:'.6','aria-hidden':'true'});
+      key.append(el('path',{d:'M 300 150 A 480 420 0 0 1 300 990 L 300 918 A 395 348 0 0 0 300 222 Z',class:'den-map-terminal-body'}));
+      key.append(el('path',{d:'M 1000 1070 L 950 1015 L 1150 795 L 1215 850 Z',class:'den-map-terminal-body'}));
+      svg.append(key);geometryReservations.push({x:w-125,y:56,w:125,h:110});
+    }
+  }
+
+  function drawATL(flights) {
+    gates=[];
+    const codes=['T','A','B','C','D','E','F'];
+    const max={T:21,A:34,B:36,C:57,D:46,E:42,F:14};
+    const assigned=[...new Set(flights.map(f=>normalizeGate(f.gate)).filter(Boolean))];
+    const active=codes.filter(c=>assigned.some(g=>g.startsWith(c)&&gateNumber(g)>=1&&gateNumber(g)<=max[c]));
+    // Horizontal detail panels are rotated relative to the airport overview.
+    // ATL's odd and even sides are preserved and spacing is deliberately
+    // expanded: 150 units per gate pair, rather than 30-pixel-wide concourses.
+    const rows=[];
+    active.forEach(c=>{
+      const all=range(c,1,max[c]).map(g=>point(g,100+Math.floor((gateNumber(g)-1)/2)*150,gateNumber(g)%2?0:90,gateNumber(g)%2?'top':'bottom',c));
+      if(c==='D') ['D1A','D8A','D9A'].forEach(name=>{
+        const original=all.find(g=>g.gate===name.slice(0,-1));
+        if(original) all.push({...original,gate:name,ax:original.ax+70});
       });
+      const visible=neighborhood(all,flights);
+      if(!visible.length) return;
+      const left=Math.min(...visible.map(g=>g.ax))-170;
+      const width=Math.max(800,Math.max(...visible.map(g=>g.ax))-left+180);
+      rows.push({c,visible,left,width});
+    });
+    const w=Math.max(1000,...rows.map(r=>r.width)),h=Math.max(440,270+rows.length*390);
+    svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+    // Whole-airport context occupies one small header, not seven full concourses.
+    note(w/2,28,'PLANE TRAIN OVERVIEW · expanded Frontier concourses below');
+    const keyWidth=630,keyX=(w-keyWidth)/2;
+    svg.append(el('path',{d:`M ${keyX} 75 H ${keyX+keyWidth}`,stroke:'#a1b4a6','stroke-width':5,fill:'none',opacity:'.5'}));
+    codes.forEach((c,i)=>{
+      const x=keyX+45+i*90,hot=active.includes(c);
+      svg.append(el('rect',{x:x-7,y:hot?48:62,width:14,height:hot?52:26,rx:4,class:'den-map-terminal-body',opacity:hot?1:.25}));
+      svg.append(el('text',{x,y:hot?119:110,'text-anchor':'middle',class:'den-map-subtext den-map-outside',opacity:hot?1:.4},c));
+    });
+    geometryReservations.push({x:0,y:0,w,h:132});
+    rows.forEach(({c,visible,left,width},i)=>{
+      const y=360+i*390;
+      path(`M 70 ${y} H ${width-65} V ${y+90} H 70 Z`);
+      note(width/2,y+51,`CONCOURSE ${c} · FRONTIER GATE NEIGHBORHOOD`);
+      geometryReservations.push({x:70,y:y+22,w:width-135,h:46});
+      visible.forEach(g=>addGate(g.gate,g.ax-left,y+g.ay,g.ax-left,y+g.ay,g.side));
+      // The ends denote a crop, not invented walls at the boundary.
+      note(90,y+122,'…');note(width-85,y+122,'…');
+    });
+    if(!rows.length) note(w/2,260,'Waiting for Frontier gate assignments · concourses expand when reported');
+  }
+
+  function drawLAS(flights) {
+    const arms=[
+      {id:'NW',x:170,y:120,nums:[50,51,52,53,54,55,56,57,58,59]},
+      {id:'NE',x:1050,y:120,nums:[16,17,18,19,20,21,22,24,25,26]},
+      {id:'SW',x:170,y:600,nums:[32,33,34,35,36,37,38,39,40,41,42,43]},
+      {id:'SE',x:1050,y:600,nums:[1,2,3,4,5,6,7,8,9,10,11,12,14]}
+    ];
+    const all=[];
+    arms.forEach(arm=>arm.nums.forEach((n,i)=>{
+      const t=.25+.72*i/Math.max(1,arm.nums.length-1),dx=arm.x-610,dy=arm.y-360,len=Math.hypot(dx,dy),s=i%2?1:-1;
+      const x=610+dx*t-dy/len*38*s,y=360+dy*t+dx/len*38*s;
+      all.push(point(`D${n}`,x,y,y<360?'top':'bottom',arm.id));
+    }));
+    all.push(...edge('E',[15,14,12,11,10,9,8,7,6,5,4,3,2,1],160,830,1080,830,'bottom','E'));
+    gates=neighborhood(all,flights);
+    svg.setAttribute('viewBox','0 0 1220 1050');
+    const livePiers=new Set(gates.map(g=>g.pier));
+    arms.forEach(a=>{
+      const hot=livePiers.has(a.id);
+      // Unused wings are shortened and faint; their gate labels are omitted.
+      const t=hot?1:.32,x=610+(a.x-610)*t,y=360+(a.y-360)*t;
+      svg.append(el('path',{d:`M 610 360 L ${x} ${y}`,class:'den-map-terminal-line',opacity:hot?1:.2}));
+      if(hot) svg.append(el('path',{d:`M 610 360 L ${x} ${y}`,class:'den-map-terminal-line-inner'}));
+    });
+    svg.append(el('circle',{cx:610,cy:360,r:65,class:'den-map-terminal-body'}));
+    note(610,362,'D SATELLITE');
+    geometryReservations.push({x:540,y:310,w:140,h:100});
+    if(livePiers.has('E')) {
+      path('M 120 765 H 1120 V 830 H 120 Z');note(610,802,'TERMINAL 3 · E GATES');
+      geometryReservations.push({x:380,y:777,w:460,h:38});
+      svg.append(el('path',{d:'M 610 425 V 720',class:'den-map-connector'}));
+      note(690,620,'TRAM');
+    } else {
+      svg.setAttribute('viewBox','0 0 1220 790');
+      note(610,742,gates.length?'Other D wings / Terminal 3 omitted from detail':'Waiting for mapped Frontier gate assignments');
     }
   }
 
   function buildGeometry(flights) {
-    if (layout.type === 'den') drawDEN();
-    else if (layout.type === 'atl') drawATL(flights);
-    else if (layout.type === 'las') drawLAS(flights);
-    else if (layout.type === 'stl') drawSTL();
-    else if (layout.type === 'lax') drawLAX(flights);
-    else linearLayout(layout, flights);
+    geometryReservations=[];
+    if(layout.type==='den') drawDEN();
+    else if(layout.type==='atl') drawATL(flights);
+    else if(layout.type==='las') drawLAS(flights);
+    else if(layout.type==='stl') drawSTL();
+    else drawFootprint(payload.airport,flights);
   }
+
+  function spreadGateSigns() {
+    const occupied=[];
+    const box=(g,x,y)=>({x:x-Math.max(54,28+g.gate.length*9)/2,y:y-13,w:Math.max(54,28+g.gate.length*9),h:26});
+    for(const g of gates) {
+      const vertical=g.side==='left'||g.side==='right';
+      for(let step=0;;step++) {
+        const shift=step===0?0:(step%2?1:-1)*Math.ceil(step/2)*72;
+        const x=g.ax+(vertical?0:shift),y=g.ay+(vertical?shift:0);
+        const b=box(g,x,y),{w,h}=viewBoxSize();
+        if(b.x<8||b.y<64||b.x+b.w>w-8||b.y+b.h>h-8) continue;
+        if(occupied.some(o=>overlaps(b,o,8))||geometryReservations.some(o=>overlaps(b,o,2))) continue;
+        g.x=x;g.y=y;occupied.push(b);break;
+      }
+    }
+  }
+
 
   const PLANE_PATH = 'M 0 -22 C -3 -22 -4 -18 -4 -12 L -4 -3 L -20 7 L -20 12 L -4 7 L -4 17 L -10 22 L -10 25 L 0 22 L 10 25 L 10 22 L 4 17 L 4 7 L 20 12 L 20 7 L 4 -3 L 4 -12 C 4 -18 3 -22 0 -22 Z';
   const AIRBORNE_PLANE_PATH = 'M -22 2 L -7 2 L 3 -6 L 8 -6 L 4 2 L 18 2 C 21 2 23 4 24 6 C 20 8 15 9 10 9 L 3 9 L -3 15 L -7 15 L -4 9 L -17 9 Z';
@@ -458,89 +595,41 @@
   }
 
   function chooseBubble(g, placed, reserved) {
-    const {w:vw,h:vh}=viewBoxSize();
-    const w=118,h=74,x=g.ax,y=g.ay;
-
-    /* The bubble should open AWAY from the terminal edge:
-       top-side gate -> bubble above; bottom-side gate -> bubble below.
-       Left/right are used on a few schematic concourses. */
-    let candidates;
-    if (g.side === 'bottom') {
-      candidates=[
-        {x:x-w/2,y:y+36},
-        {x:x-w-24,y:y+36}, {x:x+24,y:y+36},
-        {x:x-w/2,y:y+h+48},
-        {x:x-w-34,y:y-h/2}, {x:x+34,y:y-h/2},
-        {x:x-w/2,y:y-h-36}
-      ];
-    } else if (g.side === 'left') {
-      candidates=[
-        {x:x-w-36,y:y-h/2},
-        {x:x-w-36,y:y-h-28},{x:x-w-36,y:y+28},
-        {x:x+36,y:y-h/2},
-        {x:x-w/2,y:y-h-36},{x:x-w/2,y:y+36}
-      ];
-    } else if (g.side === 'right') {
-      candidates=[
-        {x:x+36,y:y-h/2},
-        {x:x+36,y:y-h-28},{x:x+36,y:y+28},
-        {x:x-w-36,y:y-h/2},
-        {x:x-w/2,y:y-h-36},{x:x-w/2,y:y+36}
-      ];
-    } else {
-      /* top and auto default upward */
-      candidates=[
-        {x:x-w/2,y:y-h-36},
-        {x:x-w-24,y:y-h-36}, {x:x+24,y:y-h-36},
-        {x:x-w/2,y:y-h*2-48},
-        {x:x-w-34,y:y-h/2}, {x:x+34,y:y-h/2},
-        {x:x-w/2,y:y+36}
-      ];
-    }
-
-    const blocked = [...placed, ...reserved];
-    for(let ring=0;ring<8;ring++){
-      for(let i=0;i<candidates.length;i++){
-        const c={...candidates[i],w,h};
-        if(ring){
-          /* Nudge primarily along the terminal so cards spread horizontally
-             before they jump to the opposite side of the map. */
-          if (g.side === 'left' || g.side === 'right') c.y += (ring%2?1:-1)*ring*34;
-          else c.x += (ring%2?1:-1)*ring*38;
+    const {w:vw,h:vh}=viewBoxSize(),w=118,h=74,x=g.x,y=g.y;
+    const side=g.side==='auto'?'top':g.side;
+    const blocked=[...placed,...reserved];
+    const candidates=[];
+    // Generate nearby outward positions first and rank by pin length. This
+    // avoids the former far-left scan when a crowded gate runs out of space.
+    for(let row=0;row<4;row++) {
+      for(let offset=-5;offset<=5;offset++) {
+        let cx,cy;
+        if(side==='left'||side==='right') {
+          cx=side==='left'?x-w-32-row*(w+14):x+32+row*(w+14);
+          cy=y-h/2+offset*(h+14);
+        } else {
+          cx=x-w/2+offset*(w+14);
+          cy=side==='bottom'?y+32+row*(h+14):y-h-32-row*(h+14);
         }
-        c.x=Math.max(8,Math.min(vw-w-8,c.x));
-        c.y=Math.max(8,Math.min(vh-h-8,c.y));
-        if(!blocked.some(p=>overlaps(c,p,9)))return c;
+        if(cx<8||cy<8||cx+w>vw-8||cy+h>vh-8) continue;
+        const distance=Math.hypot(Math.max(cx-x,0,x-cx-w),Math.max(cy-y,0,y-cy-h));
+        candidates.push({x:cx,y:cy,w,h,distance});
       }
     }
-
-    /* DEN: keep crowded cards near the east end instead of scanning from
-       the far-left corner. Extend the canvas to the right as needed.
-       The finite blocked area guarantees free space farther to the right. */
-    if (layout.type === 'den') {
-      const preferredY = Math.max(8, Math.min(vh-h-8,
-        g.side === 'bottom' ? y+36 : y-h-36));
-      for (let step=0; ; step++) {
-        const c={x:x+24+step*(w+10), y:preferredY, w, h};
-        if (blocked.some(p=>overlaps(c,p,9))) continue;
-        const expandedWidth=Math.max(vw,c.x+c.w+8);
-        if (expandedWidth>vw) svg.setAttribute('viewBox', `0 0 ${expandedWidth} ${vh}`);
-        return c;
-      }
+    candidates.sort((a,b)=>a.distance-b.distance);
+    for(const c of candidates) if(!blocked.some(b=>overlaps(c,b,10))) return c;
+    // Extend the right edge at the nearest viable row, for every airport.
+    // Unlike the old fallback this never returns an overlapping card.
+    const cy=Math.max(8,Math.min(vh-h-8,side==='bottom'?y+32:side==='top'?y-h-32:y-h/2));
+    for(let step=0;;step++) {
+      const c={x:Math.max(8,x+32)+step*(w+14),y:cy,w,h};
+      if(blocked.some(b=>overlaps(c,b,10))) continue;
+      const width=Math.max(vw,c.x+w+12);
+      svg.setAttribute('viewBox',`0 0 ${width} ${vh}`);
+      return c;
     }
-
-    /* Last resort: scan the preferred half of the map instead of covering
-       another gate marker. */
-    const startY = g.side === 'bottom' ? Math.min(vh-h-10, y+36) : 10;
-    const endY = g.side === 'bottom' ? vh-h-10 : Math.max(10,y-h-36);
-    for(let y0=startY; y0<=endY; y0+=h+10){
-      for(let x0=10;x0<=vw-w-10;x0+=w+10){
-        const c={x:x0,y:y0,w,h};
-        if(!blocked.some(p=>overlaps(c,p,9)))return c;
-      }
-    }
-    return {x:Math.max(8,Math.min(vw-w-8,x-w/2)),y:Math.max(8,Math.min(vh-h-8,g.side==='bottom'?y+36:y-h-36)),w,h};
   }
+
 
   function representativeFlight(at) {
     const sorted=[...at].sort((a,b)=>(a.instant??Infinity)-(b.instant??Infinity));
@@ -549,13 +638,16 @@
 
   function renderGate(g, at, bubbleBox) {
     const f=representativeFlight(at), occupied=!!f;
-    const markerX=g.ax, markerY=g.ay;
+    const markerX=g.x, markerY=g.y;
     const markerW=Math.max(54,28+String(g.gate).length*9), markerH=26;
     const group=el('g',{
       role:'button',tabindex:0,'data-gate':g.gate,
       'aria-label':`${g.gate}, ${at.length} flight${at.length===1?'':'s'}${f?', '+String(f.flight).replace(/\s+/g,'')+', '+conciseStatus(f).label:', no current Frontier activity'}`,
       'aria-pressed':selected===g.gate,class:`den-map-gate${occupied?' is-occupied':''}`
     });
+    if (Math.hypot(markerX-g.ax,markerY-g.ay)>1) {
+      group.append(el('line',{x1:g.ax,y1:g.ay,x2:markerX,y2:markerY,class:'den-map-pin'}));
+    }
     group.append(el('rect',{x:markerX-markerW/2,y:markerY-markerH/2,width:markerW,height:markerH,rx:5,class:'den-map-gate-marker'}));
     group.append(el('text',{x:markerX-markerW/2+11,y:markerY+4,'text-anchor':'middle',class:'den-map-gate-plane'},'✈'));
     group.append(el('text',{x:markerX+8,y:markerY+5,'text-anchor':'middle',class:'den-map-gate-name'},g.gate));
@@ -626,7 +718,8 @@
       el('desc',{},layout.description+' Yellow gate signs have current mapped Frontier activity; sage signs do not. Activity is not aircraft tracking.')
     );
 
-    buildGeometry(flights);
+    buildGeometry(payload.flights);
+    spreadGateSigns();
     const baseMapWidth = viewBoxSize().w;
 
     const gateData = gates.map(g => ({g, at:flights.filter(f => normalizeGate(f.gate) === g.gate)}));
@@ -635,17 +728,17 @@
        a flight card is never allowed to cover a neighboring gate number. */
     const reserved = gateData.map(({g}) => {
       const markerW=Math.max(54,28+String(g.gate).length*9), markerH=26;
-      return {x:g.ax-markerW/2,y:g.ay-markerH/2,w:markerW,h:markerH};
+      return {x:g.x-markerW/2,y:g.y-markerH/2,w:markerW,h:markerH};
     });
 
     const placed = [];
     const bubbleByGate = new Map();
     for (const item of gateData.filter(item => representativeFlight(item.at))) {
-      const box = chooseBubble(item.g, placed, reserved);
+      const box = chooseBubble(item.g, placed, [...reserved, ...geometryReservations]);
       placed.push(box);
       bubbleByGate.set(item.g.gate, box);
     }
-    mapWidthRatio = viewBoxSize().w / baseMapWidth;
+    mapWidthRatio = viewBoxSize().w / Math.min(baseMapWidth, 1200);
     resizeExpandedMap();
     for (const {g,at} of gateData) renderGate(g, at, bubbleByGate.get(g.gate));
 
