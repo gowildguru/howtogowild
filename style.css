@@ -7689,3 +7689,80 @@ body.tool-modal-open {
   cursor: pointer;
   min-height: 28px;
 }
+
+/* Routes live in the same frosted departures card. */
+.departure-route-section { margin-top: 24px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.24); }
+.departure-route-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+.departure-route-heading h4 { margin:5px 0 6px; font-size:22px; color:#fff; }
+.departure-route-heading p { margin:0; font-size:13px; color:rgba(255,255,255,.85); }
+.departure-route-tabs { display:flex; gap:5px; padding:5px; background:rgba(24,45,34,.23); border:1px solid rgba(255,255,255,.20); border-radius:13px; }
+.departure-route-tab { cursor:pointer; border:0; border-radius:9px; padding:10px 16px; background:transparent; color:#fff; font:inherit; font-size:13px; font-weight:700; }
+.departure-route-tab[aria-pressed="true"] { background:#eff5e9; color:#354d3d; box-shadow:0 2px 8px rgba(20,34,25,.12); }
+.departure-route-tab:hover { background:rgba(255,255,255,.17); }
+.departure-route-tab[aria-pressed="true"]:hover { background:#fff; }
+.departure-route-canvas { overflow:hidden; border-radius:18px; background:#edf2ed; border:1px solid rgba(255,255,255,.45); }
+.departure-route-canvas svg { display:block; width:100%; height:auto; }
+.departure-route-empty { margin:0; min-height:220px; display:grid; place-items:center; padding:32px; text-align:center; color:#425d4b; font-size:15px; }
+.route-ocean { fill:#e6eee9; }
+.route-grid { fill:none; stroke:#cbd9d1; stroke-width:.7; opacity:.55; }
+.route-land { fill:#f6f7ed; stroke:#c6d3c6; stroke-width:1; stroke-linejoin:round; }
+.route-line { fill:none; stroke:#5c846b; stroke-width:1.7; opacity:.64; }
+.route-line.is-selected { stroke:#214f35; stroke-width:3; opacity:1; }
+.route-line.is-muted { opacity:.19; }
+.route-hit { fill:none; stroke:transparent; stroke-width:16; cursor:pointer; pointer-events:stroke; }
+.route-origin { fill:#31583e; stroke:#fff; stroke-width:3; }
+.route-airport { fill:#6a896c; stroke:#fff; stroke-width:1.5; }
+.route-leader { fill:none; stroke:#809980; stroke-width:.7; }
+.route-label-box { fill:#fff; fill-opacity:.96; stroke:#cbd8c8; stroke-width:.7; }
+.route-label-box.is-origin { fill:#31583e; stroke:#31583e; }
+.route-label { fill:#3c5845; font-family:system-ui,sans-serif; font-size:12px; font-weight:750; }
+.route-label.is-origin { fill:#fff; }
+.route-plane { cursor:pointer; }
+.route-plane-halo { fill:#fff; fill-opacity:.92; stroke:#afc2ac; stroke-width:1; }
+.route-plane-icon { fill:#294f37; stroke:#fff; stroke-width:.7; }
+.departure-route-legend { display:flex; flex-wrap:wrap; gap:10px 20px; padding:11px 1px 0; color:rgba(255,255,255,.9); font-size:12px; }
+.departure-route-legend span { display:inline-flex; align-items:center; gap:7px; }
+.departure-route-legend-line { display:inline-block; width:22px; height:2px; background:#bed1b7; }
+.departure-route-legend-plane { font-size:17px; }
+.departure-route-note { margin:9px 0 0; color:rgba(255,255,255,.79); font-size:12px; line-height:1.6; }
+.departure-route-note a { color:inherit; text-decoration:underline; }
+.departure-route-destinations { display:flex; flex-wrap:wrap; gap:7px; margin-top:16px; }
+.departure-route-chip { padding:7px 11px; border:1px solid rgba(255,255,255,.32); border-radius:9px; background:rgba(255,255,255,.10); color:#fff; font:inherit; font-size:12px; cursor:pointer; }
+.departure-route-chip[aria-pressed="true"] { background:#eff5e9; color:#354d3d; border-color:#eff5e9; font-weight:700; }
+.departure-route-chip:hover { border-color:#fff; }
+.departure-route-detail-title { margin:18px 0 9px; font-size:15px; color:#fff; }
+.departure-route-flight-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:8px; max-height:260px; overflow:auto; }
+.departure-route-flight { display:flex; flex-wrap:wrap; gap:5px 12px; align-items:center; padding:12px; background:rgba(255,255,255,.91); color:#3e5946; border-radius:10px; text-decoration:none; font-size:12px; }
+.departure-route-flight:hover { background:#fff; }
+.departure-route-flight-status { flex-basis:100%; font-size:11px; color:#57735f; }
+.departure-route-local-note { margin:9px 0 0; font-size:12px; color:rgba(255,255,255,.8); }
+.departure-route-tab:focus-visible,.departure-route-chip:focus-visible,.departure-route-flight:focus-visible { outline:3px solid #e9f3aa; outline-offset:3px; }
+@media(max-width:650px) {
+  .departure-route-heading h4 { font-size:20px; }
+  .departure-route-tabs { width:100%; }
+  .departure-route-tab { flex:1; padding:10px 7px; }
+  .departure-route-canvas svg { min-height:250px; }
+  .departure-route-section { margin-top:18px; padding-top:18px; }
+}
+/* Native details preserves the user's open/closed choice when board data refreshes. */
+.departure-route-section { padding-top:0; border:1px solid rgba(255,255,255,.24); border-radius:15px; background:rgba(255,255,255,.045); }
+.departure-route-toggle { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:17px 19px; cursor:pointer; list-style:none; }
+.departure-route-toggle::-webkit-details-marker { display:none; }
+.departure-route-toggle::marker { content:""; }
+.departure-route-title { display:block; font-size:19px; font-weight:750; color:#fff; }
+.departure-route-description { display:block; margin-top:4px; font-size:12px; color:rgba(255,255,255,.8); }
+.departure-route-toggle-action { display:flex; align-items:center; gap:10px; white-space:nowrap; font-size:12px; font-weight:650; color:#fff; }
+.departure-route-close-label { display:none; }
+.departure-route-section[open] .departure-route-open-label { display:none; }
+.departure-route-section[open] .departure-route-close-label { display:inline; }
+.departure-route-chevron { font-size:20px; }
+.departure-route-section[open] .departure-route-chevron { transform:rotate(180deg); }
+.departure-route-content { padding:2px 19px 19px; }
+.departure-route-toggle:focus-visible { outline:3px solid #e9f3aa; outline-offset:3px; border-radius:14px; }
+@media(max-width:650px) { .departure-route-section { padding-top:0; } .departure-route-toggle { padding:15px 13px; } .departure-route-content { padding:0 13px 15px; } .departure-route-description { max-width:220px; } }
+/* Calendar and collapsible map share the right desktop column. */
+.dashboard-calendar-column { display:flex; flex-direction:column; gap:12px; min-width:0; }
+.dashboard-calendar-column .departure-route-section { margin:0; flex:0 0 auto; background:rgba(53,77,61,.25); box-shadow:0 8px 24px rgba(20,34,25,.10),inset 0 1px 0 rgba(255,255,255,.10); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+.dashboard-middle-grid .dashboard-calendar-column .dashboard-booking-calendar { min-height:0; height:auto; margin:0; flex:0 0 auto; }
+@media(min-width:701px) { .dashboard-middle-grid > .dashboard-calendar-column { grid-column:2; grid-row:1 / span 2; align-self:start; } }
+.route-plane.is-muted { opacity:.16; pointer-events:none; }
