@@ -1489,13 +1489,9 @@ let liveCamLoadedCode = "";
 
 
 function liveCamDesktopEnabled() {
-
-  return window.matchMedia(
-    "(min-width: 701px)"
-  ).matches;
-
+  const card = document.getElementById('airportConditionsCard');
+  return card ? card.open : window.matchMedia('(min-width: 701px)').matches;
 }
-
 
 function liveCamIsActive() {
 
@@ -1793,7 +1789,8 @@ let radarLastAttemptAt = 0;
 const radarBaseCache = new Map();
 
 function radarDesktopEnabled() {
-  return window.matchMedia("(min-width: 701px)").matches;
+  const card = document.getElementById('airportConditionsCard');
+  return card ? card.open : window.matchMedia('(min-width: 701px)').matches;
 }
 
 function radarIsActive() {
@@ -2385,6 +2382,8 @@ function setWeatherBackground(code, isDay) {
 }
 
 function hideFAA() {
+  const warning = document.getElementById("airportConditionsWarning");
+  if (warning) { warning.hidden = true; warning.removeAttribute("title"); }
   const panel = document.getElementById("faaNotice");
   if (panel) { panel.hidden = true; panel.replaceChildren(); }
   const assessment = document.getElementById("weatherMessage");
@@ -2396,6 +2395,8 @@ function renderFAA(data, airport) {
   if (!panel) return;
   hideFAA();
   if (!Array.isArray(data.events) || !data.events.length) return;
+  const warning = document.getElementById("airportConditionsWarning");
+  if (warning) { warning.hidden = false; warning.title = data.events.map(event => event.title).join(" · "); }
   for (const event of data.events) {
     const item = document.createElement("div");
     item.className = "dashboard-faa-event";
@@ -2500,6 +2501,12 @@ function syncWeatherActivity() {
 }
 
 function initializeWeatherEnhancements() {
+  document.getElementById('airportConditionsCard')?.addEventListener('toggle', () => {
+    syncRadarActivity();
+    // Restore the camera source label when opening after an initially closed load.
+    if (liveCamAirport) updateLiveCam(liveCamAirport);
+    else syncLiveCamActivity();
+  });
   const card = document.querySelector(".dashboard-weather");
   if (card && "IntersectionObserver" in window) {
     weatherCardVisible = false;
@@ -5034,6 +5041,7 @@ function securityAge(iso) {
   return minutes<1?'just now':`${minutes} min ago`;
 }
 function securityHide() {
+  const wrapper=document.getElementById('airportSecurityCard');if(wrapper)wrapper.hidden=true;
   const card=document.getElementById('airportSecurity');if(card){card.hidden=true;card.replaceChildren();}
 }
 function securityWaitDisplay(l) {
@@ -6793,6 +6801,28 @@ function securityLaneRows(box,cp,data) {
     if(l.notes)box.append(securityText('p','security-note',l.notes));
   }
 }
+function renderSecurityCompactPreview(featured,data) {
+  const preview=document.getElementById('securityCompactPreview');if(!preview)return;
+  preview.replaceChildren();
+  for(const cp of featured) {
+    const row=securityText('span','security-compact-row','');
+    row.append(securityText('strong','security-compact-checkpoint',cp.name));
+    const lanes=cp.lanes.filter(l=>['standard','precheck'].includes(l.type));
+    if(!lanes.length) {
+      const selected=cp.lanes.filter(l=>l.type===securityLane||l.type==='combined');lanes.push(...selected);
+    }
+    if(!lanes.length)row.append(securityText('span','security-compact-wait',data.reason==='loading'?'Checking live waits…':'Live waits unavailable'));
+    for(const lane of lanes) {
+      const schedule=securitySchedule(lane.hours||cp.hours,data.timezone||securityAirport?.timezone);
+      const closed=lane.status==='closed'||schedule?.status==='closed';
+      const wait=closed?'Closed':securityWaitCurrent(lane)?securityWaitDisplay(lane):'Wait unavailable';
+      row.append(securityText('span','security-compact-wait',`${securityLabels[lane.type]||lane.label}: ${wait}`));
+    }
+    preview.append(row);
+  }
+  if(!preview.childElementCount)preview.textContent='Expand for published security information and checkpoint hours.';
+}
+
 function renderSecurity(data) {
   const card=document.getElementById('airportSecurity');
   if(!card||data.airport!==securityAirport?.code)return;
@@ -6806,6 +6836,7 @@ function renderSecurity(data) {
   if(!guidance&&!models.some(c=>c.hours||c.lanes.some(l=>securityWaitCurrent(l)||l.hours||l.status==='closed'))){securityHide();return;}
   const open=new Set([...card.querySelectorAll('details[open][data-security-key]')].map(el=>el.dataset.securityKey));
   card.replaceChildren();card.hidden=false;
+  const wrapper=document.getElementById('airportSecurityCard');if(wrapper)wrapper.hidden=false;
   const heading=securityText('div','security-heading',''),copy=securityText('div','security-heading-copy','');
   copy.append(securityText('div','dashboard-booking-kicker','AIRPORT SECURITY'),securityText('h3','',`${data.airport} security checkpoints`));heading.append(copy);
   const links=securityText('div','security-source-links','');
@@ -6837,6 +6868,7 @@ function renderSecurity(data) {
   }
   if(types.length)card.append(options);
   const featured=securityFeaturedModels(models,data);
+  renderSecurityCompactPreview(featured,data);
   const recommendation=data.recommendations?.find(r=>r.lane===securityLane);
   if(recommendation){const cp=models.find(c=>c.live&&c.name===recommendation.checkpoint);
     // Keep the Worker's wait comparison, but never suggest a wrong or gate-dependent entrance.
@@ -6865,8 +6897,14 @@ function renderSecurity(data) {
   }
   card.append(grid);
   if(estimates.childElementCount){card.append(securityText('h4','security-section-label','Airport-published estimates / arrival information'),estimates);}
-  if(rest.childElementCount){const more=securityText('details','security-more','');more.dataset.securityKey='other:'+data.airport;
-    more.append(securityText('summary','',`Alternate and other checkpoints (${rest.childElementCount})`),rest);card.append(more);}
+  if(rest.childElementCount){
+    if(document.getElementById('airportSecurityCard')) {
+      card.append(securityText('h4','security-section-label',`Alternate and other checkpoints (${rest.childElementCount})`),rest);
+    } else {
+      const more=securityText('details','security-more','');more.dataset.securityKey='other:'+data.airport;
+      more.append(securityText('summary','',`Alternate and other checkpoints (${rest.childElementCount})`),rest);card.append(more);
+    }
+  }
   const fetched=securityAge(data.fetchedAt);
   card.append(securityText('p','security-footer',`${data.type==='estimate'?'Airport-published estimate':'Published checkpoint information'}${fetched?' · Checked '+fetched:''}${guidance?' · Guidance reviewed '+guidance.reviewed:''} · Times and gates can change. Confirm your boarding pass.`));
   for(const el of card.querySelectorAll('details[data-security-key]'))el.open=open.has(el.dataset.securityKey);
