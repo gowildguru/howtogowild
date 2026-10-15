@@ -12,8 +12,45 @@
   <meta property="article:published_time" content="2026-10-15">
   <link rel="stylesheet" href="../style.css?v=boarding-pass-11">
   <link rel="stylesheet" href="../blog.css?v=6">
+  <style>
+/* This article’s comparison styles are included here so no further blog.css edit is needed. */
+.blog-back-to-basics .btb-comparison {
+  margin:28px 0; padding:clamp(12px,2.5vw,22px); color:#fff;
+  border:1px solid rgba(230,244,233,.38); border-radius:22px; background:#344f3f;
+  box-shadow:0 8px 24px rgba(4,7,6,.14),inset 0 1px 0 rgba(255,255,255,.12);
+}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  .blog-back-to-basics .btb-comparison {
+    background:linear-gradient(120deg,rgba(230,244,233,.08),rgba(230,244,233,.02)),rgba(20,43,29,.78);
+    -webkit-backdrop-filter:blur(18px) saturate(125%);backdrop-filter:blur(18px) saturate(125%);
+  }
+}
+.blog-back-to-basics .btb-scroll {max-width:100%;overflow-x:auto;isolation:isolate;border:1px solid rgba(255,255,255,.3);border-radius:12px;scrollbar-color:#d3e8d7 #344f3f}
+.blog-back-to-basics .btb-scroll:focus-visible {outline:3px solid #fff;outline-offset:5px}
+.blog-back-to-basics .btb-table {width:100%;min-width:610px;table-layout:fixed;border-collapse:separate;border-spacing:0;color:#fff;font-size:.88rem;line-height:1.6}
+.blog-back-to-basics .btb-table th,.blog-back-to-basics .btb-table td {padding:16px 14px;text-align:left;vertical-align:top;white-space:normal;overflow-wrap:anywhere;border-bottom:1px solid rgba(255,255,255,.25)}
+.blog-back-to-basics .btb-table thead th {background:#2b4435;font-size:1.05rem}
+.blog-back-to-basics .btb-table tr>:first-child {position:sticky;left:0;z-index:1;background:#344f3f;border-right:1px solid rgba(255,255,255,.3)}
+.blog-back-to-basics .btb-table thead tr>:first-child {background:#2b4435;z-index:2}
+.blog-back-to-basics .btb-table tbody tr:last-child>* {border-bottom:0}
+.blog-back-to-basics .btb-feature {display:flex;align-items:flex-start;gap:10px}
+.blog-back-to-basics .btb-icon {width:23px;height:23px;flex:0 0 23px;margin-top:2px}
+@media(max-width:700px){
+  .blog-back-to-basics .btb-comparison {margin:24px -10px;padding:10px}
+  .blog-back-to-basics .btb-table {min-width:580px;font-size:.83rem}
+  .blog-back-to-basics .btb-table th,.blog-back-to-basics .btb-table td {padding:14px 12px}
+  .blog-back-to-basics .btb-feature {flex-direction:column;gap:6px}
+}
+@media(prefers-reduced-transparency:reduce){.blog-back-to-basics .btb-comparison {background:#344f3f;backdrop-filter:none;-webkit-backdrop-filter:none}}
+@media(forced-colors:active){.blog-back-to-basics .btb-comparison,.blog-back-to-basics .btb-scroll {border:1px solid CanvasText}}
+@media print{
+ .blog-back-to-basics .btb-scroll {overflow:visible}
+ .blog-back-to-basics .btb-table {min-width:0;font-size:9pt}
+ .blog-back-to-basics .btb-comparison,.blog-back-to-basics .btb-table tr>* {background:#fff!important;color:#000;box-shadow:none;position:static;border-color:#555}
+}
+  </style>
 </head>
-<body class="blog-page">
+<body class="blog-page blog-back-to-basics">
   <header class="more-header">
     <div class="container">
       <a class="more-brand" href="../index.html">HOWTOGOWILD!</a>
@@ -62,24 +99,25 @@
         <h2 class="blog-article-subheading">Let’s compare:</h2>
         <p>Below is a sample of nonstop Basic fare offerings between DEN–LAS in the month of January 2027.</p>
 
-        <div class="blog-fare-scroll" role="region" aria-label="Southwest and Frontier fare comparison" tabindex="0">
-          <table class="blog-fare-table">
+        <div class="btb-comparison"><div class="btb-scroll" role="region" aria-label="Southwest and Frontier fare comparison" tabindex="0">
+          <table class="btb-table">
+            <colgroup><col style="width:34%"><col style="width:33%"><col style="width:33%"></colgroup>
             <thead><tr><th scope="col"><span aria-label="Comparison feature"></span></th><th scope="col">Southwest</th><th scope="col">Frontier</th></tr></thead>
             <tbody>
-              <tr><th scope="row">Average Low Fare</th><td>$138</td><td>$79</td></tr>
-              <tr><th scope="row">Cost Difference</th><td>$59 more than F9</td><td>$59 less than WN</td></tr>
-              <tr><th scope="row">Cancellation Cost</th><td>FREE! (included)</td><td>$149</td></tr>
-              <tr><th scope="row">Carry-on Cost</th><td>FREE! (included)</td><td>$69*</td></tr>
-              <tr><th scope="row">Inflight Snack</th><td>FREE! (included)</td><td>Starts at $5</td></tr>
-              <tr><th scope="row">Inflight Drink</th><td>FREE! (included)</td><td>Starts at</td></tr>
-              <tr><th scope="row">Inflight Connectivity</th><td>FREE!</td><td>Not yet available</td></tr>
-              <tr><th scope="row">Elite Member Seat Selection at Booking</th><td>FREE!</td><td>Not Available</td></tr>
-              <tr><th scope="row">Elite Member Upgrade at Check-in</th><td>FREE!</td><td>Not Available</td></tr>
-              <tr><th scope="row">Tier Points Earned<br>(base member, no cc)</th><td>2x (276)</td><td>1x (79)</td></tr>
-              <tr><th scope="row">Elite Member<br>Same-Day Standby</th><td>FREE</td><td>Not Available</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10V4h6l12 12-7 7L3 10Z"/><circle cx="7" cy="8" r="1"/></svg><span>Average Low Fare</span></span></th><td>$138</td><td>$79</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7h17m-5-5 5 5-5 5M21 17H4m5-5-5 5 5 5"/></svg><span>Cost Difference</span></span></th><td>$59 more than F9</td><td>$59 less than WN</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m9 9 6 6m0-6-6 6"/></svg><span>Cancellation Cost</span></span></th><td>FREE! (included)</td><td>$149</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="6" width="14" height="14" rx="2"/><path d="M9 6V3h6v3M8 20v2m8-2v2M9 10v6m6-6v6"/></svg><span>Carry-on Cost</span></span></th><td>FREE! (included)</td><td>$69*</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h12l-1 4 1 10v4H6v-4L7 7 6 3Zm1 4h10M6 17h12"/><circle cx="12" cy="12" r="2"/></svg><span>Inflight Snack</span></span></th><td>FREE! (included)</td><td>Starts at $5</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 4h12v12a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V4Zm12 2h2a3 3 0 0 1 0 6h-2M4 23h14"/></svg><span>Inflight Drink</span></span></th><td>FREE! (included)</td><td>Starts at</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0m-10 4a5 5 0 0 1 6 0"/><circle cx="12" cy="20" r="1"/></svg><span>Inflight Connectivity</span></span></th><td>FREE!</td><td>Not yet available</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3v10a3 3 0 0 0 3 3h10M9 4v8h9v4M8 16l-2 6m12-6 2 6M4 3h5"/></svg><span>Elite Member Seat Selection at Booking</span></span></th><td>FREE!</td><td>Not Available</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 13v5h16v-5M12 16V3m-5 5 5-5 5 5"/></svg><span>Elite Member Upgrade at Check-in</span></span></th><td>FREE!</td><td>Not Available</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M10 17V7h3a3 3 0 0 1 0 6h-3"/></svg><span>Tier Points Earned<br>(base member, no cc)</span></span></th><td>2x (276)</td><td>1x (79)</td></tr>
+              <tr><th scope="row"><span class="btb-feature"><svg class="btb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span>Elite Member<br>Same-Day Standby</span></span></th><td>FREE</td><td>Not Available</td></tr>
             </tbody>
           </table>
-        </div>
+        </div></div>
 
         <p>*During booking; price found using <a href="https://www.flyfrontier.com/travel/travel-info/bag-options/?mobile=true#bag-prices-for-new-trip">Frontier’s Bag Price Checker</a>.</p>
 
