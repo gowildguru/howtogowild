@@ -6,6 +6,9 @@
   <title>Frontier First Tracker | HowToGoWild!</title>
   <meta name="description" content="Follow the Frontier First seat rollout by aircraft registration and animal tail.">
   <link rel="canonical" href="https://www.howtogowild.com/FrontierFirst.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
 #frontier-retrofits {
       color-scheme: light dark;
@@ -22,7 +25,7 @@
       --amber: light-dark(#88551b, #edbf7f);
       padding: 10px;
       color: var(--ink);
-      font: 14px/1.35 system-ui, sans-serif;
+      font: 14px/1.35 "Montserrat", system-ui, sans-serif;
     }
     #frontier-retrofits .fleet-panel {
       position: relative;
@@ -196,7 +199,7 @@
       #frontier-retrofits .seat-label { grid-template-rows: 23px minmax(1.15em, auto); }
     }
 :root { color-scheme: light dark; background: light-dark(#f0f7f1, #07130d); }
-body { margin: 0; font: 14px/1.4 system-ui, sans-serif; }
+body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 #frontier-retrofits.app { max-width: 1120px; margin: 0 auto; padding: clamp(10px, 3vw, 24px); }
 .site-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; margin: 0 0 15px; }
 .site-nav a { color: var(--green); font-weight: 600; text-underline-offset: .2em; }
@@ -352,7 +355,10 @@ body {
 #frontier-retrofits .tile .upfront-product, #frontier-retrofits .tile .amenities { border-top:0 !important; }
 @media(prefers-reduced-motion:reduce) { #frontier-retrofits .progress-segment {transition:none;} }
 
-  </style>
+  
+/* Keep form controls and buttons in the same typeface as the tracker. */
+button, input, select, textarea { font-family: "Montserrat", system-ui, sans-serif; }
+</style>
 </head>
 <body>
   <main id="frontier-retrofits" class="app" data-retrofit-endpoint="https://frontier-flight-times.jacob-brown-6700.workers.dev/frontier-first">
