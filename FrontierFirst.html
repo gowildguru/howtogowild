@@ -217,6 +217,13 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 #frontier-retrofits .tile.unknown .caption { background:rgba(231,235,238,.88); border-color:#b5bec6; }
 #frontier-retrofits .tile.confirmed .caption { background:rgba(207,242,219,.87); border-color:#83b995; }
 #frontier-retrofits .seat-image { width:min(100%,90px);height:59px; }
+#frontier-retrofits .seat-image:is(.upfront-image, .legroom-image) {
+  height: auto;
+  aspect-ratio: 160 / 87;
+  align-self: center;
+  background-position: center top;
+  background-size: 100% auto;
+}
 #frontier-retrofits .seat-label { grid-template-rows:59px auto;gap:2px; }
 #frontier-retrofits .legend .seat-image { width:42px;height:29px; }
 #frontier-retrofits .tile.underway .first-image { display:none; }
@@ -242,6 +249,9 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 .admin-actions {display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
 #frontier-retrofits .tile.admin-editing .caption {outline:2px dashed #23865e;outline-offset:2px;}
 @container (max-width:560px) { #frontier-retrofits .seat-label {grid-template-rows:44px auto;} #frontier-retrofits .seat-image {height:44px;} #frontier-retrofits .tile.underway .first-product::before {line-height:44px;} #frontier-retrofits .amenities {font-size:9px;} }
+@container (max-width:560px) {
+  #frontier-retrofits .seat-image:is(.upfront-image, .legroom-image) { max-width:80px; }
+}
 
 
 /* HowToGoWild sky and translucent fleet cards — forced light theme */
@@ -574,7 +584,6 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   const plugIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2v6m6-6v6M7 8h10v4a5 5 0 0 1-10 0V8Zm5 9v5"/></svg>';
   const defaults=new Map(tiles.map(tile=>[tile.dataset.tail,{tail:tile.dataset.tail,first:tile.classList.contains('confirmed')||tile.classList.contains('reported')?'equipped':'soon',wifi:'soon',power:'soon'}]));
   let records=new Map([...defaults].map(([k,v])=>[k,{...v}])), selected=tiles[0], admin=false, code='', dirty=new Set(), editTail=null;
-  const upfrontRetrofitLabel='UpFront Plus · Row 3';
   const legroomLabel='Extra Legroom · Rows 4–8';
   for(const tile of tiles){
     const legroom=document.createElement('span');
@@ -595,16 +604,19 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       const status=retrofitted?'confirmed':d.first==='underway'?'underway':'unknown';
       tile.classList.remove('confirmed','reported','underway','unknown');tile.classList.add(status);
       tile.classList.toggle('admin-editing',admin);
-      const firstLabel=retrofitted?'Frontier First':d.first==='underway'?'Retrofit Underway at TPA':'Coming Soon';
+      const firstLabel=retrofitted?'Frontier First · Rows 1–2':d.first==='underway'?'Retrofit Underway at TPA':'Coming Soon';
+      const upfrontLabel=retrofitted?'UpFront Plus · Row 3':'UpFront Plus · Rows 1–3';
       tile.querySelector('.first-product .product-name').textContent=firstLabel;
-      tile.querySelector('.upfront-product .product-name').textContent=retrofitted?upfrontRetrofitLabel:'UpFront Plus';
+      tile.querySelector('.upfront-product .product-name').textContent=upfrontLabel;
       tile.querySelector('.legroom-product').hidden=!retrofitted;
       for(const [field,selector] of [['wifi','.amenity-wifi'],['power','.amenity-power']]){
         const el=tile.querySelector(selector),enabled=d[field]==='equipped';el.classList.toggle('equipped',enabled);
         el.querySelector('small').textContent=enabled?'Equipped':'Coming Soon';
       }
       const fr24=tile.querySelector('.fr24-link');fr24.hidden=!retrofitted;
-      const seating=retrofitted?[firstLabel,upfrontRetrofitLabel,legroomLabel].join(' · '):firstLabel;
+      const seatLabels=[firstLabel,upfrontLabel];
+      if(retrofitted)seatLabels.push(legroomLabel);
+      const seating=seatLabels.join(' · ');
       tile.dataset.detail=tile.dataset.model+' · '+seating+' · Starlink '+(d.wifi==='equipped'?'Equipped':'Coming Soon')+' · Power '+(d.power==='equipped'?'Equipped':'Coming Soon');
       tile.setAttribute('aria-label',tile.dataset.label+' · '+tile.dataset.detail);
       return {tile,rank:retrofitted?0:d.first==='underway'?1:2};
