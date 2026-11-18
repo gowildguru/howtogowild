@@ -204,23 +204,56 @@ body { margin: 0; font: 14px/1.4 system-ui, sans-serif; }
 .site-footer { color: var(--muted); font-size: 12px; padding: 12px 2px; }
 .cursor-interaction { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+/* Frontier First status cards and amenities */
+#frontier-retrofits { --sky-texture: url("https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1800&q=75"); --green-card:rgba(212,242,224,.83); --green-card-border:#8abda2; }
+#frontier-retrofits .tile.underway .caption { background:rgba(205,231,250,.87); border-color:#80aed7; }
+#frontier-retrofits .tile.unknown .caption { background:rgba(231,235,238,.88); border-color:#b5bec6; }
+#frontier-retrofits .tile.confirmed .caption { background:rgba(207,242,219,.87); border-color:#83b995; }
+#frontier-retrofits .seat-image { width:min(100%,90px);height:59px; }
+#frontier-retrofits .seat-label { grid-template-rows:59px auto;gap:2px; }
+#frontier-retrofits .legend .seat-image { width:42px;height:29px; }
+#frontier-retrofits .tile.underway .first-image { display:none; }
+#frontier-retrofits .tile.underway .first-product::before { content:"🔧";display:block;font-size:31px;line-height:59px; }
+#frontier-retrofits .tile.unknown .first-image { opacity:.3;filter:grayscale(1); }
+#frontier-retrofits .tile.underway .first-product {color:#145d99;}
+#frontier-retrofits .tile.unknown .first-product {color:#57646b;}
+#frontier-retrofits .amenities {border-top:1px solid rgba(50,90,75,.2);margin:4px 3px 1px;padding-top:4px;display:grid;gap:3px;font-size:10px;line-height:1.2;}
+#frontier-retrofits .amenity {display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;}
+#frontier-retrofits .amenity svg {width:15px;height:15px;flex-shrink:0;}
+#frontier-retrofits .amenity small {opacity:.8;font-size:10px;}
+#frontier-retrofits .amenity.equipped {color:#13734e;font-weight:700;}
+#frontier-retrofits .tile {cursor:pointer;}
+#admin-open {border:0;background:transparent;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;opacity:.7;margin-left:8px;}
+#admin-bar {position:sticky;bottom:10px;z-index:50;background:#123f30;color:white;padding:12px;border-radius:12px;box-shadow:0 4px 24px #0004;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+#admin-bar[hidden] {display:none;}
+#admin-bar button,#admin-dialog button,#edit-dialog button {padding:9px 13px;border:1px solid #9bbca8;border-radius:8px;cursor:pointer;font:inherit;}
+#admin-save {background:#b2efc3;color:#123f30;font-weight:700;}
+#admin-dialog,#edit-dialog {border:1px solid #9fb9aa;border-radius:14px;padding:22px;max-width:min(90vw,440px);background:#f7fff9;color:#16392c;box-shadow:0 14px 50px #0005;}
+#admin-dialog::backdrop,#edit-dialog::backdrop {background:#0b281c99;}
+#admin-dialog label,#edit-dialog label {display:grid;gap:6px;margin:13px 0;}
+#admin-dialog input,#edit-dialog select {padding:10px;border:1px solid #9fb9aa;border-radius:8px;font:inherit;min-width:240px;max-width:100%;}
+.admin-actions {display:flex;gap:10px;justify-content:flex-end;margin-top:14px;}
+#frontier-retrofits .tile.admin-editing .caption {outline:2px dashed #23865e;outline-offset:2px;}
+@container (max-width:560px) { #frontier-retrofits .seat-label {grid-template-rows:44px auto;} #frontier-retrofits .seat-image {height:44px;} #frontier-retrofits .tile.underway .first-product::before {line-height:44px;} #frontier-retrofits .amenities {font-size:9px;} }
+
   </style>
 </head>
 <body>
-  <main id="frontier-retrofits" class="app" data-retrofit-endpoint="">
+  <main id="frontier-retrofits" class="app" data-retrofit-endpoint="https://REPLACE-WITH-YOUR-WORKER.workers.dev/frontier-first">
     <nav class="site-nav" aria-label="HowToGoWild">
       <a class="brand" href="/">HowToGoWild!</a>
       <a href="/seatmaps.html">Meet the Fleet</a>
     </nav>
 <div class="fleet-panel">
     <h1>Frontier First Tracker</h1>
-    <div class="snapshot">157 aircraft · November 17, 2026 snapshot</div>
+    <div class="snapshot">157 aircraft · Frontier cabin upgrades</div>
     <ul class="legend" aria-label="Seat products and retrofit status">
       <li class="confirmed"><span class="seat-image first-image" aria-hidden="true"></span> Frontier First</li>
-      <li class="pending-key"><span class="seat-image first-image" aria-hidden="true"></span> Coming soon</li>
+      <li class="underway-key">🔧 Retrofit underway at TPA</li><li class="pending-key">Coming soon</li>
       <li><span class="seat-image upfront-image" aria-hidden="true"></span> UpFront Plus</li>
     </ul>
-    <p class="status-note">“Coming soon” means the tracker has no record of a Frontier First installation. Timing can vary by aircraft.</p>
+    <p class="status-note">Track Frontier First, Starlink Wi-Fi, and in-seat power by aircraft.</p>
     <div class="selection" aria-live="polite">
       <strong>N680FR · Spirit the Golden Eagle</strong>
       <span>A321neo · Frontier First and UpFront Plus</span>
@@ -389,83 +422,90 @@ body { margin: 0; font: 14px/1.4 system-ui, sans-serif; }
       <button type="button" class="toggle-fleet cursor-interaction" aria-expanded="false" aria-controls="frontier-retrofits-rack">Show all 157 aircraft</button>
     </div>
   </div>
-    <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking.</footer>
+    <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking. <button type="button" id="admin-open">Admin</button></footer>
+    <dialog id="admin-dialog"><form method="dialog" id="admin-login"><h2>Tracker Admin</h2><label>Code word <input id="admin-code" type="password" autocomplete="off" required></label><p id="admin-message" role="status"></p><div class="admin-actions"><button type="submit" value="cancel">Close</button><button type="button" id="admin-unlock">Unlock</button></div></form></dialog>
+    <section id="admin-bar" hidden><strong>Admin Mode</strong> <span id="admin-dirty">Tap a tail to edit its status.</span> <button id="admin-save" type="button">Save Changes</button> <button id="admin-exit" type="button">Exit</button></section>
+    <dialog id="edit-dialog"><form method="dialog"><h2 id="edit-title">Edit aircraft</h2><label>Frontier First<select id="edit-first"><option value="soon">Coming Soon</option><option value="underway">Retrofit Underway at TPA</option><option value="equipped">Frontier First Equipped</option></select></label><label>Starlink Wi-Fi<select id="edit-wifi"><option value="soon">Coming Soon</option><option value="equipped">Equipped</option></select></label><label>In-Seat Power (Rows 1–8)<select id="edit-power"><option value="soon">Coming Soon</option><option value="equipped">Equipped</option></select></label><div class="admin-actions"><button value="cancel">Cancel</button><button id="edit-apply" value="apply">Apply</button></div></form></dialog>
   </main>
   <script>
 (() => {
-  const root = document.getElementById("frontier-retrofits");
-  const rack = root.querySelector(".rack");
-  const toggle = root.querySelector(".toggle-fleet");
-  const name = root.querySelector(".selection strong");
-  const detail = root.querySelector(".selection span");
-  const snapshot = root.querySelector(".snapshot");
-  const tiles = [...rack.querySelectorAll("button.tile")];
-  let selected = rack.querySelector('[aria-pressed="true"]');
-
-  function select(tile) {
-    selected?.setAttribute("aria-pressed", "false");
-    selected = tile;
-    selected.setAttribute("aria-pressed", "true");
-    name.textContent = tile.dataset.label;
-    detail.textContent = tile.dataset.detail;
+  const root=document.getElementById('frontier-retrofits');
+  const rack=root.querySelector('.rack'), toggle=root.querySelector('.toggle-fleet');
+  const name=root.querySelector('.selection strong'), detail=root.querySelector('.selection span'), snapshot=root.querySelector('.snapshot');
+  const tiles=[...rack.querySelectorAll('button.tile')], endpoint=root.dataset.retrofitEndpoint.trim();
+  const adminDialog=document.getElementById('admin-dialog'), editDialog=document.getElementById('edit-dialog');
+  const adminBar=document.getElementById('admin-bar'), adminMessage=document.getElementById('admin-message');
+  const wifiIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 8.8a16 16 0 0 1 20 0M5 12.5a11 11 0 0 1 14 0M8.5 16a6 6 0 0 1 7 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg>';
+  const plugIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2v6m6-6v6M7 8h10v4a5 5 0 0 1-10 0V8Zm5 9v5"/></svg>';
+  const defaults=new Map(tiles.map(tile=>[tile.dataset.tail,{tail:tile.dataset.tail,first:tile.classList.contains('confirmed')||tile.classList.contains('reported')?'equipped':'soon',wifi:'soon',power:'soon'}]));
+  let records=new Map([...defaults].map(([k,v])=>[k,{...v}])), selected=tiles[0], admin=false, code='', dirty=new Set(), editTail=null;
+  for(const tile of tiles){
+    const block=document.createElement('span');block.className='amenities';
+    block.innerHTML='<span class="amenity amenity-wifi">'+wifiIcon+'<span>Starlink Wi-Fi</span> <small>Coming Soon</small></span><span class="amenity amenity-power">'+plugIcon+'<span>Power · Rows 1–8</span> <small>Coming Soon</small></span>';
+    tile.querySelector('.caption').append(block);
   }
-
-  rack.addEventListener("click", event => {
-    const tile = event.target.closest("button.tile");
-    if (tile) select(tile);
-  });
-  toggle.addEventListener("click", () => {
-    const columns = Number(getComputedStyle(rack).getPropertyValue("--slots"));
-    const expanded = rack.toggleAttribute("data-expanded");
-    toggle.setAttribute("aria-expanded", String(expanded));
-    toggle.textContent = expanded ? "Show fewer aircraft" : `Show all ${tiles.length} aircraft`;
-    if (expanded) {
-      rack.children[columns * 2]?.focus({ preventScroll: true });
-    } else {
-      if (!selected.getClientRects().length) select(rack.firstElementChild);
-      toggle.scrollIntoView({ block: "nearest" });
-    }
-  });
-
-  const confirmed = { className: "confirmed", label: "Frontier First and UpFront Plus", first: "Frontier First", rank: 0 };
-  const reported = { className: "reported", label: "Frontier First and UpFront Plus · Cabin report", first: "Frontier First", rank: 1 };
-  const pending = { className: "unknown", label: "UpFront Plus reference · Frontier First awaiting retrofit", first: "Coming soon", rank: 2 };
-  const statuses = new Map([
-    ["Confirmed", confirmed],
-    ["Retrofitted", reported],
-    ["Not yet retrofitted", pending],
-  ]);
-
-  async function refresh(endpoint) {
-    try {
-      const response = await fetch(endpoint, { signal: AbortSignal.timeout(8000) });
-      if (!response.ok) throw new Error("Status request failed");
-      const { aircraft } = await response.json();
-      if (!Array.isArray(aircraft)) throw new Error("Invalid status response");
-      const byTail = new Map(aircraft.map(({ tail, status }) => [tail, statuses.get(status)]));
-      const ordered = tiles.map(tile => {
-        const status = byTail.get(tile.dataset.tail) ?? pending;
-        tile.classList.remove("confirmed", "reported", "unknown");
-        tile.classList.add(status.className);
-        tile.dataset.detail = `${tile.dataset.model} · ${status.label}`;
-        tile.setAttribute("aria-label", `${tile.dataset.label} · ${status.label}`);
-        tile.querySelector(".first-product .product-name").textContent = status.first;
-        return { tile, rank: status.rank };
-      });
-      ordered.sort((a, b) => a.rank - b.rank || a.tile.dataset.tail.localeCompare(b.tile.dataset.tail, "en", { numeric: true }));
-      const focused = document.activeElement;
-      rack.append(...ordered.map(({ tile }) => tile));
-      if (!selected.getClientRects().length) select(rack.firstElementChild);
-      else select(selected);
-      if (rack.contains(focused) && focused.getClientRects().length) focused.focus({ preventScroll: true });
-      snapshot.textContent = `${tiles.length} aircraft · Status from the retrofit tracker`;
-    } catch {
-      snapshot.textContent += " · Live status unavailable";
-    }
+  function select(tile){selected?.setAttribute('aria-pressed','false');selected=tile;tile.setAttribute('aria-pressed','true');name.textContent=tile.dataset.label;detail.textContent=tile.dataset.detail;}
+  function render(){
+    const ordered=tiles.map(tile=>{
+      const d=records.get(tile.dataset.tail)||defaults.get(tile.dataset.tail);
+      const status=d.first==='equipped'?'confirmed':d.first==='underway'?'underway':'unknown';
+      tile.classList.remove('confirmed','reported','underway','unknown');tile.classList.add(status);
+      tile.classList.toggle('admin-editing',admin);
+      const firstLabel=d.first==='equipped'?'Frontier First':d.first==='underway'?'Retrofit Underway at TPA':'Coming Soon';
+      tile.querySelector('.first-product .product-name').textContent=firstLabel;
+      for(const [field,selector] of [['wifi','.amenity-wifi'],['power','.amenity-power']]){
+        const el=tile.querySelector(selector),enabled=d[field]==='equipped';el.classList.toggle('equipped',enabled);
+        el.querySelector('small').textContent=enabled?'Equipped':'Coming Soon';
+      }
+      tile.dataset.detail=tile.dataset.model+' · '+firstLabel+' · Starlink '+(d.wifi==='equipped'?'Equipped':'Coming Soon')+' · Power '+(d.power==='equipped'?'Equipped':'Coming Soon');
+      tile.setAttribute('aria-label',tile.dataset.label+' · '+tile.dataset.detail);
+      return {tile,rank:d.first==='equipped'?0:d.first==='underway'?1:2};
+    });
+    ordered.sort((a,b)=>a.rank-b.rank||a.tile.dataset.tail.localeCompare(b.tile.dataset.tail,'en',{numeric:true}));
+    rack.append(...ordered.map(x=>x.tile));
+    select(selected);
+    const counts={equipped:0,underway:0,soon:0};for(const d of records.values())counts[d.first]++;
+    snapshot.textContent=tiles.length+' aircraft · '+counts.equipped+' Frontier First · '+counts.underway+' underway · '+counts.soon+' coming soon';
+    document.getElementById('admin-dirty').textContent=dirty.size?dirty.size+' unsaved aircraft change(s)':'Tap a tail to edit its status.';
   }
-
-  const endpoint = root.dataset.retrofitEndpoint.trim();
-  if (endpoint) refresh(endpoint);
+  rack.addEventListener('click',event=>{const tile=event.target.closest('button.tile');if(!tile)return;select(tile);if(admin){
+    editTail=tile.dataset.tail;const d=records.get(editTail);
+    document.getElementById('edit-title').textContent=editTail+' · '+tile.querySelector('.animal').textContent;
+    document.getElementById('edit-first').value=d.first;document.getElementById('edit-wifi').value=d.wifi;document.getElementById('edit-power').value=d.power;
+    editDialog.showModal();
+  }});
+  document.getElementById('edit-apply').addEventListener('click',()=>{
+    if(!editTail)return;
+    records.set(editTail,{tail:editTail,first:document.getElementById('edit-first').value,wifi:document.getElementById('edit-wifi').value,power:document.getElementById('edit-power').value});
+    dirty.add(editTail);render();
+  });
+  toggle.addEventListener('click',()=>{const expanded=rack.toggleAttribute('data-expanded');toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'Show fewer aircraft':'Show all '+tiles.length+' aircraft';if(!expanded)toggle.scrollIntoView({block:'nearest'});});
+  document.getElementById('admin-open').addEventListener('click',()=>{adminMessage.textContent='';adminDialog.showModal();});
+  document.getElementById('admin-unlock').addEventListener('click',async()=>{
+    const candidate=document.getElementById('admin-code').value;adminMessage.textContent='Checking…';
+    try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'unlock',code:candidate})});
+      if(!response.ok)throw new Error('Incorrect code word or Worker unavailable');
+      code=candidate;admin=true;adminBar.hidden=false;adminDialog.close();rack.setAttribute('data-expanded','');toggle.textContent='Show fewer aircraft';toggle.setAttribute('aria-expanded','true');render();
+    }catch(error){adminMessage.textContent=error.message;}
+  });
+  document.getElementById('admin-save').addEventListener('click',async()=>{
+    const button=document.getElementById('admin-save');if(!dirty.size)return;button.disabled=true;button.textContent='Saving…';
+    try{const changes=[...dirty].map(tail=>records.get(tail));const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',code,aircraft:changes})});
+      const result=await response.json();if(!response.ok)throw new Error(result.error||'Save failed');dirty.clear();render();button.textContent='Saved!';setTimeout(()=>button.textContent='Save Changes',1600);
+    }catch(error){alert('Could not save: '+error.message);button.textContent='Save Changes';}finally{button.disabled=false;}
+  });
+  document.getElementById('admin-exit').addEventListener('click',async()=>{
+    if(dirty.size&&!confirm('Discard unsaved changes?'))return;admin=false;code='';dirty.clear();adminBar.hidden=true;await refresh();render();
+  });
+  async function refresh(){
+    try{const response=await fetch(endpoint,{cache:'no-store',signal:AbortSignal.timeout(10000)});if(!response.ok)throw new Error('Unavailable');
+      const payload=await response.json();if(!Array.isArray(payload.aircraft))throw new Error('Invalid data');
+      records=new Map([...defaults].map(([k,v])=>[k,{...v}]));
+      for(const d of payload.aircraft)if(defaults.has(d.tail))records.set(d.tail,{...defaults.get(d.tail),...d});
+    }catch(error){console.warn('Tracker data unavailable; showing initial statuses.',error);}
+    render();
+  }
+  render();if(endpoint)refresh();
 })();
   </script>
 </body>
