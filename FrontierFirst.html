@@ -315,6 +315,43 @@ body {
 }
 @media(max-width:560px) { #frontier-retrofits .hero-links .hero-pill { flex:1 1 auto; padding:9px 12px; } }
 
+  
+/* Color-only status key; keeps seat product photographs in the aircraft cards. */
+#frontier-retrofits .status-key { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; padding:0; margin:12px 0; list-style:none; }
+#frontier-retrofits .status-key li { display:inline-flex; gap:8px; align-items:center; font-size:12px; font-weight:700; color:#173d30; }
+#frontier-retrofits .status-swatch { display:inline-block; width:20px; height:20px; border-radius:6px; flex:none; border:1px solid rgba(255,255,255,.7); box-shadow:0 2px 7px rgba(19,57,49,.22); backdrop-filter:blur(8px); }
+#frontier-retrofits .status-swatch.installed { background:rgba(13,72,45,.88); }
+#frontier-retrofits .status-swatch.underway { background:rgba(18,67,109,.88); }
+#frontier-retrofits .status-swatch.coming { background:rgba(58,70,80,.88); }
+/* In-progress retrofits show the actual Frontier First seats fading gently in/out. */
+#frontier-retrofits .tile.underway .first-image { display:block !important; opacity:1 !important; filter:none !important; animation:frontier-seat-installing 2.8s ease-in-out infinite; }
+#frontier-retrofits .tile.underway .first-product::before { content:none !important; display:none !important; }
+@keyframes frontier-seat-installing { 0%,100% {opacity:.25;} 50% {opacity:1;} }
+@media (prefers-reduced-motion:reduce) { #frontier-retrofits .tile.underway .first-image { animation:none !important; opacity:1 !important; } }
+
+
+/* Fleet completion dashboard */
+#frontier-retrofits .fleet-dashboard { margin:16px 0 14px; padding:16px; border:1px solid rgba(27,94,72,.26); border-radius:16px; background:rgba(248,255,253,.68); box-shadow:0 8px 24px rgba(21,65,56,.09); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+#frontier-retrofits .dashboard-head { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:13px; }
+#frontier-retrofits .dashboard-eyebrow { font-size:11px; text-transform:uppercase; letter-spacing:.075em; font-weight:800; color:#42685a; }
+#frontier-retrofits .dashboard-number { font-size:clamp(24px,4vw,36px); line-height:1.1; font-weight:850; color:#125237; font-variant-numeric:tabular-nums; }
+#frontier-retrofits .dashboard-sub { font-size:12px; color:#3a5e51; margin-top:4px; }
+#frontier-retrofits .deadline-link { color:#14583d; font-weight:750; text-underline-offset:3px; }
+#frontier-retrofits .progress-track { display:flex; width:100%; height:20px; overflow:hidden; border-radius:999px; background:#3a4650; box-shadow:inset 0 1px 4px rgba(0,0,0,.17); }
+#frontier-retrofits .progress-segment { display:block; height:100%; min-width:0; transition:width .3s ease; }
+#frontier-retrofits .progress-installed { background:#0d482d; }
+#frontier-retrofits .progress-underway { background:#12436d; }
+#frontier-retrofits .progress-coming { background:#3a4650; }
+#frontier-retrofits .progress-stats { display:flex; flex-wrap:wrap; gap:9px 20px; margin-top:11px; font-size:12px; font-weight:650; color:#264f41; }
+#frontier-retrofits .progress-stats span { display:inline-flex; align-items:center; gap:7px; }
+#frontier-retrofits .progress-stats i { display:inline-block; width:10px; height:10px; border-radius:3px; }
+#frontier-retrofits .progress-stats .stat-installed i { background:#0d482d; }
+#frontier-retrofits .progress-stats .stat-underway i { background:#12436d; }
+#frontier-retrofits .progress-stats .stat-coming i { background:#3a4650; }
+/* Remove separators between the seat products and amenities. */
+#frontier-retrofits .tile .upfront-product, #frontier-retrofits .tile .amenities { border-top:0 !important; }
+@media(prefers-reduced-motion:reduce) { #frontier-retrofits .progress-segment {transition:none;} }
+
   </style>
 </head>
 <body>
@@ -330,11 +367,21 @@ body {
 <div class="fleet-panel">
     <h1>Frontier First Tracker</h1>
     <p class="tracker-intro">A community-sourced guide to Frontier First seating, Starlink Wi-Fi and in-seat power across Frontier’s fleet. Maintained independently by HowToGoWild! and aviation enthusiasts.</p>
+    <section class="fleet-dashboard" aria-label="Fleet retrofit completion and target date">
+      <div class="dashboard-head">
+        <div><div class="dashboard-eyebrow">Frontier First retrofit progress</div><div class="dashboard-number" id="fleet-percent">1.9% complete</div><div class="dashboard-sub" id="fleet-fraction">3 of 157 aircraft installed</div></div>
+        <div><div class="dashboard-eyebrow">Frontier's target completion date</div><div class="dashboard-number" id="fleet-countdown">Calculating…</div><div class="dashboard-sub"><a class="deadline-link" href="https://news.flyfrontier.com/" target="_blank" rel="noopener noreferrer">March 5, 2027</a> · Seating retrofit target, not Starlink or power</div></div>
+      </div>
+      <div class="progress-track" role="img" id="fleet-progress" aria-label="Fleet progress: 3 installed, 0 underway, 154 coming soon">
+        <span class="progress-segment progress-installed" id="progress-installed" style="width:1.9108%"></span><span class="progress-segment progress-underway" id="progress-underway" style="width:0%"></span><span class="progress-segment progress-coming" id="progress-coming" style="width:98.0892%"></span>
+      </div>
+      <div class="progress-stats"><span class="stat-installed"><i aria-hidden="true"></i><span id="count-installed">3 installed</span></span><span class="stat-underway"><i aria-hidden="true"></i><span id="count-underway">0 underway</span></span><span class="stat-coming"><i aria-hidden="true"></i><span id="count-coming">154 coming soon</span></span></div>
+    </section>
     <div class="snapshot">157 aircraft · Frontier cabin upgrades</div>
-    <ul class="legend" aria-label="Seat products and retrofit status">
-      <li class="confirmed"><span class="seat-image first-image" aria-hidden="true"></span> Frontier First</li>
-      <li class="underway-key">🔧 Retrofit underway at TPA</li><li class="pending-key">Coming soon</li>
-      <li><span class="seat-image upfront-image" aria-hidden="true"></span> UpFront Plus</li>
+    <ul class="legend status-key" aria-label="Aircraft retrofit status key">
+      <li><span class="status-swatch installed" aria-hidden="true"></span> Frontier First installed</li>
+      <li><span class="status-swatch underway" aria-hidden="true"></span> Retrofit underway at TPA</li>
+      <li><span class="status-swatch coming" aria-hidden="true"></span> Coming soon</li>
     </ul>
     <p class="status-note">Track Frontier First, Starlink Wi-Fi, and in-seat power by aircraft.</p>
     <noscript><p>Enable JavaScript to browse the full fleet and select individual aircraft.</p></noscript>
@@ -546,6 +593,16 @@ body {
     select(selected);
     const counts={equipped:0,underway:0,soon:0};for(const d of records.values())counts[d.first]++;
     snapshot.textContent=tiles.length+' aircraft · '+counts.equipped+' Frontier First · '+counts.underway+' underway · '+counts.soon+' coming soon';
+    const total=tiles.length || 1;
+    document.getElementById('fleet-percent').textContent=(100*counts.equipped/total).toFixed(1)+'% complete';
+    document.getElementById('fleet-fraction').textContent=counts.equipped+' of '+tiles.length+' aircraft installed';
+    document.getElementById('progress-installed').style.width=(100*counts.equipped/total)+'%';
+    document.getElementById('progress-underway').style.width=(100*counts.underway/total)+'%';
+    document.getElementById('progress-coming').style.width=(100*counts.soon/total)+'%';
+    document.getElementById('count-installed').textContent=counts.equipped+' installed';
+    document.getElementById('count-underway').textContent=counts.underway+' underway';
+    document.getElementById('count-coming').textContent=counts.soon+' coming soon';
+    document.getElementById('fleet-progress').setAttribute('aria-label','Fleet progress: '+counts.equipped+' installed, '+counts.underway+' underway, '+counts.soon+' coming soon');
     document.getElementById('admin-dirty').textContent=dirty.size?dirty.size+' unsaved aircraft change(s)':'Tap a tail to edit its status.';
   }
   rack.addEventListener('click',event=>{if(event.target.closest('.fr24-link'))return;const tile=event.target.closest('.tile');if(!tile)return;select(tile);if(admin){
@@ -586,6 +643,16 @@ body {
     }catch(error){console.warn('Tracker data unavailable; showing initial statuses.',error);}
     render();
   }
+  function updateCountdown(){
+    // Date-only countdown: use the visitor's local calendar date, avoiding timezone surprises.
+    const now=new Date();
+    const today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+    const deadline=Date.UTC(2027,2,5);
+    const days=Math.max(0,Math.round((deadline-today)/86400000));
+    document.getElementById('fleet-countdown').textContent=days===0?(today>deadline?'Target date passed':'Target date today'):days+' days left';
+  }
+  updateCountdown();
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateCountdown();});
   render();if(endpoint)refresh();
 })();
   </script>
