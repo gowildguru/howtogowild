@@ -479,6 +479,21 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   }
   #frontier-retrofits .airspace-wordmark::before { content: "Airspace"; }
 }
+#frontier-retrofits .fleet-support {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--panel);
+}
+#frontier-retrofits .fleet-support-copy { flex: 1 1 320px; }
+#frontier-retrofits .fleet-support h2 { margin: 0 0 4px; font-size: 15px; font-weight: 750; }
+#frontier-retrofits .fleet-support p { margin: 0; color: var(--muted); font-size: 13px; }
 #frontier-retrofits .fleet-coffee {
   display: flex;
   width: fit-content;
@@ -487,7 +502,6 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  margin: 14px auto 0;
   padding: 7px 14px;
   border: 1px solid var(--card-border);
   border-radius: 8px;
@@ -1091,7 +1105,13 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       <button type="button" class="toggle-fleet cursor-interaction" aria-expanded="false" aria-controls="frontier-retrofits-rack">Show all 167 aircraft</button>
     </div>
   </div>
-    <a class="fleet-coffee" href="https://buymeacoffee.com/gowildguru" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
+    <section class="fleet-support" aria-labelledby="fleet-support-title">
+      <div class="fleet-support-copy">
+        <h2 id="fleet-support-title">Enjoying the Frontier First Tracker?</h2>
+        <p>If the tracker helped you find a retrofitted aircraft or see what’s on board, buying me a coffee helps support ongoing fleet updates and keeps the tracker free for everyone.</p>
+      </div>
+      <a class="fleet-coffee" href="https://buymeacoffee.com/gowildguru" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
+    </section>
     <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking.</footer>
     <dialog id="admin-dialog"><form method="dialog" id="admin-login"><h2>Tracker Admin</h2><label>Code word <input id="admin-code" type="password" autocomplete="off" required></label><p id="admin-message" role="status"></p><div class="admin-actions"><button type="submit" value="cancel">Close</button><button type="button" id="admin-unlock">Unlock</button></div></form></dialog>
     <section id="admin-bar" hidden><strong>Admin Mode</strong> <span id="admin-dirty">Tap a tail to edit its status.</span> <button id="admin-save" type="button">Save Changes</button> <button id="admin-exit" type="button">Exit</button></section>
