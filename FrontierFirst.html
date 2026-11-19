@@ -239,7 +239,7 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
   --green: #a9ecc5;
   --status-installed: #9fbea9;
   --status-underway: #8cc8ef;
-  --status-coming: #c4cbd0;
+  --status-coming: #818d94;
 }
 #frontier-retrofits .tracker-intro { max-width: 740px; margin: 8px 0 10px; color: var(--muted); line-height: 1.5; font-size: 14px; font-weight: 500; }
 #frontier-retrofits .tile .caption { box-shadow: 0 5px 18px rgba(16,51,43,.14); }
@@ -288,8 +288,8 @@ body {
   gap: 12px;
 }
 #frontier-retrofits .tile {
-  --status-card: rgba(181, 190, 196, .91);
-  --status-ink: #142425;
+  --status-card: rgba(87, 97, 105, .92);
+  --status-ink: #f8fbfc;
 }
 #frontier-retrofits .tile:is(.confirmed, .reported) {
   --status-card: #66766c;
@@ -297,6 +297,7 @@ body {
 }
 #frontier-retrofits .tile.underway {
   --status-card: rgba(139, 193, 226, .93);
+  --status-ink: #142425;
 }
 #frontier-retrofits .fr24-link { background:rgba(245,255,249,.96); color:#0d4b2f; }
 #frontier-retrofits .fr24-link[hidden] { display:none !important; }
@@ -357,9 +358,9 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 #frontier-retrofits .incoming-spirit {
   --spirit-yellow: #ffdb32;
   margin-top: 22px;
-  border: 1px solid var(--spirit-yellow);
+  border: 1px solid rgba(255,219,50,.45);
   border-radius: 16px;
-  background: #1c201c;
+  background: rgba(40,37,18,.74);
 }
 #frontier-retrofits .incoming-spirit > summary {
   display: flex;
@@ -368,21 +369,17 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   min-height: 52px;
   padding: 8px 15px;
   border-radius: 15px;
-  background: var(--spirit-yellow);
-  color: #1c201c;
+  background: linear-gradient(115deg, rgba(255,222,78,.22), rgba(255,222,78,.10));
+  color: #fff4c4;
+  box-shadow: inset 0 1px 0 rgba(255,246,196,.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   cursor: pointer;
   list-style: none;
 }
 #frontier-retrofits .incoming-spirit > summary::-webkit-details-marker { display: none; }
 #frontier-retrofits .incoming-spirit[open] > summary { border-radius: 15px 15px 0 0; }
 #frontier-retrofits .incoming-spirit > summary:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-#frontier-retrofits .incoming-spirit > summary img {
-  display: block;
-  width: clamp(65px, 17vw, 130px);
-  height: auto;
-  margin-top: -19px;
-  mask-image: linear-gradient(to right, black 82%, transparent 96%);
-}
 #frontier-retrofits .incoming-spirit-heading { display: grid; gap: 2px; }
 #frontier-retrofits .incoming-spirit-heading strong { font-size: clamp(13px, 3.6vw, 17px); }
 #frontier-retrofits .incoming-spirit-heading > span { font-size: 12px; }
@@ -401,23 +398,48 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 }
 #frontier-retrofits .incoming-spirit-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 8px;
   margin: 0;
   padding: 12px;
   list-style: none;
 }
-#frontier-retrofits .incoming-spirit-list li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 3px 8px;
-  padding: 8px 10px;
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 8px;
+#frontier-retrofits .incoming-spirit-card { min-width: 0; text-align: center; }
+#frontier-retrofits .incoming-spirit-card .caption {
+  --tail-overlap: 7px;
+  --status-card: linear-gradient(145deg, rgba(255,222,78,.20), rgba(255,222,78,.09));
+  --status-ink: #fff;
+  display: grid;
+  gap: 3px;
+  padding-bottom: 8px;
+  border-color: rgba(255,219,50,.40);
+  box-shadow: inset 0 1px 0 rgba(255,246,196,.13);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
-#frontier-retrofits .incoming-spirit-list li > span { color: var(--muted); font-size: 12px; }
-#frontier-retrofits .incoming-spirit-list s { color: var(--spirit-yellow); font-weight: 700; }
+#frontier-retrofits .incoming-spirit-card .registration { color: #fff; font-size: 12px; }
+#frontier-retrofits .incoming-spirit-card .caption > span { color: var(--muted); font-size: 11px; }
+#frontier-retrofits .incoming-spirit-card s { color: var(--spirit-yellow); font-weight: 700; white-space: nowrap; }
+@container (max-width: 780px) {
+  #frontier-retrofits .incoming-spirit-list { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@container (max-width: 520px) {
+  #frontier-retrofits .incoming-spirit-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+#frontier-retrofits .fleet-data-notice {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+#frontier-retrofits #fleet-data-retry {
+  min-height: 44px;
+  margin-left: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  text-decoration: underline;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -447,6 +469,10 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       <div class="progress-stats"><span class="stat-installed"><i aria-hidden="true"></i><span id="count-installed">3 installed</span></span><span class="stat-underway"><i aria-hidden="true"></i><span id="count-underway">0 underway</span></span><span class="stat-coming"><i aria-hidden="true"></i><span id="count-coming">154 coming soon</span></span></div>
     </section>
     <div class="snapshot">157 aircraft · Frontier cabin upgrades</div>
+    <p class="fleet-data-notice" id="fleet-data-notice">
+      <span id="fleet-data-message" role="status">Loading saved fleet statuses…</span>
+      <button type="button" id="fleet-data-retry" hidden>Retry</button>
+    </p>
     <ul class="legend status-key" aria-label="Aircraft retrofit status key">
       <li><span class="status-swatch installed" aria-hidden="true"></span> Frontier First installed</li>
       <li><span class="status-swatch underway" aria-hidden="true"></span> Retrofit underway</li>
@@ -616,10 +642,8 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     <div class="toggle-line">
       <button type="button" class="toggle-fleet cursor-interaction" aria-expanded="false" aria-controls="frontier-retrofits-rack">Show all 157 aircraft</button>
     </div>
-  </div>
-    <details class="incoming-spirit">
+    <details class="incoming-spirit" open>
       <summary>
-        <img src="photos/tails/oldnk.png" alt="" width="1536" height="1024" loading="lazy" decoding="async">
         <span class="incoming-spirit-heading">
           <strong>Incoming from Spirit</strong>
           <span>10 Airbus A321neos</span>
@@ -627,18 +651,49 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
         <span class="incoming-spirit-toggle" aria-hidden="true"></span>
       </summary>
       <ul class="incoming-spirit-list" aria-label="Planned Frontier registrations and former Spirit registrations">
-        <li><strong>N814FR</strong><span>formerly <s>N731NK</s></span></li>
-        <li><strong>N813FR</strong><span>formerly <s>N726NK</s></span></li>
-        <li><strong>N815FR</strong><span>formerly <s>N723NK</s></span></li>
-        <li><strong>N816FR</strong><span>formerly <s>N724NK</s></span></li>
-        <li><strong>N817FR</strong><span>formerly <s>N725NK</s></span></li>
-        <li><strong>N819FR</strong><span>formerly <s>N729NK</s></span></li>
-        <li><strong>N820FR</strong><span>formerly <s>N720NK</s></span></li>
-        <li><strong>N822FR</strong><span>formerly <s>N721NK</s></span></li>
-        <li><strong>N823FR</strong><span>formerly <s>N718NK</s></span></li>
-        <li><strong>N825FR</strong><span>formerly <s>N717NK</s></span></li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N814FR</strong><span>Formerly <s>N731NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N813FR</strong><span>Formerly <s>N726NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N815FR</strong><span>Formerly <s>N723NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N816FR</strong><span>Formerly <s>N724NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N817FR</strong><span>Formerly <s>N725NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N819FR</strong><span>Formerly <s>N729NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N820FR</strong><span>Formerly <s>N720NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N822FR</strong><span>Formerly <s>N721NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N823FR</strong><span>Formerly <s>N718NK</s></span></span>
+        </li>
+        <li class="incoming-spirit-card">
+          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+          <span class="caption"><strong class="registration">N825FR</strong><span>Formerly <s>N717NK</s></span></span>
+        </li>
       </ul>
     </details>
+  </div>
     <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking.</footer>
     <dialog id="admin-dialog"><form method="dialog" id="admin-login"><h2>Tracker Admin</h2><label>Code word <input id="admin-code" type="password" autocomplete="off" required></label><p id="admin-message" role="status"></p><div class="admin-actions"><button type="submit" value="cancel">Close</button><button type="button" id="admin-unlock">Unlock</button></div></form></dialog>
     <section id="admin-bar" hidden><strong>Admin Mode</strong> <span id="admin-dirty">Tap a tail to edit its status.</span> <button id="admin-save" type="button">Save Changes</button> <button id="admin-exit" type="button">Exit</button></section>
@@ -661,6 +716,10 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   const editLocationField=document.getElementById('edit-location-field');
   const retrofitLocations=new Set(['TPA','MCO']);
   let supportsRetrofitLocation=false;
+  let liveDataReady=false, hasLoadedFleet=false, refreshRequest;
+  const dataNotice=document.getElementById('fleet-data-notice');
+  const dataMessage=document.getElementById('fleet-data-message');
+  const dataRetry=document.getElementById('fleet-data-retry');
 
   function updateLocationField(){
     const showLocation=supportsRetrofitLocation && editFirst.value==='underway';
@@ -754,6 +813,10 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   document.getElementById('admin-open').addEventListener('click',()=>{adminMessage.textContent='';adminDialog.showModal();});
   document.getElementById('admin-unlock').addEventListener('click',async()=>{
     const candidate=document.getElementById('admin-code').value;adminMessage.textContent='Checking…';
+    if(!liveDataReady && !await refresh()){
+      adminMessage.textContent='Saved fleet statuses are unavailable. Try again before editing.';
+      return;
+    }
     try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'unlock',code:candidate})});
       if(!response.ok)throw new Error('Incorrect code word or Worker unavailable');
       code=candidate;admin=true;adminBar.hidden=false;adminDialog.close();rack.setAttribute('data-expanded','');toggle.textContent='Show fewer aircraft';toggle.setAttribute('aria-expanded','true');render();
@@ -768,15 +831,49 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   document.getElementById('admin-exit').addEventListener('click',async()=>{
     if(dirty.size&&!confirm('Discard unsaved changes?'))return;admin=false;code='';dirty.clear();adminBar.hidden=true;await refresh();render();
   });
-  async function refresh(){
-    try{const response=await fetch(endpoint,{cache:'no-store',signal:AbortSignal.timeout(10000)});if(!response.ok)throw new Error('Unavailable');
-      const payload=await response.json();if(!Array.isArray(payload.aircraft))throw new Error('Invalid data');
+  async function fetchFleet(){
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),12000);
+    try{
+      const response=await fetch(endpoint,{cache:'no-store',signal:controller.signal});
+      if(!response.ok)throw new Error('Fleet endpoint returned HTTP '+response.status);
+      const payload=await response.json();
+      if(!Array.isArray(payload.aircraft))throw new Error('Invalid fleet data');
+      return payload;
+    }finally{
+      clearTimeout(timeout);
+    }
+  }
+
+  async function loadFleet(){
+    dataNotice.hidden=false;
+    dataMessage.textContent='Loading saved fleet statuses…';
+    dataRetry.hidden=true;
+    try{
+      const payload=await fetchFleet().catch(fetchFleet);
       supportsRetrofitLocation=payload.supportsRetrofitLocation===true;
       records=new Map([...defaults].map(([k,v])=>[k,{...v}]));
       for(const d of payload.aircraft)if(defaults.has(d.tail))records.set(d.tail,{...defaults.get(d.tail),...d});
-    }catch(error){console.warn('Tracker data unavailable; showing initial statuses.',error);}
-    render();
+      liveDataReady=true;
+      hasLoadedFleet=true;
+      dataNotice.hidden=true;
+      render();
+    }catch(error){
+      liveDataReady=false;
+      dataMessage.textContent=hasLoadedFleet
+        ?'Could not refresh fleet statuses. Showing the last loaded data.'
+        :'Saved fleet statuses are unavailable. Showing the initial snapshot.';
+      dataRetry.hidden=false;
+      console.warn('Could not load saved fleet statuses.',error);
+    }
+    return liveDataReady;
   }
+
+  function refresh(){
+    if(!refreshRequest)refreshRequest=loadFleet().finally(()=>{refreshRequest=undefined;});
+    return refreshRequest;
+  }
+  dataRetry.addEventListener('click',refresh);
   function updateCountdown(){
     // Date-only countdown: use the visitor's local calendar date, avoiding timezone surprises.
     const now=new Date();
