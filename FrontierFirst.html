@@ -237,8 +237,8 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 /* Tracker theme */
 #frontier-retrofits {
   color-scheme: dark;
-  --ink: #f2f8f5; --muted: #c5d6cd; --line: rgba(225,250,235,.24);
-  --panel: rgba(56,62,61,.68); --detail: rgba(23,34,30,.85);
+  --ink: #f2f8f5; --muted: #c5d6cd; --line: rgba(255,255,255,.24);
+  --panel: rgba(53,77,61,.25); --detail: rgba(23,34,30,.85);
   --green: #a9ecc5;
   --green-card: rgba(10,63,39,.75);
 }
@@ -261,17 +261,30 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 #frontier-retrofits .tile:focus-visible { outline: 3px solid #186b4d; outline-offset: 3px; }
 
 
-/* Green page glow and a translucent gray tracker panel. */
-:root { color-scheme: dark; background: #080e0c; }
-html, body { min-height: 100%; }
+/* HowToGoWild homepage dashboard gradient and frosted panel. */
+:root { color-scheme: dark; background-color: #040706; }
 body {
   margin: 0;
-  background: radial-gradient(ellipse 80% 530px at 50% 0, #26734c 0%, #153c2b 52%, transparent 100%) #080e0c;
+  min-height: 100vh;
+  min-height: 100svh;
+  background-color: #040706;
+  background-image: radial-gradient(
+      ellipse 85% 52% at 50% 0%,
+      #66766c 0%,
+      #53635a 18%,
+      #34423b 36%,
+      #18231f 56%,
+      #0a100e 76%,
+      #040706 100%
+    );
+  background-size: 100% 100vh;
+  background-size: 100% 100svh;
+  background-repeat: no-repeat;
 }
 #frontier-retrofits .fleet-panel {
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 18px 55px rgba(0,0,0,.28);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(20,34,25,.10), inset 0 1px 0 rgba(255,255,255,.10);
 }
 #frontier-retrofits .tracker-header {
   display: flex;
