@@ -16,7 +16,6 @@
       --muted: light-dark(#486258, #b0c7bd);
       --line: light-dark(#d7e5de, #365148);
       --panel: light-dark(#deeff8, #152f36);
-      --green-card: light-dark(rgb(214 241 221 / .82), rgb(23 70 50 / .86));
       --card-border: rgba(211, 250, 223, .44);
       --detail: light-dark(#fff, #20372e);
       --green: light-dark(#167452, #8dd9b9);
@@ -124,7 +123,8 @@
       padding: calc(var(--tail-overlap) + 4px) 1px 3px;
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      background: var(--green-card);
+      background: var(--status-card);
+      color: var(--status-ink);
     }
     #frontier-retrofits .tile[aria-pressed="true"] .caption {
       border-color: rgba(211, 250, 223, .68);
@@ -182,8 +182,7 @@
       overflow-wrap: anywhere;
     }
     #frontier-retrofits .first-product { margin-top: 2px; }
-    #frontier-retrofits :is(.confirmed, .reported) .first-product { color: var(--green); }
-    #frontier-retrofits :is(.unknown, .pending-key) .first-image { filter: grayscale(1); opacity: .4; }
+        #frontier-retrofits :is(.unknown, .pending-key) .first-image { filter: grayscale(1); opacity: .4; }
     #frontier-retrofits .product-name { align-self: center; }
 body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 #frontier-retrofits.app { max-width: 1120px; margin: 0 auto; padding: clamp(10px, 3vw, 24px); }
@@ -202,13 +201,11 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 }
 #frontier-retrofits .legend .seat-image { width:42px;height:29px; }
 #frontier-retrofits .tile.unknown .first-image { opacity:.3;filter:grayscale(1); }
-#frontier-retrofits .tile.underway .first-product {color:#145d99;}
-#frontier-retrofits .tile.unknown .first-product {color:#57646b;}
 #frontier-retrofits .amenities {margin:5px 3px 1px;display:grid;gap:2px;font-size:10px;line-height:1.2;}
 #frontier-retrofits .amenity {display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;}
 #frontier-retrofits .amenity svg {width:15px;height:15px;flex-shrink:0;}
 #frontier-retrofits .amenity small {opacity:.8;font-size:10px;}
-#frontier-retrofits .amenity.equipped {color:#13734e;font-weight:700;}
+#frontier-retrofits .amenity.equipped {font-weight:700;}
 #frontier-retrofits .tile {cursor:pointer;}
 #admin-open {
   display: inline-flex; align-items: center; flex: none; min-height: 44px;
@@ -240,19 +237,17 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
   --ink: #f2f8f5; --muted: #c5d6cd; --line: rgba(255,255,255,.24);
   --panel: rgba(53,77,61,.25); --detail: rgba(23,34,30,.85);
   --green: #a9ecc5;
-  --green-card: rgba(10,63,39,.75);
+  --status-installed: #9fbea9;
+  --status-underway: #8cc8ef;
+  --status-coming: #c4cbd0;
 }
 #frontier-retrofits .tracker-intro { max-width: 740px; margin: 8px 0 10px; color: var(--muted); line-height: 1.5; font-size: 14px; font-weight: 500; }
 #frontier-retrofits .tile .caption { box-shadow: 0 5px 18px rgba(16,51,43,.14); }
-#frontier-retrofits .tile .caption, #frontier-retrofits .tile .caption .registration,
-#frontier-retrofits .tile .caption .animal, #frontier-retrofits .tile .caption .seat-label,
-#frontier-retrofits .tile .caption .product-name, #frontier-retrofits .tile .caption .amenity,
-#frontier-retrofits .tile .caption .amenity.equipped,
-#frontier-retrofits .tile.underway .first-product,
-#frontier-retrofits .tile.unknown .first-product,
-#frontier-retrofits .tile.confirmed .first-product { color: #f4fff8; }
+#frontier-retrofits .tile .caption :is(.registration, .seat-label, .amenity, .amenity small) {
+  color: inherit;
+}
 #frontier-retrofits .tile .caption .registration { font-weight: 750; font-size: 12px; }
-#frontier-retrofits .tile .caption .amenity small { color: #e2f2e9; opacity: 1; }
+#frontier-retrofits .tile .caption .amenity small { opacity: 1; }
 #frontier-retrofits .fr24-link { display:block; margin: 5px 5px 3px; padding: 7px 3px; border-radius: 7px; background: rgba(246,255,249,.94); color: #13482e; font-size: 11px; font-weight: 800; text-decoration: none; line-height: 1.3; }
 #frontier-retrofits .fr24-link:hover, #frontier-retrofits .fr24-link:focus-visible { background: white; text-decoration: underline; }
 #frontier-retrofits .fr24-link[hidden] { display:none !important; }
@@ -292,11 +287,17 @@ body {
   justify-content: space-between;
   gap: 12px;
 }
-#frontier-retrofits .tile.confirmed .caption { background:var(--green-card); color:#fff !important; }
-#frontier-retrofits .tile.underway .caption { background:rgba(13,54,93,.75); color:#fff !important; }
-#frontier-retrofits .tile.unknown .caption { background:rgba(43,56,67,.75); color:#fff !important; }
-#frontier-retrofits .tile .caption .animal, #frontier-retrofits .tile .caption .product-name,
-#frontier-retrofits .tile .caption .registration, #frontier-retrofits .tile .caption .amenities { color:#fff !important; }
+#frontier-retrofits .tile {
+  --status-card: rgba(181, 190, 196, .91);
+  --status-ink: #142425;
+}
+#frontier-retrofits .tile:is(.confirmed, .reported) {
+  --status-card: #66766c;
+  --status-ink: #ffffff;
+}
+#frontier-retrofits .tile.underway {
+  --status-card: rgba(139, 193, 226, .93);
+}
 #frontier-retrofits .fr24-link { background:rgba(245,255,249,.96); color:#0d4b2f; }
 #frontier-retrofits .fr24-link[hidden] { display:none !important; }
 #frontier-retrofits .hero-links { display:flex; gap:9px; flex-wrap:wrap; margin:5px 0 20px; }
@@ -319,9 +320,9 @@ body {
 #frontier-retrofits .status-key { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; padding:0; margin:12px 0; list-style:none; }
 #frontier-retrofits .status-key li { display:inline-flex; gap:8px; align-items:center; font-size:12px; font-weight:700; color:var(--ink); }
 #frontier-retrofits .status-swatch { display:inline-block; width:20px; height:20px; border-radius:6px; flex:none; border:1px solid rgba(255,255,255,.7); box-shadow:0 2px 7px rgba(19,57,49,.22); backdrop-filter:blur(8px); }
-#frontier-retrofits .status-swatch.installed { background:rgba(13,72,45,.88); }
-#frontier-retrofits .status-swatch.underway { background:rgba(18,67,109,.88); }
-#frontier-retrofits .status-swatch.coming { background:rgba(58,70,80,.88); }
+#frontier-retrofits .status-swatch.installed { background:var(--status-installed); }
+#frontier-retrofits .status-swatch.underway { background:var(--status-underway); }
+#frontier-retrofits .status-swatch.coming { background:var(--status-coming); }
 /* In-progress retrofits show the actual Frontier First seats fading gently in/out. */
 #frontier-retrofits .tile.underway .first-image { display:block !important; opacity:1 !important; filter:none !important; animation:frontier-seat-installing 2.8s ease-in-out infinite; }
 @keyframes frontier-seat-installing { 0%,100% {opacity:.25;} 50% {opacity:1;} }
@@ -335,22 +336,88 @@ body {
 #frontier-retrofits .dashboard-number { font-size:clamp(24px,4vw,36px); line-height:1.1; font-weight:850; color:var(--ink); font-variant-numeric:tabular-nums; }
 #frontier-retrofits .dashboard-sub { font-size:12px; color:var(--muted); margin-top:4px; }
 #frontier-retrofits .deadline-link { color:var(--green); font-weight:750; text-underline-offset:3px; }
-#frontier-retrofits .progress-track { display:flex; width:100%; height:20px; overflow:hidden; border-radius:999px; background:#3a4650; box-shadow:inset 0 1px 4px rgba(0,0,0,.17); }
+#frontier-retrofits .progress-track { display:flex; width:100%; height:20px; overflow:hidden; border-radius:999px; background:var(--status-coming); box-shadow:inset 0 0 0 1px rgba(255,255,255,.21); }
 #frontier-retrofits .progress-segment { display:block; height:100%; min-width:0; transition:width .3s ease; }
-#frontier-retrofits .progress-installed { background:#0d482d; }
-#frontier-retrofits .progress-underway { background:#12436d; }
-#frontier-retrofits .progress-coming { background:#3a4650; }
+#frontier-retrofits .progress-installed { background:var(--status-installed); }
+#frontier-retrofits .progress-underway { background:var(--status-underway); }
+#frontier-retrofits .progress-coming { background:var(--status-coming); }
 #frontier-retrofits .progress-stats { display:flex; flex-wrap:wrap; gap:9px 20px; margin-top:11px; font-size:12px; font-weight:650; color:var(--ink); }
 #frontier-retrofits .progress-stats span { display:inline-flex; align-items:center; gap:7px; }
 #frontier-retrofits .progress-stats i { display:inline-block; width:10px; height:10px; border-radius:3px; }
-#frontier-retrofits .progress-stats .stat-installed i { background:#0d482d; }
-#frontier-retrofits .progress-stats .stat-underway i { background:#12436d; }
-#frontier-retrofits .progress-stats .stat-coming i { background:#3a4650; }
+#frontier-retrofits .progress-stats .stat-installed i { background:var(--status-installed); }
+#frontier-retrofits .progress-stats .stat-underway i { background:var(--status-underway); }
+#frontier-retrofits .progress-stats .stat-coming i { background:var(--status-coming); }
 @media(prefers-reduced-motion:reduce) { #frontier-retrofits .progress-segment {transition:none;} }
 
   
 /* Keep form controls and buttons in the same typeface as the tracker. */
 button, input, select, textarea { font-family: "Montserrat", system-ui, sans-serif; }
+
+/* Incoming former Spirit aircraft */
+#frontier-retrofits .incoming-spirit {
+  --spirit-yellow: #ffdb32;
+  margin-top: 22px;
+  border: 1px solid var(--spirit-yellow);
+  border-radius: 16px;
+  background: #1c201c;
+}
+#frontier-retrofits .incoming-spirit > summary {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 18px);
+  min-height: 52px;
+  padding: 8px 15px;
+  border-radius: 15px;
+  background: var(--spirit-yellow);
+  color: #1c201c;
+  cursor: pointer;
+  list-style: none;
+}
+#frontier-retrofits .incoming-spirit > summary::-webkit-details-marker { display: none; }
+#frontier-retrofits .incoming-spirit[open] > summary { border-radius: 15px 15px 0 0; }
+#frontier-retrofits .incoming-spirit > summary:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+#frontier-retrofits .incoming-spirit > summary img {
+  display: block;
+  width: clamp(65px, 17vw, 130px);
+  height: auto;
+  margin-top: -19px;
+  mask-image: linear-gradient(to right, black 82%, transparent 96%);
+}
+#frontier-retrofits .incoming-spirit-heading { display: grid; gap: 2px; }
+#frontier-retrofits .incoming-spirit-heading strong { font-size: clamp(13px, 3.6vw, 17px); }
+#frontier-retrofits .incoming-spirit-heading > span { font-size: 12px; }
+#frontier-retrofits .incoming-spirit-toggle {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin: 0 3px 4px auto;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+#frontier-retrofits .incoming-spirit[open] .incoming-spirit-toggle {
+  margin-bottom: 0;
+  transform: rotate(225deg);
+}
+#frontier-retrofits .incoming-spirit-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  list-style: none;
+}
+#frontier-retrofits .incoming-spirit-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 8px;
+}
+#frontier-retrofits .incoming-spirit-list li > span { color: var(--muted); font-size: 12px; }
+#frontier-retrofits .incoming-spirit-list s { color: var(--spirit-yellow); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -550,6 +617,28 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       <button type="button" class="toggle-fleet cursor-interaction" aria-expanded="false" aria-controls="frontier-retrofits-rack">Show all 157 aircraft</button>
     </div>
   </div>
+    <details class="incoming-spirit">
+      <summary>
+        <img src="photos/tails/oldnk.png" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+        <span class="incoming-spirit-heading">
+          <strong>Incoming from Spirit</strong>
+          <span>10 Airbus A321neos</span>
+        </span>
+        <span class="incoming-spirit-toggle" aria-hidden="true"></span>
+      </summary>
+      <ul class="incoming-spirit-list" aria-label="Planned Frontier registrations and former Spirit registrations">
+        <li><strong>N814FR</strong><span>formerly <s>N731NK</s></span></li>
+        <li><strong>N813FR</strong><span>formerly <s>N726NK</s></span></li>
+        <li><strong>N815FR</strong><span>formerly <s>N723NK</s></span></li>
+        <li><strong>N816FR</strong><span>formerly <s>N724NK</s></span></li>
+        <li><strong>N817FR</strong><span>formerly <s>N725NK</s></span></li>
+        <li><strong>N819FR</strong><span>formerly <s>N729NK</s></span></li>
+        <li><strong>N820FR</strong><span>formerly <s>N720NK</s></span></li>
+        <li><strong>N822FR</strong><span>formerly <s>N721NK</s></span></li>
+        <li><strong>N823FR</strong><span>formerly <s>N718NK</s></span></li>
+        <li><strong>N825FR</strong><span>formerly <s>N717NK</s></span></li>
+      </ul>
+    </details>
     <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking.</footer>
     <dialog id="admin-dialog"><form method="dialog" id="admin-login"><h2>Tracker Admin</h2><label>Code word <input id="admin-code" type="password" autocomplete="off" required></label><p id="admin-message" role="status"></p><div class="admin-actions"><button type="submit" value="cancel">Close</button><button type="button" id="admin-unlock">Unlock</button></div></form></dialog>
     <section id="admin-bar" hidden><strong>Admin Mode</strong> <span id="admin-dirty">Tap a tail to edit its status.</span> <button id="admin-save" type="button">Save Changes</button> <button id="admin-exit" type="button">Exit</button></section>
