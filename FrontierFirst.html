@@ -182,10 +182,11 @@
         #frontier-retrofits :is(.unknown, .pending-key) .first-image { filter: grayscale(1); opacity: .4; }
     #frontier-retrofits .product-name { align-self: center; }
 body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
-#frontier-retrofits.app { max-width: 1120px; margin: 0 auto; padding: clamp(10px, 3vw, 24px); }
-.site-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; margin: 0 0 15px; }
-.site-nav a { color: var(--green); font-weight: 600; text-underline-offset: .2em; }
-.site-nav .brand { color: var(--ink); font-size: 16px; }
+#frontier-retrofits.app,
+.tracker-site-header { max-width: 1120px; margin-inline: auto; padding-inline: clamp(10px, 3vw, 24px); }
+#frontier-retrofits.app { padding-block: 0 clamp(10px, 3vw, 24px); }
+.tracker-site-header { padding-block: clamp(10px, 3vw, 24px) 12px; }
+.tracker-site-header :focus-visible { outline: 2px solid #a9ecc5; outline-offset: 2px; }
 .site-footer { color: var(--muted); font-size: 12px; padding: 12px 2px; }
 .cursor-interaction { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
@@ -373,20 +374,29 @@ body {
 }
 #frontier-retrofits .fr24-link { background:rgba(245,255,249,.96); color:#0d4b2f; }
 #frontier-retrofits .fr24-link[hidden] { display:none !important; }
-#frontier-retrofits .hero-links { display:flex; gap:9px; flex-wrap:wrap; margin:5px 0 20px; }
-#frontier-retrofits .hero-links .hero-pill {
-  display:inline-flex; align-items:center; justify-content:center; min-height:38px;
-  padding:9px 16px; border:1px solid rgba(16,85,54,.38); border-radius:999px;
+.tracker-site-header .hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 14px;
+  background: rgba(53,77,61,.25);
+}
+.tracker-site-header .hero-links .hero-pill {
+  display:inline-flex; box-sizing:border-box; align-items:center; justify-content:center; min-height:44px;
+  padding:8px 14px; text-align:center; border:1px solid rgba(16,85,54,.38); border-radius:999px;
   color:#134f35; background:rgba(255,255,255,.77); font-size:13px;
   font-weight:750; line-height:1.1; text-decoration:none;
   box-shadow:0 3px 12px rgba(14,74,61,.10); backdrop-filter:blur(9px);
   transition:background .18s, transform .18s, box-shadow .18s;
 }
-#frontier-retrofits .hero-links .hero-pill:hover,
-#frontier-retrofits .hero-links .hero-pill:focus-visible {
+.tracker-site-header .hero-links .hero-pill:hover,
+.tracker-site-header .hero-links .hero-pill:focus-visible {
   background:#145b3b; color:#fff; transform:translateY(-1px); box-shadow:0 5px 16px rgba(14,74,61,.2);
 }
-@media(max-width:560px) { #frontier-retrofits .hero-links .hero-pill { flex:1 1 auto; padding:9px 12px; } }
+@media(max-width:560px) { .tracker-site-header .hero-links .hero-pill { flex:1 1 auto; padding:9px 12px; } }
 
   
 /* Color-only status key; keeps seat product photographs in the aircraft cards. */
@@ -750,15 +760,17 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 </style>
 </head>
 <body>
-  <main id="frontier-retrofits" class="app" data-retrofit-endpoint="https://frontier-flight-times.jacob-brown-6700.workers.dev/frontier-first">
-    <nav class="site-nav hero-links" aria-label="Explore HowToGoWild">
+  <header class="tracker-site-header">
+    <nav class="hero-links" aria-label="Explore HowToGoWild">
       <a class="hero-pill" href="/">⌂ Home</a>
       <a class="hero-pill" href="/#tools">Helpful Tools</a>
-      <a class="hero-pill" href="/#faqs">GoWild! FAQs</a>
-      <a class="hero-pill" href="/#more">More Topics</a>
-      <a class="hero-pill" href="/#latest-posts">Blog</a>
+      <a class="hero-pill" href="/#faq">GoWild! FAQs</a>
+      <a class="hero-pill" href="/more.html">More Topics</a>
+      <a class="hero-pill" href="/#blog">Blog</a>
       <a class="hero-pill" href="/seatmaps.html">Meet the Fleet</a>
     </nav>
+  </header>
+  <main id="frontier-retrofits" class="app" data-retrofit-endpoint="https://frontier-flight-times.jacob-brown-6700.workers.dev/frontier-first">
 <div class="fleet-panel">
     <header class="tracker-header">
       <h1>Frontier First Tracker</h1>
