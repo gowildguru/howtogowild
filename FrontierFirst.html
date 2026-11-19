@@ -120,7 +120,7 @@
       margin: calc(-1 * var(--tail-overlap)) 0 0;
       width: 100%;
       box-sizing: border-box;
-      padding: calc(var(--tail-overlap) + 4px) 1px 3px;
+      padding: calc(var(--tail-overlap) + 2px) 1px 2px;
       border: 1px solid var(--card-border);
       border-radius: 8px;
       background: var(--status-card);
@@ -249,8 +249,8 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  margin-top: 2px;
+  gap: 2px;
+  margin-top: 1px;
   padding-inline: 2px;
   font-size: 12px;
 }
@@ -575,7 +575,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 #frontier-retrofits .frontier-first-banner {
   display: table;
   box-sizing: border-box;
-  margin: 0 auto 3px;
+  margin: 0 auto 2px;
   padding: 1px 4px;
   border: 1px solid rgba(194, 241, 214, .64);
   border-radius: 3px;
@@ -594,14 +594,20 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 #frontier-retrofits .tile:not(.admin-editing, [data-card-open]) .animal {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  height: 3.6em;
+  height: 2.4em;
+}
+@container (min-width: 930px) {
+  #frontier-retrofits .tile:not(.admin-editing, [data-card-open]) .animal {
+    -webkit-line-clamp: 1;
+    height: 1.2em;
+  }
 }
 #frontier-retrofits .airspace-slot {
   display: block;
-  height: 17px;
-  padding-top: 4px;
+  height: 13px;
+  padding-top: 1px;
   box-sizing: border-box;
 }
 #frontier-retrofits .airspace-slot .airspace-wordmark { margin-top: 0; }
@@ -612,8 +618,8 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   box-sizing: border-box;
   width: 100%;
   min-height: 44px;
-  margin: 2px 0 0;
-  padding: 3px 3px 2px;
+  margin: 0;
+  padding: 1px 3px;
   border: 0;
   background: transparent;
   color: inherit;
@@ -641,7 +647,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 #frontier-retrofits .feature-icon[data-state="underway"] { border-style: dashed; }
 #frontier-retrofits .feature-icon[data-state="unknown"] { opacity: .58; border-color: transparent; }
 #frontier-retrofits .feature-icon svg { width: min(100%, 17px); height: 17px; }
-#frontier-retrofits .card-chevron { display: block; margin: 4px auto 0; line-height: 0; }
+#frontier-retrofits .card-chevron { display: block; margin: 2px auto 0; line-height: 0; }
 #frontier-retrofits .card-chevron svg { width: 13px; height: 13px; }
 #frontier-retrofits .card-summary[aria-expanded="true"] .card-chevron svg { transform: rotate(180deg); }
 #frontier-retrofits .aircraft-details { display: block; }
@@ -676,7 +682,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   #frontier-retrofits .card-summary .feature-icon { width: min(100%, 20px); height: 19px; }
   #frontier-retrofits .card-summary .feature-icon svg { width: min(100%, 15px); height: 15px; }
 }
-#frontier-retrofits .aircraft-age { display: block; margin: 2px 0 3px; font-size: 10px; }
+#frontier-retrofits .aircraft-age { display: block; margin: 1px 0 2px; font-size: 10px; }
 #frontier-retrofits .aircraft-age:empty { display:none; }
 #frontier-retrofits .aircraft-fact {
   display: block;
@@ -1242,7 +1248,9 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     const details=document.createElement('span');
     details.className='aircraft-details';
     details.id='aircraft-details-'+tail;
-    details.append(...caption.querySelectorAll('.classic-interior, .aircraft-fact, .seat-label, .fr24-link, .amenities'));
+    details.append(...caption.querySelectorAll('.classic-interior, .aircraft-fact, .seat-label, .amenities'));
+    const trackingLink=tile.querySelector('.fr24-link');
+    if(trackingLink)details.append(trackingLink);
     const button=document.createElement('button');
     button.type='button';
     button.className='card-summary';
