@@ -240,6 +240,7 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
   --status-installed: #9fbea9;
   --status-underway: #8cc8ef;
   --status-coming: #818d94;
+  --status-incoming: #ffdb32;
 }
 #frontier-retrofits .tracker-intro { max-width: 740px; margin: 8px 0 10px; color: var(--muted); line-height: 1.5; font-size: 14px; font-weight: 500; }
 #frontier-retrofits .tile .caption { box-shadow: 0 5px 18px rgba(16,51,43,.14); }
@@ -324,6 +325,7 @@ body {
 #frontier-retrofits .status-swatch.installed { background:var(--status-installed); }
 #frontier-retrofits .status-swatch.underway { background:var(--status-underway); }
 #frontier-retrofits .status-swatch.coming { background:var(--status-coming); }
+#frontier-retrofits .status-swatch.incoming { background:var(--status-incoming); }
 /* In-progress retrofits show the actual Frontier First seats fading gently in/out. */
 #frontier-retrofits .tile.underway .first-image { display:block !important; opacity:1 !important; filter:none !important; animation:frontier-seat-installing 2.8s ease-in-out infinite; }
 @keyframes frontier-seat-installing { 0%,100% {opacity:.25;} 50% {opacity:1;} }
@@ -342,90 +344,33 @@ body {
 #frontier-retrofits .progress-installed { background:var(--status-installed); }
 #frontier-retrofits .progress-underway { background:var(--status-underway); }
 #frontier-retrofits .progress-coming { background:var(--status-coming); }
+#frontier-retrofits .progress-incoming { background:var(--status-incoming); }
 #frontier-retrofits .progress-stats { display:flex; flex-wrap:wrap; gap:9px 20px; margin-top:11px; font-size:12px; font-weight:650; color:var(--ink); }
 #frontier-retrofits .progress-stats span { display:inline-flex; align-items:center; gap:7px; }
 #frontier-retrofits .progress-stats i { display:inline-block; width:10px; height:10px; border-radius:3px; }
 #frontier-retrofits .progress-stats .stat-installed i { background:var(--status-installed); }
 #frontier-retrofits .progress-stats .stat-underway i { background:var(--status-underway); }
 #frontier-retrofits .progress-stats .stat-coming i { background:var(--status-coming); }
+#frontier-retrofits .progress-stats .stat-incoming i { background:var(--status-incoming); }
 @media(prefers-reduced-motion:reduce) { #frontier-retrofits .progress-segment {transition:none;} }
 
   
 /* Keep form controls and buttons in the same typeface as the tracker. */
 button, input, select, textarea { font-family: "Montserrat", system-ui, sans-serif; }
 
-/* Incoming former Spirit aircraft */
-#frontier-retrofits .incoming-spirit {
-  --spirit-yellow: #ffdb32;
-  margin-top: 22px;
-  border: 1px solid rgba(255,219,50,.45);
-  border-radius: 16px;
-  background: rgba(40,37,18,.74);
-}
-#frontier-retrofits .incoming-spirit > summary {
-  display: flex;
-  align-items: center;
-  gap: clamp(8px, 2vw, 18px);
-  min-height: 52px;
-  padding: 8px 15px;
-  border-radius: 15px;
-  background: linear-gradient(115deg, rgba(255,222,78,.22), rgba(255,222,78,.10));
-  color: #fff4c4;
-  box-shadow: inset 0 1px 0 rgba(255,246,196,.18);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-  list-style: none;
-}
-#frontier-retrofits .incoming-spirit > summary::-webkit-details-marker { display: none; }
-#frontier-retrofits .incoming-spirit[open] > summary { border-radius: 15px 15px 0 0; }
-#frontier-retrofits .incoming-spirit > summary:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-#frontier-retrofits .incoming-spirit-heading { display: grid; gap: 2px; }
-#frontier-retrofits .incoming-spirit-heading strong { font-size: clamp(13px, 3.6vw, 17px); }
-#frontier-retrofits .incoming-spirit-heading > span { font-size: 12px; }
-#frontier-retrofits .incoming-spirit-toggle {
-  flex: none;
-  width: 9px;
-  height: 9px;
-  margin: 0 3px 4px auto;
-  border: solid currentColor;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-#frontier-retrofits .incoming-spirit[open] .incoming-spirit-toggle {
-  margin-bottom: 0;
-  transform: rotate(225deg);
-}
-#frontier-retrofits .incoming-spirit-list {
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 8px;
-  margin: 0;
-  padding: 12px;
-  list-style: none;
-}
-#frontier-retrofits .incoming-spirit-card { min-width: 0; text-align: center; }
-#frontier-retrofits .incoming-spirit-card .caption {
-  --tail-overlap: 7px;
-  --status-card: linear-gradient(145deg, rgba(255,222,78,.20), rgba(255,222,78,.09));
+/* Incoming aircraft share the fleet grid and use a frosted yellow caption. */
+#frontier-retrofits .tile.incoming-nk .caption {
+  --status-card: linear-gradient(145deg, rgba(255,222,78,.20), rgba(255,222,78,.09)), rgba(40,37,18,.74);
   --status-ink: #fff;
-  display: grid;
-  gap: 3px;
-  padding-bottom: 8px;
   border-color: rgba(255,219,50,.40);
   box-shadow: inset 0 1px 0 rgba(255,246,196,.13);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
-#frontier-retrofits .incoming-spirit-card .registration { color: #fff; font-size: 12px; }
-#frontier-retrofits .incoming-spirit-card .caption > span { color: var(--muted); font-size: 11px; }
-#frontier-retrofits .incoming-spirit-card s { color: var(--spirit-yellow); font-weight: 700; white-space: nowrap; }
-@container (max-width: 780px) {
-  #frontier-retrofits .incoming-spirit-list { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-}
-@container (max-width: 520px) {
-  #frontier-retrofits .incoming-spirit-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
+#frontier-retrofits .incoming-nk-former { color: var(--muted); }
+#frontier-retrofits .incoming-nk-former s { color: var(--status-incoming); font-weight: 700; white-space: nowrap; }
+#frontier-retrofits .incoming-nk .seat-image { opacity: .25; }
+#frontier-retrofits .incoming-nk .product-name small { display: block; font-size: 9px; color: #e5dfcd; }
 #frontier-retrofits .fleet-data-notice {
   margin: 9px 0 0;
   color: var(--muted);
@@ -460,15 +405,15 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     <p class="tracker-intro">A community-sourced guide to Frontier First seating, Starlink Wi-Fi and in-seat power across Frontier’s fleet. Maintained independently by HowToGoWild! and aviation enthusiasts.</p>
     <section class="fleet-dashboard" aria-label="Fleet retrofit completion and target date">
       <div class="dashboard-head">
-        <div><div class="dashboard-eyebrow">Frontier First retrofit progress</div><div class="dashboard-number" id="fleet-percent">1.9% complete</div><div class="dashboard-sub" id="fleet-fraction">3 of 157 aircraft installed</div></div>
+        <div><div class="dashboard-eyebrow">Frontier First retrofit progress</div><div class="dashboard-number" id="fleet-percent">1.8% complete</div><div class="dashboard-sub" id="fleet-fraction">3 of 167 tracked aircraft installed</div></div>
         <div><div class="dashboard-eyebrow">Frontier's target completion date</div><div class="dashboard-number" id="fleet-countdown">Calculating…</div><div class="dashboard-sub"><a class="deadline-link" href="https://news.flyfrontier.com/" target="_blank" rel="noopener noreferrer">March 5, 2027</a> · Seating retrofit target, not Starlink or power</div></div>
       </div>
-      <div class="progress-track" role="img" id="fleet-progress" aria-label="Fleet progress: 3 installed, 0 underway, 154 coming soon">
-        <span class="progress-segment progress-installed" id="progress-installed" style="width:1.9108%"></span><span class="progress-segment progress-underway" id="progress-underway" style="width:0%"></span><span class="progress-segment progress-coming" id="progress-coming" style="width:98.0892%"></span>
+      <div class="progress-track" role="img" id="fleet-progress" aria-label="Fleet progress: 3 installed, 0 underway, 154 coming soon, 10 incoming from NK">
+        <span class="progress-segment progress-installed" id="progress-installed" style="width:1.796407%"></span><span class="progress-segment progress-underway" id="progress-underway" style="width:0%"></span><span class="progress-segment progress-coming" id="progress-coming" style="width:92.215569%"></span><span class="progress-segment progress-incoming" id="progress-incoming" style="width:5.988024%"></span>
       </div>
-      <div class="progress-stats"><span class="stat-installed"><i aria-hidden="true"></i><span id="count-installed">3 installed</span></span><span class="stat-underway"><i aria-hidden="true"></i><span id="count-underway">0 underway</span></span><span class="stat-coming"><i aria-hidden="true"></i><span id="count-coming">154 coming soon</span></span></div>
+      <div class="progress-stats"><span class="stat-installed"><i aria-hidden="true"></i><span id="count-installed">3 installed</span></span><span class="stat-underway"><i aria-hidden="true"></i><span id="count-underway">0 underway</span></span><span class="stat-coming"><i aria-hidden="true"></i><span id="count-coming">154 coming soon</span></span><span class="stat-incoming"><i aria-hidden="true"></i><span id="count-incoming">10 incoming from NK</span></span></div>
     </section>
-    <div class="snapshot">157 aircraft · Frontier cabin upgrades</div>
+    <div class="snapshot">157 active aircraft · 10 incoming from NK</div>
     <p class="fleet-data-notice" id="fleet-data-notice">
       <span id="fleet-data-message" role="status">Loading saved fleet statuses…</span>
       <button type="button" id="fleet-data-retry" hidden>Retry</button>
@@ -477,6 +422,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       <li><span class="status-swatch installed" aria-hidden="true"></span> Frontier First installed</li>
       <li><span class="status-swatch underway" aria-hidden="true"></span> Retrofit underway</li>
       <li><span class="status-swatch coming" aria-hidden="true"></span> Coming soon</li>
+      <li><span class="status-swatch incoming" aria-hidden="true"></span> Incoming from NK</li>
     </ul>
     <p class="status-note">Track Frontier First, Starlink Wi-Fi, and in-seat power by aircraft.</p>
     <noscript><p>Enable JavaScript to browse the full fleet and select individual aircraft.</p></noscript>
@@ -638,61 +584,110 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       <div class="tile unknown cursor-interaction" data-tail="N721FR" data-model="A321-200" role="button" tabindex="0" aria-pressed="false" aria-label="N721FR · Cody and Dakota the Coyotes · UpFront Plus reference · Frontier First awaiting retrofit" data-label="N721FR · Cody and Dakota the Coyotes" data-detail="A321-200 · UpFront Plus reference · Frontier First awaiting retrofit"><span class="art" aria-hidden="true"><img src="/photos/tails/N721FR.png" loading="lazy" alt="" decoding="async"></span><span class="caption"><span class="registration">N721FR</span><span class="animal">Cody and Dakota the Coyotes</span><span class="seat-label first-product" aria-hidden="true"><span class="seat-image first-image"></span><span class="product-name">Coming soon</span></span><span class="seat-label upfront-product" aria-hidden="true"><span class="seat-image upfront-image"></span><span class="product-name">UpFront Plus</span></span></span><a class="fr24-link" href="https://www.flightradar24.com/data/aircraft/N721FR" target="_blank" rel="noopener noreferrer" hidden aria-label="Track N721FR on Flightradar24">✈ Track This Aircraft ↗</a></div>
       <div class="tile unknown cursor-interaction" data-tail="N722FR" data-model="A321-200" role="button" tabindex="0" aria-pressed="false" aria-label="N722FR · Xavier the Mountain Goat · UpFront Plus reference · Frontier First awaiting retrofit" data-label="N722FR · Xavier the Mountain Goat" data-detail="A321-200 · UpFront Plus reference · Frontier First awaiting retrofit"><span class="art" aria-hidden="true"><img src="/photos/tails/N722FR.png" loading="lazy" alt="" decoding="async"></span><span class="caption"><span class="registration">N722FR</span><span class="animal">Xavier the Mountain Goat</span><span class="seat-label first-product" aria-hidden="true"><span class="seat-image first-image"></span><span class="product-name">Coming soon</span></span><span class="seat-label upfront-product" aria-hidden="true"><span class="seat-image upfront-image"></span><span class="product-name">UpFront Plus</span></span></span><a class="fr24-link" href="https://www.flightradar24.com/data/aircraft/N722FR" target="_blank" rel="noopener noreferrer" hidden aria-label="Track N722FR on Flightradar24">✈ Track This Aircraft ↗</a></div>
       <div class="tile unknown cursor-interaction" data-tail="N723FR" data-model="A321-200" role="button" tabindex="0" aria-pressed="false" aria-label="N723FR · Gordon the Golden Eagle · UpFront Plus reference · Frontier First awaiting retrofit" data-label="N723FR · Gordon the Golden Eagle" data-detail="A321-200 · UpFront Plus reference · Frontier First awaiting retrofit"><span class="art" aria-hidden="true"><img src="/photos/tails/N723FR.png" loading="lazy" alt="" decoding="async"></span><span class="caption"><span class="registration">N723FR</span><span class="animal">Gordon the Golden Eagle</span><span class="seat-label first-product" aria-hidden="true"><span class="seat-image first-image"></span><span class="product-name">Coming soon</span></span><span class="seat-label upfront-product" aria-hidden="true"><span class="seat-image upfront-image"></span><span class="product-name">UpFront Plus</span></span></span><a class="fr24-link" href="https://www.flightradar24.com/data/aircraft/N723FR" target="_blank" rel="noopener noreferrer" hidden aria-label="Track N723FR on Flightradar24">✈ Track This Aircraft ↗</a></div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N814FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N731NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N813FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N726NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N815FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N723NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N816FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N724NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N817FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N725NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N819FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N729NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N820FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N720NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N822FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N721NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N823FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N718NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
+      <div class="tile incoming-nk">
+        <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="caption">
+          <strong class="registration">N825FR</strong>
+          <span class="animal incoming-nk-former">Formerly <s>N717NK</s></span>
+          <span class="seat-label first-product"><span class="seat-image first-image" aria-hidden="true"></span><span class="product-name">Frontier First<small>Coming soon</small></span></span>
+          <span class="seat-label upfront-product"><span class="seat-image upfront-image" aria-hidden="true"></span><span class="product-name">UpFront Plus<small>Coming soon</small></span></span>
+          <span class="seat-label legroom-product"><span class="seat-image legroom-image" aria-hidden="true"></span><span class="product-name">Extra Legroom<small>Coming soon</small></span></span>
+        </span>
+      </div>
     </div>
     <div class="toggle-line">
-      <button type="button" class="toggle-fleet cursor-interaction" aria-expanded="false" aria-controls="frontier-retrofits-rack">Show all 157 aircraft</button>
+      <button type="button" class="toggle-fleet cursor-interaction" aria-expanded="false" aria-controls="frontier-retrofits-rack">Show all 167 aircraft</button>
     </div>
-    <details class="incoming-spirit" open>
-      <summary>
-        <span class="incoming-spirit-heading">
-          <strong>Incoming from Spirit</strong>
-          <span>10 Airbus A321neos</span>
-        </span>
-        <span class="incoming-spirit-toggle" aria-hidden="true"></span>
-      </summary>
-      <ul class="incoming-spirit-list" aria-label="Planned Frontier registrations and former Spirit registrations">
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N814FR</strong><span>Formerly <s>N731NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N813FR</strong><span>Formerly <s>N726NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N815FR</strong><span>Formerly <s>N723NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N816FR</strong><span>Formerly <s>N724NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N817FR</strong><span>Formerly <s>N725NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N819FR</strong><span>Formerly <s>N729NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N820FR</strong><span>Formerly <s>N720NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N822FR</strong><span>Formerly <s>N721NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N823FR</strong><span>Formerly <s>N718NK</s></span></span>
-        </li>
-        <li class="incoming-spirit-card">
-          <span class="art" aria-hidden="true"><img src="/photos/tails/oldnk.png" alt="" loading="lazy" decoding="async"></span>
-          <span class="caption"><strong class="registration">N825FR</strong><span>Formerly <s>N717NK</s></span></span>
-        </li>
-      </ul>
-    </details>
   </div>
     <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking.</footer>
     <dialog id="admin-dialog"><form method="dialog" id="admin-login"><h2>Tracker Admin</h2><label>Code word <input id="admin-code" type="password" autocomplete="off" required></label><p id="admin-message" role="status"></p><div class="admin-actions"><button type="submit" value="cancel">Close</button><button type="button" id="admin-unlock">Unlock</button></div></form></dialog>
@@ -708,7 +703,10 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   const root=document.getElementById('frontier-retrofits');
   const rack=root.querySelector('.rack'), toggle=root.querySelector('.toggle-fleet');
   const snapshot=root.querySelector('.snapshot');
-  const tiles=[...rack.querySelectorAll('.tile')], endpoint=root.dataset.retrofitEndpoint.trim();
+  const tiles=[...rack.querySelectorAll('.tile[data-tail]')], endpoint=root.dataset.retrofitEndpoint.trim();
+  const incomingTiles=[...rack.querySelectorAll('.incoming-nk')];
+  const incomingCount=incomingTiles.length;
+  const fleetTotal=tiles.length+incomingCount;
   const adminDialog=document.getElementById('admin-dialog'), editDialog=document.getElementById('edit-dialog');
   const adminBar=document.getElementById('admin-bar'), adminMessage=document.getElementById('admin-message');
   const editFirst=document.getElementById('edit-first');
@@ -771,23 +769,25 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       return {tile,rank:retrofitted?0:d.first==='underway'?1:2};
     });
     ordered.sort((a,b)=>a.rank-b.rank||a.tile.dataset.tail.localeCompare(b.tile.dataset.tail,'en',{numeric:true}));
-    rack.append(...ordered.map(x=>x.tile));
+    rack.append(...ordered.map(x=>x.tile),...incomingTiles);
     select(selected);
     const counts={equipped:0,underway:0,soon:0};for(const d of records.values())counts[d.first]++;
-    snapshot.textContent=tiles.length+' aircraft · '+counts.equipped+' Frontier First · '+counts.underway+' underway · '+counts.soon+' coming soon';
-    const total=tiles.length || 1;
+    snapshot.textContent=tiles.length+' active aircraft · '+incomingCount+' incoming from NK';
+    const total=fleetTotal || 1;
     document.getElementById('fleet-percent').textContent=(100*counts.equipped/total).toFixed(1)+'% complete';
-    document.getElementById('fleet-fraction').textContent=counts.equipped+' of '+tiles.length+' aircraft installed';
+    document.getElementById('fleet-fraction').textContent=counts.equipped+' of '+fleetTotal+' tracked aircraft installed';
     document.getElementById('progress-installed').style.width=(100*counts.equipped/total)+'%';
     document.getElementById('progress-underway').style.width=(100*counts.underway/total)+'%';
     document.getElementById('progress-coming').style.width=(100*counts.soon/total)+'%';
+    document.getElementById('progress-incoming').style.width=(100*incomingCount/total)+'%';
     document.getElementById('count-installed').textContent=counts.equipped+' installed';
     document.getElementById('count-underway').textContent=counts.underway+' underway';
     document.getElementById('count-coming').textContent=counts.soon+' coming soon';
-    document.getElementById('fleet-progress').setAttribute('aria-label','Fleet progress: '+counts.equipped+' installed, '+counts.underway+' underway, '+counts.soon+' coming soon');
+    document.getElementById('count-incoming').textContent=incomingCount+' incoming from NK';
+    document.getElementById('fleet-progress').setAttribute('aria-label','Fleet progress: '+counts.equipped+' installed, '+counts.underway+' underway, '+counts.soon+' coming soon, '+incomingCount+' incoming from NK');
     document.getElementById('admin-dirty').textContent=dirty.size?dirty.size+' unsaved aircraft change(s)':'Tap a tail to edit its status.';
   }
-  rack.addEventListener('click',event=>{if(event.target.closest('.fr24-link'))return;const tile=event.target.closest('.tile');if(!tile)return;select(tile);if(admin){
+  rack.addEventListener('click',event=>{if(event.target.closest('.fr24-link'))return;const tile=event.target.closest('.tile[data-tail]');if(!tile)return;select(tile);if(admin){
     editTail=tile.dataset.tail;const d=records.get(editTail);
     document.getElementById('edit-title').textContent=editTail+' · '+tile.querySelector('.animal').textContent;
     editFirst.value=d.first;
@@ -808,8 +808,8 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     records.set(editTail,record);
     dirty.add(editTail);render();
   });
-  rack.addEventListener('keydown',event=>{if(event.target.classList.contains('tile')&&(event.key==='Enter'||event.key===' ')){event.preventDefault();event.target.click();}});
-  toggle.addEventListener('click',()=>{const expanded=rack.toggleAttribute('data-expanded');toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'Show fewer aircraft':'Show all '+tiles.length+' aircraft';if(!expanded)toggle.scrollIntoView({block:'nearest'});});
+  rack.addEventListener('keydown',event=>{if(event.target.matches('.tile[data-tail]')&&(event.key==='Enter'||event.key===' ')){event.preventDefault();event.target.click();}});
+  toggle.addEventListener('click',()=>{const expanded=rack.toggleAttribute('data-expanded');toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'Show fewer aircraft':'Show all '+fleetTotal+' aircraft';if(!expanded)toggle.scrollIntoView({block:'nearest'});});
   document.getElementById('admin-open').addEventListener('click',()=>{adminMessage.textContent='';adminDialog.showModal();});
   document.getElementById('admin-unlock').addEventListener('click',async()=>{
     const candidate=document.getElementById('admin-code').value;adminMessage.textContent='Checking…';
