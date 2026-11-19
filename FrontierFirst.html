@@ -254,7 +254,8 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
   --panel: rgba(53,77,61,.25); --detail: rgba(23,34,30,.85);
   --green: #a9ecc5;
   --card-shadow: 0 4px 12px rgba(0,0,0,.18);
-  --status-installed: #9fbea9;
+  --mint: #c5edd5;
+  --status-installed: var(--mint);
   --status-underway: #8cc8ef;
   --status-coming: #818d94;
   --status-incoming: #ffdb32;
@@ -266,9 +267,9 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
 }
 #frontier-retrofits .tile .caption .registration {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   margin-top: 1px;
   padding-inline: 2px;
   font-size: 12px;
@@ -282,6 +283,21 @@ body { margin: 0; font: 14px/1.4 "Montserrat", system-ui, sans-serif; }
   background: transparent;
 }
 #frontier-retrofits .aircraft-type:is([data-model-logo="A320neo"], [data-model-logo="A321neo"]) { width: min(58px, 100%); }
+#frontier-retrofits .registration .aircraft-type {
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: #142e23;
+}
+#frontier-retrofits .registration .aircraft-type::before { height: 11px; }
+@container (max-width: 560px) {
+  #frontier-retrofits .tile .caption .registration { gap: 3px; font-size: 10px; }
+  #frontier-retrofits .registration .aircraft-type { padding-inline: 4px; }
+  #frontier-retrofits .registration .aircraft-type::before { height: 10px; }
+}
 #frontier-retrofits .aircraft-type::before {
   content: "";
   width: 100%;
@@ -411,7 +427,6 @@ body {
   text-decoration: none;
   transition: transform .2s ease;
 }
-.tracker-site-header .hero-pill.hero-pill-primary { background: #fff; color: #354d3d; }
 .tracker-site-header .hero-pill:hover { transform: translateY(-2px); }
 @media (max-width: 700px) {
   .tracker-header-inner { gap: 4px; padding-block: 8px 12px; }
@@ -655,6 +670,17 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   white-space: normal;
 }
 #frontier-retrofits .cabin-info-panel p { margin: 0 0 8px; }
+#frontier-retrofits .model-key-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: center;
+}
+#frontier-retrofits .model-key-marks .aircraft-type { width: 36px; }
+#frontier-retrofits .model-key-marks .aircraft-type:is([data-model-logo="A320neo"], [data-model-logo="A321neo"]) { width: 48px; }
+#frontier-retrofits .model-key .cabin-info-icon { flex: 0 0 22px; }
+#frontier-retrofits .model-key .cabin-info-panel ul { margin: 0; padding-left: 18px; }
+#frontier-retrofits .model-key .cabin-info-panel li + li { margin-top: 5px; }
 #frontier-retrofits :is(.fleet-controls, .fleet-filters, #fleet-clear-filters, .tile, .toggle-fleet, .feature-icon)[hidden] { display: none; }
 #frontier-retrofits .tile { display: flex; flex-direction: column; }
 #frontier-retrofits .tile .caption { flex: 1; }
@@ -665,7 +691,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   padding: 1px 4px;
   border: 1px solid rgba(194, 241, 214, .64);
   border-radius: 3px;
-  background: #c5edd5;
+  background: var(--mint);
   color: #142e23;
   font-size: 9px;
   font-weight: 800;
@@ -806,7 +832,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   margin: 4px 4px 6px;
   padding: 4px 3px;
   border-radius: 5px;
-  background: #c5edd5;
+  background: var(--mint);
   color: #142e23;
   font-size: 10px;
   line-height: 1.2;
@@ -894,8 +920,8 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     <div class="tracker-header-inner">
       <a class="tracker-site-brand" href="/" aria-label="HowToGoWild! homepage">HOWTOGOWILD!</a>
       <nav class="hero-links" aria-label="Explore HowToGoWild">
-        <a class="hero-pill" href="/">⌂ Home</a>
-        <a class="hero-pill hero-pill-primary" href="/#tools">Helpful Tools</a>
+        <a class="hero-pill" href="/">Home</a>
+        <a class="hero-pill" href="/#tools">Helpful Tools</a>
         <a class="hero-pill" href="/#faq">GoWild! FAQs</a>
         <a class="hero-pill" href="/more.html">More Topics</a>
         <a class="hero-pill" href="/#blog">Blog</a>
@@ -940,6 +966,25 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
         <div class="fleet-icon-key-body" id="fleet-icon-key-body">
           <ul class="fleet-key-items" id="fleet-key-features" aria-label="Feature icons"></ul>
           <ul class="fleet-key-items fleet-key-states" id="fleet-key-states" aria-label="Icon status styles"></ul>
+          <details class="model-key cabin-info">
+            <summary aria-label="About Frontier’s Airbus aircraft models">
+              <span class="model-key-marks" aria-hidden="true">
+                <span class="aircraft-type" data-model-logo="A320"><span class="aircraft-type-label">A320</span></span>
+                <span class="aircraft-type" data-model-logo="A320neo"><span class="aircraft-type-label">A320neo</span></span>
+                <span class="aircraft-type" data-model-logo="A321"><span class="aircraft-type-label">A321</span></span>
+                <span class="aircraft-type" data-model-logo="A321neo"><span class="aircraft-type-label">A321neo</span></span>
+              </span>
+              <span class="cabin-info-icon" aria-hidden="true">i</span>
+            </summary>
+            <div class="cabin-info-panel">
+              <ul>
+                <li><strong>A320</strong> · Original-generation A320. Frontier’s published layout seats 180.</li>
+                <li><strong>A320neo</strong> · Same-length A320 with newer, more efficient engines. Frontier lists 186 seats.</li>
+                <li><strong>A321</strong> · Longer model in the original A320 family. Frontier lists 230 seats.</li>
+                <li><strong>A321neo</strong> · The longer A321 with newer, more efficient engines. Frontier lists 240 seats.</li>
+              </ul>
+            </div>
+          </details>
           <details class="airspace-key cabin-info">
             <summary aria-label="About the Airbus Airspace cabin">
               <span class="airspace-wordmark" role="img" aria-label="Airbus Airspace"></span>
