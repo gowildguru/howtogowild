@@ -33,7 +33,7 @@
       padding: clamp(13px, 2.5vw, 22px);
       container-type: inline-size;
     }
-    #frontier-retrofits h1 { margin: 0 0 4px; font-size: clamp(18px, 3.4vw, 24px); line-height: 1.2; }
+    #frontier-retrofits h1 { margin: 0 0 4px; font-size: clamp(18px, 3.4vw, 24px); font-weight: 800; line-height: 1.2; }
     #frontier-retrofits .snapshot { color: var(--muted); font-size: 12px; }
     #frontier-retrofits .status-note { color: var(--ink); font-size: 12px; margin: 0 0 10px; }
     #frontier-retrofits .legend {
@@ -501,11 +501,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
 #frontier-retrofits .fleet-controls button { font-weight: 650; cursor: pointer; }
 #frontier-retrofits .fleet-controls input { font-size: 16px; }
 #frontier-retrofits .fleet-controls input::placeholder { color: var(--muted); }
-#frontier-retrofits :is(#fleet-filter-toggle, #fleet-icon-key-toggle) { flex: none; white-space: nowrap; }
-@container (max-width: 340px) {
-  #frontier-retrofits .fleet-toolbar { flex-wrap: wrap; }
-  #frontier-retrofits .tail-search { flex-basis: 100%; max-width: none; }
-}
+#frontier-retrofits #fleet-filter-toggle { flex: none; white-space: nowrap; }
 #frontier-retrofits .fleet-filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 1fr));
@@ -573,9 +569,28 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   white-space: normal;
 }
 #frontier-retrofits .cabin-info-panel p { margin: 0 0 8px; }
-#frontier-retrofits :is(.fleet-controls, .fleet-filters, .fleet-icon-key, #fleet-clear-filters, .tile, .toggle-fleet, .feature-icon)[hidden] { display: none; }
+#frontier-retrofits :is(.fleet-controls, .fleet-filters, #fleet-clear-filters, .tile, .toggle-fleet, .feature-icon)[hidden] { display: none; }
 #frontier-retrofits .tile { display: flex; flex-direction: column; }
 #frontier-retrofits .tile .caption { flex: 1; }
+#frontier-retrofits .frontier-first-banner {
+  display: table;
+  box-sizing: border-box;
+  margin: 0 auto 3px;
+  padding: 1px 4px;
+  border: 1px solid rgba(194, 241, 214, .64);
+  border-radius: 3px;
+  background: #c5edd5;
+  color: #142e23;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+#frontier-retrofits .tile:not(.confirmed, .reported) .frontier-first-banner { visibility: hidden; }
+
+@container (min-width: 561px) {
+  #frontier-retrofits .tile .animal { font-size: 13px; }
+}
 #frontier-retrofits .tile:not(.admin-editing, [data-card-open]) .animal {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -638,12 +653,13 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   border-top: 1px solid var(--card-border);
 }
 #frontier-retrofits .fleet-icon-key {
-  margin-top: 8px;
+  margin: 0 0 8px;
   padding: 10px;
   border: 1px solid var(--card-border);
   border-radius: 8px;
   background: var(--detail);
 }
+#frontier-retrofits .fleet-icon-key h2 { margin: 0 0 8px; font-size: 13px; }
 #frontier-retrofits .fleet-key-items {
   display: flex;
   flex-wrap: wrap;
@@ -744,14 +760,14 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     <p class="status-note">Classic interior labels use aircraft delivered before March 23, 2021.</p>
     <p class="status-note"><strong>Airbus Airspace</strong> marks Airbus’s newer cabin design. The tracker uses provisional registration-based labels. Incoming Spirit aircraft appear under All cabins while their cabin designs are unverified.</p>
     <div class="fleet-controls" hidden>
+      <section class="fleet-icon-key" aria-labelledby="fleet-icon-key-title">
+        <h2 id="fleet-icon-key-title">Icon key</h2>
+        <ul class="fleet-key-items" id="fleet-key-features" aria-label="Feature icons"></ul>
+        <ul class="fleet-key-items fleet-key-states" id="fleet-key-states" aria-label="Icon status styles"></ul>
+      </section>
       <div class="fleet-toolbar">
         <input type="search" class="tail-search" id="fleet-tail-search" placeholder="Search by tail number" aria-label="Search by tail number" aria-controls="frontier-retrofits-rack" autocomplete="off" spellcheck="false">
         <button type="button" id="fleet-filter-toggle" aria-expanded="false" aria-controls="fleet-filters">Filter fleet</button>
-        <button type="button" id="fleet-icon-key-toggle" aria-expanded="false" aria-controls="fleet-icon-key">Icon key</button>
-      </div>
-      <div class="fleet-icon-key" id="fleet-icon-key" hidden>
-        <ul class="fleet-key-items" id="fleet-key-features" aria-label="Feature icons"></ul>
-        <ul class="fleet-key-items fleet-key-states" id="fleet-key-states" aria-label="Icon status styles"></ul>
       </div>
       <div class="fleet-filters" id="fleet-filters" hidden>
         <label>Aircraft type
@@ -1119,7 +1135,10 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     tile.dataset.searchTails=[tile.dataset.tail||tile.dataset.incomingTail,formerTail].filter(Boolean).join(' ');
     tile.dataset.filterModel=registration.querySelector('.aircraft-type').dataset.modelLogo;
     if(tile.dataset.incomingTail)tile.dataset.retrofitStatus='incoming';
-    caption.prepend(tile.querySelector('.animal'));
+    const firstBanner=document.createElement('span');
+    firstBanner.className='frontier-first-banner';
+    firstBanner.textContent='Frontier First';
+    caption.prepend(firstBanner,tile.querySelector('.animal'));
     tile.dataset.cabin=classifyCabin(tile);
     const airspaceSlot=document.createElement('span');
     airspaceSlot.className='airspace-slot';
@@ -1216,12 +1235,6 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   document.getElementById('fleet-key-states').innerHTML=Object.entries(stateLabels).map(([state,label])=>
     '<li><span class="feature-icon" data-state="'+state+'" aria-hidden="true">'+iconSvg(featureIcons[0][2])+'</span>'+label+'</li>'
   ).join('');
-  const iconKeyToggle=document.getElementById('fleet-icon-key-toggle');
-  const iconKeyPanel=document.getElementById('fleet-icon-key');
-  iconKeyToggle.addEventListener('click',()=>{
-    iconKeyPanel.hidden=!iconKeyPanel.hidden;
-    iconKeyToggle.setAttribute('aria-expanded',String(!iconKeyPanel.hidden));
-  });
   const cardSummaries=new Map();
   for(const tile of allTiles){
     const tail=tile.dataset.tail||tile.dataset.incomingTail;
