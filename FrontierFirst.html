@@ -1576,7 +1576,7 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       labels.approach='Approaching '+airport;
       labels.landing='Landing in '+airport;
     }
-    return {label:labels[phase] ?? labels.unknown,timeZone};
+    return {label:labels[phase] ?? labels.unknown,timeZone,phase};
   }
 
   async function updateLastSeen(){
@@ -1588,14 +1588,16 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       for(const tile of tiles){
         const point=positions[tile.dataset.tail];
         if(!point || !Number.isFinite(point.observedAt) || !Number.isFinite(point.lat) || !Number.isFinite(point.lon))continue;
-        const {label,timeZone}=describePosition(point);
+        const {label,timeZone,phase}=describePosition(point);
         const seen=tile.querySelector('.last-seen');
         const instant=new Date(point.observedAt);
         const time=seen.querySelector('time');
         seen.querySelector('strong').textContent=label;
-        if(point.flightNumber){
+        const flightLine=seen.querySelector('.last-seen-flight');
+        flightLine.textContent='';
+        if(phase!=='ground' && point.flightNumber){
           const flight='F9'+point.flightNumber;
-          seen.querySelector('.last-seen-flight').textContent=point.route
+          flightLine.textContent=point.route
             ? flight+' · '+point.route.origin+' → '+point.route.destination
             : flight;
         }
