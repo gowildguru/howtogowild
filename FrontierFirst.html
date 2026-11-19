@@ -1701,7 +1701,63 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   const flightStatusURL=new URL('/',endpoint);
   const observationsByButton=new WeakMap();
   const flightStatusCache=new Map();
+  const flightScheduleCache=new Map();
   let detailRequest=0;
+
+  function readFlightSchedule(date){
+    if(!flightScheduleCache.has(date)){
+      const request=(async()=>{
+        const response=await fetch('/data/'+date+'.json',{signal:AbortSignal.timeout(6000)});
+        if(!response.ok)throw new Error('Schedule HTTP '+response.status);
+        const schedule=await response.json();
+        if(schedule.date!==date || !schedule.airports)throw new Error('Schedule date did not match');
+        return schedule.airports;
+      })().catch(error=>{
+        flightScheduleCache.delete(date);
+        throw error;
+      });
+      flightScheduleCache.set(date,request);
+    }
+    return flightScheduleCache.get(date);
+  }
+
+  async function resolveFlightDate(point){
+    const {origin,destination,departDate}=point.route;
+    if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(departDate ?? ''))return departDate;
+    const format=new Intl.DateTimeFormat('en-US',{
+      timeZone:airportTimeZones.get(origin),year:'numeric',month:'2-digit',day:'2-digit',
+      hour:'2-digit',minute:'2-digit',hourCycle:'h23'
+    });
+    const localParts=instant=>Object.fromEntries(format.formatToParts(instant).map(({type,value})=>[type,value]));
+    const dateAt=instant=>{
+      const {year,month,day}=localParts(instant);
+      return year+'-'+month+'-'+day;
+    };
+    // Match the same scheduled-departure window used for the Worker’s ADS-B route match.
+    const earliest=point.observedAt-480*60000;
+    const latest=point.observedAt+90*60000;
+    const dates=[...new Set([dateAt(earliest),dateAt(latest)])];
+    const routes=await Promise.all(dates.map(readFlightSchedule));
+    const matches=[];
+    for(const [index,date] of dates.entries()){
+      for(const flight of routes[index][origin] ?? []){
+        if(String(Number(flight.flightNumber))!==point.flightNumber || flight.destination!==destination)continue;
+        const clock=/^(1[0-2]|0?[1-9]):([0-5][0-9])\s*(AM|PM)$/i.exec(flight.departureTime ?? '');
+        if(!clock)continue;
+        const hour=String(Number(clock[1])%12+(clock[3].toUpperCase()==='PM'?12:0)).padStart(2,'0');
+        const desired=Date.parse(date+'T'+hour+':'+clock[2]+':00Z');
+        let instant=desired;
+        for(let pass=0;pass<3;pass++){
+          const p=localParts(instant);
+          instant+=desired-Date.parse(p.year+'-'+p.month+'-'+p.day+'T'+p.hour+':'+p.minute+':00Z');
+        }
+        if(instant>=earliest && instant<=latest && (!point.onGround || instant<=point.observedAt)){
+          matches.push(date);
+        }
+      }
+    }
+    return matches.length===1?matches[0]:null;
+  }
 
   function requestFlightStatus(input){
     const key=JSON.stringify(input);
@@ -1744,14 +1800,18 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     detailTitle.textContent=hasFlight?'F9'+flightNumber+' · '+route.origin+' → '+route.destination:tail;
     detailObservation.textContent=tail+' · '+label+' · '+button.querySelector('time').textContent;
     detailData.replaceChildren();
-    const departDate=route?.departDate;
-    const canLookUp=hasFlight && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(departDate ?? '') &&
-      Date.now()-point.observedAt<=48*60*60*1000;
+    const canLookUp=hasFlight && Date.now()-point.observedAt<=48*60*60*1000;
     detailStatus.textContent=canLookUp?'Loading Frontier flight status…':'Flight details unavailable for this observation.';
     flightDetails.showModal();
     if(!canLookUp)return;
 
     try{
+      const departDate=await resolveFlightDate(point);
+      if(request!==detailRequest || !flightDetails.open)return;
+      if(!departDate){
+        detailStatus.textContent='Could not match this observation to a dated flight.';
+        return;
+      }
       const status=await requestFlightStatus({flightNumber,origin:route.origin,destination:route.destination,departDate});
       if(request!==detailRequest || !flightDetails.open)return;
       detailStatus.textContent='Frontier status · '+status.status;
