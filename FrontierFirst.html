@@ -824,6 +824,34 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   font-weight: 700;
 }
 #frontier-retrofits .view-seatmap[hidden] { display: none; }
+#tracker-seatmap-dialog {
+  box-sizing: border-box;
+  width: min(1060px, calc(100% - 16px));
+  height: min(860px, 91dvh);
+  max-height: 95vh;
+  padding: 0;
+  border: 1px solid #526e59;
+  border-radius: 14px;
+  background: #15241e;
+  color: #f2f8f5;
+  overflow: hidden;
+}
+#tracker-seatmap-dialog[open] { display: grid; grid-template-rows: auto auto minmax(0, 1fr); }
+#tracker-seatmap-dialog::backdrop { background: #081911cf; }
+#tracker-seatmap-dialog header {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px;
+  padding: 6px 12px; border-bottom: 1px solid #526e59;
+}
+#tracker-seatmap-dialog h2 { margin: 0 auto 0 0; font-size: 1rem; }
+#tracker-seatmap-dialog form { margin: 0; }
+#tracker-seatmap-dialog :is(button, a) { color: #c5edd5; }
+#tracker-seatmap-dialog button {
+  min-height: 44px; padding: 0 12px; border: 1px solid #526e59;
+  border-radius: 8px; background: #263d31; font: inherit; cursor: pointer;
+}
+#tracker-seatmap-dialog a { font-size: .8rem; }
+#tracker-seatmap-dialog p { margin: 0; padding: 12px; }
+#tracker-seatmap-dialog iframe { width: 100%; height: 100%; border: 0; grid-row: 3; }
 #frontier-retrofits .tile:not(.admin-editing, [data-card-open]) .aircraft-details { display: none; }
 #frontier-retrofits .tile.admin-editing .card-summary { display: none; }
 #frontier-retrofits .tile[data-card-open] .aircraft-details {
@@ -1376,6 +1404,15 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       <a class="fleet-coffee" href="https://buymeacoffee.com/gowildguru" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
     </section>
     <footer class="site-footer">Independent HowToGoWild tracker. Check your flight’s seat map before booking. Flight routes match observed callsigns to the published schedule. Aircraft positions from <a href="https://www.adsb.lol/">adsb.lol</a> (<a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL</a>).</footer>
+    <dialog id="tracker-seatmap-dialog" aria-labelledby="tracker-seatmap-title">
+      <header>
+        <h2 id="tracker-seatmap-title">Seatmap</h2>
+        <a id="tracker-seatmap-fallback" href="/seatmaps.html">Open in Meet the Fleet</a>
+        <form method="dialog"><button type="submit" autofocus>Close</button></form>
+      </header>
+      <p id="tracker-seatmap-message" role="status"></p>
+      <iframe id="tracker-seatmap-frame" title="Interactive aircraft seatmap" hidden></iframe>
+    </dialog>
     <dialog id="flight-detail-dialog" aria-labelledby="flight-detail-title">
       <form method="dialog">
         <h2 id="flight-detail-title">Flight details</h2>
@@ -1561,6 +1598,8 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
   const defaults=new Map(tiles.map(tile=>[tile.dataset.tail,{tail:tile.dataset.tail,first:tile.classList.contains('confirmed')||tile.classList.contains('reported')?'equipped':'soon',wifi:'soon',power:'soon'}]));
   let records=new Map([...defaults].map(([k,v])=>[k,{...v}])), admin=false, code='', dirty=new Set(), editTail=null;
   const legroomLabel='Extra Legroom · Rows 4–8';
+  const classicLegroomLabel='Extra Legroom · Rows 6–8 · No recline';
+  const classicRecline={original:'Recline in rows 1–3 and 13',retrofitted:'Recline in rows 3–5 and 13'};
   for(const tile of tiles){
     const legroom=document.createElement('span');
     legroom.className='seat-label legroom-product';
@@ -1598,7 +1637,47 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     iconKeyToggle.setAttribute('aria-expanded',String(expanded));
   });
   const cardSummaries=new Map();
-  const seatmapCards={A320neo:'card-a320neo',A321:'card-a321',A321neo:'card-a321neo'};
+  const seatmapCards={A320neo:'a320neo',A321:'a321',A321neo:'a321neo'};
+  const seatmapDialog=document.getElementById('tracker-seatmap-dialog');
+  const seatmapFrame=document.getElementById('tracker-seatmap-frame');
+  const seatmapMessage=document.getElementById('tracker-seatmap-message');
+  const seatmapFallback=document.getElementById('tracker-seatmap-fallback');
+  function openSeatmap(event){
+    if(event.defaultPrevented||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||!seatmapDialog.showModal)return;
+    event.preventDefault();
+    const link=event.currentTarget;
+    const tile=link.closest('.tile');
+    const url=new URL(link.href);
+    const cabin=url.searchParams.get('cabin')==='first'?'Frontier First':'Original cabin';
+    document.getElementById('tracker-seatmap-title').textContent=tile.dataset.tail+' · '+tile.dataset.filterModel+' · '+cabin;
+    seatmapFallback.href=url.href;
+    seatmapMessage.textContent='Loading seatmap…';
+    seatmapMessage.hidden=false;
+    seatmapFrame.hidden=true;
+    seatmapDialog.showModal();
+    url.searchParams.set('embed','1');
+    seatmapFrame.src=url.href;
+  }
+  seatmapFrame.addEventListener('load',()=>{
+    if(!seatmapDialog.open)return;
+    try{
+      if(seatmapFrame.contentDocument?.querySelector('.seatmap-embed #map .seat')){
+        seatmapFrame.hidden=false;
+        seatmapMessage.hidden=true;
+        return;
+      }
+    }catch{}
+    seatmapMessage.textContent='Use Open in Meet the Fleet to view this seatmap.';
+  });
+  seatmapDialog.addEventListener('close',()=>{
+    if(seatmapDialog.open)return;
+    seatmapFrame.hidden=true;
+    seatmapFrame.removeAttribute('src');
+  });
+  window.addEventListener('message',event=>{
+    if(event.origin===location.origin && event.source===seatmapFrame.contentWindow &&
+       event.data==='htgw-seatmap-close' && seatmapDialog.open)seatmapDialog.close();
+  });
   for(const tile of allTiles){
     const tail=tile.dataset.tail||tile.dataset.incomingTail;
     const caption=tile.querySelector('.caption');
@@ -1606,11 +1685,13 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
     details.className='aircraft-details';
     details.id='aircraft-details-'+tail;
     details.append(...caption.querySelectorAll('.classic-interior, .aircraft-fact, .seat-label, .amenities'));
-    const mapCard=seatmapCards[tile.dataset.filterModel];
-    if(tile.dataset.tail && mapCard){
+    const seatmapAircraft=seatmapCards[tile.dataset.filterModel];
+    if(tile.dataset.tail && seatmapAircraft){
       const link=document.createElement('a');
       link.className='view-seatmap';
-      link.href='/seatmaps.html#'+mapCard;
+      link.dataset.seatmapAircraft=seatmapAircraft;
+      link.setAttribute('aria-haspopup','dialog');
+      link.addEventListener('click',openSeatmap);
       link.textContent='View seatmap';
       details.append(link);
     }
@@ -1660,8 +1741,11 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       icon.hidden=states[key]===null;
       if(icon.hidden)continue;
       icon.dataset.state=states[key];
-      icon.title=label+' · '+stateLabels[states[key]];
-      descriptions.push(key==='recline' && !installed?'Recline in rows 1–3 and 13':label+' '+stateLabels[states[key]].toLowerCase());
+      const description=key==='recline'
+        ? classicRecline[installed?'retrofitted':'original']
+        : label+' · '+stateLabels[states[key]];
+      icon.title=description;
+      descriptions.push(description);
     }
     button.setAttribute('aria-description',descriptions.join(', '));
   }
@@ -1681,15 +1765,22 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       }else{
         for(const attribute of ['role','tabindex','aria-haspopup','aria-label'])tile.removeAttribute(attribute);
       }
+      const classic=Boolean(tile.dataset.delivered);
+      const classicRetrofit=classic&&retrofitted;
       const seatmap=tile.querySelector('.view-seatmap');
-      if(seatmap)seatmap.hidden=retrofitted;
-      if(tile.dataset.delivered){
+      if(seatmap){
+        const model=seatmap.dataset.seatmapAircraft;
+        const params=new URLSearchParams({aircraft:model,cabin:retrofitted?'first':'current'});
+        if(classicRetrofit)params.set('classic','1');
+        seatmap.href='/seatmaps.html?'+params+'#card-'+model;
+      }
+      if(classic){
         tile.classList.add('classic-cabin');
         const classicInterior=tile.querySelector('.classic-interior');
         classicInterior.hidden=false;
-        classicInterior.querySelector('small').textContent=retrofitted
-          ? 'Classic economy seats retained'
-          : 'Recline in rows 1–3 and 13';
+        classicInterior.querySelector('small').textContent=classicRetrofit
+          ? 'Black diamond-stitched seats in rows 3–5. '+classicRecline.retrofitted+'.'
+          : classicRecline.original;
       }
       updateCardIcons(tile,d);
       const location=retrofitLocations.has(d.location)?' · '+d.location:'';
@@ -1697,13 +1788,17 @@ button, input, select, textarea { font-family: "Montserrat", system-ui, sans-ser
       const upfrontLabel=retrofitted?'UpFront Plus · Row 3':'UpFront Plus · Rows 1–3';
       tile.querySelector('.first-product .product-name').textContent=firstLabel;
       tile.querySelector('.upfront-product .product-name').textContent=upfrontLabel;
-      tile.querySelector('.legroom-product').hidden=!retrofitted;
+      const legroom=tile.querySelector('.legroom-product');
+      const legroomText=classicRetrofit?classicLegroomLabel:legroomLabel;
+      legroom.hidden=!retrofitted;
+      legroom.querySelector('.product-name').textContent=legroomText;
       for(const [field,selector] of [['wifi','.amenity-wifi'],['power','.amenity-power']]){
         const el=tile.querySelector(selector),enabled=d[field]==='equipped';el.classList.toggle('equipped',enabled);
         el.querySelector('small').textContent=enabled?'Equipped':'Coming Soon';
       }
       const seatLabels=[firstLabel,upfrontLabel];
-      if(retrofitted)seatLabels.push(legroomLabel);
+      if(retrofitted)seatLabels.push(legroomText);
+      if(classicRetrofit)seatLabels.push(classicRecline.retrofitted);
       const seating=seatLabels.join(' · ');
       tile.dataset.detail=tile.dataset.model+' · '+seating+' · Starlink '+(d.wifi==='equipped'?'Equipped':'Coming Soon')+' · Power '+(d.power==='equipped'?'Equipped':'Coming Soon');
       if(admin)tile.setAttribute('aria-label','Edit '+tile.dataset.label+' · '+tile.dataset.detail);
