@@ -347,9 +347,8 @@ async function lookupRoute(
         await response.json();
 
 
-      return (
-        data.flights || []
-      )
+      if (!Array.isArray(data.flights)) throw new Error('Invalid route schedule response');
+      return {complete: true, flights: data.flights
 
         .filter(
           flight =>
@@ -366,12 +365,15 @@ async function lookupRoute(
             departureTime:
               flight.departureTime,
 
+            arrivalTime: flight.arrivalTime || null,
+            duration: flight.duration || null,
+
             flightNumber:
               String(
                 flight.flights[0]
               )
           })
-        );
+        )};
 
 
     } catch (error) {
@@ -388,7 +390,7 @@ async function lookupRoute(
           `${origin}-${destination}: giving up after 2 attempts`
         );
 
-        return [];
+        return {complete: false, flights: []};
 
       }
 
@@ -450,8 +452,7 @@ async function processInBatches(
       results.push({
         ...batch[j],
 
-        flights:
-          batchResults[j]
+        ...batchResults[j]
       });
 
     }
@@ -607,6 +608,9 @@ async function main() {
 
     flightCount,
 
+    // Failed lookups are unknown schedules, not evidence that no flights operate.
+    incompleteAirports: [...new Set(routeResults.filter(result=>!result.complete).map(result=>result.origin))],
+
     airports
 
   };
@@ -669,3 +673,4 @@ main()
 
     }
   );
+
