@@ -20,9 +20,56 @@
     .note { font-size: .85rem; color: #ffffffd9; }
     #status { margin: 18px 0 0; overflow-wrap: anywhere; }
   </style>
+
+  <link rel="stylesheet" href="site-nav.css?v=1">
+  <script src="site-nav.js?v=1" defer></script>
+  <script src="search.js?v=site-nav-1" defer></script>
 </head>
 <body>
-  <main>
+<header id="site-navigation" class="site-nav-shell">
+  <a class="site-nav-skip" href="#site-main-content">Skip to content</a>
+  <div class="site-nav-panel">
+    <div class="site-nav-top">
+      <a class="site-nav-brand" href="index.html" aria-label="HowToGoWild! home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m21 3-6 18-4-8-8-4 18-6ZM11 13l5-5"/></svg><span>HOWTOGOWILD!</span></a>
+      <div class="site-nav-search-area">
+        <form id="guideSearchForm" role="search" action="index.html">
+          <label for="guideSearchInput" class="site-nav-search-label">How will you GoWild?</label>
+          <div class="guide-search-field">
+            <input id="guideSearchInput" name="q" type="search" placeholder="Search this guide" autocomplete="off" maxlength="150" aria-controls="guideSearchResults">
+            <button type="submit" aria-label="Search the guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Search</span></button>
+          </div>
+        </form>
+        <div class="site-nav-search-popover">
+          <p id="guideSearchStatus" role="status" aria-live="polite"></p>
+          <ul id="guideSearchResults" hidden></ul>
+        </div>
+      </div>
+      <nav class="site-nav-primary" aria-label="Quick navigation">
+        <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9"/></svg><span>Home</span></a>
+        <a href="index.html#tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3ZM14 3h7v7h-7ZM3 14h7v7H3ZM14 14h7v7h-7Z"/></svg><span>Tools</span></a>
+        <a href="index.html#bookingCalendarCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg><span>Calendar</span></a>
+    <details class="site-nav-menu">
+      <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>More</span></summary>
+      <nav class="site-nav-links" aria-label="Main navigation">
+        <a href="index.html#faq">GoWild! FAQs</a>
+        <a href="about.html">About</a>
+        <a href="gowild-availability.html">GoWild! Availability</a>
+        <a href="gowild-pricing.html">GoWild! Pricing</a>
+        <a href="seatmaps.html">Meet The Fleet</a>
+        <a href="FrontierFirst.html">First Class Tracker</a>
+        <a href="frontiermiles.html">FrontierMiles</a>
+        <a href="add-ons-and-upgrades.html">Add Ons and Upgrades</a>
+        <a href="travel-disruptions.html">Travel Disruptions</a>
+        <a href="more.html">More!</a>
+        <a href="blog.html">Blog</a>
+      </nav>
+    </details>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <main id="site-main-content" tabindex="-1">
     <a href="index.html">← Back to How To GoWild!</a>
     <h1>Disruption Portal Test</h1>
     <p class="note">Submitting sends your last name and confirmation code directly to Frontier to open your disruption options. This page does not save your details.</p>
@@ -97,3 +144,4 @@
   </script>
 </body>
 </html>
+

@@ -1986,7 +1986,7 @@ z-index: 2;
   background: #f8faf8;
 }
 
-.dashboard-booking-item.is-blackout {
+.dashboard-booking-item.is-peak {
   background: #fff8ed;
   border-color: #e6cda4;
 }
@@ -2017,7 +2017,7 @@ z-index: 2;
   line-height: 1.45;
 }
 
-.dashboard-booking-item.is-blackout .booking-status {
+.dashboard-booking-item.is-peak .booking-status {
   color: #925a14;
 }
 
@@ -5764,123 +5764,29 @@ body.tool-modal-open {
 }
 
 
-/* =====================================================
-   STANDARD + INTERNATIONAL
-   Today and tomorrow.
-   Half green / half blue.
-   ===================================================== */
-
-.booking-calendar-day.is-standard.is-international:not(.is-blackout) {
-  border-color: #66766c;
-
-  background:
-    linear-gradient(
-      90deg,
-      #66766c 0%,
-      #66766c 50%,
-      #5f8aa6 50%,
-      #5f8aa6 100%
-    );
-
-  color: #ffffff;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+/* Booking timing is independent of the peak-day fee. Purple changes the
+   fill; the plane/calendar and globe icons preserve the booking-window cues. */
+.booking-calendar-day.is-standard {
+  background: #c5edd5;
+  border-color: #90c6a6;
+  color: #142e23;
 }
-
-
-/* =====================================================
-   STANDARD ONLY
-   Green.
-   Fallback if a date is standard but not international.
-   ===================================================== */
-
-.booking-calendar-day.is-standard:not(.is-international):not(.is-blackout) {
-  border-color: #66766c;
-
-  background: #66766c;
-  color: #ffffff;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+.booking-calendar-day.is-advanced {
+  background: #214d3b;
+  border-color: #3c7059;
+  color: #f5fff8;
 }
-
-
-/* =====================================================
-   INTERNATIONAL + ADVANCED DOMESTIC
-   Half yellow / half blue.
-   ===================================================== */
-
-.booking-calendar-day.is-international.is-advanced:not(.is-standard):not(.is-blackout) {
-  border-color: #c7b26f;
-
-  background:
-    linear-gradient(
-      90deg,
-      #f6e7b5 0%,
-      #f6e7b5 50%,
-      #5f8aa6 50%,
-      #5f8aa6 100%
-    );
-
-  color: #4e5851;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+.booking-calendar-day.is-peak {
+  background: #77539b;
+  border-color: #a88aca;
+  color: #fff;
 }
-
-
-/* =====================================================
-   INTERNATIONAL ONLY
-   Blue.
-   ===================================================== */
-
-.booking-calendar-day.is-international:not(.is-standard):not(.is-advanced):not(.is-blackout) {
-  border-color: #5f8aa6;
-
-  background: #5f8aa6;
-  color: #ffffff;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-
-/* =====================================================
-   ADVANCED DOMESTIC ONLY
-   Yellow.
-   ===================================================== */
-
-.booking-calendar-day.is-advanced:not(.is-standard):not(.is-international):not(.is-blackout) {
-  border-color: #d8bd76;
-
-  background: #f6e7b5;
-  color: #72551b;
-}
-
-
-/* =====================================================
-   BLACKOUT
-   Red always wins over every other booking state.
-   ===================================================== */
-
-.booking-calendar-day.is-blackout {
-  border-color: #c96a6a !important;
-
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      #f8dede,
-      #f8dede 5px,
-      #f2caca 5px,
-      #f2caca 10px
-    ) !important;
-
-  color: #8d2f2f !important;
-
-  box-shadow:
-    inset 0 0 0 2px rgba(141, 47, 47, 0.10) !important;
-}
+.booking-calendar-day.is-past:not(.is-peak) { opacity: .65; }
+.booking-calendar-day.is-peak.is-past { opacity: .8; }
+.booking-calendar-icons { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 14px; }
+.booking-date-icon { width: 13px; height: 13px; display: inline-block; flex: 0 0 auto; vertical-align: -.15em; }
+.booking-calendar-icons .icon-international { opacity: .9; }
+.booking-calendar-icons .icon-peak { stroke-width: 2; }
 
 
 /* =====================================================
@@ -5911,7 +5817,7 @@ body.tool-modal-open {
 
 /* White X on green standard dates */
 
-.booking-calendar-day.is-standard:not(.is-blackout)
+.booking-calendar-day.is-standard:not(.is-peak)
 .booking-calendar-no-departures {
   color: #ffffff;
 }
@@ -5919,7 +5825,7 @@ body.tool-modal-open {
 
 /* White X on blue international-only dates */
 
-.booking-calendar-day.is-international:not(.is-standard):not(.is-advanced):not(.is-blackout)
+.booking-calendar-day.is-international:not(.is-standard):not(.is-advanced):not(.is-peak)
 .booking-calendar-no-departures {
   color: #ffffff;
 }
@@ -5927,15 +5833,15 @@ body.tool-modal-open {
 
 /* Dark X on yellow/blue International + Advanced dates */
 
-.booking-calendar-day.is-international.is-advanced:not(.is-standard):not(.is-blackout)
+.booking-calendar-day.is-international.is-advanced:not(.is-standard):not(.is-peak)
 .booking-calendar-no-departures {
   color: #4e5851;
 }
 
 
-/* Dark red X on blackout dates */
+/* Peak-day dates keep the no-departures marker legible. */
 
-.booking-calendar-day.is-blackout
+.booking-calendar-day.is-peak
 .booking-calendar-no-departures {
   color: #8d2f2f !important;
 }
@@ -5981,47 +5887,10 @@ body.tool-modal-open {
 }
 
 
-/* Standard
-   Green represents the domestic standard window.
-   The actual calendar will show green/blue when
-   Standard and International overlap. */
-
-.booking-legend-swatch.standard {
-  border: 1px solid #66766c;
-  background: #66766c;
-}
-
-
-/* International = blue */
-
-.booking-legend-swatch.international {
-  border: 1px solid #5f8aa6;
-  background: #5f8aa6;
-}
-
-
-/* Advanced Domestic = yellow */
-
-.booking-legend-swatch.advanced {
-  border: 1px solid #d8bd76;
-  background: #f6e7b5;
-}
-
-
-/* Blackout = red */
-
-.booking-legend-swatch.blackout {
-  border: 1px solid #c96a6a;
-
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      #f8dede,
-      #f8dede 3px,
-      #f2caca 3px,
-      #f2caca 6px
-    );
-}
+.booking-legend-swatch.standard { background: #c5edd5; border: 1px solid #90c6a6; color: #142e23; }
+.booking-legend-swatch.advanced { background: #214d3b; border: 1px solid #3c7059; color: #f5fff8; }
+.booking-legend-swatch.peak { background: #77539b; border: 1px solid #a88aca; color: #fff; }
+.booking-legend-swatch.international { background: transparent; border: 1px solid #c5edd5; color: #c5edd5; }
 
 
 /* No departures remaining */
@@ -7635,9 +7504,8 @@ body.tool-modal-open {
   outline-offset: 2px;
 }
 
-/* Exclude empty placeholders and every booking state. The original split
-   fills, blackout precedence, X markers and today outline remain in force. */
-.dashboard-booking-calendar .booking-calendar-day:not(.is-empty):not(.is-standard):not(.is-international):not(.is-advanced):not(.is-blackout) {
+/* Neutral dates retain their original fill; booking states use the calendar palette. */
+.dashboard-booking-calendar .booking-calendar-day:not(.is-empty):not(.is-standard):not(.is-international):not(.is-advanced):not(.is-peak) {
   background: rgba(247, 251, 245, .68);
   border-color: rgba(53, 77, 61, .16);
   color: #2d4434;
@@ -8051,3 +7919,48 @@ body.tool-modal-open {
 #dashboard .calendar-departure-destination { flex:1 1 120px; }
 #dashboard .calendar-departure-number,#dashboard .calendar-departure-status { font-size:11px; color:rgba(255,255,255,.8); }
 #dashboard .calendar-departure-link { margin-left:auto; }
+
+
+/* GoWild Fly Now / Fly Later calendar — tracker palette, 2026-11-26. */
+#bookingCalendarDays .booking-calendar-day:not(.is-empty) {
+  min-height: 54px; aspect-ratio: auto; flex-direction: column; gap: 6px;
+}
+#bookingCalendarDays .booking-calendar-number { font-size: 13px; line-height: 1; }
+#bookingCalendarDays .booking-calendar-no-departures { color: inherit !important; }
+#bookingCalendarCard .booking-legend-swatch { width: 23px; height: 23px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; }
+#bookingCalendarCard .booking-calendar-legend { justify-content: flex-start; gap: 10px 14px; }
+#bookingCalendarCard .booking-calendar-legend > span { font-size: 9px; line-height: 1.4; gap: 7px; }
+#bookingCalendarCard .dashboard-booking-note { line-height: 1.7; }
+#bookingCalendarCard .dashboard-booking-note a { color: #c5edd5; text-underline-offset: 3px; }
+#bookingCalendarCard .booking-calendar-day:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+#bookingCalendarCard .booking-calendar-day.is-selected { outline-color: #c5edd5; box-shadow: inset 0 0 0 2px #142e23; }
+.calendar-booking-guidance { color: #284d3b; background: #e6f3eb; border: 1px solid #b0d7c0; border-radius: 9px; padding: 10px 12px; font-size: 11px; line-height: 1.6; }
+.calendar-booking-guidance.is-peak { color: #442665; background: #f0e9f8; border-color: #d0b9e7; }
+.departure-booking-status { white-space: normal; line-height: 1.45; }
+.departure-booking-status.peak { display: flex; align-items: center; gap: 4px; color: #67428b; font-weight: 700; }
+@media (max-width: 420px) {
+  #bookingCalendarDays .booking-calendar-day:not(.is-empty) { min-height: 50px; gap: 5px; }
+  .booking-calendar-icons { gap: 2px; }
+  .booking-calendar-icons .booking-date-icon { width: 10px; height: 10px; }
+  #bookingCalendarCard .booking-calendar-legend > span { font-size: 8px; }
+}
+
+#bookingCalendarDays .is-peak .icon-standard,
+#bookingCalendarDays .is-peak .icon-advanced { display: none; }
+#bookingCalendarDays .is-peak .icon-peak { width: 19px; height: 19px; }
+#bookingCalendarDays .is-peak .icon-international { width: 10px; height: 10px; }
+#bookingCalendarDays .is-peak .booking-calendar-icons { gap: 2px; }
+
+#faq .gw-booking-widget .blackout-notice,
+.tool-modal-content .tool-booking-timeline .blackout-notice { background: #f0e9f8; color: #442665; border-color: #d0b9e7; }
+
+#bookingCalendarDays .is-advanced:not(.is-peak) .booking-calendar-icons { color: #c5edd5; }
+#bookingCalendarDays .is-advanced .icon-advanced { width: 19px; height: 19px; }
+#bookingCalendarDays .is-advanced .icon-international { width: 10px; height: 10px; }
+#bookingCalendarDays .is-standard .icon-international,
+#bookingCalendarDays .is-advanced .icon-international,
+#bookingCalendarDays .is-peak .icon-international { padding: 1px; box-sizing: content-box; border: 1px solid currentColor; border-radius: 50%; }
+#bookingCalendarCard .booking-legend-swatch.advanced { color: #c5edd5; }
+
+.hero-story-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; border-color: #c5edd570; background: #ffffff0a; color: #f5fff8; }
+.hero-story-link:hover { background: #c5edd51f; border-color: #c5edd5; }

@@ -1,9 +1,17 @@
-name: Test schedule efficiency
+name: Test calendar and schedule behavior
 
 on:
   pull_request:
     paths:
       - dashboard.js
+      - style.css
+      - site-nav.js
+      - site-nav.css
+      - search.js
+      - tools.js
+      - faq-booking.js
+      - "**/*.html"
+      - tests/calendar-policy.test.mjs
       - scripts/build-schedule.mjs
       - tests/schedule-efficiency.test.mjs
       - .github/workflows/test-schedule.yml
@@ -11,6 +19,14 @@ on:
     branches: [main]
     paths:
       - dashboard.js
+      - style.css
+      - site-nav.js
+      - site-nav.css
+      - search.js
+      - tools.js
+      - faq-booking.js
+      - "**/*.html"
+      - tests/calendar-policy.test.mjs
       - scripts/build-schedule.mjs
       - tests/schedule-efficiency.test.mjs
       - .github/workflows/test-schedule.yml
@@ -27,5 +43,10 @@ jobs:
         with:
           node-version: 22
       - run: node --check dashboard.js
+      - run: node --check site-nav.js
+      - run: node --check search.js
+      - run: node --check tools.js
+      - run: node --check faq-booking.js
       - run: node --check scripts/build-schedule.mjs
-      - run: node --test tests/schedule-efficiency.test.mjs
+      - run: node --test tests/*.test.mjs
+

@@ -3136,37 +3136,197 @@ async function updateWeather(airport) {
 /* =====================================================
    STAGE 3 \u2014 GOWILD BOOKING CALENDAR
    ===================================================== */
-const goWildAdvancedBookingEnd = {
-  year: 2027,
-  month: 4,
-  day: 4
-};
-
-const goWildBlackouts = {
-
-  2026: {
-    1:[1,3,4,15,16,19],
-    2:[12,13,16],
-    3:[13,14,15,20,21,22,27,28,29],
-    4:[3,4,5,6,10,11,12],
-    5:[21,22,25],
-    6:[25,26,27,28],
-    7:[2,3,4,5,6],
-    9:[3,4,7],
-    10:[8,9,11,12],
-    11:[24,25,28,29],
-    12:[19,20,21,22,23,24,26,27,28,29,30,31]
+// Published peak travel dates, verified 2026-11-26.
+// Source: https://www.flyfrontier.com/deals/gowild-pass
+const goWildPeakTravelDates = {
+  "2026": {
+    "11": [
+      24,
+      25,
+      28,
+      29,
+      30
+    ],
+    "12": [
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ]
   },
-
-  2027: {
-    1:[1,2,3,14,15,18],
-    2:[11,12,15],
-    3:[12,13,14,19,20,21,26,27,28,29],
-    4:[2,3,4]
+  "2027": {
+    "1": [
+      1,
+      2,
+      3,
+      14,
+      15,
+      18
+    ],
+    "2": [
+      11,
+      12,
+      15
+    ],
+    "3": [
+      12,
+      13,
+      14,
+      19,
+      20,
+      21,
+      26,
+      27,
+      28,
+      29
+    ],
+    "4": [
+      2,
+      3,
+      4
+    ],
+    "5": [
+      27,
+      28,
+      31
+    ],
+    "7": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "9": [
+      2,
+      3,
+      6
+    ],
+    "10": [
+      7,
+      8,
+      11
+    ],
+    "11": [
+      23,
+      24,
+      27,
+      28,
+      29
+    ],
+    "12": [
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ]
+  },
+  "2028": {
+    "1": [
+      1,
+      2,
+      3,
+      13,
+      14,
+      17
+    ],
+    "2": [
+      17,
+      18,
+      21
+    ],
+    "3": [
+      10,
+      11,
+      12,
+      17,
+      18,
+      19,
+      24,
+      25,
+      26,
+      31
+    ],
+    "4": [
+      1,
+      2,
+      14,
+      15,
+      16,
+      17
+    ],
+    "5": [
+      25,
+      26,
+      29
+    ],
+    "6": [
+      29,
+      30
+    ],
+    "7": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      8,
+      9
+    ],
+    "8": [
+      31
+    ],
+    "9": [
+      1,
+      4
+    ],
+    "10": [
+      5,
+      6,
+      9
+    ],
+    "11": [
+      21,
+      22,
+      25,
+      26,
+      27
+    ],
+    "12": [
+      20,
+      21,
+      22,
+      23,
+      24,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ]
   }
-
 };
-
+const goWildPeakDatesStart = '2026-11-24';
+const goWildPeakDatesEnd = '2028-12-31';
 
 const goWildSlugs = {
   DCA:"washington",
@@ -3302,32 +3462,36 @@ function bookingKey(date) {
 
 
 function bookingKnown(date) {
-
-  return (
-    date.year === 2026 ||
-    (
-      date.year === 2027 &&
-      date.month <= 4
-    )
-  );
-
+  const key=bookingKey(date);
+  return key>=goWildPeakDatesStart && key<=goWildPeakDatesEnd;
 }
-
-
-function bookingBlackout(date) {
-
-  return (
-    goWildBlackouts[
-      date.year
-    ]?.[
-      date.month
-    ] || []
-  ).includes(
-    date.day
-  );
-
+function bookingPeakTravelDay(date) {
+  return (goWildPeakTravelDates[date.year]?.[date.month]||[]).includes(date.day);
 }
-
+function bookingDateState(date,today) {
+  const key=bookingKey(date),days=Math.round((Date.UTC(date.year,date.month-1,date.day)-Date.UTC(today.year,today.month-1,today.day))/86400000);
+  return {standard:days>=0&&days<=1,international:days>=0&&days<=10,
+    advanced:days>1&&bookingKnown(date),peak:bookingPeakTravelDay(date),past:days<0,known:bookingKnown(date)};
+}
+function bookingDateIcon(kind) {
+  const paths={"standard": "m21 3-6 18-4-8-8-4 18-6ZM11 13l5-5", "advanced": "M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM8.5 6v12M11 8.5c-1-1-5-1-5 1s5 2 5 4-4 2-5 1M14 12h5M16.5 9.5v5", "international": "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c4 4 4 14 0 18-4-4-4-14 0-18Z", "peak": "M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM8.5 6v12M11 8.5c-1-1-5-1-5 1s5 2 5 4-4 2-5 1M14 12h5M16.5 9.5v5"};
+  const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('class','booking-date-icon icon-'+kind);
+  icon.setAttribute('aria-hidden','true');icon.setAttribute('focusable','false');
+  icon.setAttribute('fill','none');icon.setAttribute('stroke','currentColor');icon.setAttribute('stroke-width','1.8');
+  icon.setAttribute('stroke-linecap','round');icon.setAttribute('stroke-linejoin','round');
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',paths[kind]);icon.appendChild(path);
+  return icon;
+}
+function bookingDateDescription(state) {
+  const labels=[];
+  if(state.standard)labels.push('Fly Now — Standard Window (domestic)');
+  if(state.advanced)labels.push('Fly Later — Advanced Booking (domestic, when offered)');
+  if(state.international)labels.push('International open — 10-day standard window, subject to availability');
+  if(state.peak)labels.push('Peak Travel Day — a peak-day fee applies regardless of when you book');
+  if(!state.known&&!state.past)labels.push('Peak travel dates not yet published — check Frontier');
+  return labels;
+}
 
 function bookingLabel(date) {
 
@@ -3672,11 +3836,14 @@ function renderBookingCalendarDepartures() {
   const cached=bookingDateDepartures.get(airport.code+':'+key);
   const data=board?.loadedKeys.has(key)?{status:'ready',flights:board.flights.filter(f=>bookingKey(f.date)===key)}:cached||{status:'loading'};
   const flights=data.flights||[];
-  const signature=JSON.stringify([airport.code,key,data.status,flights.map(f=>[f.destination,f.flightNumber,f.departureTime,f.arrivalTime,boardStatusInfo(airport,f,now)?.label]),data.progress?.checkedRoutes,data.progress?.totalRoutes,data.error]);
+  const signature=JSON.stringify([airport.code,key,bookingDayKey,data.status,flights.map(f=>[f.destination,f.flightNumber,f.departureTime,f.arrivalTime,boardStatusInfo(airport,f,now)?.label]),data.progress?.checkedRoutes,data.progress?.totalRoutes,data.error]);
   if(signature===bookingCalendarDepartureSignature)return;bookingCalendarDepartureSignature=signature;
   const focused=panel.contains(document.activeElement)?document.activeElement.dataset.calendarFlight:undefined;
   panel.hidden=false;panel.replaceChildren();
   panel.append(departureText('h4','calendar-departures-title',`${bookingLabel(date)} departures from ${airport.code}`));
+  const today=bookingDate(bookingParts(new Date(),airport.timezone),0),dateState=bookingDateState(date,today);
+  const guidance=departureText('p','calendar-booking-guidance'+(dateState.peak?' is-peak':''),bookingDateDescription(dateState).join(' · '));
+  if(guidance.textContent)panel.append(guidance);
   const message=departureText('p','calendar-departures-summary','');message.setAttribute('role','status');panel.append(message);
   if(data.status==='loading'){message.textContent=data.progress?`Checking ${data.progress.checkedRoutes} of ${data.progress.totalRoutes} routes. ${flights.length} departures found so far...`:'Loading this day\u2019s departure schedule...';if(!flights.length)return;}
   if(data.status==='unavailable') {
@@ -3953,81 +4120,15 @@ function renderBookingCalendar() {
     }
 
 
-    if (
-      key === bookingKey(today) ||
-      key === bookingKey(tomorrow)
-    ) {
-
-      cell.classList.add(
-        "is-standard"
-      );
-
-    }
-
-
-    if (
-      key >= bookingKey(today) &&
-      key <= bookingKey(internationalEnd)
-    ) {
-
-      cell.classList.add(
-        "is-international"
-      );
-
-    }
-
-
-    const dayStatus =
-      bookingDepartureDayStatus(
-        date
-      );
-
-
-    const daysFromToday =
-      Math.round(
-        (
-          Date.UTC(
-            date.year,
-            date.month - 1,
-            date.day
-          ) -
-          Date.UTC(
-            today.year,
-            today.month - 1,
-            today.day
-          )
-        ) /
-        86400000
-      );
-
-const advancedEndKey =
-  bookingKey(
-    goWildAdvancedBookingEnd
-  );
-
-if (
-  daysFromToday > 1 &&
-  key <= advancedEndKey
-) {
-
-  cell.classList.add(
-    "is-advanced"
-  );
-
-}
-
-
-    if (
-      bookingKnown(date) &&
-      bookingBlackout(date)
-    ) {
-
-      cell.classList.add(
-        "is-blackout"
-      );
-
-    }
-
+    const state=bookingDateState(date,today);
+    for(const name of ['standard','international','advanced','peak','past'])if(state[name])cell.classList.add('is-'+name);
+    const icons=document.createElement('span');icons.className='booking-calendar-icons';icons.setAttribute('aria-hidden','true');
+    if(state.standard)icons.appendChild(bookingDateIcon('standard'));
+    if(state.advanced)icons.appendChild(bookingDateIcon('advanced'));
+    if(state.international)icons.appendChild(bookingDateIcon('international'));
+    if(state.peak)icons.appendChild(bookingDateIcon('peak'));
+    cell.appendChild(icons);
+    const dayStatus=bookingDepartureDayStatus(date);
 
     if (
       dayStatus === "none" ||
@@ -4066,61 +4167,9 @@ if (
     }
 
 
-    const descriptions = [];
-
-
-    if (
-      key === bookingKey(today)
-    ) {
-      descriptions.push(
-        "today"
-      );
-    }
-
-
-    if (
-      cell.classList.contains(
-        "is-standard"
-      )
-    ) {
-      descriptions.push(
-        "standard domestic booking window"
-      );
-    }
-
-
-    if (
-      cell.classList.contains(
-        "is-international"
-      )
-    ) {
-      descriptions.push(
-        "international booking window"
-      );
-    }
-
-
-    if (
-      cell.classList.contains(
-        "is-advanced"
-      )
-    ) {
-      descriptions.push(
-        "advanced booking"
-      );
-    }
-
-
-    if (
-      cell.classList.contains(
-        "is-blackout"
-      )
-    ) {
-      descriptions.push(
-        "GoWild blackout date"
-      );
-    }
-
+    const descriptions=bookingDateDescription(state);
+    if(key===bookingKey(today))descriptions.unshift('today');
+    cell.title=descriptions.join(' · ');
 
     if (
       dayStatus === "none"
@@ -4238,17 +4287,7 @@ function updateBookingDashboard() {
 
     if (standardStatus) {
 
-      standardStatus.textContent =
-
-        !bookingKnown(tomorrow)
-
-          ? "Check Frontier"
-
-          : bookingBlackout(tomorrow)
-
-            ? "Tomorrow is a blackout"
-
-            : "Open now";
+      standardStatus.textContent = 'Open now';
 
     }
 
@@ -4256,9 +4295,9 @@ function updateBookingDashboard() {
     if (standardDate) {
 
       standardDate.textContent =
-        bookingBlackout(tomorrow)
+        bookingPeakTravelDay(tomorrow)
 
-          ? `${bookingShortLabel(tomorrow)} \u00b7 Peak Day Charge may apply`
+          ? `${bookingShortLabel(tomorrow)} \u00b7 Peak Travel Day fee applies`
 
           : `Departing ${bookingShortLabel(tomorrow)}`;
 
@@ -4289,32 +4328,15 @@ function updateBookingDashboard() {
     }
 
 
-    let offset =
+    const offset =
       2;
 
 
-    let departure =
+    const departure =
       bookingDate(
         today,
         offset
       );
-
-
-    while (
-      bookingKnown(departure) &&
-      bookingBlackout(departure) &&
-      offset < 370
-    ) {
-
-      offset++;
-
-      departure =
-        bookingDate(
-          today,
-          offset
-        );
-
-    }
 
 
     const opensOn =
@@ -5141,20 +5163,26 @@ function renderDepartureBoard() {
     const booking = departureText('div', 'departure-booking', '');
     const live = boardStatusInfo(airport, flight, now);
     const international = departureInternational.has(airport.code) || departureInternational.has(flight.destination);
-    const blackout = bookingBlackout(flight.date);
-    const standard = international || now >= bookingMidnight(bookingDate(flight.date, -1), airport.timezone);
+    const peak = bookingPeakTravelDay(flight.date);
+    const standardOpens=bookingMidnight(bookingDate(flight.date,international?-10:-1),airport.timezone);
+    const standard=now>=standardOpens;
     if (live) {
-      const prefix = live.booking ? (blackout ? 'Blackout' : standard ? 'Standard Window' : 'Advanced Booking') + ' \u00b7 ' : '';
+      const prefix = live.booking ? (standard ? 'Fly Now — Standard Window' : 'Fly Later — Advanced Booking') + ' \u00b7 ' : '';
       booking.append(departureText('span', 'departure-booking-status ' + live.kind, prefix + live.label));
       if (live.kind === 'boarding' || live.kind === 'gate-closed') booking.title = 'Estimated timing: boarding begins 45 minutes before scheduled departure; gate closes 20 minutes before scheduled departure.';
     } else {
-    booking.append(departureText('span', `departure-booking-status ${blackout ? 'blackout' : standard ? 'standard' : 'advance'}`,
-      blackout ? 'Blackout \u00b7 peak day charge may apply' : standard ? 'Standard Window' : 'Advanced Booking'));
-    if (!standard && !blackout) {
+    booking.append(departureText('span', `departure-booking-status ${standard ? 'standard' : 'advance'}`,
+      standard ? 'Fly Now — Standard Window' : 'Fly Later — Advanced Booking'));
+    if (!standard) {
       const countdown = departureText('span', 'departure-booking-countdown', '');
-      countdown.dataset.opensAt = String(bookingMidnight(bookingDate(flight.date, -1), airport.timezone));
+      countdown.dataset.opensAt = String(standardOpens);
       booking.append(countdown);
     }
+    }
+    if(peak) {
+      const fee=departureText('span','departure-booking-status peak','');
+      fee.append(bookingDateIcon('peak'),document.createTextNode('Peak Travel Day · fee applies'));
+      booking.append(fee);
     }
     row.append(booking);
     rows.append(row);
@@ -7398,3 +7426,4 @@ initializeDashboardRefinements();
 initializeWeatherEnhancements();
 initializeSecurityConveyor();
 initializeDashboard();
+
