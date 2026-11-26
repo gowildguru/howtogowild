@@ -1,0 +1,31 @@
+name: Test schedule efficiency
+
+on:
+  pull_request:
+    paths:
+      - dashboard.js
+      - scripts/build-schedule.mjs
+      - tests/schedule-efficiency.test.mjs
+      - .github/workflows/test-schedule.yml
+  push:
+    branches: [main]
+    paths:
+      - dashboard.js
+      - scripts/build-schedule.mjs
+      - tests/schedule-efficiency.test.mjs
+      - .github/workflows/test-schedule.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check dashboard.js
+      - run: node --check scripts/build-schedule.mjs
+      - run: node --test tests/schedule-efficiency.test.mjs

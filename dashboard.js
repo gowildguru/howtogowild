@@ -1315,10 +1315,11 @@ function initializeDashboardRefinements() {
     picker?.addEventListener('focusout',event=>{if(!picker.contains(event.relatedTarget))closeAirportSearch();});
     document.addEventListener('pointerdown',event=>{if(picker&&!picker.contains(event.target))closeAirportSearch();});
   }
-  for(const id of ['departureBoardCard','denGateMap','departureRouteCard'])document.getElementById(id)?.addEventListener('toggle',()=>{
+  for(const id of ['departureBoardCard','denGateMap','departureRouteCard','bookingCalendarCard'])document.getElementById(id)?.addEventListener('toggle',()=>{
+    ensureDepartureBoard();
     if(boardStatusLiveActive())void pollBoardStatuses();
   });
-  document.addEventListener('visibilitychange',()=>{if(boardStatusLiveActive())void pollBoardStatuses();});
+  document.addEventListener('visibilitychange',()=>{ensureDepartureBoard();if(boardStatusLiveActive())void pollBoardStatuses();});
 }
 
 function showAirport(
@@ -4546,6 +4547,7 @@ function departureInstant(date, minutes, timezone) {
 
 // Shared D1 schedule data can supplement the dated GitHub schedule files.
 const airportDateScheduleCache = new Map();
+const airportDateSchedulePending = new Map();
 function airportScheduleTTL(airport,key) {
   const today=bookingKey(bookingDate(bookingParts(new Date(),airport.timezone),0));
   const days=(Date.parse(key)-Date.parse(today))/86400000;return days<=70?Infinity:21600000;
@@ -4564,23 +4566,42 @@ function airportScheduleSnapshot(airport,key,data) {
   return {date:key,airports:{[airport.code]:data.flights},fetchedAt:data.fetchedAt,
     partial:!data.complete||data.partial,progress:data,source:'shared-airport-date-cache'};
 }
+function publishedAirportScheduleAvailable(published,airport,key) {
+  return published?.date===key && !published.partial &&
+    !published.incompleteAirports?.includes(airport.code) &&
+    Array.isArray(published.airports?.[airport.code]);
+}
+function publishedAirportScheduleComplete(published,airport,key,days) {
+  return publishedAirportScheduleAvailable(published,airport,key) &&
+    published.airports[airport.code].every(f=>f && /^[A-Z]{3}$/.test(f.destination) &&
+      /^\d+$/.test(String(f.flightNumber)) && departureMinutes(f.departureTime)!==null &&
+      (days>2 || departureMinutes(f.arrivalTime)!==null));
+}
 async function departureAirportSnapshot(airport,date) {
   const key=bookingKey(date),cacheKey=airport.code+':'+key,local=airportDateScheduleCache.get(cacheKey);
   const today=bookingKey(bookingDate(bookingParts(new Date(),airport.timezone),0));
   const days=(Date.parse(key)-Date.parse(today))/86400000;
   if(local&&!local.partial&&Date.now()-Date.parse(local.fetchedAt)<airportScheduleTTL(airport,key)&&(days>2||(local.airports[airport.code]||[]).every(f=>f.arrivalTime)))return local;
-  const results=await Promise.allSettled([departureSnapshot(key),airportScheduleRequest(airport,key,true)]);
-  const published=results[0].status==='fulfilled'?results[0].value:null;
-  const shared=results[1].status==='fulfilled'?results[1].value:null;
-  if(shared?.available&&shared.complete&&!shared.partial&&!shared.refreshNeeded) {
-    const snapshot=airportScheduleSnapshot(airport,key,shared);
-    const publishedFlights=new Map((published?.airports?.[airport.code]||[]).map(f=>[f.destination+':'+Number(f.flightNumber),f]));
-    snapshot.airports[airport.code]=snapshot.airports[airport.code].map(f=>{const extra=publishedFlights.get(f.destination+':'+Number(f.flightNumber));return extra?{...extra,...f,arrivalTime:f.arrivalTime||extra.arrivalTime||null,duration:f.duration||extra.duration||null}:f;});
-    airportDateScheduleCache.set(cacheKey,snapshot);return snapshot;
-  }
-  if(published)return published;
-  // A clicked date completes missing routes; a partial cache must not masquerade as a full day.
-  throw new Error('No complete published schedule for this airport/date.');
+  if(airportDateSchedulePending.has(cacheKey))return airportDateSchedulePending.get(cacheKey);
+  const pending=(async()=>{
+    // Published files are free to serve and may already contain the full schedule.
+    const published=await departureSnapshot(key).catch(()=>null);
+    if(publishedAirportScheduleComplete(published,airport,key,days))return published;
+    const shared=await airportScheduleRequest(airport,key,true).catch(()=>null);
+    if(shared?.available&&shared.complete&&!shared.partial&&!shared.refreshNeeded) {
+      const snapshot=airportScheduleSnapshot(airport,key,shared);
+      const publishedFlights=new Map((published?.airports?.[airport.code]||[]).map(f=>[f.destination+':'+Number(f.flightNumber),f]));
+      snapshot.airports[airport.code]=snapshot.airports[airport.code].map(f=>{const extra=publishedFlights.get(f.destination+':'+Number(f.flightNumber));return extra?{...extra,...f,arrivalTime:f.arrivalTime||extra.arrivalTime||null,duration:f.duration||extra.duration||null}:f;});
+      airportDateScheduleCache.set(cacheKey,snapshot);return snapshot;
+    }
+    // Missing arrival details must not hide otherwise available departures.
+    if(publishedAirportScheduleAvailable(published,airport,key))return published;
+    // The calendar can progressively fill genuinely missing airport/date schedules.
+    throw new Error('No complete published schedule for this airport/date.');
+  })();
+  airportDateSchedulePending.set(cacheKey,pending);
+  try {return await pending;}
+  finally {airportDateSchedulePending.delete(cacheKey);}
 }
 async function lookupAirportDateSchedule(airport,key,onProgress,shouldContinue=()=>true) {
   let latest;
@@ -5155,7 +5176,24 @@ function renderDepartureBoard() {
   renderBookingCalendar();
 }
 
+function departureScheduleVisible() {
+  return !document.hidden && ['departureBoardCard','denGateMap','departureRouteCard','bookingCalendarCard']
+    .some(id=>document.getElementById(id)?.open);
+}
+function ensureDepartureBoard() {
+  if(!departureScheduleVisible())return;
+  const airport=airportByCode(dashboardSelectedAirport);
+  if(!airport)return;
+  const today=bookingKey(bookingDate(bookingParts(new Date(),airport.timezone),0));
+  if(departureState?.airport.code!==airport.code || departureState.dayKey!==today)void loadDepartureBoard(airport);
+}
 async function loadDepartureBoard(airport) {
+  // The default collapsed dashboard needs no schedule reads. Load on expansion.
+  if(!departureScheduleVisible()) {
+    ++departureRequest;
+    departureState=null;
+    return;
+  }
   const rows = document.getElementById('departureRows');
   if (!rows) return;
   const request = ++departureRequest;
