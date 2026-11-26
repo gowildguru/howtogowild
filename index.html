@@ -11,7 +11,7 @@
     content="An independent guide to Frontier Airlines' GoWild! Pass, including booking tools, route information, pricing help, and practical travel resources."
   >
 
-  <link rel="stylesheet" href="style.css?v=calendar-shared-cache-1">
+  <link rel="stylesheet" href="style.css?v=peak-travel-calendar-1">
   <link rel="stylesheet" href="den-gate-map.css?v=2">
   <link rel="stylesheet" href="blog.css?v=2">
 
@@ -25,68 +25,63 @@
   <!-- Needed by the Award Booking Calculator for community recent finds -->
   <script src="https://www.gstatic.com/charts/loader.js"></script>
 
-  <!-- TEMPORARY ABOUT BANNER STYLES: remove this block when retiring the banner. -->
-  <style>
-    .hero.hero-with-announcement { flex-direction: column; }
-    .hero-with-announcement .hero-content { padding-top: 0; }
-    .about-announcement {
-      position: relative;
-      z-index: 12;
-      flex: 0 0 auto;
-      width: min(calc(100% - 40px), 1180px);
-      margin: 16px auto 0;
-      padding: 16px 24px;
-      color: #fff;
-      background: rgba(35, 50, 40, .38);
-      -webkit-backdrop-filter: blur(16px);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,.3);
-      border-radius: 22px;
-      box-shadow: 0 8px 30px rgba(20,34,25,.14);
-      text-align: center;
-      font-size: .9rem;
-      line-height: 1.7;
-    }
-    .about-announcement strong { font-weight: 700; }
-    .about-announcement-link {
-      display: inline;
-      color: inherit;
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-    }
-    .about-announcement-link:hover { text-decoration-thickness: 2px; }
-    .about-announcement-link:focus-visible,
-    .hero-topic-nav .about-hero-link:focus-visible {
-      outline: 3px solid #b6d3c0;
-      outline-offset: 4px;
-      border-radius: 4px;
-    }
-    @media (max-width: 600px) {
-      .about-announcement {
-        width: calc(100% - 24px);
-        margin-top: 12px;
-        padding: 14px 18px;
-        border-radius: 18px;
-        font-size: .8rem;
-      }
-    }
-  </style>
-  <!-- END TEMPORARY ABOUT BANNER STYLES -->
+
+
+  <link rel="stylesheet" href="site-nav.css?v=1">
+  <script src="site-nav.js?v=1" defer></script>
+  <script src="search.js?v=site-nav-1" defer></script>
 </head>
 
 <body>
+<header id="site-navigation" class="site-nav-shell">
+  <a class="site-nav-skip" href="#site-main-content">Skip to content</a>
+  <div class="site-nav-panel">
+    <div class="site-nav-top">
+      <a class="site-nav-brand" href="index.html" aria-label="HowToGoWild! home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m21 3-6 18-4-8-8-4 18-6ZM11 13l5-5"/></svg><span>HOWTOGOWILD!</span></a>
+      <div class="site-nav-search-area">
+        <form id="guideSearchForm" role="search" action="index.html">
+          <label for="guideSearchInput" class="site-nav-search-label">How will you GoWild?</label>
+          <div class="guide-search-field">
+            <input id="guideSearchInput" name="q" type="search" placeholder="Search this guide" autocomplete="off" maxlength="150" aria-controls="guideSearchResults">
+            <button type="submit" aria-label="Search the guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Search</span></button>
+          </div>
+        </form>
+        <div class="site-nav-search-popover">
+          <p id="guideSearchStatus" role="status" aria-live="polite"></p>
+          <ul id="guideSearchResults" hidden></ul>
+        </div>
+      </div>
+      <nav class="site-nav-primary" aria-label="Quick navigation">
+        <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9"/></svg><span>Home</span></a>
+        <a href="index.html#tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3ZM14 3h7v7h-7ZM3 14h7v7H3ZM14 14h7v7h-7Z"/></svg><span>Tools</span></a>
+        <a href="index.html#bookingCalendarCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg><span>Calendar</span></a>
+    <details class="site-nav-menu">
+      <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>More</span></summary>
+      <nav class="site-nav-links" aria-label="Main navigation">
+        <a href="index.html#faq">GoWild! FAQs</a>
+        <a href="about.html">About</a>
+        <a href="gowild-availability.html">GoWild! Availability</a>
+        <a href="gowild-pricing.html">GoWild! Pricing</a>
+        <a href="seatmaps.html">Meet The Fleet</a>
+        <a href="FrontierFirst.html">First Class Tracker</a>
+        <a href="frontiermiles.html">FrontierMiles</a>
+        <a href="add-ons-and-upgrades.html">Add Ons and Upgrades</a>
+        <a href="travel-disruptions.html">Travel Disruptions</a>
+        <a href="more.html">More!</a>
+        <a href="blog.html">Blog</a>
+      </nav>
+    </details>
+      </nav>
+    </div>
+  </div>
+</header>
+<div id="site-main-content" tabindex="-1"></div>
+
 
 
 
   <!-- HERO -->
-  <section class="hero hero-with-announcement">
-
-    <!-- TEMPORARY ABOUT BANNER: remove this aside when retiring the banner. -->
-    <aside class="about-announcement" aria-label="Welcome to the new GoWild! Guide">
-      <strong>Welcome to the NEW GoWild! Guide- <a class="about-announcement-link" href="about.html">read the story (about)</a></strong>
-    </aside>
-    <!-- END TEMPORARY ABOUT BANNER -->
+  <section class="hero">
 
 
     <div class="hero-content">
@@ -117,57 +112,9 @@
           have been compiled in one place to help you make the most out of unlimited travel.
         </p>
 
-<nav class="hero-topic-nav" aria-label="Guide topics">
-
-  <a class="button button-primary" href="#tools">
-    Helpful Tools
-  </a>
-
-  <a class="button button-outline" href="#faq">
-    GoWild! FAQs
-  </a>
-
-  <a class="button button-outline about-hero-link" href="about.html">
-    About
-  </a>
-
-  <a class="button button-outline"
-     href="gowild-availability.html">
-    GoWild! Availability
-  </a>
-
-  <a class="button button-outline"
-     href="gowild-pricing.html">
-    GoWild! Pricing
-  </a>
-
-  <a class="button button-outline"
-     href="seatmaps.html">
-    Meet The Fleet
-  </a>
-
-  <a class="button button-outline" href="FrontierFirst.html">
-    First Class Tracker
-  </a>
+        <a class="button button-outline hero-story-link" href="about.html">Read the story <span aria-hidden="true">↗</span></a>
 
 
-  <a class="button button-outline"
-     href="frontiermiles.html">
-    FrontierMiles
-  </a>
-
-  <a class="button button-outline"
-   href="add-ons-and-upgrades.html">
-  Add Ons and Upgrades
-</a>
-
-<a class="button button-outline"
-   href="travel-disruptions.html">
-  Travel Disruptions
-</a>
-
-  <a class="button button-outline" href="more.html">More!</a>
-</nav>
 
       </div>
 
@@ -201,42 +148,6 @@
   </div>
 
   <div class="container">
-
-    <!-- GUIDE SEARCH -->
-    <section class="guide-search" aria-label="Search this guide">
-      <div class="guide-search-inner">
-        <form id="guideSearchForm" role="search">
-          <label for="guideSearchInput" class="guide-search-label">
-            How will you GoWild?
-          </label>
-
-          <div class="guide-search-field">
-            <input
-              id="guideSearchInput"
-              type="search"
-              placeholder="Search this guide"
-              autocomplete="off"
-              maxlength="150"
-              aria-controls="guideSearchResults"
-            >
-            <button type="submit">Search</button>
-          </div>
-        </form>
-
-        <p
-          id="guideSearchStatus"
-          class="guide-search-status"
-          role="status"
-          aria-live="polite"
-        ></p>
-
-        <ul
-          id="guideSearchResults"
-          class="guide-search-results"
-          hidden
-        ></ul>
-      </div>
-    </section>
 
     <h2 class="section-heading">
       Your Dashboard
@@ -567,7 +478,7 @@
       
 <details id="bookingCalendarCard" class="dashboard-booking dashboard-booking-calendar dashboard-expander" aria-labelledby="bookingCalendarCardTitle"><summary class="dashboard-expander-header">
   <span class="dashboard-expander-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M7 14h2M13 14h2M7 18h2M13 18h2"/></svg></span>
-  <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="bookingCalendarCardTitle">Interactive Calendar</span><span class="dashboard-expander-description">Explore booking windows, blackout dates, and departures.</span></span>
+  <span class="dashboard-expander-copy"><span class="dashboard-expander-title" id="bookingCalendarCardTitle">Interactive Calendar</span><span class="dashboard-expander-description">Explore Fly Now, Fly Later, peak travel days, and departures.</span></span>
   <span class="dashboard-expander-action"><span class="dashboard-expander-view">View</span><span class="dashboard-expander-close">Close</span></span>
 </summary><div class="dashboard-expander-body">
 
@@ -611,7 +522,7 @@
           <div class="booking-summary-item">
 
             <span class="booking-summary-label">
-              STANDARD
+              FLY NOW — STANDARD WINDOW
             </span>
 
             <strong id="bookingStandardStatus">
@@ -629,7 +540,7 @@
           <div class="booking-summary-item">
 
             <span class="booking-summary-label">
-              INTERNATIONAL
+              INTERNATIONAL — 10-DAY WINDOW
             </span>
 
             <strong id="bookingInternationalStatus">
@@ -648,7 +559,7 @@
             class="booking-summary-item booking-summary-countdown">
 
             <span class="booking-summary-label">
-              NEXT STANDARD OPENING
+              NEXT FLY NOW OPENING
             </span>
 
             <strong id="bookingNextDate">
@@ -730,62 +641,21 @@
 
         <!-- CALENDAR LEGEND -->
 
-        <div class="booking-calendar-legend">
-
-          <span>
-            <i
-              class="booking-legend-swatch standard"
-              aria-hidden="true">
-            </i>
-            Standard
-          </span>
-
-
-          <span>
-            <i
-              class="booking-legend-swatch international"
-              aria-hidden="true">
-            </i>
-            International
-          </span>
-
-
-          <span>
-            <i
-              class="booking-legend-swatch advanced"
-              aria-hidden="true">
-            </i>
-            Advanced
-          </span>
-
-
-          <span>
-            <i
-              class="booking-legend-swatch blackout"
-              aria-hidden="true">
-            </i>
-            Blackout
-          </span>
-
-
-          <span>
-            <i
-              class="booking-legend-x"
-              aria-hidden="true">
-              ×
-            </i>
-            No departures remaining
-          </span>
-
+        <div class="booking-calendar-legend" aria-label="Calendar key">
+          <span><i class="booking-legend-swatch standard" aria-hidden="true"><svg class="booking-date-icon icon-standard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21 3-6 18-4-8-8-4 18-6ZM11 13l5-5"/></svg></i>Fly Now — Standard Window</span>
+          <span><i class="booking-legend-swatch advanced" aria-hidden="true"><svg class="booking-date-icon icon-advanced" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM8.5 6v12M11 8.5c-1-1-5-1-5 1s5 2 5 4-4 2-5 1M14 12h5M16.5 9.5v5"/></svg></i>Fly Later — Advanced Booking</span>
+          <span><i class="booking-legend-swatch peak" aria-hidden="true"><svg class="booking-date-icon icon-peak" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM8.5 6v12M11 8.5c-1-1-5-1-5 1s5 2 5 4-4 2-5 1M14 12h5M16.5 9.5v5"/></svg></i>Peak Travel Day</span>
+          <span><i class="booking-legend-swatch international" aria-hidden="true"><svg class="booking-date-icon icon-international" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c4 4 4 14 0 18-4-4-4-14 0-18Z"/></svg></i>International — 10-day window</span>
+          <span><i class="booking-legend-x" aria-hidden="true">×</i>No departures remaining</span>
         </div>
 
-
-
         <p class="dashboard-booking-note">
-          Standard domestic GoWild! booking begins the day before departure.
-          International trips may be booked earlier. Blackout dates may have a
-          Peak Day Charge. Flight availability remains subject to Frontier
-          inventory and pass validity.
+          <strong>Fly Now:</strong> the standard window opens the day before domestic departure and 10 days before international departure.
+          <strong>Fly Later:</strong> eligible flights may be booked earlier for an additional charge when offered.
+          <strong>Peak Travel Day:</strong> the peak-day fee applies regardless of when you book, including within the standard window.
+          Purple dates carry a circled $+ fee marker. Select a date to see its booking window; the globe marks the international window.
+          All fares remain subject to availability and your pass validity. Frontier displays the charge before purchase.
+          <a href="https://www.flyfrontier.com/deals/gowild-pass" target="_blank" rel="noopener noreferrer">View Frontier’s current peak travel dates ↗</a>
         </p>
 
 </div></details>
@@ -1366,12 +1236,12 @@
         <div id="statusMessage" class="status-message"></div>
 
         <div id="blackoutMessage" class="notice blackout-notice">
-          <strong>⚠️ No standard availability</strong><br>
-          Peak Day charge may apply.
+          <strong>Peak Travel Day — fee applies</strong><br>
+          The peak-day fee applies regardless of when you book, including within the standard window.
         </div>
 
         <div id="unpublishedMessage" class="notice unpublished-notice">
-          <strong>Blackout dates not yet published</strong><br>
+          <strong>Peak travel dates not yet published</strong><br>
           Check Frontier's current pass terms for this travel date.
         </div>
 
@@ -2238,12 +2108,12 @@
                     <div id="gw-statusMessage" class="status-message"></div>
 
                     <div id="gw-blackoutMessage" class="notice blackout-notice">
-                      <strong>No standard availability</strong><br>
-                      Peak Day charge may apply.
+                      <strong>Peak Travel Day — fee applies</strong><br>
+                      The peak-day fee applies regardless of when you book, including within the standard window.
                     </div>
 
                     <div id="gw-unpublishedMessage" class="notice unpublished-notice">
-                      <strong>Blackout dates not yet published</strong><br>
+                      <strong>Peak travel dates not yet published</strong><br>
                       Check Frontier's current pass terms for this travel date.
                     </div>
 
@@ -2312,7 +2182,7 @@
                   </p>
 
                   <p>
-                    A <strong>Peak Day charge</strong> may also apply on published blackout dates when GoWild! availability is offered. Unlike an Early Booking Fee, a Peak Day charge does <strong>not</strong> disappear when the standard booking window opens.
+                    A <strong>Peak Travel Day fee</strong> applies to eligible GoWild! fares on marked peak travel dates, regardless of when you book. Peak dates remain bookable, subject to availability. This fee does <strong>not</strong> disappear when the standard window opens and is separate from any advanced-booking charge.
                   </p>
                 </div>
 
@@ -2643,7 +2513,7 @@
   </footer>
 
 
-  <script src="faq-booking.js?v=2" defer></script>
+  <script src="faq-booking.js?v=peak-travel-1" defer></script>
 
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -2652,13 +2522,13 @@
   </script>
 
   <script src="den-gate-map.js?v=7"></script>
-  <script src="dashboard.js?v=calendar-shared-cache-1"></script>
-  <script src="tools.js?v=4"></script>
+  <script src="dashboard.js?v=peak-travel-calendar-1"></script>
+  <script src="tools.js?v=peak-travel-1"></script>
   <script src="credit-cards.js?v=1"></script>
-  <script src="search.js?v=5" defer></script>
   <script src="latest-blog.js?v=2" defer></script>
 
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f6717b3623a64aeaa8929241e4026b09"}'></script><!-- End Cloudflare Web Analytics -->
   
 </body>
 </html>
+

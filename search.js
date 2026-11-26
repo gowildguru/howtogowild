@@ -1,4 +1,6 @@
 (() => {
+  const siteRoot = new URL('.', document.currentScript?.src || new URL('search.js', window.location.href).href);
+
   const form = document.getElementById("guideSearchForm");
   const input = document.getElementById("guideSearchInput");
   const results = document.getElementById("guideSearchResults");
@@ -184,13 +186,13 @@
     const urls = new Set();
 
     /* More! hosts individual answers, including entries added later. */
-    urls.add(new URL("more.html", window.location.href).href);
+    urls.add(new URL("more.html", siteRoot).href);
 
     /*
      * Always include homepage.
      */
     urls.add(
-      new URL("index.html", window.location.href).href
+      new URL("index.html", siteRoot).href
     );
 
     /*
@@ -445,7 +447,7 @@
     let posts;
     try {
       posts = JSON.parse(await fetchBlogResource(
-        new URL("blog/posts.json", document.baseURI).href
+        new URL("blog/posts.json", siteRoot).href
       ));
       if (!Array.isArray(posts)) return;
     } catch (error) {
@@ -468,7 +470,7 @@
       if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== post.date) continue;
 
       let url;
-      try { url = new URL(post.url, document.baseURI); } catch { continue; }
+      try { url = new URL(post.url, siteRoot); } catch { continue; }
       if (!["http:", "https:"].includes(url.protocol) ||
           url.origin !== window.location.origin ||
           !url.pathname.toLowerCase().endsWith(".html")) continue;
@@ -624,6 +626,7 @@
    */
 
   function search() {
+    if(input.value.trim())void buildSiteIndex();
     const words =
       normalize(input.value)
         .split(/\s+/)
@@ -817,8 +820,9 @@
    */
   indexCurrentPageInteractiveContent();
 
-  /*
-   * Then quietly index linked pages.
-   */
-  buildSiteIndex();
+  // Index static pages only when search is used, rather than on every page view.
+  input.addEventListener('focus', () => { void buildSiteIndex(); if(input.value.trim())search(); });
+  const initialQuery = new URLSearchParams(window.location.search).get('q');
+  if(initialQuery) { input.value=initialQuery.slice(0,150); void buildSiteIndex(); search(); }
 })();
+

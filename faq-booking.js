@@ -43,28 +43,9 @@ const widget = document.querySelector("#faq .gw-booking-widget");
 if (!widget) return;
 
 
-/* ================= BLACKOUT DATES ================= */
-
-const blackoutDates = new Set([
-  "2026-01-01","2026-01-03","2026-01-04","2026-01-15","2026-01-16","2026-01-19",
-  "2026-02-12","2026-02-13","2026-02-16",
-  "2026-03-13","2026-03-14","2026-03-15","2026-03-20","2026-03-21","2026-03-22","2026-03-27","2026-03-28","2026-03-29",
-  "2026-04-03","2026-04-04","2026-04-05","2026-04-06","2026-04-10","2026-04-11","2026-04-12",
-  "2026-05-21","2026-05-22","2026-05-25",
-  "2026-06-25","2026-06-26","2026-06-27","2026-06-28",
-  "2026-07-02","2026-07-03","2026-07-04","2026-07-05","2026-07-06",
-  "2026-09-03","2026-09-04","2026-09-07",
-  "2026-10-08","2026-10-09","2026-10-11","2026-10-12",
-  "2026-11-24","2026-11-25","2026-11-28","2026-11-29","2026-11-30",
-  "2026-12-19","2026-12-20","2026-12-21","2026-12-22","2026-12-23","2026-12-24","2026-12-26","2026-12-27","2026-12-28","2026-12-29","2026-12-30","2026-12-31",
-
-  "2027-01-01","2027-01-02","2027-01-03","2027-01-14","2027-01-15","2027-01-18",
-  "2027-02-11","2027-02-12","2027-02-15",
-  "2027-03-12","2027-03-13","2027-03-14","2027-03-19","2027-03-20","2027-03-21","2027-03-26","2027-03-27","2027-03-28","2027-03-29",
-  "2027-04-02","2027-04-03","2027-04-04"
-]);
-
-const blackoutUnknownAfter = "2027-04-30";
+/* Peak travel dates: https://www.flyfrontier.com/deals/gowild-pass (verified 2026-11-26). */
+const peakTravelDates = new Set(["2026-11-24", "2026-11-25", "2026-11-28", "2026-11-29", "2026-11-30", "2026-12-19", "2026-12-20", "2026-12-21", "2026-12-22", "2026-12-23", "2026-12-24", "2026-12-25", "2026-12-26", "2026-12-27", "2026-12-28", "2026-12-29", "2026-12-30", "2026-12-31", "2027-01-01", "2027-01-02", "2027-01-03", "2027-01-14", "2027-01-15", "2027-01-18", "2027-02-11", "2027-02-12", "2027-02-15", "2027-03-12", "2027-03-13", "2027-03-14", "2027-03-19", "2027-03-20", "2027-03-21", "2027-03-26", "2027-03-27", "2027-03-28", "2027-03-29", "2027-04-02", "2027-04-03", "2027-04-04", "2027-05-27", "2027-05-28", "2027-05-31", "2027-07-01", "2027-07-02", "2027-07-03", "2027-07-04", "2027-07-05", "2027-09-02", "2027-09-03", "2027-09-06", "2027-10-07", "2027-10-08", "2027-10-11", "2027-11-23", "2027-11-24", "2027-11-27", "2027-11-28", "2027-11-29", "2027-12-18", "2027-12-19", "2027-12-20", "2027-12-21", "2027-12-22", "2027-12-23", "2027-12-24", "2027-12-26", "2027-12-27", "2027-12-28", "2027-12-29", "2027-12-30", "2027-12-31", "2028-01-01", "2028-01-02", "2028-01-03", "2028-01-13", "2028-01-14", "2028-01-17", "2028-02-17", "2028-02-18", "2028-02-21", "2028-03-10", "2028-03-11", "2028-03-12", "2028-03-17", "2028-03-18", "2028-03-19", "2028-03-24", "2028-03-25", "2028-03-26", "2028-03-31", "2028-04-01", "2028-04-02", "2028-04-14", "2028-04-15", "2028-04-16", "2028-04-17", "2028-05-25", "2028-05-26", "2028-05-29", "2028-06-29", "2028-06-30", "2028-07-01", "2028-07-02", "2028-07-03", "2028-07-04", "2028-07-05", "2028-07-08", "2028-07-09", "2028-08-31", "2028-09-01", "2028-09-04", "2028-10-05", "2028-10-06", "2028-10-09", "2028-11-21", "2028-11-22", "2028-11-25", "2028-11-26", "2028-11-27", "2028-12-20", "2028-12-21", "2028-12-22", "2028-12-23", "2028-12-24", "2028-12-26", "2028-12-27", "2028-12-28", "2028-12-29", "2028-12-30", "2028-12-31"]);
+const peakDatesUnknownAfter = "2028-12-31";
 
 
 /* ================= AIRPORTS ================= */
@@ -295,7 +276,7 @@ function setWindowOpenMessage() {
   statusMessage.className = "status-message status-open";
 
   statusMessage.innerHTML =
-    `<strong>✓ Standard booking window is open</strong><br>
+    `<strong>Fly Now — Standard Window</strong><br>
      This itinerary is within the normal GoWild! booking period.`;
 }
 
@@ -458,8 +439,8 @@ widget.querySelector("#gw-calculateButton")
     statusMessage.classList.add("status-early");
 
     statusMessage.innerHTML =
-      `<strong>Early Booking Period</strong><br>
-       Standard booking has not opened yet. An Early Booking charge may apply.`;
+      `<strong>Fly Later — Advanced Booking</strong><br>
+       The standard window has not opened yet. Eligible early-booking options may be offered for an additional charge.`;
 
     startCountdown(finalOpen);
 
@@ -470,7 +451,7 @@ widget.querySelector("#gw-calculateButton")
   }
 
 
-  /* ===== BLACKOUT CHECK ===== */
+  /* ===== PEAK TRAVEL DAY CHECK ===== */
 
   blackoutMessage.style.display = "none";
   unpublishedMessage.style.display = "none";
@@ -478,31 +459,31 @@ widget.querySelector("#gw-calculateButton")
   const firstDateString =
     dateToString(firstDeparture);
 
-  let hasBlackout =
-    blackoutDates.has(firstDateString);
+  let hasPeakDay =
+    peakTravelDates.has(firstDateString);
 
-  let hasUnknownBlackout =
-    firstDateString > blackoutUnknownAfter;
+  let hasUnknownPeakDates =
+    firstDateString > peakDatesUnknownAfter;
 
   if(!nonstop){
 
     const secondDateString =
       dateToString(secondDeparture);
 
-    if(blackoutDates.has(secondDateString)){
-      hasBlackout = true;
+    if(peakTravelDates.has(secondDateString)){
+      hasPeakDay = true;
     }
 
-    if(secondDateString > blackoutUnknownAfter){
-      hasUnknownBlackout = true;
+    if(secondDateString > peakDatesUnknownAfter){
+      hasUnknownPeakDates = true;
     }
   }
 
-  if(hasBlackout){
+  if(hasPeakDay){
     blackoutMessage.style.display = "block";
   }
 
-  if(hasUnknownBlackout && !hasBlackout){
+  if(hasUnknownPeakDates && !hasPeakDay){
     unpublishedMessage.style.display = "block";
   }
 
@@ -556,3 +537,4 @@ updateNonstop();
 
 
 })();
+
